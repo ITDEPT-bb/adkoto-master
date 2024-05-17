@@ -11,7 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
+        Schema::table('comments', function(Blueprint $table) {
+            $table->foreign('parent_id')
+                  ->references('id')
+                  ->on('comments')
+                  ->onDelete('cascade');
+        });
     }
 
     /**
@@ -19,6 +24,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::table('comments', function(Blueprint $table) {
+            $table->dropForeign(['parent_id']);
+        });
     }
 };
