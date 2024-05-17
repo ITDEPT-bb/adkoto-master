@@ -52,4 +52,7 @@ Route::delete('/post/{post}', [PostController::class, 'destroy'])
 Route::get('/post/download/{attachment}', [PostController::class, 'downloadAttachment'])
     ->name('post.download');
 
+Route::post('/post/{post}/reaction', [PostController::class, 'postReaction'])
+    ->name('post.reaction');
+
 require __DIR__ . '/auth.php';

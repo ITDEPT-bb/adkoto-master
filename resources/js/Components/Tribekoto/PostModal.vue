@@ -231,19 +231,13 @@ function undoDelete(myFile) {
                                         <small>{{ attachmentExtensions.join(', ') }}</small>
                                     </div>
 
-                                    <div v-if="formErrors.attachments"
-                                        class="border-l-4 border-red-500 py-2 px-3 bg-red-100 mt-3 text-gray-800">
-                                        {{ formErrors.attachments }}
-                                    </div>
-
                                     <div class="grid gap-3 my-3" :class="[
                                         computedAttachments.length === 1
                                             ? 'grid-cols-1'
                                             : 'grid-cols-2',
                                     ]">
                                         <div v-for="(myFile, ind) of computedAttachments">
-                                            <div class="group aspect-square bg-blue-100 flex flex-col items-center
-                                            justify-center text-gray-500 relative border-2"
+                                            <div class="group aspect-square bg-blue-100 flex flex-col items-center justify-center text-gray-500 relative border-2"
                                                 :class="attachmentErrors[ind] ? 'border-red-500' : ''">
 
                                                 <div v-if="myFile.deleted"
