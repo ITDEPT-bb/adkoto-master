@@ -6,18 +6,18 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
 
-// import { ref } from "vue";
-// import flatPickr from "vue-flatpickr-component";
-// import "flatpickr/dist/flatpickr.css";
+import { ref } from "vue";
+import flatPickr from "vue-flatpickr-component";
+import "flatpickr/dist/flatpickr.css";
 
-// const date = ref(null);
+const date = ref(null);
 
-// const config = ref({
-//     altFormat: "M j, Y",
-//     altInput: true,
-//     dateFormat: "Y-m-d",
-//     maxDate: "today",
-// });
+const config = ref({
+    altFormat: "M j, Y",
+    altInput: true,
+    dateFormat: "Y-m-d",
+    maxDate: "today",
+});
 
 const form = useForm({
     name: "",
@@ -98,7 +98,7 @@ const submit = () => {
                 <InputError class="mt-2" :message="form.errors.phone" />
             </div>
 
-            <div class="mt-4">
+            <!-- <div class="mt-4">
                 <InputLabel for="birthday" value="Birthday" />
                 <TextInput
                     id="birthday"
@@ -109,9 +109,9 @@ const submit = () => {
                     autocomplete="bday"
                 />
                 <InputError class="mt-2" :message="form.errors.birthday" />
-            </div>
+            </div> -->
 
-            <!-- <div class="mt-4">
+            <div class="mt-4">
                 <InputLabel for="birthday" value="Birthday" />
                 <flat-pickr
                     id="birthday"
@@ -124,7 +124,7 @@ const submit = () => {
                     :config="config"
                 />
                 <InputError class="mt-2" :message="form.errors.birthday" />
-            </div> -->
+            </div>
 
             <div class="mt-4">
                 <InputLabel for="gender" value="Gender" />
