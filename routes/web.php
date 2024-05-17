@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PostController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -40,7 +41,13 @@ Route::middleware('auth')->group(function () {
         ->name('profile.updateImages');
 });
 
-Route::post('/post', [\App\Http\Controllers\PostController::class, 'store'])
+Route::post('/post', [PostController::class, 'store'])
     ->name('post.create');
+
+Route::put('/post/{post}', [PostController::class, 'update'])
+    ->name('post.update');
+
+Route::delete('/post/{post}', [PostController::class, 'destroy'])
+    ->name('post.destroy');
 
 require __DIR__ . '/auth.php';
