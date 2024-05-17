@@ -35,7 +35,7 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'surname' => 'required|string|max:255',
-            'username' => ['required', 'string', 'max:255', 'regex:/^[\w\-\.]+$/i'],
+            // 'username' => ['required', 'string', 'max:255', 'regex:/^[\w\-\.]+$/i'],
             'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
             'phone' => 'required|string|max:15',
             'birthday' => 'required|date|before:today',
@@ -45,7 +45,12 @@ class RegisteredUserController extends Controller
 
         $user = User::create([
             'name' => $request->name,
+            'surname' => $request->surname,
+            // 'username' => $request->username,
             'email' => $request->email,
+            'phone' => $request->phone,
+            'birthday' => $request->birthday,
+            'gender' => $request->gender,
             'password' => Hash::make($request->password),
         ]);
 
@@ -56,10 +61,10 @@ class RegisteredUserController extends Controller
         return redirect(route('dashboard', absolute: false));
     }
 
-    public function messages()
-    {
-        return [
-            'regex' => 'Username can only contain alphanumeric characters, dash (-) and dot(.).'
-        ];
-    }
+    // public function messages()
+    // {
+    //     return [
+    //         'regex' => 'Username can only contain alphanumeric characters, dash (-) and dot(.).'
+    //     ];
+    // }
 }
