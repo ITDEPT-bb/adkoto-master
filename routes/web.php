@@ -58,4 +58,10 @@ Route::post('/post/{post}/reaction', [PostController::class, 'postReaction'])
 Route::post('/post/{post}/comment', [PostController::class, 'createComment'])
     ->name('post.comment.create');
 
+Route::delete('/comment/{comment}', [PostController::class, 'deleteComment'])
+    ->name('post.comment.delete');
+
+Route::put('/comment/{comment}', [PostController::class, 'updateComment'])
+    ->name('post.comment.update');
+
 require __DIR__ . '/auth.php';
