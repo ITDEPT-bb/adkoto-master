@@ -24,8 +24,10 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->foreignId('current_team_id')->nullable();
-            $table->string('profile_photo_path', 2048)->nullable();
-            $table->string('cover_photo_path', 2048)->nullable();
+            // $table->string('profile_photo_path', 2048)->nullable();
+            // $table->string('cover_photo_path', 2048)->nullable();
+            $table->string('cover_path', 1024)->nullable();
+            $table->string('avatar_path', 1024)->nullable();
             $table->boolean('is_admin')->default(false);
             $table->timestamp('blocked_at')->nullable();
             $table->timestamps();
