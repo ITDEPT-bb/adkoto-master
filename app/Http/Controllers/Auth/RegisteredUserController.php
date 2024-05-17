@@ -13,6 +13,8 @@ use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
 
+use Illuminate\Validation\Rule;
+
 class RegisteredUserController extends Controller
 {
     /**
@@ -32,7 +34,12 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
+            'surname' => 'required|string|max:255',
+            'username' => ['required', 'string', 'max:255', 'regex:/^[\w\-\.]+$/i'],
+            'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
+            'phone' => 'required|string|max:15',
+            'birthday' => 'required|date|before:today',
+            'gender' => ['required', Rule::in(['male', 'female', 'other'])],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -47,5 +54,12 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         return redirect(route('dashboard', absolute: false));
+    }
+
+    public function messages()
+    {
+        return [
+            'regex' => 'Username can only contain alphanumeric characters, dash (-) and dot(.).'
+        ];
     }
 }
