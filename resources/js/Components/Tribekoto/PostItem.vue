@@ -6,9 +6,10 @@ import {
     EllipsisVerticalIcon,
 } from "@heroicons/vue/20/solid";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
-import { ref } from "vue";
+// import { ref } from "vue";
 import PostUserHeader from "@/Components/Tribekoto/PostUserHeader.vue";
 import { router } from "@inertiajs/vue3";
+import { isImage } from "@/helpers.js";
 
 const props = defineProps({
     post: Object,
@@ -16,11 +17,12 @@ const props = defineProps({
 
 const emit = defineEmits(["editClick"]);
 
-function isImage(attachment) {
-    const mime = attachment.mime.split("/");
-    return mime[0].toLowerCase() === "image";
-}
+// function isImage(attachment) {
+//     const mime = attachment.mime.split("/");
+//     return mime[0].toLowerCase() === "image";
+// }
 
+// function openEditModal() {
 function openEditModal() {
     emit("editClick", props.post);
 }
