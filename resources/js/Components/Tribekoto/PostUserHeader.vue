@@ -18,7 +18,7 @@ defineProps({
         </a>
         <div>
             <h4 class="font-bold">
-                <a href="javascript:void(0)" class="hover:underline">{{ post.user.name }}</a>
+                <a href="javascript:void(0)" class="hover:underline">{{ post.user.name }} {{ post.user.surname }}</a>
                 <template v-if="post.group">
                     >
                     <a href="javascript:void(0)" class="hover:underline">{{ post.group.name }}</a>
