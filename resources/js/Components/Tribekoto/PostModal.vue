@@ -1,5 +1,6 @@
 <script setup>
-import { computed, onMounted, onUpdated, reactive, ref, watch } from "vue";
+// import { computed, onMounted, onUpdated, reactive, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import {
     XMarkIcon,
     PaperClipIcon,
@@ -13,9 +14,10 @@ import {
     DialogPanel,
     DialogTitle,
 } from "@headlessui/vue";
-import InputTextarea from "@/Components/InputTextarea.vue";
+// import InputTextarea from "@/Components/InputTextarea.vue";
 import PostUserHeader from "@/Components/Tribekoto/PostUserHeader.vue";
-import { useForm } from "@inertiajs/vue3";
+// import { useForm } from "@inertiajs/vue3";
+import { useForm, usePage } from "@inertiajs/vue3";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { isImage } from "@/helpers.js";
 
@@ -47,6 +49,8 @@ const props = defineProps({
     modelValue: Boolean,
 });
 
+const attachmentExtensions = usePage().props.attachmentExtensions;
+
 /**
  * {
  *     file: File,
@@ -55,6 +59,9 @@ const props = defineProps({
  * @type {Ref<UnwrapRef<*[]>>}
  */
 const attachmentFiles = ref([]);
+
+const attachmentErrors = ref([])
+const showExtensionsText = ref(false)
 
 const form = useForm({
     // id: null,
@@ -91,7 +98,12 @@ function closeModal() {
 function resetModal() {
     form.reset();
     attachmentFiles.value = [];
-    props.post.attachments.forEach((file) => (file.deleted = false));
+    // props.post.attachments.forEach((file) => (file.deleted = false));
+    showExtensionsText.value = false;
+    attachmentErrors.value = [];
+    if (props.post.attachments) {
+        props.post.attachments.forEach(file => file.deleted = false)
+    }
 }
 
 function submit() {
@@ -101,23 +113,44 @@ function submit() {
         form._method = "PUT";
         form.post(route("post.update", props.post.id), {
             preserveScroll: true,
-            onSuccess: () => {
-                closeModal();
+            onSuccess: (res) => {
+                closeModal()
+            },
+            onError: (errors) => {
+                processErrors(errors)
             },
         });
     } else {
         form.post(route("post.create"), {
             preserveScroll: true,
-            onSuccess: () => {
-                closeModal();
+            onSuccess: (res) => {
+                closeModal()
+            },
+            onError: (errors) => {
+                processErrors(errors)
             },
         });
     }
 }
 
+function processErrors(errors) {
+    for (const key in errors) {
+        if (key.includes('.')) {
+            const [, index] = key.split('.')
+            attachmentErrors.value[index] = errors[key]
+        }
+    }
+}
+
 async function onAttachmentChoose($event) {
-    console.log($event.target.files);
+    // console.log($event.target.files);
+    showExtensionsText.value = false;
     for (const file of $event.target.files) {
+        let parts = file.name.split('.')
+        let ext = parts.pop().toLowerCase()
+        if (!attachmentExtensions.includes(ext)) {
+            showExtensionsText.value = true;
+        }
         const myFile = {
             file,
             url: await readFile(file),
@@ -125,8 +158,9 @@ async function onAttachmentChoose($event) {
         attachmentFiles.value.push(myFile);
     }
     $event.target.value = null;
-    console.log(attachmentFiles.value);
+    // console.log(attachmentFiles.value);
 }
+
 async function readFile(file) {
     return new Promise((res, rej) => {
         if (isImage(file)) {
@@ -164,125 +198,73 @@ function undoDelete(myFile) {
     <teleport to="body">
         <TransitionRoot appear :show="show" as="template">
             <Dialog as="div" @close="closeModal" class="relative z-50">
-                <TransitionChild
-                    as="template"
-                    enter="duration-300 ease-out"
-                    enter-from="opacity-0"
-                    enter-to="opacity-100"
-                    leave="duration-200 ease-in"
-                    leave-from="opacity-100"
-                    leave-to="opacity-0"
-                >
+                <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0"
+                    enter-to="opacity-100" leave="duration-200 ease-in" leave-from="opacity-100" leave-to="opacity-0">
                     <div class="fixed inset-0 bg-black/25" />
                 </TransitionChild>
 
                 <div class="fixed inset-0 overflow-y-auto">
-                    <div
-                        class="flex min-h-full items-center justify-center p-4 text-center"
-                    >
-                        <TransitionChild
-                            as="template"
-                            enter="duration-300 ease-out"
-                            enter-from="opacity-0 scale-95"
-                            enter-to="opacity-100 scale-100"
-                            leave="duration-200 ease-in"
-                            leave-from="opacity-100 scale-100"
-                            leave-to="opacity-0 scale-95"
-                        >
+                    <div class="flex min-h-full items-center justify-center p-4 text-center">
+                        <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0 scale-95"
+                            enter-to="opacity-100 scale-100" leave="duration-200 ease-in"
+                            leave-from="opacity-100 scale-100" leave-to="opacity-0 scale-95">
                             <DialogPanel
-                                class="w-full max-w-md transform overflow-hidden rounded bg-white text-left align-middle shadow-xl transition-all"
-                            >
-                                <DialogTitle
-                                    as="h3"
-                                    class="flex items-center justify-between py-3 px-4 font-medium bg-gray-100 text-gray-900"
-                                >
+                                class="w-full max-w-md transform overflow-hidden rounded bg-white text-left align-middle shadow-xl transition-all">
+                                <DialogTitle as="h3"
+                                    class="flex items-center justify-between py-3 px-4 font-medium bg-gray-100 text-gray-900">
                                     {{
                                         post.id ? "Update Post" : "Create Post"
                                     }}
-                                    <button
-                                        @click="closeModal"
-                                        class="w-8 h-8 rounded-full hover:bg-black/5 transition flex items-center justify-center"
-                                    >
+                                    <button @click="closeModal"
+                                        class="w-8 h-8 rounded-full hover:bg-black/5 transition flex items-center justify-center">
                                         <XMarkIcon class="w-4 h-4" />
                                     </button>
                                 </DialogTitle>
                                 <div class="p-4">
-                                    <PostUserHeader
-                                        :post="post"
-                                        :show-time="false"
-                                        class="mb-4"
-                                    />
-                                    <ckeditor
-                                        :editor="editor"
-                                        v-model="form.body"
-                                        :config="editorConfig"
-                                    ></ckeditor>
+                                    <PostUserHeader :post="post" :show-time="false" class="mb-4" />
+                                    <ckeditor :editor="editor" v-model="form.body" :config="editorConfig"></ckeditor>
 
-                                    <div
-                                        class="grid gap-3 my-3"
-                                        :class="[
-                                            computedAttachments.length === 1
-                                                ? 'grid-cols-1'
-                                                : 'grid-cols-2',
-                                        ]"
-                                    >
-                                        <template
-                                            v-for="(
-                                                myFile, ind
-                                            ) of computedAttachments"
-                                        >
-                                            <div
-                                                class="group aspect-square bg-blue-100 flex flex-col items-center justify-center text-gray-500 relative"
-                                            >
-                                                <div
-                                                    v-if="myFile.deleted"
-                                                    class="absolute z-10 left-0 bottom-0 right-0 py-2 px-3 text-sm bg-black text-white flex justify-between items-center"
-                                                >
+                                    <div v-if="showExtensionsText"
+                                        class="border-l-4 border-amber-500 py-2 px-3 bg-amber-100 mt-3 text-gray-800">
+                                        Files must be one of the following extensions <br>
+                                        <small>{{ attachmentExtensions.join(', ') }}</small>
+                                    </div>
+
+                                    <div class="grid gap-3 my-3" :class="[
+                                        computedAttachments.length === 1
+                                            ? 'grid-cols-1'
+                                            : 'grid-cols-2',
+                                    ]">
+                                        <div v-for="(myFile, ind) of computedAttachments">
+                                            <div class="group aspect-square bg-blue-100 flex flex-col items-center
+                                            justify-center text-gray-500 relative border-2"
+                                                :class="attachmentErrors[ind] ? 'border-red-500' : ''">
+
+                                                <div v-if="myFile.deleted"
+                                                    class="absolute z-10 left-0 bottom-0 right-0 py-2 px-3 text-sm bg-black text-white flex justify-between items-center">
                                                     To be deleted
 
-                                                    <ArrowUturnLeftIcon
-                                                        @click="
-                                                            undoDelete(myFile)
-                                                        "
-                                                        class="w-4 h-4 cursor-pointer"
-                                                    />
+                                                    <ArrowUturnLeftIcon @click="undoDelete(myFile)"
+                                                        class="w-4 h-4 cursor-pointer" />
                                                 </div>
-                                                <button
-                                                    @click="removeFile(myFile)"
-                                                    class="absolute z-20 right-3 top-3 w-7 h-7 flex items-center justify-center bg-black/30 text-white rounded-full hover:bg-black/40"
-                                                >
-                                                    <XMarkIcon
-                                                        class="h-5 w-5"
-                                                    />
+                                                <button @click="removeFile(myFile)"
+                                                    class="absolute z-20 right-3 top-3 w-7 h-7 flex items-center justify-center bg-black/30 text-white rounded-full hover:bg-black/40">
+                                                    <XMarkIcon class="h-5 w-5" />
                                                 </button>
 
-                                                <img
-                                                    v-if="
-                                                        isImage(
-                                                            myFile.file ||
-                                                                myFile
-                                                        )
-                                                    "
-                                                    :src="myFile.url"
-                                                    class="object-contain aspect-square"
-                                                    :class="
-                                                        myFile.deleted
-                                                            ? 'opacity-50'
-                                                            : ''
-                                                    "
-                                                />
-                                                <div
-                                                    v-else
-                                                    class="flex flex-col justify-center items-center"
-                                                    :class="
-                                                        myFile.deleted
-                                                            ? 'opacity-50'
-                                                            : ''
-                                                    "
-                                                >
-                                                    <PaperClipIcon
-                                                        class="w-10 h-10 mb-3"
-                                                    />
+                                                <img v-if="
+                                                    isImage(
+                                                        myFile.file ||
+                                                        myFile
+                                                    )
+                                                " :src="myFile.url" class="object-contain aspect-square" :class="myFile.deleted
+                                                    ? 'opacity-50'
+                                                    : ''
+                                                    " />
+
+                                                <div v-else class="flex flex-col justify-center items-center px-3"
+                                                    :class="myFile.deleted ? 'opacity-50' : ''">
+                                                    <PaperClipIcon class="w-10 h-10 mb-3" />
 
                                                     <small class="text-center">
                                                         {{
@@ -294,30 +276,22 @@ function undoDelete(myFile) {
                                                     </small>
                                                 </div>
                                             </div>
-                                        </template>
+                                            <small class="text-red-500">{{ attachmentErrors[ind] }}</small>
+                                        </div>
                                     </div>
                                 </div>
 
                                 <div class="flex gap-2 py-3 px-4">
-                                    <button
-                                        type="button"
-                                        class="flex items-center justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 w-full relative"
-                                    >
+                                    <button type="button"
+                                        class="flex items-center justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 w-full relative">
                                         <PaperClipIcon class="w-4 h-4 mr-2" />
                                         Attach Files
-                                        <input
-                                            @click.stop
-                                            @change="onAttachmentChoose"
-                                            type="file"
-                                            multiple
-                                            class="absolute left-0 top-0 right-0 bottom-0 opacity-0"
-                                        />
+                                        <input @click.stop @change="onAttachmentChoose" type="file" multiple
+                                            class="absolute left-0 top-0 right-0 bottom-0 opacity-0" />
                                     </button>
-                                    <button
-                                        type="button"
+                                    <button type="button"
                                         class="flex items-center justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 w-full"
-                                        @click="submit"
-                                    >
+                                        @click="submit">
                                         <BookmarkIcon class="w-4 h-4 mr-2" />
                                         Submit
                                     </button>
