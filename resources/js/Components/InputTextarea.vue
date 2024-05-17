@@ -3,7 +3,8 @@ import { onMounted, ref } from "vue";
 const props = defineProps({
     modelValue: {
         type: String,
-        required: true,
+        // required: true,
+        required: false,
     },
     placeholder: String,
     autoResize: {
