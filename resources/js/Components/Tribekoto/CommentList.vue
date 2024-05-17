@@ -19,6 +19,9 @@ const props = defineProps({
         default: null
     }
 })
+
+const emit = defineEmits(['commentCreate', 'commentDelete']);
+
 function startCommentEdit(comment) {
     console.log(comment)
     editingComment.value = {
@@ -26,6 +29,7 @@ function startCommentEdit(comment) {
         comment: comment.comment.replace(/<br\s*\/?>/gi, '\n') // <br />, <br > <br> <br/>, <br    />
     }
 }
+
 function createComment() {
     axiosClient.post(route('post.comment.create', props.post), {
         comment: newCommentText.value,
@@ -38,8 +42,10 @@ function createComment() {
                 props.parentComment.num_of_comments++;
             }
             props.post.num_of_comments++;
+            emit('commentCreate', data)
         })
 }
+
 function deleteComment(comment) {
     if (!window.confirm('Are you sure you want to delete this comment?')) {
         return false;
@@ -56,6 +62,7 @@ function deleteComment(comment) {
             props.post.num_of_comments--;
         })
 }
+
 function updateComment() {
     axiosClient.put(route('comment.update', editingComment.value.id), editingComment.value)
         .then(({ data }) => {
@@ -68,6 +75,7 @@ function updateComment() {
             })
         })
 }
+
 function sendCommentReaction(comment) {
     axiosClient.post(route('comment.reaction', comment.id), {
         reaction: 'like'
@@ -77,12 +85,26 @@ function sendCommentReaction(comment) {
             comment.num_of_reactions = data.num_of_reactions;
         })
 }
+
+function onCommentCreate(comment) {
+    if (props.parentComment) {
+        props.parentComment.num_of_comments++;
+    }
+    emit('commentCreate', comment)
+}
+
+function onCommentDelete(comment) {
+    if (props.parentComment) {
+        props.parentComment.num_of_comments--;
+    }
+    emit('commentDelete', comment)
+}
 </script>
 <template>
     <div class="flex gap-2 mb-3">
         <a href="javascript:void(0)">
             <img :src="authUser.avatar_url"
-                class="w-[40px] rounded-full border border-2 transition-all hover:border-blue-500" />
+                class="w-[40px] rounded-full border-2 transition-all hover:border-blue-500" />
         </a>
         <div class="flex flex-1">
             <InputTextarea v-model="newCommentText" placeholder="Enter your comment here" rows="1"
@@ -96,7 +118,7 @@ function sendCommentReaction(comment) {
                 <div class="flex gap-2">
                     <a href="javascript:void(0)">
                         <img :src="comment.user.avatar_url"
-                            class="w-[40px] rounded-full border border-2 transition-all hover:border-blue-500" />
+                            class="w-[40px] rounded-full border-2 transition-all hover:border-blue-500" />
                     </a>
                     <div>
                         <h4 class="font-bold">
@@ -142,7 +164,8 @@ function sendCommentReaction(comment) {
                         </DisclosureButton>
                     </div>
                     <DisclosurePanel class="mt-3">
-                        <CommentList :post="post" :data="{ comments: comment.comments }" :parent-comment="comment" />
+                        <CommentList :post="post" :data="{ comments: comment.comments }" :parent-comment="comment"
+                            @comment-create="onCommentCreate" @comment-delete="onCommentDelete" />
                     </DisclosurePanel>
                 </Disclosure>
             </div>
