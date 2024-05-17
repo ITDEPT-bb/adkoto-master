@@ -37,7 +37,6 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::post('/profile/update-images', [ProfileController::class, 'updateImage'])
-        // ->name('profile.updateCover');
         ->name('profile.updateImages');
 });
 
@@ -49,5 +48,8 @@ Route::put('/post/{post}', [PostController::class, 'update'])
 
 Route::delete('/post/{post}', [PostController::class, 'destroy'])
     ->name('post.destroy');
+
+Route::get('/post/download/{attachment}', [PostController::class, 'downloadAttachment'])
+    ->name('post.download');
 
 require __DIR__ . '/auth.php';
