@@ -5,7 +5,10 @@ import FollowingList from "@/Components/Tribekoto/FollowingList.vue";
 import CreatePost from "@/Components/Tribekoto/CreatePost.vue";
 import PostList from "@/Components/Tribekoto/PostList.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-defineProps({});
+
+defineProps({
+    posts: Object,
+});
 </script>
 
 <template>
@@ -23,7 +26,8 @@ defineProps({});
                 class="lg:col-span-6 lg:order-2 h-full overflow-hidden flex flex-col"
             >
                 <CreatePost />
-                <PostList class="flex-1" />
+                <!-- <PostList class="flex-1" /> -->
+                <PostList :posts="posts.data" class="flex-1"/>
             </div>
         </div>
     </AuthenticatedLayout>

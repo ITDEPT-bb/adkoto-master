@@ -40,4 +40,7 @@ Route::middleware('auth')->group(function () {
         ->name('profile.updateImages');
 });
 
+Route::post('/post', [\App\Http\Controllers\PostController::class, 'store'])
+    ->name('post.create');
+
 require __DIR__ . '/auth.php';
