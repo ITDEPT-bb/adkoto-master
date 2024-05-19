@@ -39,62 +39,39 @@ const submit = () => {
 
 <template>
     <GuestLayout>
+
         <Head title="Register" />
 
         <form @submit.prevent="submit">
             <div>
                 <InputLabel for="name" value="Name" />
 
-                <TextInput
-                    id="name"
-                    type="text"
-                    class="mt-1 block w-full"
-                    v-model="form.name"
-                    required
-                    autocomplete="name"
-                />
+                <TextInput id="name" type="text" class="mt-1 block w-full" v-model="form.name" required
+                    autocomplete="name" />
 
                 <InputError class="mt-2" :message="form.errors.name" />
             </div>
 
             <div class="mt-4">
                 <InputLabel for="surname" value="Surname" />
-                <TextInput
-                    id="surname"
-                    v-model="form.surname"
-                    type="text"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="surname"
-                />
+                <TextInput id="surname" v-model="form.surname" type="text" class="mt-1 block w-full" required
+                    autocomplete="surname" />
                 <InputError class="mt-2" :message="form.errors.surname" />
             </div>
 
             <div class="mt-4">
                 <InputLabel for="email" value="Email" />
 
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autocomplete="username"
-                />
+                <TextInput id="email" type="email" class="mt-1 block w-full" v-model="form.email" required
+                    autocomplete="username" />
 
                 <InputError class="mt-2" :message="form.errors.email" />
             </div>
 
             <div class="mt-4">
                 <InputLabel for="phone" value="Mobile No." />
-                <TextInput
-                    id="phone"
-                    v-model="form.phone"
-                    type="tel"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="phone"
-                />
+                <TextInput id="phone" v-model="form.phone" type="tel" class="mt-1 block w-full" required
+                    autocomplete="phone" />
                 <InputError class="mt-2" :message="form.errors.phone" />
             </div>
 
@@ -113,27 +90,17 @@ const submit = () => {
 
             <div class="mt-4">
                 <InputLabel for="birthday" value="Birthday" />
-                <flat-pickr
-                    id="birthday"
-                    v-model="form.birthday"
-                    type="date"
-                    class="mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                    required
-                    autocomplete="birthday"
-                    placeholder="Select date"
-                    :config="config"
-                />
+                <flat-pickr id="birthday" v-model="form.birthday" type="date"
+                    class="mt-1 block w-full rounded-md shadow-sm border-gray-300 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 focus:border-red-500 focus:ring dark:focus:border-red-600 focus:ring-red-500 dark:focus:ring-red-600 focus:ring-opacity-50"
+                    required autocomplete="birthday" placeholder="Select date" :config="config" />
                 <InputError class="mt-2" :message="form.errors.birthday" />
             </div>
 
             <div class="mt-4">
                 <InputLabel for="gender" value="Gender" />
-                <select
-                    v-model="form.gender"
-                    id="gender"
-                    class="mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                    required
-                >
+                <select v-model="form.gender" id="gender"
+                    class="mt-1 block w-full rounded-md shadow-sm border-gray-300 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 focus:border-red-500 focus:ring dark:focus:border-red-600 focus:ring-red-500 dark:focus:ring-red-600 focus:ring-opacity-50"
+                    required>
                     <option disabled value="">Select One</option>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
@@ -145,52 +112,28 @@ const submit = () => {
             <div class="mt-4">
                 <InputLabel for="password" value="Password" />
 
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="new-password"
-                />
+                <TextInput id="password" type="password" class="mt-1 block w-full" v-model="form.password" required
+                    autocomplete="new-password" />
 
                 <InputError class="mt-2" :message="form.errors.password" />
             </div>
 
             <div class="mt-4">
-                <InputLabel
-                    for="password_confirmation"
-                    value="Confirm Password"
-                />
+                <InputLabel for="password_confirmation" value="Confirm Password" />
 
-                <TextInput
-                    id="password_confirmation"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password_confirmation"
-                    required
-                    autocomplete="new-password"
-                />
+                <TextInput id="password_confirmation" type="password" class="mt-1 block w-full"
+                    v-model="form.password_confirmation" required autocomplete="new-password" />
 
-                <InputError
-                    class="mt-2"
-                    :message="form.errors.password_confirmation"
-                />
+                <InputError class="mt-2" :message="form.errors.password_confirmation" />
             </div>
 
             <div class="flex items-center justify-end mt-4">
-                <Link
-                    :href="route('login')"
-                    class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
-                >
-                    Already registered?
+                <Link :href="route('login')"
+                    class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 dark:focus:ring-offset-gray-800">
+                Already registered?
                 </Link>
 
-                <PrimaryButton
-                    class="ms-4"
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
+                <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                     Register
                 </PrimaryButton>
             </div>
