@@ -227,7 +227,10 @@ function followUser() {
                     <TabPanels class="mt-2">
                         <TabPanel>
                             <template v-if="posts">
-                                <CreatePost />
+                                <!-- <CreatePost /> -->
+                                <template v-if="isMyProfile">
+                                    <CreatePost />
+                                </template>
                                 <PostList :posts="posts.data" class="flex-1" />
                             </template>
                             <div v-else class="py-8 text-center">
