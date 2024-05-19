@@ -16,7 +16,8 @@ defineProps({
         default: false
     }
 })
-defineEmits(['approve', 'reject', 'roleChange'])
+
+defineEmits(['approve', 'reject', 'roleChange', 'delete'])
 </script>
 
 <template>
@@ -27,7 +28,7 @@ defineEmits(['approve', 'reject', 'roleChange'])
             </Link>
             <div class="flex justify-between flex-1">
                 <Link :href="route('profile', user.username)">
-                <h3 class="font-black hover:underline">{{ user.name }}</h3>
+                <h3 class="font-black hover:underline">{{ user.name }} {{ user.surname }}</h3>
                 </Link>
                 <div v-if="forApprove" class="flex gap-1">
                     <button class="text-xs py-1 px-2 rounded bg-emerald-500 hover:bg-emerald-600 text-white"
@@ -43,9 +44,14 @@ defineEmits(['approve', 'reject', 'roleChange'])
                     <select @change="$emit('roleChange', user, $event.target.value)"
                         class="rounded-md border-0 py-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 max-w-xs text-sm leading-6"
                         :disabled="disableRoleDropdown">
-                        <option :selected="user.role === 'admin'">admin</option>
-                        <option :selected="user.role === 'user'">user</option>
+                        <option :selected="user.role === 'admin'">Admin</option>
+                        <option :selected="user.role === 'user'">User</option>
                     </select>
+
+                    <button @click="$emit('delete', user)"
+                        class="text-xs py-1.5 px-2 rounded bg-gray-700 hover:bg-gray-800 text-white ml-3 disabled:bg-gray-500"
+                        :disabled="disableRoleDropdown">Delete
+                    </button>
                 </div>
             </div>
         </div>
