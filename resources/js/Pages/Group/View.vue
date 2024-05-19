@@ -257,7 +257,7 @@ function onRoleChange(user, role) {
                     </div>
                 </div>
             </div>
-            <div class="border-t m-4 pt-0">
+            <div class="border-t m-4 mt-0">
                 <TabGroup>
                     <TabList class="flex bg-white dark:bg-slate-950 dark:text-white">
                         <Tab v-slot="{ selected }" as="template">
@@ -287,7 +287,7 @@ function onRoleChange(user, role) {
                                     There are no posts in this group. Be the first and create it.
                                 </div>
                             </template>
-                            <div class="py-8 text-center dark:text-gray-100">
+                            <div v-else class="py-8 text-center dark:text-gray-100">
                                 You don't have permission to view these posts.
                             </div>
                         </TabPanel>
@@ -324,7 +324,7 @@ function onRoleChange(user, role) {
                                 </PrimaryButton>
                             </template>
 
-                            <div v-else class="ck-content-output" v-html="group.about">
+                            <div v-else class="ck-content-output dark:text-gray-100" v-html="group.about">
 
                             </div>
                         </TabPanel>
