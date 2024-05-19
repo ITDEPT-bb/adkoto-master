@@ -7,6 +7,7 @@ use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdateCommentRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Http\Resources\CommentResource;
+use App\Http\Resources\PostResource;
 use App\Models\Comment;
 use App\Models\Post;
 use App\Models\PostAttachment;
@@ -21,6 +22,21 @@ use Illuminate\Validation\Rule;
 
 class PostController extends Controller
 {
+    public function view(Post $post)
+    {
+        $post->loadCount('reactions');
+        $post->load([
+            'comments' => function ($query) {
+                $query->withCount('reactions'); // SELECT * FROM comments WHERE post_id IN (1, 2, 3...)
+                // SELECT COUNT(*) from reactions
+            },
+        ]);
+
+        return inertia('Post/View', [
+            'post' => new PostResource($post)
+        ]);
+    }
+
     /**
      * Display a listing of the resource.
      */
