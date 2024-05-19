@@ -10,12 +10,21 @@ import EditDeleteDropdown from "@/Components/Tribekoto/EditDeleteDropdown.vue";
 import PostAttachments from "@/Components/Tribekoto/PostAttachments.vue";
 
 import CommentList from "@/Components/Tribekoto/CommentList.vue";
+import { computed } from "vue";
 
 const props = defineProps({
     post: Object,
 });
 
 const emit = defineEmits(["editClick", "attachmentClick"]);
+
+const postBody = computed(() => props.post.body.replace(
+    /(#\w+)(?![^<]*<\/a>)/g,
+    (match, group) => {
+        const encodedGroup = encodeURIComponent(group);
+        return `<a href="/search/${encodedGroup}" class="hashtag">${group}</a>`;
+    })
+)
 
 function openEditModal() {
     emit("editClick", props.post);
@@ -51,7 +60,8 @@ function deletePost() {
             <EditDeleteDropdown :user="post.user" :post="post" @edit="openEditModal" @delete="deletePost" />
         </div>
         <div class="mb-3">
-            <ReadMoreReadLess :content="post.body" />
+            <!-- <ReadMoreReadLess :content="post.body" /> -->
+            <ReadMoreReadLess :content="postBody" />
         </div>
         <div class="grid gap-3 mb-3" :class="[
             post.attachments.length === 1 ? 'grid-cols-1' : 'grid-cols-2',
