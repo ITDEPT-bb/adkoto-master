@@ -103,7 +103,7 @@ function onCommentDelete(comment) {
 <template>
     <div class="flex gap-2 mb-3">
         <Link :href="route('profile', authUser.username)">
-        <img :src="authUser.avatar_url" class="w-[40px] rounded-full border-2 transition-all hover:border-blue-500" />
+        <img :src="authUser.avatar_url" class="w-[40px] rounded-full border-2 transition-all hover:border-red-500" />
         </Link>
         <div class="flex flex-1">
             <InputTextarea v-model="newCommentText" placeholder="Enter your comment here" rows="1"
@@ -117,12 +117,12 @@ function onCommentDelete(comment) {
                 <div class="flex gap-2">
                     <a href="javascript:void(0)">
                         <img :src="comment.user.avatar_url"
-                            class="w-[40px] rounded-full border-2 transition-all hover:border-blue-500" />
+                            class="w-[40px] rounded-full border-2 transition-all hover:border-red-500" />
                     </a>
                     <div>
                         <h4 class="font-bold">
                             <a href="javascript:void(0)" class="hover:underline">
-                                {{ comment.user.name }}
+                                {{ comment.user.name }} {{ comment.user.surname }}
                             </a>
                         </h4>
                         <small class="text-xs text-gray-400">{{ comment.updated_at }}</small>
@@ -136,7 +136,7 @@ function onCommentDelete(comment) {
                     <InputTextarea v-model="editingComment.comment" placeholder="Enter your comment here" rows="1"
                         class="w-full max-h-[160px] resize-none"></InputTextarea>
                     <div class="flex gap-2 justify-end">
-                        <button @click="editingComment = null" class="rounded-r-none text-indigo-500">cancel
+                        <button @click="editingComment = null" class="rounded-r-none text-red-500">cancel
                         </button>
                         <IndigoButton @click="updateComment" class="w-[100px]">update
                         </IndigoButton>
@@ -146,17 +146,17 @@ function onCommentDelete(comment) {
                 <Disclosure>
                     <div class="mt-1 flex gap-2">
                         <button @click="sendCommentReaction(comment)"
-                            class="flex items-center text-xs text-indigo-500 py-0.5 px-1  rounded-lg" :class="[
+                            class="flex items-center text-xs text-red-500 py-0.5 px-1  rounded-lg" :class="[
                                 comment.current_user_has_reaction ?
-                                    'bg-indigo-50 hover:bg-indigo-100' :
-                                    'hover:bg-indigo-50'
+                                    'bg-red-50 hover:bg-red-100' :
+                                    'hover:bg-red-50'
                             ]">
                             <HandThumbUpIcon class="w-3 h-3 mr-1" />
                             <span class="mr-2">{{ comment.num_of_reactions }}</span>
                             {{ comment.current_user_has_reaction ? 'unlike' : 'like' }}
                         </button>
                         <DisclosureButton
-                            class="flex items-center text-xs text-indigo-500 py-0.5 px-1 hover:bg-indigo-100 rounded-lg">
+                            class="flex items-center text-xs text-red-500 py-0.5 px-1 hover:bg-red-100 rounded-lg">
                             <ChatBubbleLeftEllipsisIcon class="w-3 h-3 mr-1" />
                             <span class="mr-2">{{ comment.num_of_comments }}</span>
                             comments

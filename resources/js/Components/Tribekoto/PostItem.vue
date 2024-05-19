@@ -11,6 +11,7 @@ import PostAttachments from "@/Components/Tribekoto/PostAttachments.vue";
 
 import CommentList from "@/Components/Tribekoto/CommentList.vue";
 import { computed } from "vue";
+import UrlPreview from "@/Components/Tribekoto/UrlPreview.vue";
 
 const props = defineProps({
     post: Object,
@@ -18,13 +19,16 @@ const props = defineProps({
 
 const emit = defineEmits(["editClick", "attachmentClick"]);
 
-const postBody = computed(() => props.post.body.replace(
-    /(#\w+)(?![^<]*<\/a>)/g,
-    (match, group) => {
-        const encodedGroup = encodeURIComponent(group);
-        return `<a href="/search/${encodedGroup}" class="hashtag">${group}</a>`;
-    })
-)
+const postBody = computed(() => {
+    let content = props.post.body.replace(
+        /(?:(\s+)|<p>)((#\w+)(?![^<]*<\/a>))/g,
+        (match, group1, group2) => {
+            const encodedGroup = encodeURIComponent(group2);
+            return `${group1 || ''}<a href="/search/${encodedGroup}" class="hashtag">${group2}</a>`;
+        }
+    )
+    return content;
+})
 
 function openEditModal() {
     emit("editClick", props.post);
@@ -62,6 +66,7 @@ function deletePost() {
         <div class="mb-3">
             <!-- <ReadMoreReadLess :content="post.body" /> -->
             <ReadMoreReadLess :content="postBody" />
+            <UrlPreview :preview="post.preview" :url="post.preview_url" />
         </div>
         <div class="grid gap-3 mb-3" :class="[
             post.attachments.length === 1 ? 'grid-cols-1' : 'grid-cols-2',
@@ -74,15 +79,15 @@ function deletePost() {
                 <button @click="sendReaction"
                     class="text-gray-800 flex gap-1 items-center justify-center  rounded-lg py-2 px-4 flex-1" :class="[
                         post.current_user_has_reaction ?
-                            'bg-sky-100 hover:bg-sky-200' :
-                            'bg-gray-100  hover:bg-gray-200'
+                            'bg-red-300 hover:bg-red-400' :
+                            'bg-red-100  hover:bg-red-300'
                     ]">
                     <HandThumbUpIcon class="w-5 h-5" />
                     <span class="mr-2">{{ post.num_of_reactions }}</span>
                     {{ post.current_user_has_reaction ? 'Unlike' : 'Like' }}
                 </button>
                 <DisclosureButton
-                    class="text-gray-800 flex gap-1 items-center justify-center bg-gray-100 rounded-lg hover:bg-gray-200 py-2 px-4 flex-1">
+                    class="text-gray-800 flex gap-1 items-center justify-center bg-red-100 rounded-lg hover:bg-red-300 py-2 px-4 flex-1">
                     <ChatBubbleLeftRightIcon class="w-5 h-5" />
                     <span class="mr-2">{{ post.num_of_comments }}</span>
                     Comment

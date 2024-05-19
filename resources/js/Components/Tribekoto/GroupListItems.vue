@@ -4,6 +4,8 @@ import GroupItem from "@/Components/Tribekoto/GroupItem.vue";
 import { ref } from "vue";
 import GroupModal from "@/Components/Tribekoto/GroupModal.vue";
 
+import { PlusIcon } from '@heroicons/vue/24/solid';
+
 const searchKeyword = ref('')
 const showNewGroupModal = ref(false)
 
@@ -21,8 +23,9 @@ function onGroupCreate(group) {
     <div class="flex gap-2  mt-4">
         <TextInput :model-value="searchKeyword" placeholder="Type to search" class="w-full" />
         <button @click="showNewGroupModal = true"
-            class="text-sm bg-indigo-500 hover:bg-indigo-600 text-white rounded py-1 px-2 w-[120px]">
-            new group
+            class="text-center items-center bg-red-500 hover:bg-red-600 text-white rounded py-1 px-2">
+            <!-- new group -->
+            <PlusIcon class="h-8 w-8" />
         </button>
     </div>
 
