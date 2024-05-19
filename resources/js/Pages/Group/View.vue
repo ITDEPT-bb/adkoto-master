@@ -257,7 +257,7 @@ function onRoleChange(user, role) {
                     </div>
                 </div>
             </div>
-            <div class="border-t p-4 pt-0">
+            <div class="border-t m-4 pt-0">
                 <TabGroup>
                     <TabList class="flex bg-white">
                         <Tab v-slot="{ selected }" as="template">
