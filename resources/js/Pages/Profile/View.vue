@@ -13,6 +13,8 @@ import CreatePost from "@/Components/Tribekoto/CreatePost.vue";
 import PostList from "@/Components/Tribekoto/PostList.vue";
 import UserListItem from "@/Components/Tribekoto/UserListItem.vue";
 import TextInput from "@/Components/TextInput.vue";
+import PostAttachments from "@/Components/Tribekoto/PostAttachments.vue";
+import TabPhotos from "@/Pages/Profile/TabPhotos.vue";
 
 const imagesForm = useForm({
     avatar: null,
@@ -47,6 +49,7 @@ const props = defineProps({
     posts: Object,
     followers: Array,
     followings: Array,
+    photos: Array
 });
 
 function onCoverChange(event) {
@@ -264,7 +267,7 @@ function followUser() {
                             </div>
                         </TabPanel>
                         <TabPanel>
-                            Photos
+                            <TabPhotos :photos="photos" />
                         </TabPanel>
                         <TabPanel v-if="isMyProfile">
                             <Edit :must-verify-email="mustVerifyEmail" :status="status" />

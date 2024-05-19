@@ -13,6 +13,7 @@ import TextInput from "@/Components/TextInput.vue";
 import GroupForm from "@/Components/Tribekoto/GroupForm.vue";
 import PostList from "@/Components/Tribekoto/PostList.vue";
 import CreatePost from "@/Components/Tribekoto/CreatePost.vue";
+import TabPhotos from "@/Pages/Profile/TabPhotos.vue";
 
 const imagesForm = useForm({
     thumbnail: null,
@@ -40,7 +41,8 @@ const props = defineProps({
     },
     posts: Object,
     users: Array,
-    requests: Array
+    requests: Array,
+    photos: Array
 });
 
 const aboutForm = useForm({
@@ -310,7 +312,7 @@ function onRoleChange(user, role) {
                             </div>
                         </TabPanel>
                         <TabPanel class="bg-white p-3 shadow">
-                            Photos
+                            <TabPhotos :photos="photos" />
                         </TabPanel>
                         <TabPanel class="bg-white p-3 shadow">
                             <template v-if="isCurrentUserAdmin">
