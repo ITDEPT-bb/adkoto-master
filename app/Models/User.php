@@ -32,7 +32,8 @@ class User extends Authenticatable
         'gender',
         'password',
         'cover_path',
-        'avatar_path'
+        'avatar_path',
+        'pinned_post_id'
     ];
 
     /**

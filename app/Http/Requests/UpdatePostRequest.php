@@ -31,7 +31,10 @@ class UpdatePostRequest extends StorePostRequest
         //     'body' => ['nullable', 'string'],
         //     'user_id' => ['numeric']
         // ];
-        return array_merge(parent::rules(), [
+        $rules = parent::rules();
+        unset($rules['group_id']);
+
+        return array_merge($rules, [
             'deleted_file_ids' => 'array',
             'deleted_file_ids.*' => 'numeric',
         ]);
