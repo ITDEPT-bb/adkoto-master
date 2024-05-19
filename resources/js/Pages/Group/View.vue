@@ -11,6 +11,8 @@ import InviteUserModal from "@/Pages/Group/InviteUserModal.vue";
 import UserListItem from "@/Components/Tribekoto/UserListItem.vue";
 import TextInput from "@/Components/TextInput.vue";
 import GroupForm from "@/Components/Tribekoto/GroupForm.vue";
+import PostList from "@/Components/Tribekoto/PostList.vue";
+import CreatePost from "@/Components/Tribekoto/CreatePost.vue";
 
 const imagesForm = useForm({
     thumbnail: null,
@@ -36,6 +38,7 @@ const props = defineProps({
     group: {
         type: Object
     },
+    posts: Object,
     users: Array,
     requests: Array
 });
@@ -153,7 +156,8 @@ function onRoleChange(user, role) {
 
 <template>
     <AuthenticatedLayout>
-        <div class="max-w-[768px] mx-auto h-full overflow-auto">
+        <!-- <div class="max-w-[768px] mx-auto h-full overflow-auto"> -->
+        <div class="mx-auto h-full overflow-auto">
             <div class="px-4">
                 <div v-show="showNotification && success"
                     class="my-2 py-2 px-3 font-medium text-sm bg-emerald-500 text-white">
@@ -259,8 +263,14 @@ function onRoleChange(user, role) {
                     </TabList>
 
                     <TabPanels class="mt-2">
-                        <TabPanel class="bg-white p-3 shadow">
-                            Posts
+                        <TabPanel>
+                            <template v-if="posts">
+                                <CreatePost :group="group" />
+                                <PostList :posts="posts.data" class="flex-1" />
+                            </template>
+                            <div v-else class="py-8 text-center">
+                                You don't have permission to view these posts.
+                            </div>
                         </TabPanel>
                         <TabPanel v-if="isJoinedToGroup">
                             <div class="mb-3">
