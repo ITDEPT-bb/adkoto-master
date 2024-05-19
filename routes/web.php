@@ -1,36 +1,20 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-// Route::get('/', function () {
-//     return Inertia::render('Welcome', [
-//         'canLogin' => Route::has('login'),
-//         'canRegister' => Route::has('register'),
-//         'laravelVersion' => Application::VERSION,
-//         'phpVersion' => PHP_VERSION,
-//     ]);
-// });
-
-// Route::get('/dashboard', function () {
-//     return Inertia::render('Dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::get('/', [HomeController::class, 'index'])
-    // ->middleware(['auth', 'verified'])->name('home');
     ->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/u/{user:username}', [ProfileController::class, 'index'])
     ->name('profile');
 
 Route::middleware('auth')->group(function () {
-    // Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    // Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    // Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
@@ -40,6 +24,7 @@ Route::middleware('auth')->group(function () {
         ->name('profile.updateImages');
 });
 
+// Posts
 Route::post('/post', [PostController::class, 'store'])
     ->name('post.create');
 
@@ -55,6 +40,7 @@ Route::get('/post/download/{attachment}', [PostController::class, 'downloadAttac
 Route::post('/post/{post}/reaction', [PostController::class, 'postReaction'])
     ->name('post.reaction');
 
+// Comments
 Route::post('/post/{post}/comment', [PostController::class, 'createComment'])
     ->name('post.comment.create');
 
@@ -66,5 +52,9 @@ Route::put('/comment/{comment}', [PostController::class, 'updateComment'])
 
 Route::post('/comment/{comment}/reaction', [PostController::class, 'commentReaction'])
     ->name('comment.reaction');
+
+// Groups
+Route::post('/group', [GroupController::class, 'store'])
+    ->name('group.create');
 
 require __DIR__ . '/auth.php';
