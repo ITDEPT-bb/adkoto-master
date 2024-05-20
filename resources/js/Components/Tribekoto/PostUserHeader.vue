@@ -2,6 +2,11 @@
 import { Link } from '@inertiajs/vue3';
 import { ChevronRightIcon } from "@heroicons/vue/24/solid/index.js";
 
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(relativeTime);
+
 defineProps({
     post: {
         type: Object
@@ -30,7 +35,7 @@ defineProps({
                     </Link>
                 </template>
             </h4>
-            <small v-if="showTime" class="text-gray-400">{{ post.updated_at }}</small>
+            <small v-if="showTime" class="text-gray-400">{{ dayjs(post.updated_at).fromNow() }}</small>
         </div>
     </div>
 </template>

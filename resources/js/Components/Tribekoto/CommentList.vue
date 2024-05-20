@@ -115,15 +115,19 @@ function onCommentDelete(comment) {
         <div v-for="comment of data.comments" :key="comment.id" class="mb-4">
             <div class="flex justify-between gap-2">
                 <div class="flex gap-2">
-                    <a href="javascript:void(0)">
-                        <img :src="comment.user.avatar_url"
-                            class="w-[40px] rounded-full border-2 transition-all hover:border-red-500" />
-                    </a>
+                    <!-- <a href="javascript:void(0)"> -->
+                    <Link :href="route('profile', comment.user.username)">
+                    <img :src="comment.user.avatar_url"
+                        class="w-[40px] rounded-full border-2 transition-all hover:border-red-500" />
+                    </Link>
+                    <!-- </a> -->
                     <div>
                         <h4 class="font-bold">
-                            <a href="javascript:void(0)" class="hover:underline">
-                                {{ comment.user.name }} {{ comment.user.surname }}
-                            </a>
+                            <!-- <a href="javascript:void(0)" class="hover:underline"> -->
+                            <Link class="hover:underline" :href="route('profile', comment.user.username)">
+                            {{ comment.user.name }} {{ comment.user.surname }}
+                            <!-- </a> -->
+                            </Link>
                         </h4>
                         <small class="text-xs text-gray-400">{{ comment.updated_at }}</small>
                     </div>
