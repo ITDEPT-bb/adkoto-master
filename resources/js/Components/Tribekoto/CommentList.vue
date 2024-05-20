@@ -129,7 +129,7 @@ function onCommentDelete(comment) {
                             <!-- </a> -->
                             </Link>
                         </h4>
-                        <small class="text-xs text-gray-400">{{ comment.updated_at }}</small>
+                        <small class="text-xs text-gray-400">{{ dayjs(comment.updated_at).fromNow() }}</small>
                     </div>
                 </div>
                 <EditDeleteDropdown :user="comment.user" :post="post" :comment="comment"
