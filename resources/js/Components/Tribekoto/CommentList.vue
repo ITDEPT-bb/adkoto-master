@@ -8,6 +8,12 @@ import { usePage, Link } from "@inertiajs/vue3";
 import { ref } from "vue";
 import axiosClient from "@/axiosClient.js";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
+
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(relativeTime);
+
 const authUser = usePage().props.auth.user;
 const newCommentText = ref('')
 const editingComment = ref(null);
