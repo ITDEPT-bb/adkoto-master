@@ -54,9 +54,9 @@ function toggleDarkMode() {
                         <TextInput v-model="keywords" placeholder="Search on the website" class="w-full"
                             @keyup.enter="search" />
 
-                        <button @click="toggleDarkMode" class="dark:text-white">
+                        <!-- <button @click="toggleDarkMode" class="dark:text-white">
                             <MoonIcon class="w-5 h-5" />
-                        </button>
+                        </button> -->
                     </div>
 
                     <div class="hidden sm:flex sm:items-center">
