@@ -136,7 +136,7 @@ function followUser() {
 
                 <div class="group relative bg-white dark:bg-slate-950 dark:text-gray-100">
                     <img :src="coverImageSrc || user.cover_url || '/img/default_cover.jpg'"
-                        class="w-full h-[200px] object-cover">
+                        class="w-full h-[400px] object-cover">
                     <div class="absolute top-2 right-2 ">
                         <button v-if="!coverImageSrc"
                             class="bg-gray-50 hover:bg-gray-100 text-gray-800 py-1 px-2 text-xs flex items-center opacity-0 group-hover:opacity-100">
