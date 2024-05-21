@@ -192,7 +192,8 @@ function followUser() {
                         <div class="flex justify-between items-center flex-1 p-4">
                             <div>
                                 <h2 class="font-bold text-lg">{{ user.name }} {{ user.surname }}</h2>
-                                <p class="text-xs text-gray-500">{{ followerCount }} follower(s)</p>
+                                <p class="text-gray-500 mb-1">@{{ user.username }}</p>
+                                <p class="text-xs text-gray-500 ps-1">{{ followerCount }} follower(s)</p>
                             </div>
 
                             <!-- <div v-if="authUser.id !== user.id"> -->
