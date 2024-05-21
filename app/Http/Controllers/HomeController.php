@@ -38,6 +38,7 @@ class HomeController extends Controller
                     ->orWhere('posts.user_id', $userId);
             })
             // ->whereNot('posts.user_id', $userId)
+            ->latest()
             ->paginate(10);
 
         $posts = PostResource::collection($posts);
