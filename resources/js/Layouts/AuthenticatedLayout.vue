@@ -6,7 +6,8 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import TextInput from "@/Components/TextInput.vue";
-import { MoonIcon } from '@heroicons/vue/24/solid'
+import { MoonIcon } from '@heroicons/vue/24/solid';
+import logo from '/public/img/tribekoto.png';
 
 const showingNavigationDropdown = ref(false);
 const keywords = ref(usePage().props.search || '')
@@ -42,8 +43,9 @@ function toggleDarkMode() {
                         <!-- Logo -->
                         <div class="shrink-0 flex items-center">
                             <Link :href="route('dashboard')">
-                            <ApplicationLogo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
-                            </Link>
+                            <!-- <ApplicationLogo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" /> -->
+                            <img :src="logo" class="block h-9 w-auto" alt="Logo" />
+                        </Link>
                         </div>
 
                     </div>
