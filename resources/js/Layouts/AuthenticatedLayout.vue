@@ -56,6 +56,10 @@ function toggleDarkMode() {
                         <TextInput v-model="keywords" placeholder="Search on the website" class="w-full"
                             @keyup.enter="search" />
 
+                            <Link :href="route('kalakalkoto')">
+                                Kalakalkoto
+                            </Link>
+
                         <!-- <button @click="toggleDarkMode" class="dark:text-white">
                             <MoonIcon class="w-5 h-5" />
                         </button> -->

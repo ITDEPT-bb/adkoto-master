@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\KalakalkotoController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
@@ -24,6 +25,8 @@ use Inertia\Inertia;
 Route::get('/', [HomeController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('dashboard');
 
+    Route::get('/kalakalkoto', [KalakalkotoController::class, 'index'])
+    ->middleware(['auth', 'verified'])->name('kalakalkoto');
 
 Route::get('/u/{user:username}', [ProfileController::class, 'index'])
     ->name('profile');
