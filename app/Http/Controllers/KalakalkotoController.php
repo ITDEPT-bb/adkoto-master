@@ -14,4 +14,11 @@ class KalakalkotoController extends Controller
             //
         ]);
     }
+
+    public function view(): Response
+    {
+        return Inertia::render('Kalakalkoto/Product', [
+            //
+        ]);
+    }
 }

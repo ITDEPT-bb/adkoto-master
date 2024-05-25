@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\KalakalkotoController;
+use App\Http\Controllers\AdkotoController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
@@ -26,7 +27,16 @@ Route::get('/', [HomeController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('dashboard');
 
     Route::get('/kalakalkoto', [KalakalkotoController::class, 'index'])
-    ->middleware(['auth', 'verified'])->name('kalakalkoto');
+    ->middleware(['auth', 'verified'])
+    ->name('kalakalkoto');
+
+Route::get('/kalakalkoto/prod/', [KalakalkotoController::class, 'view'])
+    ->middleware(['auth', 'verified'])
+    ->name('product');
+
+    Route::get('/adkoto', [AdkotoController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('adkoto');
 
 Route::get('/u/{user:username}', [ProfileController::class, 'index'])
     ->name('profile');
