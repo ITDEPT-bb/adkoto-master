@@ -1,13 +1,13 @@
 <script setup>
 import { Link, Head } from '@inertiajs/vue3';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import KalakalLayout from '@/Layouts/KalakalLayout.vue';
 </script>
 
 <template>
 
     <Head title="Kalakalkoto" />
 
-    <AuthenticatedLayout>
+    <KalakalLayout>
         <div class="grid max-w-7xl mx-auto lg:grid-cols-12 gap-3 p-4 h-full">
             <!-- Sidebar -->
             <div class="lg:col-span-3 lg:order-1 h-full overflow-hidden">
@@ -24,7 +24,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                     <!-- Sidebar Content -->
                     <div :class="sidebarOpen ? 'block' : 'hidden'" class="h-full overflow-hidden flex-col lg:flex">
                         <div class="flex justify-between mb-4">
-                            <h2 class="text-xl font-bold">Kalakalkoto</h2>
+                            <!-- <h2 class="text-xl font-bold">Kalakalkoto</h2> -->
                         </div>
                         <nav class="flex-1 overflow-y-auto">
                             <ul>
@@ -63,14 +63,14 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                 <!-- Add more conditional rendering for other views -->
             </div>
         </div>
-    </AuthenticatedLayout>
+    </KalakalLayout>
 </template>
 
 <script>
 export default {
     components: {
         Head,
-        AuthenticatedLayout
+        KalakalLayout
     },
     data() {
         return {

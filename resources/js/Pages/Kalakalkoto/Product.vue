@@ -1,12 +1,12 @@
 <script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import KalakalLayout from '@/Layouts/KalakalLayout.vue';
 </script>
 
 <template>
 
     <Head title="Gadget Set" />
 
-    <AuthenticatedLayout>
+    <KalakalLayout>
 
         <div class="max-w-7xl overflow-y-auto h-full mx-auto p-4">
             <div class="bg-white dark:bg-slate-950 rounded-lg border dark:border-slate-900 p-6">
@@ -20,7 +20,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                 </div>
             </div>
         </div>
-    </AuthenticatedLayout>
+    </KalakalLayout>
 </template>
 
 <script>

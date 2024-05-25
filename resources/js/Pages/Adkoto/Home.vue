@@ -1,6 +1,6 @@
 <script setup>
 import { Head, Link } from "@inertiajs/vue3";
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import AdkotoLayout from "@/Layouts/AdkotoLayout.vue";
 
 import adsFirst from '/public/img/ads/testad1.jpg';
 import adsSecond from '/public/img/ads/testad2.jpg';
@@ -13,9 +13,9 @@ import adsTwo from '/public/img/ads/ADS 2.jpg';
 
     <Head title="Adkoto" />
 
-    <AuthenticatedLayout>
+    <AdkotoLayout>
         <div class="max-w-7xl overflow-y-auto mx-auto gap-3 p-4 h-full">
-            <h1 class="text-4xl font-bold mb-8">Adkoto</h1>
+            <!-- <h1 class="text-4xl font-bold mb-8">Adkoto</h1> -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <div v-for="(ad, index) in ads" :key="index" class="border rounded-lg overflow-hidden bg-white">
                     <div class="h-40 overflow-hidden">
@@ -161,7 +161,7 @@ import adsTwo from '/public/img/ads/ADS 2.jpg';
 
         </div>
 
-    </AuthenticatedLayout>
+    </AdkotoLayout>
 </template>
 
 <script>
