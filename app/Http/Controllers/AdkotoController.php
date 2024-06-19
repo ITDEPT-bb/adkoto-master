@@ -19,12 +19,18 @@ class AdkotoController extends Controller
      *
      * @return Response
      */
-    public function index(): Response
+    public function index(): \Inertia\Response
     {
-        $ads = Ad::where('user_id', Auth::id())->with('attachments')->orderByDesc('created_at')->get();
+        $ads = Ad::where('user_id', Auth::id())
+            ->with('attachments')
+            ->orderByDesc('created_at')
+            ->get();
+
+        $categories = Category::all(); // Fetch all categories
 
         return Inertia::render('Adkoto/Home', [
             'ads' => $ads,
+            'categories' => $categories, // Pass categories to the frontend
         ]);
     }
 

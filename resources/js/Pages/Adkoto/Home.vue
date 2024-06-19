@@ -1,27 +1,66 @@
 <template>
     <AuthenticatedLayout>
+      <div class="max-w-7xl mx-auto p-4 h-full overflow-y-auto">
+        <!-- Create New Ad Button -->
         <Link
-                :href="route('adkoto.create')"
-                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 block"
-            >
-                Create New Ad
-            </Link>
-        <div class="max-w-7xl mx-auto gap-3 p-4 overflow-y-auto h-full">
-            <h1 class="text-2xl font-bold mb-4">Ads</h1>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
-                <AdCard v-for="ad in ads" :key="ad.id" :ad="ad" />
-            </div>
+          :href="route('adkoto.create')"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 block"
+        >
+          Create New Ad
+        </Link>
+
+        <!-- Categories Section -->
+        <div class="mt-8">
+          <h2 class="text-xl font-bold mb-4">Categories</h2>
+          <ul class="flex flex-wrap gap-2">
+            <li v-for="category in categories" :key="category.id">
+              <button
+                @click="selectCategory(category.id)"
+                :class="`px-4 py-2 rounded-lg font-semibold ${selectedCategory === category.id ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`"
+              >
+                {{ category.name }}
+              </button>
+            </li>
+          </ul>
         </div>
+
+        <!-- Advertisements Section -->
+        <div class="mt-8" v-if="filteredAds.length > 0">
+          <h1 class="text-2xl font-bold mb-4">Advertisements</h1>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+            <AdCard v-for="ad in filteredAds" :key="ad.id" :ad="ad" />
+          </div>
+        </div>
+        <div v-else>
+          <p class="text-gray-600">No ads found in this category.</p>
+        </div>
+      </div>
     </AuthenticatedLayout>
-</template>
+  </template>
 
-<script setup>
-import { defineProps } from "vue";
-import { Link } from '@inertiajs/vue3';
-import AdCard from "@/Components/Adkoto/AdCard.vue";
-import AuthenticatedLayout from "@/Layouts/AdkotoLayout.vue";
+  <script setup>
+  import { defineProps, ref, computed } from 'vue';
+  import { Link } from '@inertiajs/vue3';
+  import AdCard from '@/Components/Adkoto/AdCard.vue';
+  import AuthenticatedLayout from '@/Layouts/AdkotoLayout.vue';
 
-const props = defineProps({
+  const props = defineProps({
     ads: Array,
-});
-</script>
+    categories: Array,
+  });
+
+  const selectedCategory = ref(null);
+
+  const filteredAds = computed(() => {
+    if (!selectedCategory.value) {
+      return props.ads;
+    } else {
+      return props.ads.filter(ad => ad.category_id === selectedCategory.value);
+    }
+  });
+
+  function selectCategory(categoryId) {
+    selectedCategory.value = categoryId === selectedCategory.value ? null : categoryId;
+  }
+
+  </script>
