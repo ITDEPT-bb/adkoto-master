@@ -1,7 +1,7 @@
 <!-- resources/js/Pages/Adkoto/Show.vue -->
 <template>
     <AuthenticatedLayout>
-        <div>
+        <div class="max-w-7xl mx-auto gap-3 p-4 overflow-y-auto h-full">
             <AdItem :ad="ad" />
         </div>
     </AuthenticatedLayout>

@@ -91,7 +91,7 @@ class AdkotoController extends Controller
             ]);
         }
 
-        return Redirect::route('adkoto.create')->with('success', 'Ad created successfully.');
+        return Redirect::route('adkoto')->with('success', 'Ad created successfully.');
     }
 
     /**
