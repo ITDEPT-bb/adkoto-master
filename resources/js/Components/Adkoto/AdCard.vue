@@ -53,7 +53,7 @@ const props = defineProps({
                 <img
                     :src="`/storage/${ad.attachments[0].image_path}`"
                     alt="Ad Attachment"
-                    class="w-full h-full object-cover"
+                    class="w-full h-full object-contain"
                 />
             </div>
             <!-- <div
