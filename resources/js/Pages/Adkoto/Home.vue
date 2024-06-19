@@ -25,14 +25,18 @@
         </div>
 
         <!-- Advertisements Section -->
-        <div class="mt-8" v-if="filteredAds.length > 0">
-          <h1 class="text-2xl font-bold mb-4">Advertisements</h1>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+        <div class="mt-8">
+          <h1 class="text-2xl font-bold mb-4">
+            {{ selectedCategory ? getCategoryName(selectedCategory) : 'Advertisements' }}
+          </h1>
+
+          <!-- Show Ads or No Ads Found Message -->
+          <div v-if="filteredAds.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
             <AdCard v-for="ad in filteredAds" :key="ad.id" :ad="ad" />
           </div>
-        </div>
-        <div v-else>
-          <p class="text-gray-600">No ads found in this category.</p>
+          <div v-else class="text-gray-600 mt-4">
+            No ads found in this category.
+          </div>
         </div>
       </div>
     </AuthenticatedLayout>
@@ -61,6 +65,11 @@
 
   function selectCategory(categoryId) {
     selectedCategory.value = categoryId === selectedCategory.value ? null : categoryId;
+  }
+
+  function getCategoryName(categoryId) {
+    const category = props.categories.find(cat => cat.id === categoryId);
+    return category ? category.name : '';
   }
 
   </script>
