@@ -32,4 +32,9 @@ class Ad extends Model
     {
         return $this->hasMany(AdsAttachment::class);
     }
+
+    public function attachments()
+    {
+        return $this->hasMany(AdsAttachment::class);
+    }
 }
