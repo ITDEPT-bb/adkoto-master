@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class AdsAttachment extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['ad_id', 'image_path'];
+
+    public function ad()
+    {
+        return $this->belongsTo(Ad::class);
+    }
 }

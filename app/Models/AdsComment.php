@@ -8,4 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class AdsComment extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['ad_id', 'user_id', 'comment'];
+
+    public function ad()
+    {
+        return $this->belongsTo(Ad::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
