@@ -21,8 +21,11 @@ class AdkotoController extends Controller
      */
     public function index(): \Inertia\Response
     {
-        $ads = Ad::where('user_id', Auth::id())
-            ->with('attachments')
+        // $ads = Ad::where('user_id', Auth::id())
+        //     ->with('attachments')
+        //     ->orderByDesc('created_at')
+        //     ->get();
+        $ads = Ad::with('attachments')
             ->orderByDesc('created_at')
             ->get();
 
