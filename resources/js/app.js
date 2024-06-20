@@ -11,6 +11,9 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import CKEditor from "@ckeditor/ckeditor5-vue";
 import "../css/app.css";
 
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
+
 const html = window.document.documentElement
 const darkMode = parseInt(localStorage.getItem('darkMode') || 1)
 if (darkMode) {
@@ -35,6 +38,7 @@ createInertiaApp({
             .use(plugin)
             .use(CKEditor)
             .use(ZiggyVue)
+            .use(VueSweetalert2)
             .mount(el);
     },
     progress: {

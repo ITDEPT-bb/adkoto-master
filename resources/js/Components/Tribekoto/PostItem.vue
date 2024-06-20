@@ -11,6 +11,7 @@ import CommentList from "@/Components/Tribekoto/CommentList.vue";
 import { computed } from "vue";
 import UrlPreview from "@/Components/Tribekoto/UrlPreview.vue";
 import { MapPinIcon } from "@heroicons/vue/24/outline/index.js";
+import Swal from 'sweetalert2';
 
 const props = defineProps({
     post: Object
@@ -44,13 +45,35 @@ function openEditModal() {
     emit('editClick', props.post)
 }
 
-function deletePost() {
-    if (window.confirm('Are you sure you want to delete this post?')) {
-        router.delete(route('post.destroy', props.post), {
-            preserveScroll: true
-        })
-    }
-}
+// function deletePost() {
+//     if (window.confirm('Are you sure you want to delete this post?')) {
+//         router.delete(route('post.destroy', props.post), {
+//             preserveScroll: true
+//         })
+//     }
+// }
+const deletePost = () => {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'Are you sure you want to delete this post?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            router.delete(route('post.destroy', props.post), {
+                preserveScroll: true
+            }).then(() => {
+                // Optionally handle success or additional logic after deletion
+            }).catch((error) => {
+                // Handle error if deletion fails
+                console.error('Failed to delete post:', error);
+            });
+        }
+    });
+};
 
 function pinUnpinPost() {
     const form = useForm({
