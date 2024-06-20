@@ -56,23 +56,23 @@ function toggleDarkMode() {
 
                     <!-- <div class="hidden sm:flex sm:items-center sm:ms-6"> -->
                     <!-- <div class="flex-1"> -->
-                    <div class="flex items-center gap-3 p-2 flex-1">
-                        <TextInput v-model="keywords" placeholder="Search on the website" class="w-9/12"
+                    <div class="flex items-center sm:gap-10 p-2 flex-1">
+                        <TextInput v-model="keywords" placeholder="Search on the website" class="w-full sm:w-9/12"
                             @keyup.enter="search" />
 
                             <Link :href="route('dashboard')">
                                 <!-- Tribekoto -->
-                                <img :src="tribekotoIcon" class="block h-8 w-auto" alt="Logo" />
+                                <img :src="tribekotoIcon" class="hidden sm:flex h-8 w-auto" alt="Logo" />
                             </Link>
 
                             <Link :href="route('kalakalkoto')">
                                 <!-- Kalakalkoto -->
-                                <img :src="kalakalkotoIcon" class="block h-8 w-auto" alt="Logo" />
+                                <img :src="kalakalkotoIcon" class="hidden sm:flex h-8 w-auto" alt="Logo" />
                             </Link>
 
                             <Link :href="route('adkoto')">
                                 <!-- Adkoto -->
-                                <img :src="adkotoIcon" class="block h-8 w-auto" alt="Logo" />
+                                <img :src="adkotoIcon" class="hidden sm:flex h-8 w-auto" alt="Logo" />
                             </Link>
 
                         <!-- <button @click="toggleDarkMode" class="dark:text-white">
@@ -153,6 +153,15 @@ function toggleDarkMode() {
                         </div>
 
                         <div class="mt-3 space-y-1">
+                            <ResponsiveNavLink :href="route('dashboard')">
+                                Tribekoto
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('kalakalkoto')">
+                                Kalakalkoto
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('adkoto')">
+                                Adkoto
+                            </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('profile', { username: authUser.username })"> Profile
                             </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('logout')" method="post" as="button">
