@@ -1,7 +1,7 @@
 <!-- resources/js/Pages/Adkoto/Show.vue -->
 <template>
     <AuthenticatedLayout>
-        <div class="max-w-7xl mx-auto px-4 py-8">
+        <div class="max-w-7xl mx-auto px-4 py-8 h-full overflow-y-auto">
             <Link
                 :href="route('adkoto')"
                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-5"

@@ -44,6 +44,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/adkoto/{id}', [AdkotoController::class, 'update'])->name('adkoto.update');
     Route::delete('/adkoto/{id}', [AdkotoController::class, 'destroy'])->name('adkoto.destroy');
 
+    Route::get('/ads', [AdkotoController::class, 'fetchAllUserAds'])->name('ads.fetchAll');
+
     // Route for fetching categories
     Route::get('/api/categories', [AdkotoController::class, 'fetchCategories'])->name('api.categories');
 });

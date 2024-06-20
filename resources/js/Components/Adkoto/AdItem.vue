@@ -10,9 +10,9 @@
             <p class="text-gray-600 dark:text-gray-300 mb-2">
                 {{ ad.description }}
             </p>
-            <p class="text-gray-700 dark:text-gray-400 mb-2">
+            <!-- <p class="text-gray-700 dark:text-gray-400 mb-2">
                 Price: {{ ad.price }}
-            </p>
+            </p> -->
             <p class="text-gray-700 dark:text-gray-400 mb-2">
                 Location: {{ ad.location }}
             </p>

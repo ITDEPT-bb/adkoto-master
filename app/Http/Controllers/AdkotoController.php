@@ -29,11 +29,29 @@ class AdkotoController extends Controller
             ->orderByDesc('created_at')
             ->get();
 
-        $categories = Category::all(); // Fetch all categories
+        $categories = Category::all();
 
         return Inertia::render('Adkoto/Home', [
             'ads' => $ads,
-            'categories' => $categories, // Pass categories to the frontend
+            'categories' => $categories,
+        ]);
+    }
+
+    public function fetchAllUserAds(): \Inertia\Response
+    {
+        $ads = Ad::where('user_id', Auth::id())
+            ->with('attachments')
+            ->orderByDesc('created_at')
+            ->get();
+        // $ads = Ad::with('attachments')
+        //     ->orderByDesc('created_at')
+        //     ->get();
+
+        $categories = Category::all();
+
+        return Inertia::render('Adkoto/List', [
+            'ads' => $ads,
+            'categories' => $categories,
         ]);
     }
 
