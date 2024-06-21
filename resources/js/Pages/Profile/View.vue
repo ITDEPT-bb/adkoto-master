@@ -19,6 +19,7 @@ import UserListItem from "@/Components/Tribekoto/UserListItem.vue";
 import TextInput from "@/Components/TextInput.vue";
 import PostAttachments from "@/Components/Tribekoto/PostAttachments.vue";
 import TabPhotos from "@/Pages/Profile/TabPhotos.vue";
+import FollowingList from "@/Components/Tribekoto/FollowingList.vue";
 
 const imagesForm = useForm({
     avatar: null,
@@ -127,7 +128,7 @@ function followUser() {
 
 <template>
     <AuthenticatedLayout>
-        <div class="mx-auto h-full overflow-auto">
+        <div class="mx-auto max-w-7xl bg-white h-full overflow-auto">
             <div class="px-4">
                 <div
                     v-show="showNotification && success"
@@ -151,7 +152,7 @@ function followUser() {
                             user.cover_url ||
                             '/img/default_cover.jpg'
                         "
-                        class="w-full h-[400px] object-cover"
+                        class="w-full h-[400px] object-contain"
                     />
                     <div v-if="isMyProfile" class="absolute top-2 right-2">
                         <button
@@ -310,18 +311,31 @@ function followUser() {
 
                     <TabPanels class="mt-2">
                         <TabPanel>
-                            <template v-if="posts">
-                                <!-- <CreatePost /> -->
-                                <template v-if="isMyProfile">
-                                    <CreatePost />
-                                </template>
-                                <PostList :posts="posts.data" class="flex-1" />
-                            </template>
-                            <div
-                                v-else
-                                class="py-8 text-center dark:text-gray-100"
-                            >
-                                You don't have permission to view these posts.
+                            <div class="bg-gray-100">
+                                <div class="grid max-w-7xl mx-auto lg:grid-cols-12 gap-3 p-4 h-auto">
+                                    <div class="lg:col-span-4 lg:order-1 h-full overflow-hidden">
+                                        <FollowingList :users="followings" />
+                                    </div>
+                                    <div class="lg:col-span-8 lg:order-2 h-auto overflow-hidden flex flex-col">
+                                        <template v-if="posts">
+                                            <!-- <CreatePost /> -->
+                                            <template v-if="isMyProfile">
+                                                <CreatePost />
+                                            </template>
+                                            <PostList
+                                                :posts="posts.data"
+                                                class="flex-1"
+                                            />
+                                        </template>
+                                        <div
+                                            v-else
+                                            class="py-8 text-center dark:text-gray-100"
+                                        >
+                                            You don't have permission to view
+                                            these posts.
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </TabPanel>
                         <TabPanel>
