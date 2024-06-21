@@ -9,9 +9,12 @@ import TextInput from "@/Components/TextInput.vue";
 import { MoonIcon } from '@heroicons/vue/24/solid';
 import logo from '/public/img/kalakalkoto.png';
 
-import tribekotoIcon from '/public/img/icons/tribekotoicon.png';
-import adkotoIcon from '/public/img/icons/adkotoicon.png';
-import kalakalkotoIcon from '/public/img/icons/kalakalkotoicon.png';
+// import tribekotoIcon from '/public/img/icons/tribekotoicon.png';
+// import adkotoIcon from '/public/img/icons/adkotoicon.png';
+// import kalakalkotoIcon from '/public/img/icons/kalakalkotoicon.png';
+import tribekotoIcon from '/public/img/icons/tribekoto.png';
+import adkotoIcon from '/public/img/icons/adkoto.png';
+import kalakalkotoIcon from '/public/img/icons/kalakalkoto.png';
 
 const showingNavigationDropdown = ref(false);
 const keywords = ref(usePage().props.search || '')
