@@ -5,24 +5,31 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Conversation extends Model
+class GroupChat extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'user_id1',
-        'user_id2',
+        'name',
+        'description',
+        'owner_id',
+        'group_id',
     ];
+
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'owner_id');
+    }
 
     public function participants()
     {
-        return $this->belongsToMany(User::class, 'conversation_participants', 'conversation_id', 'user_id')
+        return $this->belongsToMany(User::class, 'group_chat_participants', 'group_chat_id', 'user_id')
                     ->withTimestamps();
     }
 
     public function messages()
     {
-        return $this->hasMany(Message::class, 'conversation_id');
+        return $this->hasMany(Message::class, 'group_id');
     }
 
     public function lastMessage()
