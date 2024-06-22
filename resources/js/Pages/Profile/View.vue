@@ -270,7 +270,7 @@ function followUser() {
                                 </p>
                             </div>
 
-                            <div v-if="!isMyProfile" class="flex mt-6 me-1 sm:me-0 sm:mt-0">
+                            <div v-if="!isMyProfile" class="flex mt-6 sm:me-0 sm:mt-0">
                                 <PrimaryButton
                                     v-if="!isCurrentUserFollower"
                                     @click="followUser"
