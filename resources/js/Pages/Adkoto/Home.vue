@@ -69,7 +69,7 @@
             <!-- Box Size Ads Section -->
             <div class="col-span-12 md:col-span-4">
               <!-- <h2 class="text-xl font-bold mb-4">Box Size Ads</h2> -->
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="grid grid-cols-2 md:grid-cols-2 gap-0 sm:gap-4">
                 <AdCard
                   v-for="ad in boxSizeAds"
                   :key="ad.id"
