@@ -148,7 +148,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, nextTick } from "vue";
 import axiosClient from "@/axiosClient.js";
 import { Head } from "@inertiajs/vue3";
 import AuthenticatedLayout from "@/Layouts/ChatLayout.vue";
@@ -156,15 +156,17 @@ import AuthenticatedLayout from "@/Layouts/ChatLayout.vue";
 const selectedUser = ref(null);
 const conversation = ref(null);
 const newMessage = ref("");
+const messageContainer = ref(null); // Define the ref for the message container
+
 const props = defineProps({
     followings: Array,
 });
 
 // Function to scroll to bottom of messages
-function scrollToBottom() {
-    const container = $refs.messageContainer;
-    if (container) {
-        container.scrollTop = container.scrollHeight;
+async function scrollToBottom() {
+    await nextTick();
+    if (messageContainer.value) {
+        messageContainer.value.scrollTop = messageContainer.value.scrollHeight;
     }
 }
 
@@ -174,10 +176,8 @@ function formatMessageTimestamp(timestamp) {
     const messageTime = new Date(timestamp);
     const diffTime = now - messageTime;
 
-    // Convert difference to seconds
     const diffSeconds = Math.floor(diffTime / 1000);
 
-    // Define thresholds for different time ranges
     const minute = 60;
     const hour = minute * 60;
     const day = hour * 24;
@@ -210,7 +210,7 @@ async function selectUser(user) {
             `/chat/conversations/${user.id}`
         );
         conversation.value = response.data;
-        scrollToBottom();
+        await scrollToBottom();
     } catch (error) {
         console.error("Error fetching conversation:", error);
     }
@@ -229,16 +229,14 @@ async function sendMessage() {
             }
         );
 
-        // Assuming response.data includes the new message object with `created_at` timestamp
         conversation.value.messages.push(response.data);
         newMessage.value = "";
-        scrollToBottom();
+        await scrollToBottom();
     } catch (error) {
         console.error("Error sending message:", error);
     }
 }
 
-// Lifecycle hook to scroll to bottom when component is mounted
 onMounted(() => {
     scrollToBottom();
 });
