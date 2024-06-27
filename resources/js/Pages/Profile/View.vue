@@ -307,9 +307,9 @@ function followUser() {
                         <Tab v-slot="{ selected }" as="template">
                             <TabItem text="Followers" :selected="selected" />
                         </Tab>
-                        <!-- <Tab v-slot="{ selected }" as="template">
+                        <Tab v-slot="{ selected }" as="template">
                             <TabItem text="Followings" :selected="selected" />
-                        </Tab> -->
+                        </Tab>
                         <Tab v-slot="{ selected }" as="template">
                             <TabItem text="Photos" :selected="selected" />
                         </Tab>
