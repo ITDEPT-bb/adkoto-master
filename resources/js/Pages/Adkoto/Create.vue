@@ -10,6 +10,7 @@
             <AdForm :categories="categories" @submit="submitForm" />
         </div>
     </AuthenticatedLayout>
+    <UpdateProfileReminder />
 </template>
 
 <script setup>
@@ -18,6 +19,7 @@ import { Link } from "@inertiajs/vue3";
 import axios from "axios";
 import AdForm from "@/Components/Adkoto/AdForm.vue";
 import AuthenticatedLayout from "@/Layouts/AdkotoLayout.vue";
+import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
 
 const categories = ref([]);
 

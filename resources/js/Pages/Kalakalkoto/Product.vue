@@ -1,5 +1,6 @@
 <script setup>
 import KalakalLayout from '@/Layouts/KalakalLayout.vue';
+import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
 </script>
 
 <template>
@@ -21,6 +22,7 @@ import KalakalLayout from '@/Layouts/KalakalLayout.vue';
             </div>
         </div>
     </KalakalLayout>
+    <UpdateProfileReminder />
 </template>
 
 <script>

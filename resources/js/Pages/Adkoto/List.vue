@@ -25,6 +25,7 @@
             </div>
         </div>
     </AuthenticatedLayout>
+    <UpdateProfileReminder />
 </template>
 
 <script setup>
@@ -32,6 +33,7 @@ import { ref } from "vue";
 import AdCardItems from "@/Components/Adkoto/AdCardItems.vue";
 import { usePage, Link, Head } from "@inertiajs/vue3";
 import AuthenticatedLayout from "@/Layouts/AdkotoLayout.vue";
+import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
 
 const { props } = usePage();
 const ads = ref(props.ads);

@@ -21,6 +21,8 @@ import PostAttachments from "@/Components/Tribekoto/PostAttachments.vue";
 import TabPhotos from "@/Pages/Profile/TabPhotos.vue";
 import FollowingList from "@/Components/Tribekoto/FollowingList.vue";
 
+import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
+
 import followIcon from "/public/img/icons/heartfollow.png";
 import unfollowIcon from "/public/img/icons/heartunfollow.png";
 
@@ -417,6 +419,7 @@ function followUser() {
             </div>
         </div>
     </AuthenticatedLayout>
+    <UpdateProfileReminder />
 </template>
 
 <style scoped></style>

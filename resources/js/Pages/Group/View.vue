@@ -14,6 +14,7 @@ import GroupForm from "@/Components/Tribekoto/GroupForm.vue";
 import PostList from "@/Components/Tribekoto/PostList.vue";
 import CreatePost from "@/Components/Tribekoto/CreatePost.vue";
 import TabPhotos from "@/Pages/Profile/TabPhotos.vue";
+import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
 
 const imagesForm = useForm({
     thumbnail: null,
@@ -334,6 +335,7 @@ function onRoleChange(user, role) {
         </div>
     </AuthenticatedLayout>
     <InviteUserModal v-model="showInviteUserModal" />
+    <UpdateProfileReminder />
 </template>
 
 <style scoped></style>

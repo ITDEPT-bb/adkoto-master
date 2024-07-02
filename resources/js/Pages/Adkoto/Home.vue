@@ -85,6 +85,7 @@
         </div>
       </div>
     </AuthenticatedLayout>
+    <UpdateProfileReminder />
   </template>
 
   <script setup>
@@ -92,6 +93,7 @@
   import { Link, Head } from '@inertiajs/vue3';
   import AdCard from '@/Components/Adkoto/AdCard.vue';
   import AuthenticatedLayout from '@/Layouts/AdkotoLayout.vue';
+  import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
 
   const props = defineProps({
     ads: Array,
