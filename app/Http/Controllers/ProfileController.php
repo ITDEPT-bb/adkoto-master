@@ -27,13 +27,13 @@ class ProfileController extends Controller
      * Display the user's profile form.
      */
 
-    // public function edit(Request $request): Response
-    // {
-    //     return Inertia::render('Profile/Edit', [
-    //         'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
-    //         'status' => session('status'),
-    //     ]);
-    // }
+    public function edit(Request $request): Response
+    {
+        return Inertia::render('Profile/Update', [
+            'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
+            'status' => session('status'),
+        ]);
+    }
 
     public function index(Request $request, User $user)
     {
@@ -153,5 +153,14 @@ class ProfileController extends Controller
         }
 
         return back()->with('success', $success);
+    }
+
+    public function checkProfile()
+    {
+        $user = Auth::user();
+
+        $isProfileComplete = $user->surname && $user->username && $user->phone && $user->birthday && $user->gender;
+
+        return response()->json(['isProfileComplete' => $isProfileComplete]);
     }
 }

@@ -5,16 +5,16 @@ import FollowingList from "@/Components/Tribekoto/FollowingList.vue";
 import CreatePost from "@/Components/Tribekoto/CreatePost.vue";
 import PostList from "@/Components/Tribekoto/PostList.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
 
 defineProps({
     posts: Object,
     groups: Array,
-    followings: Array
+    followings: Array,
 });
 </script>
 
 <template>
-
     <Head title="Social Media Website" />
 
     <AuthenticatedLayout>
@@ -25,13 +25,16 @@ defineProps({
             <div class="lg:col-span-3 lg:order-3 h-full overflow-hidden">
                 <FollowingList :users="followings" />
             </div>
-            <div class="lg:col-span-6 lg:order-2 h-full overflow-hidden flex flex-col">
+            <div
+                class="lg:col-span-6 lg:order-2 h-full overflow-hidden flex flex-col"
+            >
                 <CreatePost />
                 <!-- <PostList class="flex-1" /> -->
                 <PostList :posts="posts.data" class="flex-1" />
             </div>
         </div>
     </AuthenticatedLayout>
+    <UpdateProfileReminder />
 </template>
 
 <style></style>
