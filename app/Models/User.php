@@ -11,8 +11,10 @@ use Illuminate\Notifications\Notifiable;
 
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
+use Devdojo\Auth\Models\User as AuthUser;
 
-class User extends Authenticatable implements MustVerifyEmail
+// class User extends Authenticatable implements MustVerifyEmail
+class User extends AuthUser implements MustVerifyEmail
 {
     use HasFactory, Notifiable;
 
