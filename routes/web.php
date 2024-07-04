@@ -61,6 +61,12 @@ Route::get('/group/approve-invitation/{token}', [GroupController::class, 'approv
 
 Route::middleware('auth')->group(function () {
 
+    // Chat
+    Route::prefix('/chat')->group(function () {
+
+    });
+
+
     // Groups
     Route::prefix('/group')->group(function () {
 
