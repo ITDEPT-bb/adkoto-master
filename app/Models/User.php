@@ -16,12 +16,17 @@ use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use Devdojo\Auth\Models\User as AuthUser;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 // class User extends Authenticatable implements MustVerifyEmail
 class User extends AuthUser implements MustVerifyEmail, FilamentUser
 {
     use HasFactory, Notifiable;
 
     use HasSlug;
+
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
