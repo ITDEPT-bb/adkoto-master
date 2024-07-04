@@ -9,12 +9,15 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Notifications\Notifiable;
 
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
+
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use Devdojo\Auth\Models\User as AuthUser;
 
 // class User extends Authenticatable implements MustVerifyEmail
-class User extends AuthUser implements MustVerifyEmail
+class User extends AuthUser implements MustVerifyEmail, FilamentUser
 {
     use HasFactory, Notifiable;
 
@@ -91,5 +94,21 @@ class User extends AuthUser implements MustVerifyEmail
     public function comments()
     {
         return $this->hasMany(AdsComment::class);
+    }
+
+    /**
+     * Determine if the user can access the specified Filament panel.
+     *
+     * @param  \Filament\Panel  $panel
+     * @return bool
+     */
+    public function canAccessPanel(Panel $panel): bool
+    {
+        // Check if the user has the `is_filament_admin` attribute set to true
+        if ($panel->getId() === 'admin') {
+            return $this->is_filament_admin;
+        }
+
+        return true;
     }
 }
