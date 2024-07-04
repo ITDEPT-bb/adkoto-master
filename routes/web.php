@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\KalakalkotoController;
 use App\Http\Controllers\AdkotoController;
@@ -63,9 +64,9 @@ Route::middleware('auth')->group(function () {
 
     // Chat
     Route::prefix('/chat')->group(function () {
-
+        Route::get('/{chat}', [ChatController::class, 'view'])
+            ->name('chat.index');
     });
-
 
     // Groups
     Route::prefix('/group')->group(function () {
@@ -95,7 +96,7 @@ Route::middleware('auth')->group(function () {
             ->name('group.changeRole');
     });
 
-       Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/profile/update-images', [ProfileController::class, 'updateImage'])
