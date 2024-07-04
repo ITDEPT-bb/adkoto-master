@@ -42,7 +42,12 @@ class UserResource extends Resource
                     ->maxLength(255)
                     ->default(null),
                 Forms\Components\DatePicker::make('birthday'),
-                Forms\Components\TextInput::make('gender'),
+                // Forms\Components\Select::make('gender')
+                //     ->options([
+                //         'male' => 'Male',
+                //         'female' => 'Female',
+                //         'other' => 'Other',
+                //     ]),
                 // Forms\Components\TextInput::make('password')
                 //     ->password()
                 //     ->maxLength(255)
@@ -92,7 +97,7 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('birthday')
                     ->date()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('gender'),
+                // Tables\Columns\TextColumn::make('gender'),
                 // Tables\Columns\TextColumn::make('two_factor_confirmed_at')
                 //     ->dateTime()
                 //     ->sortable(),
@@ -118,9 +123,9 @@ class UserResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('pinned_post_id')
-                    ->numeric()
-                    ->sortable(),
+                // Tables\Columns\TextColumn::make('pinned_post_id')
+                //     ->numeric()
+                //     ->sortable(),
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()
