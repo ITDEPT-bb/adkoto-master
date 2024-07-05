@@ -64,7 +64,10 @@ Route::middleware('auth')->group(function () {
 
     // Chat
     Route::prefix('/chat')->group(function () {
-        Route::get('/{chat}', [ChatController::class, 'view'])
+        Route::get('/', [ChatController::class, 'ChatFollowings'])
+            ->name('chat.followings');
+
+        Route::get('/{user}', [ChatController::class, 'index'])
             ->name('chat.index');
     });
 

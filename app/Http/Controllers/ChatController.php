@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\UserResource;
+use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -14,15 +15,25 @@ class ChatController extends Controller
      */
     public function index(Request $request, User $user)
     {
-
-    }
-
-    public function ChatFollowings(Request $request, User $user)
-    {
-        $followings = $user->followings;
+        $messages = Message::where(function($query) use ($user) {
+            $query->where('sender_id', auth()->id())
+                  ->where('receiver_id', $user->id);
+        })->orWhere(function($query) use ($user) {
+            $query->where('sender_id', $user->id)
+                  ->where('receiver_id', auth()->id());
+        })->get();
 
         return Inertia::render('Chat/View', [
             'user' => new UserResource($user),
+            'messages' => $messages,
+        ]);
+    }
+
+    public function ChatFollowings(Request $request)
+    {
+        $followings = auth()->user()->followings;
+
+        return Inertia::render('Chat/Followings', [
             'followings' => UserResource::collection($followings)
         ]);
     }
