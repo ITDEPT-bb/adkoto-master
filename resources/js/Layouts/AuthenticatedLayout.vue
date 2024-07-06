@@ -15,6 +15,7 @@ import logo from '/public/img/tribekoto.png';
 import tribekotoIcon from '/public/img/icons/tribekoto.png';
 import adkotoIcon from '/public/img/icons/adkoto.png';
 import kalakalkotoIcon from '/public/img/icons/kalakalkoto.png';
+import messageIcon from '/public/img/icons/messageicon.png';
 
 const showingNavigationDropdown = ref(false);
 const keywords = ref(usePage().props.search || '')
@@ -59,7 +60,7 @@ function toggleDarkMode() {
 
                     <!-- <div class="hidden sm:flex sm:items-center sm:ms-6"> -->
                     <!-- <div class="flex-1"> -->
-                    <div class="flex items-center sm:gap-10 p-2 flex-1">
+                    <div class="flex items-center sm:gap-7 p-2 flex-1">
                         <TextInput v-model="keywords" placeholder="Search on the website" class="w-full sm:w-9/12"
                             @keyup.enter="search" />
 
@@ -76,6 +77,11 @@ function toggleDarkMode() {
                             <Link :href="route('adkoto')">
                                 <!-- Adkoto -->
                                 <img :src="adkotoIcon" class="hidden sm:flex h-8 w-auto" alt="Logo" />
+                            </Link>
+
+                            <Link :href="route('chat.index')">
+                                <!-- Chatkoto -->
+                                <img :src="messageIcon" class="hidden sm:flex h-8 w-auto" alt="Logo" />
                             </Link>
 
                         <!-- <button @click="toggleDarkMode" class="dark:text-white">
@@ -158,6 +164,9 @@ function toggleDarkMode() {
                         <div class="mt-3 space-y-1">
                             <ResponsiveNavLink :href="route('dashboard')">
                                 Tribekoto
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('chat.index')">
+                                Chat
                             </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('kalakalkoto')">
                                 Kalakalkoto
