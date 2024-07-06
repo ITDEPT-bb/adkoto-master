@@ -50,7 +50,7 @@ function toggleDarkMode() {
                     <div class="flex mr-2">
                         <!-- Logo -->
                         <div class="shrink-0 flex items-center">
-                            <Link :href="route('dashboard')">
+                            <Link :href="route('kalakalkoto')">
                             <!-- <ApplicationLogo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" /> -->
                             <img :src="logo" class="block h-9 w-auto" alt="Logo" />
                         </Link>
@@ -60,7 +60,7 @@ function toggleDarkMode() {
 
                     <!-- <div class="hidden sm:flex sm:items-center sm:ms-6"> -->
                     <!-- <div class="flex-1"> -->
-                    <div class="flex items-center sm:gap-10 p-2 flex-1">
+                    <div class="flex items-center sm:gap-12 p-2 flex-1">
                         <TextInput v-model="keywords" placeholder="Search on the website" class="w-full sm:w-9/12"
                             @keyup.enter="search" />
 
@@ -69,10 +69,10 @@ function toggleDarkMode() {
                                 <img :src="tribekotoIcon" class="hidden sm:flex h-8 w-auto" alt="Logo" />
                             </Link>
 
-                            <Link :href="route('kalakalkoto')">
+                            <!-- <Link :href="route('kalakalkoto')"> -->
                                 <!-- Kalakalkoto -->
-                                <img :src="kalakalkotoIcon" class="hidden sm:flex h-8 w-auto" alt="Logo" />
-                            </Link>
+                                <!-- <img :src="kalakalkotoIcon" class="hidden sm:flex h-8 w-auto" alt="Logo" />
+                            </Link> -->
 
                             <Link :href="route('adkoto')">
                                 <!-- Adkoto -->
@@ -168,9 +168,9 @@ function toggleDarkMode() {
                             <ResponsiveNavLink :href="route('chat.index')">
                                 Chat
                             </ResponsiveNavLink>
-                            <ResponsiveNavLink :href="route('kalakalkoto')">
+                            <!-- <ResponsiveNavLink :href="route('kalakalkoto')">
                                 Kalakalkoto
-                            </ResponsiveNavLink>
+                            </ResponsiveNavLink> -->
                             <ResponsiveNavLink :href="route('adkoto')">
                                 Adkoto
                             </ResponsiveNavLink>

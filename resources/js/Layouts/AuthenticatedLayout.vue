@@ -60,14 +60,14 @@ function toggleDarkMode() {
 
                     <!-- <div class="hidden sm:flex sm:items-center sm:ms-6"> -->
                     <!-- <div class="flex-1"> -->
-                    <div class="flex items-center sm:gap-7 p-2 flex-1">
+                    <div class="flex items-center sm:gap-12 p-2 flex-1">
                         <TextInput v-model="keywords" placeholder="Search on the website" class="w-full sm:w-9/12"
                             @keyup.enter="search" />
 
-                            <Link :href="route('dashboard')">
+                            <!-- <Link :href="route('dashboard')"> -->
                                 <!-- Tribekoto -->
-                                <img :src="tribekotoIcon" class="hidden sm:flex h-8 w-auto" alt="Logo" />
-                            </Link>
+                                <!-- <img :src="tribekotoIcon" class="hidden sm:flex h-8 w-auto" alt="Logo" />
+                            </Link> -->
 
                             <Link :href="route('kalakalkoto')">
                                 <!-- Kalakalkoto -->
@@ -162,9 +162,9 @@ function toggleDarkMode() {
                         </div>
 
                         <div class="mt-3 space-y-1">
-                            <ResponsiveNavLink :href="route('dashboard')">
+                            <!-- <ResponsiveNavLink :href="route('dashboard')">
                                 Tribekoto
-                            </ResponsiveNavLink>
+                            </ResponsiveNavLink> -->
                             <ResponsiveNavLink :href="route('chat.index')">
                                 Chat
                             </ResponsiveNavLink>

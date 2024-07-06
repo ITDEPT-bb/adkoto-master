@@ -49,12 +49,12 @@ function toggleDarkMode() {
                 <div class="flex items-center justify-between gap-2 h-16">
                     <div class="flex">
                         <!-- Logo -->
-                        <!-- <div class="shrink-0 flex items-center">
-                            <Link :href="route('dashboard')"> -->
-                            <!-- <ApplicationLogo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" /> -->
-                            <!-- <img :src="logo" class="block h-9 w-auto" alt="Logo" />
+                        <div class="shrink-0 flex items-center">
+                            <Link :href="route('chat.index')">
+                            <ApplicationLogo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+                            <img :src="logo" class="block h-9 w-auto" alt="Logo" />
                         </Link>
-                        </div> -->
+                        </div>
 
                     </div>
 
@@ -79,10 +79,10 @@ function toggleDarkMode() {
                                 <img :src="adkotoIcon" class="hidden sm:flex h-8 w-auto" alt="Logo" />
                             </Link>
 
-                            <Link :href="route('chat.index')">
+                            <!-- <Link :href="route('chat.index')"> -->
                                 <!-- Chatkoto -->
-                                <img :src="messageIcon" class="hidden sm:flex h-8 w-auto" alt="Logo" />
-                            </Link>
+                                <!-- <img :src="messageIcon" class="hidden sm:flex h-8 w-auto" alt="Logo" />
+                            </Link> -->
 
                         <!-- <button @click="toggleDarkMode" class="dark:text-white">
                             <MoonIcon class="w-5 h-5" />
@@ -165,9 +165,9 @@ function toggleDarkMode() {
                             <ResponsiveNavLink :href="route('dashboard')">
                                 Tribekoto
                             </ResponsiveNavLink>
-                            <ResponsiveNavLink :href="route('chat.index')">
+                            <!-- <ResponsiveNavLink :href="route('chat.index')">
                                 Chat
-                            </ResponsiveNavLink>
+                            </ResponsiveNavLink> -->
                             <ResponsiveNavLink :href="route('kalakalkoto')">
                                 Kalakalkoto
                             </ResponsiveNavLink>
