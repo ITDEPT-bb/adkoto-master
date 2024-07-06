@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\KalakalkotoController;
 use App\Http\Controllers\AdkotoController;
@@ -33,6 +34,13 @@ Route::get('/kalakalkoto', [KalakalkotoController::class, 'index'])
 Route::get('/kalakalkoto/prod/', [KalakalkotoController::class, 'view'])
     ->middleware(['auth', 'verified'])
     ->name('product');
+
+// Chatkoto
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
+    Route::get('/chat/conversations/{user}', [ChatController::class, 'getConversation'])->name('chat.conversations.show');
+    Route::post('/chat/conversations/{user}/messages', [ChatController::class, 'sendMessage'])->name('chat.messages.store');
+});
 
 // Adkoto
 Route::middleware(['auth', 'verified'])->group(function () {

@@ -37,24 +37,6 @@ return new class extends Migration
             $table->foreignId('created_by')->constrained('users');
             $table->timestamp('created_at')->nullable();
         });
-
-        // Create table for group chats
-        Schema::create('group_chats', function (Blueprint $table) {
-            $table->id();
-            $table->string('name', 255);
-            $table->longText('description')->nullable();
-            $table->foreignId('group_id')->nullable()->constrained('groups')->onDelete('cascade');
-            $table->foreignId('owner_id')->constrained('users')->onDelete('cascade');
-            $table->timestamps();
-        });
-
-        // Create table for group chat participants
-        Schema::create('group_chat_participants', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('group_chat_id')->constrained('group_chats')->onDelete('cascade');
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->timestamps();
-        });
     }
 
     /**
@@ -64,7 +46,5 @@ return new class extends Migration
     {
         Schema::dropIfExists('groups');
         Schema::dropIfExists('group_users');
-        Schema::dropIfExists('group_chats');
-        Schema::dropIfExists('group_chat_participants');
     }
 };

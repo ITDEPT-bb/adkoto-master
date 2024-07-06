@@ -116,4 +116,27 @@ class User extends AuthUser implements MustVerifyEmail, FilamentUser
 
         return true;
     }
+
+    // Chat
+    public function groupChats()
+    {
+        return $this->belongsToMany(GroupChat::class, 'group_chat_participants', 'user_id', 'group_chat_id')
+                    ->withTimestamps();
+    }
+
+    public function conversations()
+    {
+        return $this->belongsToMany(Conversation::class, 'conversation_participants', 'user_id', 'conversation_id')
+                    ->withTimestamps();
+    }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
+
+    public function receivedMessages()
+    {
+        return $this->hasMany(Message::class, 'receiver_id');
+    }
 }
