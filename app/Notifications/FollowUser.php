@@ -12,12 +12,16 @@ class FollowUser extends Notification
 {
     use Queueable;
 
+    public User $user;
+    public bool $follow;
+
     /**
      * Create a new notification instance.
      */
-    public function __construct(public User $user, public bool $follow = true)
+    public function __construct(User $user, bool $follow = true)
     {
-        //
+        $this->user = $user;
+        $this->follow = $follow;
     }
 
     /**
@@ -27,7 +31,7 @@ class FollowUser extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
     /**
@@ -52,10 +56,19 @@ class FollowUser extends Notification
      *
      * @return array<string, mixed>
      */
-    public function toArray(object $notifiable): array
+    // public function toArray(object $notifiable): array
+    // {
+    //     return [
+            //
+    //     ];
+    // }
+    public function toDatabase(object $notifiable): array
     {
         return [
-            //
+            'user_id' => $this->user->id,
+            'username' => $this->user->username,
+            'follow' => $this->follow,
+            'message' => $this->follow ? 'User "' . $this->user->username . '" has followed you' : 'User "' . $this->user->username . '" is no more following you'
         ];
     }
 }

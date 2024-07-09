@@ -5,6 +5,7 @@ use App\Http\Controllers\GroupController;
 use App\Http\Controllers\KalakalkotoController;
 use App\Http\Controllers\AdkotoController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SearchController;
@@ -40,6 +41,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
     Route::get('/chat/conversations/{user}', [ChatController::class, 'getConversation'])->name('chat.conversations.show');
     Route::post('/chat/conversations/{user}/messages', [ChatController::class, 'sendMessage'])->name('chat.messages.store');
+});
+
+// Notification
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
 });
 
 // Adkoto
