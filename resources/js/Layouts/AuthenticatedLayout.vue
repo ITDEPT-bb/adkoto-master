@@ -85,10 +85,10 @@ function toggleDarkMode() {
                                 <img :src="messageIcon" class="hidden sm:flex h-8 w-auto" alt="Logo" />
                             </Link>
 
-                            <Link :href="route('dashboard')">
+                            <!-- <Link :href="route('dashboard')"> -->
                                 <!-- Notif -->
-                                <img :src="notificationIcon" class="hidden sm:flex h-8 w-auto" alt="Logo" />
-                            </Link>
+                                <!-- <img :src="notificationIcon" class="hidden sm:flex h-8 w-auto" alt="Logo" />
+                            </Link> -->
 
                         <!-- <button @click="toggleDarkMode" class="dark:text-white">
                             <MoonIcon class="w-5 h-5" />
