@@ -163,4 +163,11 @@ class ProfileController extends Controller
 
         return response()->json(['isProfileComplete' => $isProfileComplete]);
     }
+
+    public function fetchProfileNotif($userId)
+    {
+        $user = User::findOrFail($userId);
+
+        return response()->json(new UserResource($user));
+    }
 }

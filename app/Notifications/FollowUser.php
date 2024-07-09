@@ -39,10 +39,16 @@ class FollowUser extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
+        // if ($this->follow) {
+        //     $subject = 'User "' . $this->user->username . '" has followed you';
+        // } else {
+        //     $subject = 'User "' . $this->user->username . '" unfollowed you';
+        // }
+        // return (new MailMessage)
         if ($this->follow) {
-            $subject = 'User "' . $this->user->username . '" has followed you';
+            $subject = $this->user->username . ' has followed you';
         } else {
-            $subject = 'User "' . $this->user->username . '" is no more following you';
+            $subject = $this->user->username . ' unfollowed you';
         }
         return (new MailMessage)
             ->subject($subject)
@@ -68,7 +74,7 @@ class FollowUser extends Notification
             'user_id' => $this->user->id,
             'username' => $this->user->username,
             'follow' => $this->follow,
-            'message' => $this->follow ? 'User "' . $this->user->username . '" has followed you' : 'User "' . $this->user->username . '" is no more following you'
+            'message' => $this->follow ? $this->user->username . ' has followed you' : $this->user->username . ' unfollowed you'
         ];
     }
 }

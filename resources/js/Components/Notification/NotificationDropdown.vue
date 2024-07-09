@@ -42,7 +42,7 @@
                             <li
                                 v-for="notification in notifications.slice(
                                     0,
-                                    6
+                                    5
                                 )"
                                 :key="notification.id"
                                 class="py-2"
@@ -50,9 +50,37 @@
                                 <div class="hover:bg-gray-100">
                                     <a
                                         :href="notification.url"
-                                        class="flex items-center hover:cursor-pointer justify-between px-4 py-2 text-sm text-gray-700"
+                                        class="flex items-center hover:cursor-pointer gap-3 justify-start px-4 py-2 text-sm text-gray-700"
                                         @click="markAsRead(notification)"
                                     >
+                                        <!-- Display user profile -->
+                                        <div
+                                            class="flex items-center space-x-2"
+                                        >
+                                            <img
+                                                v-if="
+                                                    notification.data.user_id &&
+                                                    userProfile[
+                                                        notification.data
+                                                            .user_id
+                                                    ]
+                                                "
+                                                :src="
+                                                    userProfile[
+                                                        notification.data
+                                                            .user_id
+                                                    ].avatar_url
+                                                "
+                                                class="h-6 w-6 rounded-full"
+                                                alt="User Avatar"
+                                            />
+                                            <span
+                                                v-else
+                                                class="text-sm text-gray-500"
+                                            >
+                                                Loading profile...
+                                            </span>
+                                        </div>
                                         <div
                                             class="flex items-center space-x-2"
                                         >
@@ -78,7 +106,6 @@
                                                     ></path>
                                                 </svg>
                                             </template>
-                                            <!-- Add more templates for different notification types -->
                                             {{ notification.data.message }}
                                         </div>
                                     </a>
@@ -113,6 +140,7 @@ dayjs.extend(relativeTime);
 const showDropdown = ref(false);
 const notifications = ref([]);
 const loading = ref(true);
+const userProfile = ref({});
 
 import notificationIcon from "/public/img/icons/notification.png";
 
@@ -125,6 +153,18 @@ const fetchNotifications = async () => {
     try {
         const response = await axiosClient.get("/notifications");
         notifications.value = response.data;
+
+        // Fetch user profiles for notifications
+        await Promise.all(
+            response.data.map((notification) => {
+                if (
+                    notification.data.user_id &&
+                    !userProfile.value[notification.data.user_id]
+                ) {
+                    return fetchUserProfile(notification.data.user_id);
+                }
+            })
+        );
     } catch (error) {
         console.error("Failed to fetch notifications:", error);
         notifications.value = [];
@@ -141,11 +181,16 @@ const markAsRead = (notification) => {
     console.log("Marking notification as read:", notification);
 };
 
-const formatDate = (datetime) => {
-    return new Date(datetime).toLocaleString();
+const fetchUserProfile = async (userId) => {
+    try {
+        const response = await axiosClient.get(`/users/${userId}`);
+        userProfile.value[userId] = response.data;
+    } catch (error) {
+        console.error(
+            `Failed to fetch user profile for user ${userId}:`,
+            error
+        );
+        userProfile.value[userId] = null;
+    }
 };
 </script>
-
-<style scoped>
-/* Add your scoped styles here */
-</style>
