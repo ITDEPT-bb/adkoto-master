@@ -15,7 +15,8 @@ import logo from '/public/img/tribekoto.png';
 import tribekotoIcon from '/public/img/icons/tribekoto.png';
 import adkotoIcon from '/public/img/icons/adkoto.png';
 import kalakalkotoIcon from '/public/img/icons/kalakalkoto.png';
-import messageIcon from '/public/img/icons/messageicon.png';
+import messageIcon from '/public/img/icons/message.png';
+import notificationIcon from '/public/img/icons/notification.png';
 
 const showingNavigationDropdown = ref(false);
 const keywords = ref(usePage().props.search || '')
@@ -60,8 +61,8 @@ function toggleDarkMode() {
 
                     <!-- <div class="hidden sm:flex sm:items-center sm:ms-6"> -->
                     <!-- <div class="flex-1"> -->
-                    <div class="flex items-center sm:gap-10 p-2 flex-1">
-                        <TextInput v-model="keywords" placeholder="Search on the website" class="w-full sm:w-9/12"
+                    <div class="flex items-center sm:gap-9 p-2 flex-1">
+                        <TextInput v-model="keywords" placeholder="Search on the website" class="w-full sm:w-8/12"
                             @keyup.enter="search" />
 
                             <Link :href="route('dashboard')">
