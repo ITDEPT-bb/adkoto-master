@@ -284,8 +284,8 @@ function toggleDarkMode() {
         </header>
 
         <!-- Page Content -->
-        <!-- <main class="flex-1 overflow-hidden"> -->
-        <main>
+        <main class="flex-1 overflow-hidden">
+        <!-- <main> -->
             <slot />
         </main>
     </div>

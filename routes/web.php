@@ -6,6 +6,7 @@ use App\Http\Controllers\KalakalkotoController;
 use App\Http\Controllers\AdkotoController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ItemController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
@@ -38,8 +39,8 @@ Route::get('/kalakalkoto', [KalakalkotoController::class, 'index'])
 //     ->name('product');
 
 // Category routes
-Route::get('/kalakalkoto', [CategoryController::class, 'index'])->name('kalakalkoto');
-Route::get('/categories/{id}', [CategoryController::class, 'show'])->name('categories.show');
+Route::get('/kalakalkoto', [ItemController::class, 'index'])->name('kalakalkoto');
+Route::get('/kalakalkoto/item/{id}', [ItemController::class, 'show'])->name('kalakalkoto.item.show');
 
 // Chatkoto
 Route::middleware(['auth', 'verified'])->group(function () {

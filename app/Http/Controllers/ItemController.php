@@ -18,9 +18,12 @@ class ItemController extends Controller
 
     public function index()
     {
+        $categories = Category::all();
+
         $items = Item::with('user', 'category', 'images')->where('is_sold', false)->get();
-        return Inertia::render('Items/Index', [
-            'items' => $items
+        return Inertia::render('Kalakalkoto/Home', [
+            'items' => $items,
+            'categories' => $categories
         ]);
     }
 
@@ -60,7 +63,7 @@ class ItemController extends Controller
     public function show($id)
     {
         $item = Item::with('user', 'category', 'images')->findOrFail($id);
-        return Inertia::render('Items/Show', [
+        return Inertia::render('Kalakalkoto/Item', [
             'item' => $item
         ]);
     }
