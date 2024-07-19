@@ -139,4 +139,25 @@ class User extends AuthUser implements MustVerifyEmail, FilamentUser
     {
         return $this->hasMany(Message::class, 'receiver_id');
     }
+
+    // Kalakalkoto
+    public function items()
+    {
+        return $this->hasMany(Item::class);
+    }
+
+    public function marketSentMessages()
+    {
+        return $this->hasMany(MarketMessage::class, 'sender_id');
+    }
+
+    public function marketReceivedMessages()
+    {
+        return $this->hasMany(MarketMessage::class, 'receiver_id');
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'buyer_id');
+    }
 }
