@@ -46,7 +46,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/category/{id}', [ItemController::class, 'filterByCategory'])->name('kalakalkoto.category.filter');
 
         // CRUD Routes
-        Route::get('/item/create', [ItemController::class, 'create'])->name('kalakalkoto.item.create');
+        Route::get('/create', [ItemController::class, 'create'])->name('kalakalkoto.item.create');
         Route::post('/item', [ItemController::class, 'store'])->name('kalakalkoto.item.store');
         Route::put('/item/{id}/mark-as-sold', [ItemController::class, 'markAsSold'])->name('kalakalkoto.item.markAsSold');
     });
