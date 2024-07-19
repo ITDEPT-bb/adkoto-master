@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-import { usePage, Link, Head } from "@inertiajs/vue3";
+import { usePage, Head } from "@inertiajs/vue3";
 import KalakalLayout from "@/Layouts/KalakalLayout.vue";
 import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
 

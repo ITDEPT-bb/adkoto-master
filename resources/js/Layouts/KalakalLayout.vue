@@ -68,7 +68,7 @@ function toggleDarkMode() {
 
                     <!-- <div class="hidden sm:flex sm:items-center sm:ms-6"> -->
                     <!-- <div class="flex-1"> -->
-                    <div class="flex items-center sm:gap-9 p-2 flex-1">
+                    <div class="flex items-center sm:gap-9 p-2 ml-2 flex-1">
                         <TextInput
                             v-model="keywords"
                             placeholder="Search on the website"

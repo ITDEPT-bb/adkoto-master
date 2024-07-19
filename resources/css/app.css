@@ -167,3 +167,8 @@ html.dark .ck.ck-editor__main > .ck-editor__editable {
 html.dark .ck.ck-list {
     background-color: rgb(30, 41, 59);
 } */
+
+html.dark ::-webkit-scrollbar {
+    width: 8px;
+    background-color: transparent;
+}

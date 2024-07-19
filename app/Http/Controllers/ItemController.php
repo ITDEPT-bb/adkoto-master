@@ -30,7 +30,7 @@ class ItemController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return Inertia::render('Items/Create', [
+        return Inertia::render('Kalakalkoto/Create', [
             'categories' => $categories
         ]);
     }
@@ -57,7 +57,7 @@ class ItemController extends Controller
             }
         }
 
-        return redirect()->route('items.show', $item->id);
+        return redirect()->route('kalakalkoto.item.show', $item->id);
     }
 
     public function show($id)
@@ -76,6 +76,21 @@ class ItemController extends Controller
         $item->is_sold = true;
         $item->save();
 
-        return redirect()->route('items.index');
+        return redirect()->route('kalakalkoto');
+    }
+
+    public function filterByCategory($categoryId)
+    {
+        $categories = Category::all();
+        $items = Item::with('user', 'category', 'images')
+            ->where('category_id', $categoryId)
+            ->where('is_sold', false)
+            ->get();
+
+        return Inertia::render('Kalakalkoto/Home', [
+            'categories' => $categories,
+            'items' => $items,
+            'currentCategoryId' => $categoryId
+        ]);
     }
 }

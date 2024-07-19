@@ -38,9 +38,19 @@ Route::get('/kalakalkoto', [KalakalkotoController::class, 'index'])
 //     ->middleware(['auth', 'verified'])
 //     ->name('product');
 
-// Category routes
-Route::get('/kalakalkoto', [ItemController::class, 'index'])->name('kalakalkoto');
-Route::get('/kalakalkoto/item/{id}', [ItemController::class, 'show'])->name('kalakalkoto.item.show');
+// Kalakalkoto
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::prefix('/kalakalkoto')->group(function () {
+        Route::get('/', [ItemController::class, 'index'])->name('kalakalkoto');
+        Route::get('/item/{id}', [ItemController::class, 'show'])->name('kalakalkoto.item.show');
+        Route::get('/category/{id}', [ItemController::class, 'filterByCategory'])->name('kalakalkoto.category.filter');
+
+        // CRUD Routes
+        Route::get('/item/create', [ItemController::class, 'create'])->name('kalakalkoto.item.create');
+        Route::post('/item', [ItemController::class, 'store'])->name('kalakalkoto.item.store');
+        Route::put('/item/{id}/mark-as-sold', [ItemController::class, 'markAsSold'])->name('kalakalkoto.item.markAsSold');
+    });
+});
 
 // Chatkoto
 Route::middleware(['auth', 'verified'])->group(function () {
