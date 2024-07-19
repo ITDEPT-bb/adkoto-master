@@ -169,6 +169,6 @@ html.dark .ck.ck-list {
 } */
 
 html.dark ::-webkit-scrollbar {
-    width: 8px;
-    background-color: transparent;
+    width: 3px;
+    background-color: gray;
 }
