@@ -111,20 +111,20 @@
 
 /* WebKit browsers (Chrome, Safari) */
 /* .comment-list::-webkit-scrollbar { */
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
     width: 8px;
     background-color: transparent;
-}
+} */
 
 /* .comment-list::-webkit-scrollbar-thumb { */
-::-webkit-scrollbar-thumb {
-    background-color: #a2c3de; /* Thumb color */
+/* ::-webkit-scrollbar-thumb {
+    background-color: #a2c3de;
     border-radius: 6px;
-}
+} */
 
 /* .comment-list::-webkit-scrollbar-track { */
-::-webkit-scrollbar-track {
-    background-color: #f1f1f3; /* Track color */
+/* ::-webkit-scrollbar-track {
+    background-color: #f1f1f3;
 }
 
 html.dark ::-webkit-scrollbar {
@@ -133,12 +133,12 @@ html.dark ::-webkit-scrollbar {
 }
 
 html.dark ::-webkit-scrollbar-thumb {
-    background-color: #031a25; /* Thumb color */
+    background-color: #031a25;
     border-radius: 6px;
 }
 
 html.dark ::-webkit-scrollbar-track {
-    background-color: #0a2d3e; /* Track color */
+    background-color: #0a2d3e;
 }
 
 html.dark .ck-reset_all :not(.ck-reset_all-excluded *),
@@ -166,4 +166,4 @@ html.dark .ck.ck-editor__main > .ck-editor__editable {
 
 html.dark .ck.ck-list {
     background-color: rgb(30, 41, 59);
-}
+} */

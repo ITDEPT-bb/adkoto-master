@@ -4,6 +4,7 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\KalakalkotoController;
 use App\Http\Controllers\AdkotoController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PostController;
@@ -32,9 +33,13 @@ Route::get('/kalakalkoto', [KalakalkotoController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('kalakalkoto');
 
-Route::get('/kalakalkoto/prod/', [KalakalkotoController::class, 'view'])
-    ->middleware(['auth', 'verified'])
-    ->name('product');
+// Route::get('/kalakalkoto/prod/', [KalakalkotoController::class, 'view'])
+//     ->middleware(['auth', 'verified'])
+//     ->name('product');
+
+// Category routes
+Route::get('/kalakalkoto', [CategoryController::class, 'index'])->name('kalakalkoto');
+Route::get('/categories/{id}', [CategoryController::class, 'show'])->name('categories.show');
 
 // Chatkoto
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -104,7 +109,7 @@ Route::middleware('auth')->group(function () {
             ->name('group.changeRole');
     });
 
-       Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/profile/update-images', [ProfileController::class, 'updateImage'])

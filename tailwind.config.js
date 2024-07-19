@@ -19,5 +19,5 @@ export default {
         },
     },
 
-    plugins: [forms],
+    plugins: [forms, "./node_modules/flowbite/**/*.js"],
 };
