@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Item;
 use App\Models\Category;
+use App\Models\ItemAttachment;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,6 +29,23 @@ class ItemController extends Controller
             ->get();
 
         return Inertia::render('Kalakalkoto/Home', [
+            'items' => $items,
+            'categories' => $categories
+        ]);
+    }
+
+    public function userItems()
+    {
+        $categories = Category::all();
+        $currentUserId = Auth::id();
+
+        // $items = Item::with('user', 'category', 'images')->where('is_sold', false)->get();
+        $items = Item::with('user', 'category', 'images')
+            ->where('is_sold', false)
+            ->where('user_id', '=', $currentUserId)
+            ->get();
+
+        return Inertia::render('Kalakalkoto/Listing', [
             'items' => $items,
             'categories' => $categories
         ]);
@@ -75,15 +93,30 @@ class ItemController extends Controller
         ]);
     }
 
+    public function showItem($id)
+    {
+        $item = Item::with('user', 'category', 'images')->findOrFail($id);
+        return Inertia::render('Kalakalkoto/ItemDetail', [
+            'item' => $item,
+        ]);
+    }
+
     public function markAsSold($id)
     {
         $item = Item::findOrFail($id);
-        $this->authorize('update', $item);
+        // $this->authorize('update', $item);
 
         $item->is_sold = true;
         $item->save();
 
-        return redirect()->route('kalakalkoto');
+        return response()->json(['redirect' => route('kalakalkoto.userItems')]);
+    }
+
+    public function destroy($id)
+    {
+        $item = Item::findOrFail($id);
+        $item->delete();
+        return response()->json(['redirect' => route('kalakalkoto.userItems')]);
     }
 
     public function filterByCategory($categoryId)
@@ -100,4 +133,45 @@ class ItemController extends Controller
             'currentCategoryId' => $categoryId
         ]);
     }
+
+    public function edit($id)
+    {
+        $item = Item::findOrFail($id);
+        $categories = Category::all();
+        return Inertia::render('Kalakalkoto/Edit', [
+            'item' => $item,
+            'categories' => $categories,
+        ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $item = Item::findOrFail($id);
+
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'price' => 'required|numeric',
+            'location' => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+        ]);
+
+        // Update the item details
+        $item->update($request->only(['title', 'description', 'price', 'location', 'category_id']));
+
+        // Handle new image uploads
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('items/' . $item->id, 'public');
+                ItemAttachment::create(['item_id' => $item->id, 'path' => $path]);
+            }
+        }
+
+        // Optionally, handle removing old images if required
+        // $item->images()->whereNotIn('path', $request->input('existing_images', []))->delete();
+
+        return response()->json(['redirect' => route('kalakalkoto.showItem', $id)]);
+    }
+
 }

@@ -42,13 +42,20 @@ Route::get('/kalakalkoto', [KalakalkotoController::class, 'index'])
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('/kalakalkoto')->group(function () {
         Route::get('/', [ItemController::class, 'index'])->name('kalakalkoto');
+        Route::get('/user/items', [ItemController::class, 'userItems'])->name('kalakalkoto.userItems');
+
+        Route::get('/user/item/{id}', [ItemController::class, 'showItem'])->name('kalakalkoto.showItem');
+        Route::get('/item/{id}/edit', [ItemController::class, 'edit'])->name('item.edit');
+        Route::put('/item/update/{id}', [ItemController::class, 'update'])->name('item.update');
+        Route::delete('/item/{id}', [ItemController::class, 'destroy'])->name('item.destroy');
+        Route::post('/item/{id}/mark-as-sold', [ItemController::class, 'markAsSold'])->name('item.markAsSold');
+
         Route::get('/item/{id}', [ItemController::class, 'show'])->name('kalakalkoto.item.show');
         Route::get('/category/{id}', [ItemController::class, 'filterByCategory'])->name('kalakalkoto.category.filter');
 
-        // CRUD Routes
         Route::get('/create', [ItemController::class, 'create'])->name('kalakalkoto.item.create');
         Route::post('/item', [ItemController::class, 'store'])->name('kalakalkoto.item.store');
-        Route::put('/item/{id}/mark-as-sold', [ItemController::class, 'markAsSold'])->name('kalakalkoto.item.markAsSold');
+        // Route::put('/item/{id}/mark-as-sold', [ItemController::class, 'markAsSold'])->name('kalakalkoto.item.markAsSold');
     });
 });
 

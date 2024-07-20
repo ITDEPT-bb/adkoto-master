@@ -52,7 +52,7 @@
                 </li>
                 <li>
                     <Link
-                        :href="route('kalakalkoto.item.create')"
+                        :href="route('kalakalkoto.userItems')"
                         class="flex items-center p-2 text-gray-900 hover:bg-gray-100 transition duration-75 rounded-lg group"
                     >
                         <span class="ms-3 text-sm">My Listing</span>
