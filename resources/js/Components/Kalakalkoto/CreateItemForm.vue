@@ -18,6 +18,7 @@
                     class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     placeholder="Enter the item title"
                 />
+                <p v-if="formErrors.title" class="text-red-600 text-sm mt-1">{{ formErrors.title }}</p>
             </div>
             <div class="mb-6">
                 <label
@@ -31,6 +32,7 @@
                     placeholder="Enter the item description"
                     rows="4"
                 ></textarea>
+                <p v-if="formErrors.description" class="text-red-600 text-sm mt-1">{{ formErrors.description }}</p>
             </div>
             <div class="mb-6">
                 <label
@@ -44,6 +46,7 @@
                     class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     placeholder="Enter the item price"
                 />
+                <p v-if="formErrors.price" class="text-red-600 text-sm mt-1">{{ formErrors.price }}</p>
             </div>
             <div class="mb-6">
                 <label
@@ -57,6 +60,7 @@
                     class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     placeholder="Enter the item location"
                 />
+                <p v-if="formErrors.location" class="text-red-600 text-sm mt-1">{{ formErrors.location }}</p>
             </div>
             <div class="mb-6">
                 <label
@@ -76,6 +80,7 @@
                         {{ category.name }}
                     </option>
                 </select>
+                <p v-if="formErrors.category_id" class="text-red-600 text-sm mt-1">{{ formErrors.category_id }}</p>
             </div>
             <div class="mb-6">
                 <label
@@ -108,6 +113,7 @@
             <div class="mt-8">
                 <button
                     type="submit"
+                    :disabled="isSubmitting"
                     class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
                     Create
@@ -140,13 +146,14 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, reactive } from "vue";
 import { useForm, usePage } from "@inertiajs/vue3";
 
 const { props } = usePage();
 const categories = ref(props.categories || []);
 const previewImages = ref([]);
 const previewImage = ref(null);
+const formErrors = reactive({}); // To hold validation errors
 
 const form = useForm({
     title: "",
@@ -156,6 +163,18 @@ const form = useForm({
     category_id: "",
     images: [],
 });
+
+const isSubmitting = ref(false); // Track submission state
+
+function validateForm() {
+    formErrors.title = form.title.trim() === "" ? "Title is required." : null;
+    formErrors.description = form.description.trim() === "" ? "Description is required." : null;
+    formErrors.price = form.price <= 0 ? "Price must be greater than 0." : null;
+    formErrors.location = form.location.trim() === "" ? "Location is required." : null;
+    formErrors.category_id = !form.category_id ? "Category is required." : null;
+
+    return !Object.values(formErrors).some(error => error !== null);
+}
 
 function handleFileUpload(event) {
     const files = Array.from(event.target.files);
@@ -172,8 +191,18 @@ function closePreview() {
     previewImage.value = null;
 }
 
-function submit() {
-    form.post(route("kalakalkoto.item.store"));
+async function submit() {
+    if (!validateForm()) return; // Exit if validation fails
+
+    isSubmitting.value = true; // Set submitting state
+
+    try {
+        await form.post(route("kalakalkoto.item.store"));
+    } catch (error) {
+        console.error("Submission failed:", error);
+    } finally {
+        isSubmitting.value = false; // Reset submitting state
+    }
 }
 </script>
 
