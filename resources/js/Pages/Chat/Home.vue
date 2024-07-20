@@ -1,52 +1,3 @@
-<!-- <template>
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 p-4 h-full"> -->
-<!-- Following List Section -->
-<!-- <FollowingList :followings="followings" @selectUser="selectUser" /> -->
-
-<!-- Chat Window Section -->
-<!-- <ChatWindow :selectedUser="selectedUser" :conversation="conversation" :newMessage="newMessage" @sendMessage="sendMessage" /> -->
-
-<!-- User Info Section -->
-<!-- <UserInfo :selectedUser="selectedUser" />
-    </div>
-  </template>
-
-  <script setup>
-  import FollowingList from '@/Components/Chat/FollowingList.vue'
-  import ChatWindow from '@/Components/Chat/ChatWindow.vue'
-  import UserInfo from '@/Components/Chat/UserInfo.vue'
-  import { ref, onMounted } from 'vue'
-  import axiosClient from '@/axiosClient.js'
-
-  const followings = ref([])
-  const selectedUser = ref(null)
-  const conversation = ref(null)
-  const newMessage = ref("")
-
-  const fetchFollowings = async () => {
-    try {
-      const response = await axiosClient.get('/followings')
-      followings.value = response.data
-    } catch (error) {
-      console.error('Error fetching followings:', error)
-    }
-  }
-
-  const selectUser = async (user) => {
-    try {
-      selectedUser.value = user
-      const response = await axiosClient.get(`/chat/conversations/${user.id}`)
-      conversation.value = response.data
-    } catch (error) {
-      console.error('Error fetching conversation:', error)
-    }
-  }
-
-  onMounted(() => {
-    fetchFollowings()
-  })
-  </script> -->
-
 <template>
     <Head title="Social Media Website" />
 
@@ -205,7 +156,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick } from "vue";
+import { ref, onMounted, nextTick, watch } from "vue";
 import axiosClient from "@/axiosClient.js";
 import { Head } from "@inertiajs/vue3";
 import AuthenticatedLayout from "@/Layouts/ChatLayout.vue";
@@ -214,13 +165,13 @@ import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
 const selectedUser = ref(null);
 const conversation = ref(null);
 const newMessage = ref("");
-const messageContainer = ref(null); // Define the ref for the message container
+const messageContainer = ref(null);
 
 const props = defineProps({
     followings: Array,
 });
 
-// Function to scroll to bottom of messages
+// Function to scroll to the bottom of the chat window
 async function scrollToBottom() {
     await nextTick();
     if (messageContainer.value) {
@@ -261,6 +212,7 @@ function formatMessageTimestamp(timestamp) {
     }
 }
 
+// Function to select a user and fetch their conversation
 async function selectUser(user) {
     try {
         selectedUser.value = user;
@@ -274,6 +226,7 @@ async function selectUser(user) {
     }
 }
 
+// Function to send a new message
 async function sendMessage() {
     try {
         if (newMessage.value.trim() === "") return;
@@ -295,8 +248,26 @@ async function sendMessage() {
     }
 }
 
+// Polling for new messages
+const startPolling = () => {
+    setInterval(async () => {
+        if (selectedUser.value && conversation.value) {
+            try {
+                const response = await axiosClient.get(
+                    `/chat/conversations/${selectedUser.value.id}`
+                );
+                conversation.value = response.data;
+                await scrollToBottom();
+            } catch (error) {
+                console.error("Error fetching updated conversation:", error);
+            }
+        }
+    }, 2000);
+};
+
 onMounted(() => {
     scrollToBottom();
+    startPolling();
 });
 </script>
 
