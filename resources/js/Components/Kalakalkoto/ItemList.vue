@@ -10,11 +10,18 @@
                     <!-- <img :src="item.images[0]?.path || 'https://via.placeholder.com/150'"
                     :alt="item.name" class="w-full h-40 object-cover items-center rounded-t-lg"> -->
                     <div class="w-full h-40 overflow-hidden rounded-t-lg">
-                        <img
+                        <!-- <img
                             :src="
                                 item.images[0]?.path ||
                                 'https://via.placeholder.com/150'
                             "
+                            :alt="item.name"
+                            class="w-full h-full object-cover rounded-t-lg"
+                        /> -->
+                        <img
+                            :src="`/storage/${
+                                item.images[0]?.path || 'placeholder.png'
+                            }`"
                             :alt="item.name"
                             class="w-full h-full object-cover rounded-t-lg"
                         />
