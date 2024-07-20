@@ -15,6 +15,14 @@ function openPreview(image) {
 function closePreview() {
     previewImage.value = null;
 }
+
+const formatPrice = (price) => {
+  return new Intl.NumberFormat('en-PH', {
+    style: 'currency',
+    currency: 'PHP',
+    minimumFractionDigits: 2,
+  }).format(price);
+};
 </script>
 
 <template>
@@ -73,10 +81,15 @@ function closePreview() {
                         {{ item.description }}
                     </p>
                     <div class="flex items-center justify-between mb-4">
-                        <p
+                        <!-- <p
                             class="text-2xl font-bold text-gray-800 dark:text-gray-200"
                         >
                             ₱{{ item.price }}
+                        </p> -->
+                        <p
+                            class="text-2xl font-bold text-gray-800 dark:text-gray-200"
+                        >
+                            {{ formatPrice(item.price) }}
                         </p>
                     </div>
                     <p class="text-sm text-gray-600 dark:text-gray-400">

@@ -36,7 +36,8 @@
                             <p
                                 class="text-lg font-bold text-gray-900 dark:text-gray-100"
                             >
-                                ₱{{ item.price }}
+                                <!-- ₱{{ item.price }} -->
+                                <p>{{ formatPrice(item.price) }}</p>
                             </p>
                         </div>
                         <p class="text-sm text-gray-600 dark:text-gray-400">
@@ -50,7 +51,7 @@
 </template>
 
 <script setup>
-import { defineProps } from "vue";
+import { defineProps, computed } from "vue";
 import { Link } from "@inertiajs/vue3";
 
 const props = defineProps({
@@ -59,6 +60,14 @@ const props = defineProps({
         default: () => [],
     },
 });
+
+const formatPrice = (price) => {
+  return new Intl.NumberFormat('en-PH', {
+    style: 'currency',
+    currency: 'PHP',
+    minimumFractionDigits: 2,
+  }).format(price);
+};
 </script>
 
 <style scoped></style>

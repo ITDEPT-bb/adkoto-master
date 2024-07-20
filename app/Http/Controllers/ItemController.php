@@ -19,8 +19,14 @@ class ItemController extends Controller
     public function index()
     {
         $categories = Category::all();
+        $currentUserId = Auth::id();
 
-        $items = Item::with('user', 'category', 'images')->where('is_sold', false)->get();
+        // $items = Item::with('user', 'category', 'images')->where('is_sold', false)->get();
+        $items = Item::with('user', 'category', 'images')
+            ->where('is_sold', false)
+            ->where('user_id', '!=', $currentUserId)
+            ->get();
+
         return Inertia::render('Kalakalkoto/Home', [
             'items' => $items,
             'categories' => $categories
