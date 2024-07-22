@@ -21,22 +21,15 @@ class ChatController extends Controller
         ]);
     }
 
-    /**
-     * Retrieve or create a conversation with the given user.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function getConversation(User $user)
     {
-        // Find or create conversation
         $conversation = Conversation::where(function ($query) use ($user) {
             $query->where('user_id1', auth()->id())
                 ->where('user_id2', $user->id);
         })->orWhere(function ($query) use ($user) {
             $query->where('user_id1', $user->id)
                 ->where('user_id2', auth()->id());
-        })->with('messages')->first(); // Eager load messages
+        })->with('messages')->first();
 
         if (!$conversation) {
             $conversation = Conversation::create([
@@ -47,9 +40,10 @@ class ChatController extends Controller
 
         $messages = $conversation->messages;
 
-        return response()->json([
+        return Inertia::render('Chat/Conversation', [
             'conversation' => $conversation,
             'messages' => $messages,
+            'user' => new UserResource($user)
         ]);
     }
 

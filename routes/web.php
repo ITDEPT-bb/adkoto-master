@@ -62,7 +62,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // Chatkoto
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
-    Route::get('/chat/conversations/{user}', [ChatController::class, 'getConversation'])->name('chat.conversations.show');
+    Route::get('/chat/conversation/adktu/{user}', [ChatController::class, 'getConversation'])->name('chat.conversations.show');
     Route::post('/chat/conversations/{user}/messages', [ChatController::class, 'sendMessage'])->name('chat.messages.store');
 });
 
