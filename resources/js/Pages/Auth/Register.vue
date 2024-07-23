@@ -21,11 +21,11 @@ const config = ref({
 
 const form = useForm({
     name: "",
-    surname: "",
+    // surname: "",
     email: "",
-    phone: "",
-    birthday: "",
-    gender: "",
+    // phone: "",
+    // birthday: "",
+    // gender: "",
     password: "",
     password_confirmation: "",
 });
@@ -52,12 +52,12 @@ const submit = () => {
                 <InputError class="mt-2" :message="form.errors.name" />
             </div>
 
-            <div class="mt-4">
+            <!-- <div class="mt-4">
                 <InputLabel for="surname" value="Surname" />
                 <TextInput id="surname" v-model="form.surname" type="text" class="mt-1 block w-full" required
                     autocomplete="surname" />
                 <InputError class="mt-2" :message="form.errors.surname" />
-            </div>
+            </div> -->
 
             <div class="mt-4">
                 <InputLabel for="email" value="Email" />
@@ -68,12 +68,12 @@ const submit = () => {
                 <InputError class="mt-2" :message="form.errors.email" />
             </div>
 
-            <div class="mt-4">
+            <!-- <div class="mt-4">
                 <InputLabel for="phone" value="Mobile No." />
                 <TextInput id="phone" v-model="form.phone" type="tel" class="mt-1 block w-full" required
                     autocomplete="phone" />
                 <InputError class="mt-2" :message="form.errors.phone" />
-            </div>
+            </div> -->
 
             <!-- <div class="mt-4">
                 <InputLabel for="birthday" value="Birthday" />
@@ -88,15 +88,15 @@ const submit = () => {
                 <InputError class="mt-2" :message="form.errors.birthday" />
             </div> -->
 
-            <div class="mt-4">
+            <!-- <div class="mt-4">
                 <InputLabel for="birthday" value="Birthday" />
                 <flat-pickr id="birthday" v-model="form.birthday" type="date"
                     class="mt-1 block w-full rounded-md shadow-sm border-gray-300 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 focus:border-red-500 focus:ring dark:focus:border-red-600 focus:ring-red-500 dark:focus:ring-red-600 focus:ring-opacity-50"
                     required autocomplete="birthday" placeholder="Select date" :config="config" />
                 <InputError class="mt-2" :message="form.errors.birthday" />
-            </div>
+            </div> -->
 
-            <div class="mt-4">
+            <!-- <div class="mt-4">
                 <InputLabel for="gender" value="Gender" />
                 <select v-model="form.gender" id="gender"
                     class="mt-1 block w-full rounded-md shadow-sm border-gray-300 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 focus:border-red-500 focus:ring dark:focus:border-red-600 focus:ring-red-500 dark:focus:ring-red-600 focus:ring-opacity-50"
@@ -107,7 +107,7 @@ const submit = () => {
                     <option value="Other">Other</option>
                 </select>
                 <InputError class="mt-2" :message="form.errors.gender" />
-            </div>
+            </div> -->
 
             <div class="mt-4">
                 <InputLabel for="password" value="Password" />

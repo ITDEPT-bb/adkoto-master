@@ -1,9 +1,13 @@
 <?php
 
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\KalakalkotoController;
 use App\Http\Controllers\AdkotoController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ItemController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SearchController;
@@ -30,9 +34,44 @@ Route::get('/kalakalkoto', [KalakalkotoController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('kalakalkoto');
 
-Route::get('/kalakalkoto/prod/', [KalakalkotoController::class, 'view'])
-    ->middleware(['auth', 'verified'])
-    ->name('product');
+// Route::get('/kalakalkoto/prod/', [KalakalkotoController::class, 'view'])
+//     ->middleware(['auth', 'verified'])
+//     ->name('product');
+
+// Kalakalkoto
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::prefix('/kalakalkoto')->group(function () {
+        Route::get('/', [ItemController::class, 'index'])->name('kalakalkoto');
+        Route::get('/user/items', [ItemController::class, 'userItems'])->name('kalakalkoto.userItems');
+
+        Route::get('/user/item/{id}', [ItemController::class, 'showItem'])->name('kalakalkoto.showItem');
+        Route::get('/item/{id}/edit', [ItemController::class, 'edit'])->name('item.edit');
+        Route::put('/item/update/{id}', [ItemController::class, 'update'])->name('item.update');
+        Route::delete('/item/{id}', [ItemController::class, 'destroy'])->name('item.destroy');
+        Route::post('/item/{id}/mark-as-sold', [ItemController::class, 'markAsSold'])->name('item.markAsSold');
+
+        Route::get('/item/{id}', [ItemController::class, 'show'])->name('kalakalkoto.item.show');
+        Route::get('/category/{id}', [ItemController::class, 'filterByCategory'])->name('kalakalkoto.category.filter');
+
+        Route::get('/create', [ItemController::class, 'create'])->name('kalakalkoto.item.create');
+        Route::post('/item', [ItemController::class, 'store'])->name('kalakalkoto.item.store');
+        // Route::put('/item/{id}/mark-as-sold', [ItemController::class, 'markAsSold'])->name('kalakalkoto.item.markAsSold');
+    });
+});
+
+// Chatkoto
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
+    Route::get('/chat/conversation/adktu/{user}', [ChatController::class, 'getConversation'])->name('chat.conversations.show');
+    Route::post('/chat/conversations/{conversation}/messages', [ChatController::class, 'sendMessage'])->name('chat.messages.store');
+    Route::get('/chat/conversations/{conversationId}/messages', [ChatController::class, 'fetchMessages'])->name('chat.conversations.fetchMessages');
+});
+
+// Notification
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/users/{user}', [ProfileController::class, 'fetchProfileNotif']);
+});
 
 // Adkoto
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -89,13 +128,15 @@ Route::middleware('auth')->group(function () {
             ->name('group.changeRole');
     });
 
-    //    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/profile/update-images', [ProfileController::class, 'updateImage'])
         ->name('profile.updateImages');
 
     Route::post('/user/follow/{user}', [UserController::class, 'follow'])->name('user.follow');
+
+    Route::get('/api/check-profile', [ProfileController::class, 'checkProfile']);
 
     // Posts
     Route::prefix('/post')->group(function () {

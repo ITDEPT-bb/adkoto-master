@@ -14,6 +14,7 @@ use App\Models\PostAttachment;
 use App\Models\Reaction;
 use App\Notifications\CommentDeleted;
 use App\Notifications\PostDeleted;
+use App\Notifications\PostReacted;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -222,6 +223,9 @@ class PostController extends Controller
                 'user_id' => $userId,
                 'type' => $data['reaction']
             ]);
+
+            // Notify post owner about the new reaction
+            $post->user->notify(new PostReacted(Auth::user(), $post, $data['reaction']));
         }
 
         $reactions = Reaction::where('object_id', $post->id)->where('object_type', Post::class)->count();
