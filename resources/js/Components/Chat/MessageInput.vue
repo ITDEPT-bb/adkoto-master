@@ -24,13 +24,24 @@
                 <CameraIcon />
                 <span class="sr-only">Upload image</span>
             </button>
+            <!-- Emoji Picker Trigger -->
             <button
                 type="button"
                 class="p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
+                @click="toggleEmojiPicker"
             >
                 <EmojiIcon />
                 <span class="sr-only">Add emoji</span>
             </button>
+
+            <!-- Emoji Picker Component -->
+            <emoji-picker
+                v-if="showEmojiPicker"
+                class="absolute bottom-16 left-0 z-10"
+                @emoji-click="addEmoji"
+            ></emoji-picker>
+
+            <!-- Textarea for message input -->
             <textarea
                 v-model="newMessage"
                 @keyup.enter="sendMessage"
@@ -39,6 +50,8 @@
                 class="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Write your message..."
             ></textarea>
+
+            <!-- Send Button -->
             <button
                 @click="sendMessage"
                 type="button"
@@ -54,12 +67,12 @@
 <script setup>
 import { ref, defineEmits } from "vue";
 import axiosClient from "@/axiosClient.js";
-
 import MicIcon from "@/Components/Icons/MicIcon.vue";
 import PaperClipIcon from "@/Components/Icons/PaperClipIcon.vue";
 import CameraIcon from "@/Components/Icons/CameraIcon.vue";
 import EmojiIcon from "@/Components/Icons/EmojiIcon.vue";
 import SendIcon from "@/Components/Icons/SendIcon.vue";
+import "emoji-picker-element";
 
 const props = defineProps({
     user: {
@@ -74,6 +87,7 @@ const props = defineProps({
 
 const emit = defineEmits(["message-sent"]);
 const newMessage = ref("");
+const showEmojiPicker = ref(false);
 const user = props.user;
 const conversation = props.conversation;
 
@@ -86,7 +100,6 @@ async function sendMessage() {
 
     if (newMessage.value.trim() === "") return;
 
-    // Create a temporary message to optimistically update the UI
     const tempMessage = {
         id: Date.now(),
         message: newMessage.value,
@@ -94,10 +107,7 @@ async function sendMessage() {
         conversation_id: conversation.id,
     };
 
-    // Emit the new message to the parent component
     emit("message-sent", tempMessage);
-
-    // Clear the input field
     newMessage.value = "";
 
     try {
@@ -112,5 +122,15 @@ async function sendMessage() {
     } catch (error) {
         console.error("Error sending message:", error);
     }
+}
+
+function toggleEmojiPicker() {
+    showEmojiPicker.value = !showEmojiPicker.value;
+}
+
+function addEmoji(event) {
+    const emoji = event.detail.unicode || event.detail.emoji;
+    newMessage.value += emoji;
+    toggleEmojiPicker();
 }
 </script>
