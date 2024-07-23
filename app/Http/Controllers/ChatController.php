@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Message;
 use App\Models\Conversation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class ChatController extends Controller
@@ -102,13 +103,28 @@ class ChatController extends Controller
             'message' => 'required',
         ]);
 
-        $message = Message::create([
-            'sender_id' => auth()->id(),
-            'receiver_id' => $request->receiver_id,
-            'conversation_id' => $request->conversation_id,
-            'message' => $request->message,
-        ]);
+        // Start a database transaction
+        DB::beginTransaction();
 
-        return response()->json($message);
+        try {
+            $message = Message::create([
+                'sender_id' => auth()->id(),
+                'receiver_id' => $request->receiver_id,
+                'conversation_id' => $request->conversation_id,
+                'message' => $request->message,
+            ]);
+
+            // Commit the transaction
+            DB::commit();
+
+            // Optionally, broadcast the message to a channel
+            // broadcast(new MessageSent($message));
+
+            return response()->json($message);
+        } catch (\Exception $e) {
+            // Rollback the transaction on failure
+            DB::rollBack();
+            return response()->json(['error' => 'Failed to send message'], 500);
+        }
     }
 }

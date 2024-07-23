@@ -92,7 +92,7 @@ const fetchMessages = async () => {
 
 // Start polling for new messages
 const startPolling = () => {
-    intervalId = setInterval(fetchMessages, 1000);
+    intervalId = setInterval(fetchMessages, 5000); // Increase interval
 };
 
 const onScroll = () => {
@@ -119,40 +119,29 @@ onBeforeUnmount(() => {
     }
 });
 
-watch(messages, async () => {
-    await nextTick();
-    if (!isUserScrolling.value) {
-        scrollToBottom();
-    }
-});
-
-// Watch for the message-sent event
 watch(
     () => props.messages,
     (newMessages) => {
         if (newMessages) {
             messages.value = newMessages;
+            scrollToBottom();
         }
     }
 );
 
-// Listen for the message-sent event from the input component
 const handleMessageSent = (message) => {
     messages.value.push(message);
     scrollToBottom();
 };
 
-// Event listener for message-sent event
 const handleMessageSentEvent = (event) => {
     handleMessageSent(event.detail);
 };
 
-// Add event listener on mount
 onMounted(() => {
     document.addEventListener("message-sent", handleMessageSentEvent);
 });
 
-// Remove event listener on unmount
 onBeforeUnmount(() => {
     document.removeEventListener("message-sent", handleMessageSentEvent);
 });
