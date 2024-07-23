@@ -3,7 +3,7 @@
 
     <AuthenticatedLayout>
         <div class="home-page flex h-full overflow-y-auto container p-4 mx-auto">
-            <FollowingList :followings="followings" />
+            <FollowingList :followings="followings" :participants="participants" />
         </div>
     </AuthenticatedLayout>
     <UpdateProfileReminder />
@@ -18,6 +18,10 @@ import FollowingList from "@/Components/Chat/FollowingList.vue";
 
 const props = defineProps({
     followings: {
+        type: Array,
+        required: true,
+    },
+    participants: {
         type: Array,
         required: true,
     },

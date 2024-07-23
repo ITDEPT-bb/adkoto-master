@@ -11,13 +11,39 @@ use Inertia\Inertia;
 
 class ChatController extends Controller
 {
+    // public function index(Request $request)
+    // {
+    //     $user = auth()->user();
+    //     $followings = $user->followings()->get();
+
+    //     return Inertia::render('Chat/Home', [
+    //         'followings' => UserResource::collection($followings),
+    //     ]);
+    // }
     public function index(Request $request)
     {
         $user = auth()->user();
+
         $followings = $user->followings()->get();
+
+        $conversations = Conversation::where(function ($query) use ($user) {
+            $query->where('user_id1', $user->id)
+                ->orWhere('user_id2', $user->id);
+        })->get();
+
+        $participants = $conversations->map(function ($conversation) use ($user) {
+            return $conversation->user_id1 === $user->id
+                ? User::find($conversation->user_id2)
+                : User::find($conversation->user_id1);
+        })->unique('id');
+
+        $filteredParticipants = $participants->reject(function ($participant) use ($followings) {
+            return $followings->contains('id', $participant->id);
+        });
 
         return Inertia::render('Chat/Home', [
             'followings' => UserResource::collection($followings),
+            'participants' => UserResource::collection($filteredParticipants),
         ]);
     }
 
