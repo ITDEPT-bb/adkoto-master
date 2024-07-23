@@ -63,7 +63,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
     Route::get('/chat/conversation/adktu/{user}', [ChatController::class, 'getConversation'])->name('chat.conversations.show');
-    Route::post('/chat/conversations/{user}/messages', [ChatController::class, 'sendMessage'])->name('chat.messages.store');
+    Route::post('/chat/conversations/{conversation}/messages', [ChatController::class, 'sendMessage'])->name('chat.messages.store');
+    Route::get('/chat/conversations/{conversationId}/messages', [ChatController::class, 'fetchMessages'])->name('chat.conversations.fetchMessages');
 });
 
 // Notification

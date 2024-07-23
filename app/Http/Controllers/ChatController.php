@@ -73,6 +73,21 @@ class ChatController extends Controller
         ]);
     }
 
+    public function fetchMessages($conversationId)
+    {
+        $conversation = Conversation::with('messages')
+            ->where('id', $conversationId)
+            ->first();
+
+        if (!$conversation) {
+            return response()->json(['message' => 'Conversation not found'], 404);
+        }
+
+        $messages = $conversation->messages;
+
+        return response()->json($messages);
+    }
+
     /**
      * Send a message to a conversation.
      *
