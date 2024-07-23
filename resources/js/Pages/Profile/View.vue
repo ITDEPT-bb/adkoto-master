@@ -6,7 +6,7 @@ import {
     CameraIcon,
 } from "@heroicons/vue/24/solid";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
-import { usePage } from "@inertiajs/vue3";
+import { usePage, Link } from "@inertiajs/vue3";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import TabItem from "@/Pages/Profile/Partials/TabItem.vue";
 import Edit from "@/Pages/Profile/Edit.vue";
@@ -25,6 +25,7 @@ import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
 
 import followIcon from "/public/img/icons/heartfollow.png";
 import unfollowIcon from "/public/img/icons/heartunfollow.png";
+import MessageIcon from "@/Components/Icons/MessageIcon.vue";
 
 const imagesForm = useForm({
     avatar: null,
@@ -272,7 +273,20 @@ function followUser() {
                                 </p>
                             </div>
 
-                            <div v-if="!isMyProfile" class="flex mt-6 me-1 sm:me-0 sm:mt-0">
+                            <div
+                                v-if="!isMyProfile"
+                                class="flex mt-6 me-1 gap-3 sm:me-0 sm:mt-0"
+                            >
+                                <Link
+                                    :href="`/chat/conversation/adktu/${user.id}`"
+                                >
+                                    <button
+                                        type="button"
+                                        class="inline-flex items-center justify-center rounded-lg p-2 h-8 w-auto transition duration-500 ease-in-out text-gray-500 hover:bg-gray-300 focus:outline-none"
+                                    >
+                                        <MessageIcon />
+                                    </button>
+                                </Link>
                                 <PrimaryButton
                                     v-if="!isCurrentUserFollower"
                                     @click="followUser"
