@@ -64,7 +64,7 @@ const conversation = props.conversation;
 const messageContainer = ref(null);
 
 let intervalId = null;
-let isUserScrolling = ref(false);
+const isUserScrolling = ref(false);
 
 // Function to scroll to the bottom of the chat window
 const scrollToBottom = async () => {
@@ -124,6 +124,37 @@ watch(messages, async () => {
     if (!isUserScrolling.value) {
         scrollToBottom();
     }
+});
+
+// Watch for the message-sent event
+watch(
+    () => props.messages,
+    (newMessages) => {
+        if (newMessages) {
+            messages.value = newMessages;
+        }
+    }
+);
+
+// Listen for the message-sent event from the input component
+const handleMessageSent = (message) => {
+    messages.value.push(message);
+    scrollToBottom();
+};
+
+// Event listener for message-sent event
+const handleMessageSentEvent = (event) => {
+    handleMessageSent(event.detail);
+};
+
+// Add event listener on mount
+onMounted(() => {
+    document.addEventListener("message-sent", handleMessageSentEvent);
+});
+
+// Remove event listener on unmount
+onBeforeUnmount(() => {
+    document.removeEventListener("message-sent", handleMessageSentEvent);
 });
 </script>
 

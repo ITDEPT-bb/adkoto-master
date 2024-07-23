@@ -84,18 +84,29 @@ async function sendMessage() {
 
     if (newMessage.value.trim() === "") return;
 
+    // Create a temporary message to optimistically update the UI
+    const tempMessage = {
+        id: Date.now(),
+        message: newMessage.value,
+        sender_id: user.id,
+        conversation_id: conversation.id,
+    };
+
+    // Emit the new message to the parent component
+    emit("message-sent", tempMessage);
+
+    // Clear the input field
+    newMessage.value = "";
+
     try {
         await axiosClient.post(
             `/chat/conversations/${conversation.id}/messages`,
             {
                 receiver_id: user.id,
                 conversation_id: conversation.id,
-                message: newMessage.value,
+                message: tempMessage.message,
             }
         );
-
-        newMessage.value = "";
-        emit("message-sent");
     } catch (error) {
         console.error("Error sending message:", error);
     }
