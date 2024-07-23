@@ -98,7 +98,7 @@ Route::get('/g/{group:slug}', [GroupController::class, 'profile'])
 Route::get('/group/approve-invitation/{token}', [GroupController::class, 'approveInvitation'])
     ->name('group.approveInvitation');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
 
     // Groups
     Route::prefix('/group')->group(function () {
@@ -126,6 +126,9 @@ Route::middleware('auth')->group(function () {
 
         Route::post('/change-role/{group:slug}', [GroupController::class, 'changeRole'])
             ->name('group.changeRole');
+
+        Route::delete('/{id}', [GroupController::class, 'softDelete'])
+            ->name('group.delete');
     });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -28,6 +28,7 @@ use App\Notifications\UserRemovedFromGroup;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -139,6 +140,23 @@ class GroupController extends Controller
     public function destroy(Group $group)
     {
         //
+    }
+
+    public function softDelete($id)
+    {
+        $group = Group::findOrFail($id);
+
+        // Ensure only the admin can delete the group
+        if ($group->user_id !== Auth::id()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $group->deleted_at = now();
+        $group->deleted_by = Auth::id();
+        $group->save();
+
+        // return response()->json(['message' => 'Group deleted successfully.']);
+        return Redirect::route('dashboard');
     }
 
     public function updateImage(Request $request, Group $group)
