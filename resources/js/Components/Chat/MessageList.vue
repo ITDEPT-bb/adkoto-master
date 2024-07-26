@@ -21,17 +21,16 @@
                             message.sender_id !== authUser.id,
                     }"
                 >
-                    <div>
-                        <span
-                            v-if="message.message"
-                            class="px-4 py-2 rounded-lg inline-block break-words max-w-lg"
-                            :class="{
-                                'bg-blue-600 text-white':
-                                    message.sender_id === authUser.id,
-                                'bg-gray-300 text-gray-600':
-                                    message.sender_id !== authUser.id,
-                            }"
-                        >
+                    <div
+                        class="max-w-lg p-2 rounded-lg"
+                        :class="{
+                            'bg-blue-600 text-white':
+                                message.sender_id === authUser.id,
+                            'bg-gray-300 text-gray-600':
+                                message.sender_id !== authUser.id,
+                        }"
+                    >
+                        <span v-if="message.message" class="block break-words">
                             {{ message.message }}
                         </span>
 
@@ -46,13 +45,7 @@
                             <div
                                 v-for="attachment in message.attachments"
                                 :key="attachment.id"
-                                class="px-4 py-2 rounded-lg inline-block m-1 break-words max-w-lg"
-                                :class="{
-                                    'bg-blue-600 text-white':
-                                        message.sender_id === authUser.id,
-                                    'bg-gray-300 text-gray-600':
-                                        message.sender_id !== authUser.id,
-                                }"
+                                class="rounded-lg inline-block m-1 break-words max-w-lg"
                             >
                                 <!-- Render images -->
                                 <div
@@ -79,7 +72,7 @@
                                     <video
                                         :src="`/storage/${attachment.path}`"
                                         controls
-                                        class="rounded-lg max-w-full"
+                                        class="rounded-lg w-[100px] h-[100px] object-cover"
                                     ></video>
                                 </div>
 
@@ -106,14 +99,18 @@
             </div>
         </div>
         <!-- Image Modal -->
-    <ImageModal :src="currentImageSrc" :isVisible="isImageModalVisible" @update:isVisible="isImageModalVisible = $event" />
+        <ImageModal
+            :src="currentImageSrc"
+            :isVisible="isImageModalVisible"
+            @update:isVisible="isImageModalVisible = $event"
+        />
     </div>
 </template>
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount, nextTick, watch } from "vue";
 import axiosClient from "@/axiosClient.js";
-import ImageModal from '@/Components/Chat/ImageModal.vue';
+import ImageModal from "@/Components/Chat/ImageModal.vue";
 
 const props = defineProps({
     messages: Array,
@@ -121,14 +118,14 @@ const props = defineProps({
     user: Object,
     conversation: Object,
 });
-const emit = defineEmits(['onScroll']);
+const emit = defineEmits(["onScroll"]);
 
 const isImageModalVisible = ref(false);
-const currentImageSrc = ref('');
+const currentImageSrc = ref("");
 
 const openImageModal = (src) => {
-  currentImageSrc.value = src;
-  isImageModalVisible.value = true;
+    currentImageSrc.value = src;
+    isImageModalVisible.value = true;
 };
 
 const messages = ref(props.messages);
