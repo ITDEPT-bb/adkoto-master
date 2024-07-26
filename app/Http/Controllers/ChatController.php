@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\UserResource;
+use App\Models\MessageAttachment;
 use App\Models\User;
 use App\Models\Message;
 use App\Models\Conversation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class ChatController extends Controller
@@ -56,7 +58,7 @@ class ChatController extends Controller
         })->orWhere(function ($query) use ($user) {
             $query->where('user_id1', $user->id)
                 ->where('user_id2', auth()->id());
-        })->with('messages')->first();
+        })->with('messages.attachments')->first();
 
         if (!$conversation) {
             $conversation = Conversation::create([
@@ -76,7 +78,7 @@ class ChatController extends Controller
 
     public function fetchMessages($conversationId)
     {
-        $conversation = Conversation::with('messages')
+        $conversation = Conversation::with('messages.attachments')
             ->where('id', $conversationId)
             ->first();
 
@@ -89,24 +91,26 @@ class ChatController extends Controller
         return response()->json($messages);
     }
 
-    /**
-     * Send a message to a conversation.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function sendMessage(Request $request)
     {
+        // Validate the request
         $request->validate([
-            'receiver_id' => 'required',
-            'conversation_id' => 'required',
-            'message' => 'required',
+            'receiver_id' => 'required|integer|exists:users,id',
+            'conversation_id' => 'required|integer|exists:conversations,id',
+            'message' => 'nullable|string',
+            'files.*' => 'nullable|file|mimes:jpg,jpeg,png,gif,mp4,mov,avi|max:20480', // Adjust as needed
         ]);
+
+        // Check if there is neither a message nor files
+        if (empty($request->message) && !$request->hasFile('files')) {
+            return response()->json(['error' => 'Message or files are required'], 400);
+        }
 
         // Start a database transaction
         DB::beginTransaction();
 
         try {
+            // Create the message
             $message = Message::create([
                 'sender_id' => auth()->id(),
                 'receiver_id' => $request->receiver_id,
@@ -114,11 +118,28 @@ class ChatController extends Controller
                 'message' => $request->message,
             ]);
 
+            // Handle file uploads if there are any
+            if ($request->hasFile('files')) {
+                foreach ($request->file('files') as $file) {
+                    // Store the file and get its path
+                    $path = $file->store('message_attachments/' . $message->id, 'public');
+
+                    // Create an entry for each uploaded file
+                    MessageAttachment::create([
+                        'message_id' => $message->id,
+                        'name' => $file->getClientOriginalName(),
+                        'path' => $path,
+                        'mime' => $file->getMimeType(),
+                        'size' => $file->getSize(),
+                    ]);
+                }
+            }
+
             // Commit the transaction
             DB::commit();
 
             // Optionally, broadcast the message to a channel
-            // broadcast(new MessageSent($message));
+            // broadcast(new MessageSent($message))->toOthers();
 
             return response()->json($message);
         } catch (\Exception $e) {

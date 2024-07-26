@@ -23,6 +23,7 @@
                 >
                     <div>
                         <span
+                            v-if="message.message"
                             class="px-4 py-2 rounded-lg inline-block break-words max-w-lg"
                             :class="{
                                 'bg-blue-600 text-white':
@@ -33,6 +34,67 @@
                         >
                             {{ message.message }}
                         </span>
+
+                        <!-- Display attachments if available -->
+                        <div
+                            v-if="
+                                message.attachments &&
+                                message.attachments.length > 0
+                            "
+                            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mt-2"
+                        >
+                            <div
+                                v-for="attachment in message.attachments"
+                                :key="attachment.id"
+                                class="px-4 py-2 rounded-lg inline-block m-1 break-words max-w-lg"
+                                :class="{
+                                    'bg-blue-600 text-white':
+                                        message.sender_id === authUser.id,
+                                    'bg-gray-300 text-gray-600':
+                                        message.sender_id !== authUser.id,
+                                }"
+                            >
+                                <!-- Render images -->
+                                <div
+                                    v-if="attachment.mime.startsWith('image/')"
+                                >
+                                    <img
+                                        :src="`/storage/${attachment.path}`"
+                                        alt="Image"
+                                        class="rounded-lg w-[100px] h-[100px] object-cover cursor-pointer"
+                                        @click="
+                                            openImageModal(
+                                                `/storage/${attachment.path}`
+                                            )
+                                        "
+                                    />
+                                </div>
+
+                                <!-- Render videos -->
+                                <div
+                                    v-else-if="
+                                        attachment.mime.startsWith('video/')
+                                    "
+                                >
+                                    <video
+                                        :src="`/storage/${attachment.path}`"
+                                        controls
+                                        class="rounded-lg max-w-full"
+                                    ></video>
+                                </div>
+
+                                <!-- Render other file types -->
+                                <div v-else>
+                                    <a
+                                        :href="`/storage/${attachment.path}`"
+                                        target="_blank"
+                                        class="text-blue-500 underline"
+                                    >
+                                        {{ attachment.name }}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <img
@@ -43,12 +105,15 @@
                 />
             </div>
         </div>
+        <!-- Image Modal -->
+    <ImageModal :src="currentImageSrc" :isVisible="isImageModalVisible" @update:isVisible="isImageModalVisible = $event" />
     </div>
 </template>
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount, nextTick, watch } from "vue";
 import axiosClient from "@/axiosClient.js";
+import ImageModal from '@/Components/Chat/ImageModal.vue';
 
 const props = defineProps({
     messages: Array,
@@ -56,6 +121,15 @@ const props = defineProps({
     user: Object,
     conversation: Object,
 });
+const emit = defineEmits(['onScroll']);
+
+const isImageModalVisible = ref(false);
+const currentImageSrc = ref('');
+
+const openImageModal = (src) => {
+  currentImageSrc.value = src;
+  isImageModalVisible.value = true;
+};
 
 const messages = ref(props.messages);
 const authUser = props.authUser;
@@ -66,7 +140,6 @@ const messageContainer = ref(null);
 let intervalId = null;
 const isUserScrolling = ref(false);
 
-// Function to scroll to the bottom of the chat window
 const scrollToBottom = async () => {
     await nextTick();
     if (messageContainer.value) {
@@ -74,7 +147,6 @@ const scrollToBottom = async () => {
     }
 };
 
-// Fetch messages
 const fetchMessages = async () => {
     try {
         const response = await axiosClient.get(
@@ -90,9 +162,8 @@ const fetchMessages = async () => {
     }
 };
 
-// Start polling for new messages
 const startPolling = () => {
-    intervalId = setInterval(fetchMessages, 5000); // Increase interval
+    intervalId = setInterval(fetchMessages, 5000);
 };
 
 const onScroll = () => {
