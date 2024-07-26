@@ -1,6 +1,6 @@
 <template>
     <div class="h-full overflow-hidden w-full p-4 bg-white rounded-lg shadow">
-        <div class="flex h-full">
+        <div class="flex h-full flex-col sm:flex-row">
             <!-- Followings Column -->
             <div class="flex-1 overflow-y-auto pr-4">
                 <div class="sticky top-0 bg-white shadow-sm z-10 p-2">

@@ -1,7 +1,7 @@
 <template>
     <Head title="Conversation" />
     <AuthenticatedLayout>
-        <div class="flex-1 p:2 sm:p-6 justify-between flex flex-col h-full">
+        <div class="flex-1 p:2 sm:p-6 justify-between max-w-7xl mx-auto flex flex-col h-full">
             <ChatHeader :user="user" />
             <MessageList
                 :messages="messages"
