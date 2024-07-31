@@ -71,6 +71,7 @@ const aboutForm = useForm({
     name: usePage().props.group.name,
     auto_approval: !!parseInt(usePage().props.group.auto_approval),
     about: usePage().props.group.about,
+    group_status: usePage().props.group.group_status,
 });
 
 function onCoverChange(event) {
@@ -496,12 +497,15 @@ const confirmDelete = () => {
                         <TabPanel>
                             <template v-if="isCurrentUserAdmin">
                                 <GroupForm :form="aboutForm" />
-                                <PrimaryButton @click="updateGroup">
+                                <PrimaryButton
+                                    @click="updateGroup"
+                                    class="mt-2"
+                                >
                                     Submit
                                 </PrimaryButton>
                                 <PrimaryButton
                                     @click="openDeleteModalAds"
-                                    class="ml-4 bg-red-500 hover:bg-red-600"
+                                    class="ml-4 mt-2 bg-red-500 hover:bg-red-600"
                                     color="red"
                                 >
                                     Delete Group
@@ -577,8 +581,7 @@ const confirmDelete = () => {
                                                         class="text-sm text-gray-500"
                                                     >
                                                         Are you sure you want to
-                                                        delete this
-                                                        Group?
+                                                        delete this Group?
                                                     </p>
                                                 </div>
                                             </div>

@@ -24,9 +24,19 @@ class SearchController extends Controller
             ->latest()
             ->get();
 
+        // $groups = Group::query()
+        //     ->where('name', 'like', "%$search%")
+        //     ->orWhere('about', 'like', "%$search%")
+        //     ->whereIn('group_status', ['public'])
+        //     ->latest()
+        //     ->get();
+
         $groups = Group::query()
-            ->where('name', 'like', "%$search%")
-            ->orWhere('about', 'like', "%$search%")
+            ->where(function ($query) use ($search) {
+                $query->where('name', 'like', "%$search%")
+                    ->orWhere('about', 'like', "%$search%");
+            })
+            ->whereIn('group_status', ['public'])
             ->latest()
             ->get();
 
