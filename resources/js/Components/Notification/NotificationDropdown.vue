@@ -122,6 +122,14 @@
                             </li>
                         </ul>
                     </template>
+                    <div class="py-2 px-4 text-center">
+                        <Link
+                            :href="route('notifications.fetchAllNotifications')"
+                            class="text-sm font-medium w-full text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-md px-4 py-2 hover:bg-gray-200 transition-colors block text-center"
+                        >
+                            View all Notifications
+                        </Link>
+                    </div>
                 </div>
             </div>
         </transition>
@@ -130,6 +138,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
+import { Link } from "@inertiajs/vue3";
 import axiosClient from "@/axiosClient.js";
 
 import dayjs from "dayjs";
