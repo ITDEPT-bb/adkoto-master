@@ -17,7 +17,7 @@ import adkotoIcon from "/public/img/icons/adkoto.png";
 import kalakalkotoIcon from "/public/img/icons/kalakalkoto.png";
 import messageIcon from "/public/img/icons/message.png";
 // import notificationIcon from "/public/img/icons/notification.png";
-import NotificationDropdown from '@/Components/Notification/NotificationDropdown.vue';
+import NotificationDropdown from "@/Components/Notification/NotificationDropdown.vue";
 
 import axiosClient from "@/axiosClient.js";
 
@@ -71,10 +71,16 @@ function toggleDarkMode() {
                     <!-- <div class="hidden sm:flex sm:items-center sm:ms-6"> -->
                     <!-- <div class="flex-1"> -->
                     <div class="flex items-center sm:gap-9 p-2 flex-1">
-                        <TextInput
+                        <!-- <TextInput
                             v-model="keywords"
                             placeholder="Search on the website"
                             class="w-full sm:w-8/12"
+                            @keyup.enter="search"
+                        /> -->
+                        <TextInput
+                            v-model="keywords"
+                            placeholder="Search on the website"
+                            class="w-32 sm:w-1/2 sm:mr-32"
                             @keyup.enter="search"
                         />
 

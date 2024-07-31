@@ -72,7 +72,7 @@ function toggleDarkMode() {
                         <TextInput
                             v-model="keywords"
                             placeholder="Search on the website"
-                            class="w-full sm:w-8/12"
+                            class="w-32 sm:w-1/2 sm:mr-32"
                             @keyup.enter="search"
                         />
 
