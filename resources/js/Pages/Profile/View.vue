@@ -6,7 +6,7 @@ import {
     CameraIcon,
 } from "@heroicons/vue/24/solid";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
-import { usePage, Link } from "@inertiajs/vue3";
+import { usePage, Link, Head } from "@inertiajs/vue3";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import TabItem from "@/Pages/Profile/Partials/TabItem.vue";
 import Edit from "@/Pages/Profile/Edit.vue";
@@ -133,6 +133,8 @@ function followUser() {
 </script>
 
 <template>
+    <Head title="Profile" />
+
     <AuthenticatedLayout>
         <div class="mx-auto max-w-7xl bg-white h-full overflow-auto">
             <div class="px-4">

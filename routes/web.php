@@ -70,6 +70,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // Notification
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/all', [NotificationController::class, 'fetchAllNotifications'])->name('notifications.fetchAllNotifications');
     Route::get('/users/{user}', [ProfileController::class, 'fetchProfileNotif']);
 });
 
