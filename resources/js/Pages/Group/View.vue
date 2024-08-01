@@ -373,7 +373,7 @@ const confirmDelete = () => {
                                 "
                                 @click="joinToGroup"
                             >
-                                Join to Group
+                                Join Group
                             </PrimaryButton>
                             <PrimaryButton
                                 v-if="

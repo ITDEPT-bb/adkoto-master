@@ -13,6 +13,7 @@ use App\Models\Post;
 use App\Models\PostAttachment;
 use App\Models\Reaction;
 use App\Notifications\CommentDeleted;
+use App\Notifications\CommentPosted;
 use App\Notifications\PostDeleted;
 use App\Notifications\PostReacted;
 use Illuminate\Http\Request;
@@ -249,6 +250,8 @@ class PostController extends Controller
             'user_id' => Auth::id(),
             'parent_id' => $data['parent_id'] ?: null
         ]);
+
+        $post->user->notify(new CommentPosted(Auth::user(), $post, $data['comment']));
 
         return response(new CommentResource($comment), 201);
     }
