@@ -11,6 +11,8 @@ defineProps({
     posts: Object,
     groups: Array,
     followings: Array,
+    suggestedUsers: Array,
+    suggestedGroups: Array,
 });
 </script>
 
@@ -20,10 +22,16 @@ defineProps({
     <AuthenticatedLayout>
         <div class="grid max-w-7xl mx-auto lg:grid-cols-12 gap-3 p-4 h-full">
             <div class="lg:col-span-3 lg:order-1 h-full overflow-hidden">
-                <GroupList :groups="groups" />
+                <GroupList
+                    :groups="groups"
+                    :suggestedGroups="suggestedGroups"
+                />
             </div>
             <div class="lg:col-span-3 lg:order-3 h-full overflow-hidden">
-                <FollowingList :users="followings" />
+                <FollowingList
+                    :users="followings"
+                    :suggestedUsers="suggestedUsers"
+                />
             </div>
             <div
                 class="lg:col-span-6 lg:order-2 h-full overflow-hidden flex flex-col"

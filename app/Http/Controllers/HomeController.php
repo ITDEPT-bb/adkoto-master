@@ -8,6 +8,7 @@ use App\Http\Resources\PostResource;
 use App\Http\Resources\UserResource;
 use App\Models\Group;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -55,10 +56,30 @@ class HomeController extends Controller
             ->orderBy('name', 'desc')
             ->get();
 
+        // Get suggested people who are not followed by the current user
+        $suggestedPeople = User::where('id', '!=', $userId)
+            ->whereDoesntHave('followers', function ($query) use ($userId) {
+                $query->where('follower_id', $userId);
+            })
+            ->inRandomOrder()
+            ->limit(10)
+            ->get();
+
+        $suggestedGroups = Group::query()
+            ->select(['groups.*'])
+            ->where('group_status', 'public')
+            ->whereDoesntHave('currentUserGroup', function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            })
+            ->orderBy('name', 'desc')
+            ->get();
+
         return Inertia::render('Tribekoto/Home', [
             'posts' => $posts,
             'groups' => GroupResource::collection($groups),
-            'followings' => UserResource::collection($user->followings)
+            'suggestedGroups' => GroupResource::collection($suggestedGroups),
+            'followings' => UserResource::collection($user->followings),
+            'suggestedUsers' => UserResource::collection($suggestedPeople)
         ]);
     }
 }
