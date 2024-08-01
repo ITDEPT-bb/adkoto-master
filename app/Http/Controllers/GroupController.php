@@ -36,6 +36,7 @@ use Illuminate\Validation\Rules\Enum;
 use Inertia\Inertia;
 use PhpParser\Node\Stmt\GroupUse;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Illuminate\Support\Facades\DB;
 
 class GroupController extends Controller
 {
@@ -347,6 +348,47 @@ class GroupController extends Controller
         }
 
         return back();
+    }
+
+    public function leaveGroup(Request $request, Group $group)
+    {
+        $user_id = Auth::id();
+
+        // Start a database transaction
+        DB::transaction(function () use ($group, $user_id) {
+            // Check if the user is the owner of the group
+            if ($group->isOwner($user_id)) {
+                // Find an admin to promote to owner
+                $newOwner = $group->adminUsers()
+                    ->where('user_id', '!=', $user_id)
+                    ->first();
+
+                if (!$newOwner) {
+                    // No admin found, find any approved user to promote to admin
+                    $newOwner = $group->approvedUsers()
+                        ->where('user_id', '!=', $user_id)
+                        ->first();
+
+                    if (!$newOwner) {
+                        // No user left, delete the group
+                        $group->delete();
+                        return redirect()->route('dashboard');
+                    }
+
+                    // Promote the new user to admin
+                    $group->approvedUsers()->updateExistingPivot($newOwner->id, ['role' => GroupUserRole::ADMIN->value]);
+                }
+
+                // Promote the new owner
+                $group->user_id = $newOwner->id;
+                $group->save();
+            }
+
+            // Remove the user from the group
+            $group->approvedUsers()->detach($user_id);
+        });
+
+        return redirect()->route('dashboard');
     }
 
     public function changeRole(Request $request, Group $group)

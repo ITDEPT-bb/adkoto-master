@@ -128,6 +128,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/change-role/{group:slug}', [GroupController::class, 'changeRole'])
             ->name('group.changeRole');
 
+        Route::post('/leave-group/{group:slug}', [GroupController::class, 'leaveGroup'])
+            ->name('group.leaveGroup');
+
         Route::delete('/{id}', [GroupController::class, 'softDelete'])
             ->name('group.delete');
     });
