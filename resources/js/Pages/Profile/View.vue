@@ -346,13 +346,13 @@ function followUser() {
                                 <div
                                     class="grid max-w-7xl mx-auto lg:grid-cols-12 gap-3 p-4 h-auto"
                                 >
-                                    <div
+                                    <!-- <div
                                         class="lg:col-span-4 lg:order-1 h-full overflow-hidden"
                                     >
                                         <FollowingList :users="followings" />
-                                    </div>
+                                    </div> -->
                                     <div
-                                        class="lg:col-span-8 lg:order-2 h-auto overflow-hidden flex flex-col"
+                                        class="lg:col-span-12 lg:order-2 h-auto max-w-screen-lg mx-auto overflow-hidden lg:px-10 flex flex-col"
                                     >
                                         <template v-if="posts">
                                             <!-- <CreatePost /> -->
