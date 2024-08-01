@@ -15,37 +15,46 @@
                 v-else
                 class="max-w-full divide-y divide-gray-200 bg-white rounded-lg shadow-lg"
             >
-                <li
-                    class="py-4 px-6 flex items-start space-x-4 border-b last:border-b-0 hover:bg-gray-50 transition-colors duration-300 ease-in-out"
+                <template
                     v-for="notification in notifications"
                     :key="notification.id"
                 >
-                    <div class="flex-shrink-0">
-                        <img
-                            class="w-12 h-12 rounded-full border border-gray-300"
-                            v-if="
-                                notification.data.user_id &&
-                                userProfiles[notification.data.user_id]
-                            "
-                            :src="
-                                userProfiles[notification.data.user_id]
-                                    ?.avatar_url
-                            "
-                            alt="User Avatar"
-                        />
-                        <span v-else class="text-sm text-gray-500">
-                            Loading...
-                        </span>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-base font-semibold text-gray-900">
-                            {{ notification.data.message }}
-                        </p>
-                        <p class="text-sm text-gray-500">
-                            {{ dayjs(notification.created_at).fromNow() }}
-                        </p>
-                    </div>
-                </li>
+                    <a :href="notification.data.route">
+                        <li
+                            class="py-4 px-6 flex items-start space-x-4 border-b last:border-b-0 hover:bg-blue-200 transition-colors duration-300 ease-in-out"
+                        >
+                            <div class="flex-shrink-0">
+                                <img
+                                    class="w-12 h-12 rounded-full border border-gray-300"
+                                    v-if="
+                                        notification.data.user_id &&
+                                        userProfiles[notification.data.user_id]
+                                    "
+                                    :src="
+                                        userProfiles[notification.data.user_id]
+                                            ?.avatar_url
+                                    "
+                                    alt="User Avatar"
+                                />
+                                <span v-else class="text-sm text-gray-500">
+                                    Loading...
+                                </span>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p
+                                    class="text-base font-semibold text-gray-900"
+                                >
+                                    {{ notification.data.message }}
+                                </p>
+                                <p class="text-sm text-gray-500">
+                                    {{
+                                        dayjs(notification.created_at).fromNow()
+                                    }}
+                                </p>
+                            </div>
+                        </li>
+                    </a>
+                </template>
             </ul>
         </div>
     </AuthenticatedLayout>

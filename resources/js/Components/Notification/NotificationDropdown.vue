@@ -48,8 +48,13 @@
                                 class="py-2"
                             >
                                 <div class="hover:bg-gray-100">
-                                    <a
+                                    <!-- <a
                                         :href="notification.url"
+                                        class="flex items-center hover:cursor-pointer gap-3 justify-start px-4 py-2 text-sm text-gray-700"
+                                        @click="markAsRead(notification)"
+                                    > -->
+                                    <a
+                                        :href="notification.data.route"
                                         class="flex items-center hover:cursor-pointer gap-3 justify-start px-4 py-2 text-sm text-gray-700"
                                         @click="markAsRead(notification)"
                                     >

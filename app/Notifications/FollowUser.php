@@ -65,7 +65,7 @@ class FollowUser extends Notification
     // public function toArray(object $notifiable): array
     // {
     //     return [
-            //
+    //
     //     ];
     // }
     public function toDatabase(object $notifiable): array
@@ -74,6 +74,7 @@ class FollowUser extends Notification
             'user_id' => $this->user->id,
             'username' => $this->user->username,
             'follow' => $this->follow,
+            'route' => route('profile', $this->user->username),
             'message' => $this->follow ? $this->user->username . ' has followed you' : $this->user->username . ' unfollowed you'
         ];
     }
