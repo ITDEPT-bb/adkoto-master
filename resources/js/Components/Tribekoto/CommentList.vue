@@ -39,7 +39,11 @@ function startCommentEdit(comment) {
     };
 }
 
+const isLoading = ref(false);
 function createComment() {
+    if (isLoading.value) return;
+    isLoading.value = true;
+
     axiosClient
         .post(route("post.comment.create", props.post), {
             comment: newCommentText.value,
@@ -53,6 +57,12 @@ function createComment() {
             }
             props.post.num_of_comments++;
             emit("commentCreate", data);
+        })
+        .catch((error) => {
+            console.error(error);
+        })
+        .finally(() => {
+            isLoading.value = false;
         });
 }
 
@@ -73,7 +83,11 @@ function deleteComment(comment) {
     });
 }
 
+const isLoadingEdit = ref(false);
 function updateComment() {
+    if (isLoadingEdit.value) return;
+    isLoadingEdit.value = true;
+
     axiosClient
         .put(
             route("comment.update", editingComment.value.id),
@@ -87,6 +101,12 @@ function updateComment() {
                 }
                 return c;
             });
+        })
+        .catch((error) => {
+            console.error(error);
+        })
+        .finally(() => {
+            isLoadingEdit.value = false;
         });
 }
 
@@ -130,11 +150,22 @@ function onCommentDelete(comment) {
                 rows="1"
                 class="w-full max-h-[160px] resize-none rounded-r-none"
             ></InputTextarea>
-            <IndigoButton
+            <!-- <IndigoButton
                 @click="createComment"
                 class="rounded-l-none w-[100px]"
                 >Submit</IndigoButton
+            > -->
+            <IndigoButton
+                @click="createComment"
+                :class="[
+                    isLoading ? 'bg-gray-300 cursor-not-allowed' : '',
+                    'rounded-l-none w-[100px]',
+                ]"
+                :disabled="isLoading"
             >
+                <span v-if="!isLoading">Submit</span>
+                <span v-else>Loading...</span>
+            </IndigoButton>
         </div>
     </div>
     <div>
@@ -189,8 +220,21 @@ function onCommentDelete(comment) {
                         >
                             cancel
                         </button>
-                        <IndigoButton @click="updateComment" class="w-[100px]"
+                        <!-- <IndigoButton @click="updateComment" class="w-[100px]"
                             >update
+                        </IndigoButton> -->
+                        <IndigoButton
+                            @click="updateComment"
+                            :class="[
+                                isLoadingEdit
+                                    ? 'bg-gray-300 cursor-not-allowed'
+                                    : '',
+                                'w-[100px]',
+                            ]"
+                            :disabled="isLoadingEdit"
+                        >
+                            <span v-if="!isLoadingEdit">Update</span>
+                            <span v-else>Loading...</span>
                         </IndigoButton>
                     </div>
                 </div>
