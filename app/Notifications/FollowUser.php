@@ -31,7 +31,13 @@ class FollowUser extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail', 'database'];
+        // Only send notifications if the user is followed
+        if ($this->follow) {
+            return ['mail', 'database'];
+        }
+
+        // Return an empty array to avoid sending notifications if unfollowed
+        return [];
     }
 
     /**
@@ -39,17 +45,7 @@ class FollowUser extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        // if ($this->follow) {
-        //     $subject = 'User "' . $this->user->username . '" has followed you';
-        // } else {
-        //     $subject = 'User "' . $this->user->username . '" unfollowed you';
-        // }
-        // return (new MailMessage)
-        if ($this->follow) {
-            $subject = $this->user->username . ' has followed you';
-        } else {
-            $subject = $this->user->username . ' unfollowed you';
-        }
+        $subject = $this->user->username . ' has followed you';
         return (new MailMessage)
             ->subject($subject)
             ->line($subject)
@@ -62,12 +58,6 @@ class FollowUser extends Notification
      *
      * @return array<string, mixed>
      */
-    // public function toArray(object $notifiable): array
-    // {
-    //     return [
-    //
-    //     ];
-    // }
     public function toDatabase(object $notifiable): array
     {
         return [
@@ -75,7 +65,7 @@ class FollowUser extends Notification
             'username' => $this->user->username,
             'follow' => $this->follow,
             'route' => route('profile', $this->user->username),
-            'message' => $this->follow ? $this->user->username . ' has followed you' : $this->user->username . ' unfollowed you'
+            'message' => $this->user->username . ' has followed you'
         ];
     }
 }
