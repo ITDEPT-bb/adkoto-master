@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch } from "vue";
+import { computed, ref, watch, onMounted } from "vue";
 import {
     XMarkIcon,
     PaperClipIcon,
@@ -14,6 +14,8 @@ import axiosClient from "@/axiosClient.js";
 import UrlPreview from "@/Components/Tribekoto/UrlPreview.vue";
 import BaseModal from "@/Components/Tribekoto/BaseModal.vue";
 // import "../../../css/ckeditor.css";
+import "emoji-picker-element";
+import EmojiIcon from "@/Components/Icons/EmojiIcon.vue";
 
 const editor = ClassicEditor;
 const editorConfig = {
@@ -82,6 +84,29 @@ const form = useForm({
     preview_url: null,
     _method: "POST",
 });
+
+const showEmojiPicker = ref(false);
+let editorInstance = null;
+
+function onEditorReady(editor) {
+    editorInstance = editor;
+}
+
+function toggleEmojiPicker() {
+    showEmojiPicker.value = !showEmojiPicker.value;
+}
+
+function addEmoji(event) {
+    const emoji = event.detail.unicode || event.detail.emoji;
+    if (editorInstance) {
+        editorInstance.model.change((writer) => {
+            const insertPosition =
+                editorInstance.model.document.selection.getFirstPosition();
+            writer.insertText(emoji, insertPosition);
+        });
+    }
+    toggleEmojiPicker();
+}
 
 const show = computed({
     get: () => props.modelValue,
@@ -305,8 +330,22 @@ function matchLink() {
                     :editor="editor"
                     v-model="form.body"
                     :config="editorConfig"
+                    @ready="onEditorReady"
                     @input="onInputChange"
                 ></ckeditor>
+                <button
+                    type="button"
+                    class="p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
+                    @click="toggleEmojiPicker"
+                >
+                    <EmojiIcon />
+                    <span class="sr-only">Add emoji</span>
+                </button>
+                <emoji-picker
+                    v-if="showEmojiPicker"
+                    class="absolute bottom-16 left-0 z-10"
+                    @emoji-click="addEmoji"
+                ></emoji-picker>
 
                 <UrlPreview :preview="form.preview" :url="form.preview_url" />
 
