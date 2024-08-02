@@ -24,7 +24,7 @@
                         @click="markAsRead(notification)"
                     >
                         <li
-                            class="py-4 px-6 flex items-start space-x-4 border-b last:border-b-0 hover:bg-blue-200 transition-colors duration-300 ease-in-out"
+                            class="py-4 px-6 cursor-pointer flex items-start space-x-4 border-b last:border-b-0 hover:bg-blue-200 transition-colors duration-300 ease-in-out"
                         >
                             <div class="flex-shrink-0">
                                 <img
