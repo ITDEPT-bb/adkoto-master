@@ -15,11 +15,15 @@ import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 
+import "emoji-picker-element";
+import EmojiIcon from "@/Components/Icons/EmojiIcon.vue";
+
 dayjs.extend(relativeTime);
 
 const authUser = usePage().props.auth.user;
 const newCommentText = ref("");
 const editingComment = ref(null);
+const showEmojiPicker = ref(false);
 const props = defineProps({
     post: Object,
     data: Object,
@@ -30,6 +34,17 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["commentCreate", "commentDelete"]);
+
+const toggleEmojiPicker = () => {
+    showEmojiPicker.value = !showEmojiPicker.value;
+};
+
+const handleEmojiClick = (event) => {
+    const emoji = event.detail.unicode;
+    // Append the selected emoji to the current text in InputTextarea
+    newCommentText.value += emoji;
+    showEmojiPicker.value = false;
+};
 
 function startCommentEdit(comment) {
     console.log(comment);
@@ -150,6 +165,20 @@ function onCommentDelete(comment) {
                 rows="1"
                 class="w-full max-h-[160px] resize-none rounded-r-none"
             ></InputTextarea>
+            <!-- Emoji Picker Button -->
+            <button
+                @click="toggleEmojiPicker"
+                class="relative p-2 rounded-full"
+            >
+                <EmojiIcon />
+            </button>
+
+            <!-- Emoji Picker Element -->
+            <emoji-picker
+                v-if="showEmojiPicker"
+                @emoji-click="handleEmojiClick"
+                style="position: absolute"
+            ></emoji-picker>
             <!-- <IndigoButton
                 @click="createComment"
                 class="rounded-l-none w-[100px]"
