@@ -121,13 +121,19 @@ function submitAvatarImage() {
     });
 }
 
+const isLoading = ref(false);
 function followUser() {
+    isLoading.value = true;
+
     const form = useForm({
         follow: !props.isCurrentUserFollower,
     });
 
     form.post(route("user.follow", props.user.id), {
         preserveScroll: true,
+        onFinish: () => {
+            isLoading.value = false;
+        },
     });
 }
 </script>
@@ -292,21 +298,46 @@ function followUser() {
                                 <PrimaryButton
                                     v-if="!isCurrentUserFollower"
                                     @click="followUser"
+                                    :disabled="isLoading"
+                                    :class="{
+                                        'bg-gray-300 cursor-not-allowed':
+                                            isLoading,
+                                        'bg-blue-500': !isLoading,
+                                    }"
                                 >
-                                    <img
-                                        :src="followIcon"
-                                        class="h-6 w-auto flex sm:hidden"
-                                        alt="FollowIcon"
-                                    />
-                                    <p class="hidden sm:flex">Follow</p>
+                                    <template v-if="!isLoading">
+                                        <img
+                                            :src="followIcon"
+                                            class="h-6 w-auto flex sm:hidden"
+                                            alt="FollowIcon"
+                                        />
+                                        <p class="hidden sm:flex">Follow</p>
+                                    </template>
+                                    <p v-else class="hidden sm:flex">
+                                        Loading...
+                                    </p>
                                 </PrimaryButton>
-                                <DangerButton v-else @click="followUser">
-                                    <img
-                                        :src="unfollowIcon"
-                                        class="h-6 w-auto flex sm:hidden"
-                                        alt="UnfollowIcon"
-                                    />
-                                    <p class="hidden sm:flex">Unfollow</p>
+                                <DangerButton
+                                    v-else
+                                    @click="followUser"
+                                    :disabled="isLoading"
+                                    :class="{
+                                        'bg-gray-300 cursor-not-allowed':
+                                            isLoading,
+                                        'bg-red-500': !isLoading,
+                                    }"
+                                >
+                                    <template v-if="!isLoading">
+                                        <img
+                                            :src="unfollowIcon"
+                                            class="h-6 w-auto flex sm:hidden"
+                                            alt="UnfollowIcon"
+                                        />
+                                        <p class="hidden sm:flex">Unfollow</p>
+                                    </template>
+                                    <p v-else class="hidden sm:flex">
+                                        Loading...
+                                    </p>
                                 </DangerButton>
                             </div>
                         </div>
