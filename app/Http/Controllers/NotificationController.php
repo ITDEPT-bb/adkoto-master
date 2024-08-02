@@ -29,5 +29,16 @@ class NotificationController extends Controller
             'userProfiles' => $userProfiles->map(fn($user) => new UserResource($user))->all()
         ]);
     }
+
+    public function markAsRead($id)
+    {
+        // Find the notification for the authenticated user
+        $notification = Auth::user()->notifications()->findOrFail($id);
+
+        // Mark the notification as read
+        $notification->markAsRead();
+
+        return response()->json(['message' => 'Notification marked as read.']);
+    }
 }
 

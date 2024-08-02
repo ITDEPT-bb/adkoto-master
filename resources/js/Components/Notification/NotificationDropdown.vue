@@ -111,7 +111,20 @@
                                                     ></path>
                                                 </svg>
                                             </template>
-                                            {{ notification.data.message }}
+                                            <p
+                                                :class="{
+                                                    'text-base': true,
+                                                    'font-semibold':
+                                                        notification.read_at ===
+                                                        null,
+                                                    'font-light':
+                                                        notification.read_at !==
+                                                        null,
+                                                    'text-gray-900': true,
+                                                }"
+                                            >
+                                                {{ notification.data.message }}
+                                            </p>
                                         </div>
                                     </a>
                                     <p
@@ -191,9 +204,9 @@ onMounted(async () => {
     await fetchNotifications();
 });
 
-const markAsRead = (notification) => {
-    console.log("Marking notification as read:", notification);
-};
+// const markAsRead = (notification) => {
+//     console.log("Marking notification as read:", notification);
+// };
 
 const fetchUserProfile = async (userId) => {
     try {
@@ -205,6 +218,22 @@ const fetchUserProfile = async (userId) => {
             error
         );
         userProfile.value[userId] = null;
+    }
+};
+
+const markAsRead = async (notification) => {
+    if (!notification.read_at) {
+        try {
+            await axiosClient.post(
+                `/notifications/${notification.id}/mark-as-read`
+            );
+            notification.read_at = new Date().toISOString();
+            window.location.href = notification.data.route;
+        } catch (error) {
+            console.error("Failed to mark notification as read", error);
+        }
+    } else {
+        window.location.href = notification.data.route;
     }
 };
 </script>

@@ -19,7 +19,10 @@
                     v-for="notification in notifications"
                     :key="notification.id"
                 >
-                    <a :href="notification.data.route">
+                    <a
+                        :href="notification.data.route"
+                        @click="markAsRead(notification)"
+                    >
                         <li
                             class="py-4 px-6 flex items-start space-x-4 border-b last:border-b-0 hover:bg-blue-200 transition-colors duration-300 ease-in-out"
                         >
@@ -42,7 +45,14 @@
                             </div>
                             <div class="flex-1 min-w-0">
                                 <p
-                                    class="text-base font-semibold text-gray-900"
+                                    :class="{
+                                        'text-base': true,
+                                        'font-semibold':
+                                            notification.read_at === null,
+                                        'font-normal':
+                                            notification.read_at !== null,
+                                        'text-gray-900': true,
+                                    }"
                                 >
                                     {{ notification.data.message }}
                                 </p>
@@ -62,12 +72,13 @@
 </template>
 
 <script setup>
-import { defineProps } from "vue";
+import { defineProps, ref } from "vue";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { Head } from "@inertiajs/vue3";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
+import axiosClient from "@/axiosClient.js";
 
 dayjs.extend(relativeTime);
 
@@ -81,4 +92,22 @@ const props = defineProps({
         required: true,
     },
 });
+
+const notifications = ref(props.notifications);
+
+const markAsRead = async (notification) => {
+    if (!notification.read_at) {
+        try {
+            await axiosClient.post(
+                `/notifications/${notification.id}/mark-as-read`
+            );
+            notification.read_at = new Date().toISOString();
+            window.location.href = notification.data.route;
+        } catch (error) {
+            console.error("Failed to mark notification as read", error);
+        }
+    } else {
+        window.location.href = notification.data.route;
+    }
+};
 </script>

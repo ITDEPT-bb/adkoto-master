@@ -71,6 +71,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::get('/notifications/all', [NotificationController::class, 'fetchAllNotifications'])->name('notifications.fetchAllNotifications');
+    Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
     Route::get('/users/{user}', [ProfileController::class, 'fetchProfileNotif']);
 });
 
