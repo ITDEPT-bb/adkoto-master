@@ -137,11 +137,25 @@
                     />
                 </div>
             </div>
-            <button
+            <!-- <button
                 type="submit"
                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 w-full mt-4"
             >
                 Submit
+            </button> -->
+            <button
+                type="submit"
+                @click.prevent="submitForm"
+                :class="[
+                    isLoading
+                        ? 'bg-gray-500 cursor-not-allowed'
+                        : 'bg-blue-500 hover:bg-blue-700',
+                    'text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 w-full mt-4',
+                ]"
+                :disabled="isLoading"
+            >
+                <span v-if="!isLoading">Submit</span>
+                <span v-else>Loading...</span>
             </button>
         </form>
     </div>
@@ -155,6 +169,7 @@ const props = defineProps({
     categories: Array,
 });
 
+const isLoading = ref(false);
 const form = useForm({
     title: "",
     description: "",
@@ -181,14 +196,19 @@ const handleFileChange = (event) => {
 
 // Handle form submission
 const submitForm = () => {
+    if (isLoading.value) return;
+
+    isLoading.value = true;
+
     form.post(route("adkoto.store"), {
         onSuccess: () => {
             console.log("Form submitted successfully");
-            // Optionally redirect or show success message
         },
         onError: (errors) => {
             console.error("Form submission error:", errors);
-            // Handle validation errors or other errors
+        },
+        onFinish: () => {
+            isLoading.value = false;
         },
     });
 };
