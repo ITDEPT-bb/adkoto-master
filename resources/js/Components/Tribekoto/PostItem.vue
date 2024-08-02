@@ -110,7 +110,10 @@ function openAttachment(ind) {
     emit("attachmentClick", props.post, ind);
 }
 
+const isLoading = ref(false);
 function sendReaction() {
+    isLoading.value = true;
+
     axiosClient
         .post(route("post.reaction", props.post), {
             reaction: "like",
@@ -119,6 +122,12 @@ function sendReaction() {
             props.post.current_user_has_reaction =
                 data.current_user_has_reaction;
             props.post.num_of_reactions = data.num_of_reactions;
+        })
+        .catch((error) => {
+            console.error(error);
+        })
+        .finally(() => {
+            isLoading.value = false;
         });
 }
 </script>
@@ -168,7 +177,7 @@ function sendReaction() {
         <Disclosure v-slot="{ open }">
             <!--            Like & Comment buttons-->
             <div class="flex gap-2">
-                <button
+                <!-- <button
                     @click="sendReaction"
                     class="text-gray-800 dark:text-gray-100 flex gap-1 items-center justify-center rounded-lg py-2 px-4 flex-1"
                     :class="[
@@ -180,6 +189,27 @@ function sendReaction() {
                     <HandThumbUpIcon class="w-5 h-5" />
                     <span class="mr-2">{{ post.num_of_reactions }}</span>
                     {{ post.current_user_has_reaction ? "Unlike" : "Like" }}
+                </button> -->
+                <button
+                    @click="sendReaction"
+                    :class="[
+                        post.current_user_has_reaction
+                            ? isLoading
+                                ? 'bg-gray-300 cursor-not-allowed'
+                                : 'bg-red-300 dark:bg-sky-900 hover:bg-red-400 dark:hover:bg-sky-950'
+                            : isLoading
+                            ? 'bg-gray-300 cursor-not-allowed'
+                            : 'bg-red-100 dark:bg-slate-900 hover:bg-red-200 dark:hover:bg-slate-800',
+                        'text-gray-800 dark:text-gray-100 flex gap-1 items-center justify-center rounded-lg py-2 px-4 flex-1',
+                    ]"
+                    :disabled="isLoading"
+                >
+                    <HandThumbUpIcon class="w-5 h-5" />
+                    <span class="mr-2">{{ post.num_of_reactions }}</span>
+                    <span v-if="!isLoading">{{
+                        post.current_user_has_reaction ? "Unlike" : "Like"
+                    }}</span>
+                    <span v-else>Loading...</span>
                 </button>
                 <DisclosureButton
                     class="text-gray-800 dark:text-gray-100 flex gap-1 items-center justify-center bg-gray-100 dark:bg-slate-900 dark:hover:bg-slate-800 rounded-lg hover:bg-gray-200 py-2 px-4 flex-1"
