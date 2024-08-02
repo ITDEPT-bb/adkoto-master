@@ -343,7 +343,7 @@ function matchLink() {
                 </button>
                 <emoji-picker
                     v-if="showEmojiPicker"
-                    class="absolute bottom-16 left-0 z-10"
+                    class="bottom-16 left-0 z-10"
                     @emoji-click="addEmoji"
                 ></emoji-picker>
 
