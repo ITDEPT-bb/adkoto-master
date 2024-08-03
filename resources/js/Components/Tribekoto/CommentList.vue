@@ -22,8 +22,9 @@ dayjs.extend(relativeTime);
 
 const authUser = usePage().props.auth.user;
 const newCommentText = ref("");
-const editingComment = ref(null);
+const editingComment = ref({ id: null, comment: "" });
 const showEmojiPicker = ref(false);
+const showEmojiPickerEdit = ref(false);
 const props = defineProps({
     post: Object,
     data: Object,
@@ -41,18 +42,27 @@ const toggleEmojiPicker = () => {
 
 const handleEmojiClick = (event) => {
     const emoji = event.detail.unicode;
-    // Append the selected emoji to the current text in InputTextarea
     newCommentText.value += emoji;
     showEmojiPicker.value = false;
 };
 
-function startCommentEdit(comment) {
+const toggleEmojiPickerEdit = () => {
+    showEmojiPickerEdit.value = !showEmojiPickerEdit.value;
+};
+
+const handleEmojiClickEdit = (event) => {
+    const emoji = event.detail.unicode;
+    editingComment.value.comment += emoji;
+    showEmojiPickerEdit.value = false;
+};
+
+const startCommentEdit = (comment) => {
     console.log(comment);
     editingComment.value = {
         id: comment.id,
-        comment: comment.comment.replace(/<br\s*\/?>/gi, "\n"), // <br />, <br > <br> <br/>, <br    />
+        comment: comment.comment.replace(/<br\s*\/?>/gi, "\n"),
     };
-}
+};
 
 const isLoading = ref(false);
 function createComment() {
@@ -236,12 +246,28 @@ function onCommentDelete(comment) {
             </div>
             <div class="pl-12">
                 <div v-if="editingComment && editingComment.id === comment.id">
-                    <InputTextarea
-                        v-model="editingComment.comment"
-                        placeholder="Enter your comment here"
-                        rows="1"
-                        class="w-full max-h-[160px] resize-none"
-                    ></InputTextarea>
+                    <div class="flex flex-row py-2">
+                        <InputTextarea
+                            v-model="editingComment.comment"
+                            placeholder="Enter your comment here"
+                            rows="1"
+                            class="w-full max-h-[160px] resize-none"
+                        ></InputTextarea>
+                        <!-- Emoji Picker Button -->
+                        <button
+                            @click="toggleEmojiPickerEdit"
+                            class="relative p-2 rounded-full"
+                        >
+                            <EmojiIcon />
+                        </button>
+
+                        <!-- Emoji Picker Element -->
+                        <emoji-picker
+                            v-if="showEmojiPickerEdit"
+                            @emoji-click="handleEmojiClickEdit"
+                            style="position: absolute"
+                        ></emoji-picker>
+                    </div>
                     <div class="flex gap-2 justify-end">
                         <button
                             @click="editingComment = null"
