@@ -2,9 +2,11 @@
     <main class="bg-white p-4 shadow rounded-lg">
         <section>
             <div class="flex space-x-4 mb-4">
-                <button class="text-lg font-semibold">New Listings</button>
-                <button class="text-lg">Popular</button>
-                <button class="text-lg">Random</button>
+                <button class="text-lg font-semibold">
+                    Advertisement Listings
+                </button>
+                <!-- <button class="text-lg">Popular</button>
+                <button class="text-lg">Random</button> -->
             </div>
             <div
                 v-for="advertisement in advertisements"

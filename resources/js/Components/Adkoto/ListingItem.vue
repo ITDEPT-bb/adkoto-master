@@ -2,7 +2,10 @@
     <div class="border-b py-4">
         <div class="flex items-start space-x-4">
             <img
-                :src="advertisement.image || 'https://via.placeholder.com/100'"
+                :src="
+                    advertisement.image_path ||
+                    'https://via.placeholder.com/100'
+                "
                 alt="Listing Image"
                 class="w-20 h-20 object-cover rounded"
             />
@@ -16,12 +19,12 @@
                 >
                     <span>{{ advertisement.category }}</span>
                     <span>{{ advertisement.date }}</span>
-                    <span>394 total views, 1 today</span>
+                    <!-- <span>394 total views, 1 today</span> -->
                 </div>
             </div>
             <div class="ml-auto">
                 <span class="bg-red-500 text-white py-1 px-2 rounded"
-                    >¥{{ advertisement.price }}</span
+                    >₱{{ advertisement.price }}</span
                 >
             </div>
         </div>

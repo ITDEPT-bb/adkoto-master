@@ -1,26 +1,25 @@
 import "./bootstrap";
-import 'flowbite';
+import "flowbite";
 
-import { createApp, h } from 'vue';
-import { createInertiaApp } from '@inertiajs/vue3';
-import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
-import { ZiggyVue } from '../../vendor/tightenco/ziggy';
-// import { createApp, h } from "vue";
-// import { createInertiaApp } from "@inertiajs/vue3";
-// import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
-// import { ZiggyVue } from "../../vendor/tightenco/ziggy/dist/vue.m";
+import { createApp, h } from "vue";
+import { createInertiaApp } from "@inertiajs/vue3";
+import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
+import { ZiggyVue } from "../../vendor/tightenco/ziggy";
 import CKEditor from "@ckeditor/ckeditor5-vue";
 import "../css/app.css";
 
-import VueSweetalert2 from 'vue-sweetalert2';
-import 'sweetalert2/dist/sweetalert2.min.css';
+import VueSweetalert2 from "vue-sweetalert2";
+import "sweetalert2/dist/sweetalert2.min.css";
 
-const html = window.document.documentElement
-const darkMode = parseInt(localStorage.getItem('darkMode') || 1)
+import Toast from "vue-toastification";
+import "vue-toastification/dist/index.css";
+
+const html = window.document.documentElement;
+const darkMode = parseInt(localStorage.getItem("darkMode") || 1);
 if (darkMode) {
-    html.classList.add('dark')
+    html.classList.add("dark");
 } else {
-    html.classList.remove('dark')
+    html.classList.remove("dark");
 }
 
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
@@ -40,6 +39,7 @@ createInertiaApp({
             .use(CKEditor)
             .use(ZiggyVue)
             .use(VueSweetalert2)
+            .use(Toast)
             .mount(el);
     },
     progress: {

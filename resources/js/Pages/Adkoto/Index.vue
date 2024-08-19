@@ -20,7 +20,7 @@
 <script setup>
 import { ref } from "vue";
 import { usePage, Head } from "@inertiajs/vue3";
-import KalakalLayout from "@/Layouts/KalakalLayout.vue";
+import KalakalLayout from "@/Layouts/AdkotoLayout.vue";
 import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
 import CategoryList from "@/Components/Adkoto/CategoryList.vue";
 import Listings from "@/Components/Adkoto/Listings.vue";

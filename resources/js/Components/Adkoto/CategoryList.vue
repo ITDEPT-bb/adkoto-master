@@ -8,10 +8,11 @@
                     :key="category.id"
                     class="p-4"
                 >
-                    <h2 class="text-xl font-semibold mb-2 text-red-600">
-                        {{ category.name }} ({{
+                    <h2 class="text-xl font-semibold mb-2 text-blue-500">
+                        <!-- {{ category.name }} ({{
                             category.sub_categories.length
-                        }})
+                        }}) -->
+                        {{ category.name }}
                     </h2>
                     <ul class="pl-3">
                         <li
@@ -19,7 +20,7 @@
                             :key="subCategory.id"
                             class="text-gray-700 text-sm py-1"
                         >
-                            <span>{{ subCategory.name }} (0)</span>
+                            <span>{{ subCategory.name }}</span>
                         </li>
                     </ul>
                 </div>
