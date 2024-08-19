@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ad;
+use App\Models\Advertisement;
+use App\Models\AdvertisementCategory;
 use App\Models\Category;
 use App\Models\AdsAttachment;
 use Illuminate\Http\Request;
@@ -14,26 +16,17 @@ use Inertia\Response;
 class AdkotoController extends Controller
 {
 
-    /**
-     * Show the ad listing or dashboard.
-     *
-     * @return Response
-     */
-    public function index(): \Inertia\Response
+    public function index()
     {
-        // $ads = Ad::where('user_id', Auth::id())
-        //     ->with('attachments')
-        //     ->orderByDesc('created_at')
-        //     ->get();
-        $ads = Ad::with('attachments')
+        $advertisements = Advertisement::with('attachments')
             ->orderByDesc('created_at')
             ->get();
 
-        $categories = Category::all();
+        $categories = AdvertisementCategory::with('subCategories')->get();
 
-        return Inertia::render('Adkoto/Home', [
-            'ads' => $ads,
-            'categories' => $categories,
+        return Inertia::render('Adkoto/Index', [
+            'advertisements' => $advertisements,
+            'categories' => $categories
         ]);
     }
 
