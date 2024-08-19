@@ -78,6 +78,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // Adkoto
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/adkoto', [AdkotoController::class, 'index'])->name('adkoto');
+    Route::get('/adkoto/create', [AdkotoController::class, 'create'])->name('advertisements.create');
+    Route::post('/adkoto', [AdkotoController::class, 'store'])->name('advertisements.store');
 });
 
 Route::get('/u/{user:username}', [ProfileController::class, 'index'])

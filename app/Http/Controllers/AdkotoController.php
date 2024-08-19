@@ -30,88 +30,49 @@ class AdkotoController extends Controller
         ]);
     }
 
-    public function fetchAllUserAds(): \Inertia\Response
+    public function create()
     {
-        $ads = Ad::where('user_id', Auth::id())
-            ->with('attachments')
-            ->orderByDesc('created_at')
-            ->get();
-        // $ads = Ad::with('attachments')
-        //     ->orderByDesc('created_at')
-        //     ->get();
+        $categories = AdvertisementCategory::with('subCategories')->get();
 
-        $categories = Category::all();
-
-        return Inertia::render('Adkoto/List', [
-            'ads' => $ads,
-            'categories' => $categories,
+        return Inertia::render('Adkoto/Create', [
+            'categories' => $categories
         ]);
     }
 
-    /**
-     * Show the create ad form.
-     *
-     * @return Response
-     */
-    public function create(): Response
-    {
-        return Inertia::render('Adkoto/Create');
-    }
 
-    public function fetchCategories()
-    {
-        $categories = Category::all();
-        return response()->json($categories);
-    }
-    // public function create(): Response
-    // {
-    //     $categories = Category::all();
-
-    //     return Inertia::render('Adkoto/Create', [
-    //         'categories' => $categories,
-    //     ]);
-    // }
-
-
-    /**
-     * Store a newly created ad in storage.
-     *
-     * @param  Request  $request
-     * @return RedirectResponse
-     */
     public function store(Request $request)
     {
         $request->validate([
+            'category_id' => 'required|exists:advertisement_categories,id',
+            'sub_category_id' => 'required|exists:advertisement_sub_categories,id',
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'price' => 'required|numeric',
-            'category_id' => 'required|exists:categories,id',
+            'price' => 'required|numeric|min:0',
             'location' => 'required|string|max:255',
-            'image' => 'nullable|image|max:2048'
+            'images.*' => 'sometimes|file|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        // Create the ad
-        $ad = Ad::create([
+        // Create the advertisement
+        $advertisement = Advertisement::create([
+            'user_id' => auth()->id(),
+            'category_id' => $request->category_id,
+            'sub_category_id' => $request->sub_category_id,
             'title' => $request->title,
             'description' => $request->description,
             'price' => $request->price,
-            'category_id' => $request->category_id,
             'location' => $request->location,
-            'user_id' => Auth::id()
         ]);
 
-        // Handle image upload if provided
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('ads', 'public');
-
-            // Create ads_attachment record
-            AdsAttachment::create([
-                'ad_id' => $ad->id,
-                'image_path' => $imagePath,
-            ]);
+        // Handle file uploads
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $file) {
+                $path = $file->store('advertisement_images', 'public');
+                $advertisement->attachments()->create(['image_path' => $path]);
+            }
         }
 
-        return Redirect::route('adkoto')->with('success', 'Ad created successfully.');
+        // Redirect or return response
+        return redirect()->route('advertisements.create')->with('success', 'Advertisement created successfully!');
     }
 
     /**
