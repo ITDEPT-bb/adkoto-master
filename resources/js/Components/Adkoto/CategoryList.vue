@@ -8,19 +8,41 @@
                     :key="category.id"
                     class="p-4"
                 >
-                    <h2 class="text-xl font-semibold mb-2 text-blue-500">
-                        <!-- {{ category.name }} ({{
-                            category.sub_categories.length
-                        }}) -->
-                        {{ category.name }}
-                    </h2>
-                    <ul class="pl-3">
+                    <a
+                        :href="
+                            route('adkoto.showCategory', {
+                                category_name: category.name,
+                            })
+                        "
+                    >
+                        <h2
+                            class="text-md font-semibold mb-2 text-blue-500 hover:underline"
+                        >
+                            {{ category.name }} ({{
+                                category.advertisements_count
+                            }})
+                        </h2>
+                    </a>
+                    <ul class="pl-5 list-disc">
                         <li
                             v-for="subCategory in category.sub_categories"
                             :key="subCategory.id"
-                            class="text-gray-700 text-sm py-1"
+                            class="text-gray-700 text-xs pb-1 hover:underline"
                         >
-                            <span>{{ subCategory.name }}</span>
+                            <a
+                                :href="
+                                    route('adkoto.showSubcategory', {
+                                        category_name: category.name,
+                                        subcategory_name: subCategory.name,
+                                    })
+                                "
+                            >
+                                <span>
+                                    {{ subCategory.name }} ({{
+                                        subCategory.advertisements_count
+                                    }})
+                                </span>
+                            </a>
                         </li>
                     </ul>
                 </div>

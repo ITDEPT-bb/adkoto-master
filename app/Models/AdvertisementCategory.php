@@ -11,6 +11,11 @@ class AdvertisementCategory extends Model
 
     protected $fillable = ['name'];
 
+    public function advertisements()
+    {
+        return $this->hasMany(Advertisement::class, 'category_id');
+    }
+
     public function subCategories()
     {
         return $this->hasMany(AdvertisementSubCategory::class, 'category_id');

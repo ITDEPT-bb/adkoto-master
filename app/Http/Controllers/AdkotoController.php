@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Ad;
 use App\Models\Advertisement;
 use App\Models\AdvertisementCategory;
+use App\Models\AdvertisementSubCategory;
 use App\Models\Category;
 use App\Models\AdsAttachment;
 use Illuminate\Http\Request;
@@ -18,17 +19,26 @@ class AdkotoController extends Controller
 
     public function index()
     {
-        $advertisements = Advertisement::with('attachments')
+        $advertisements = Advertisement::with(['attachments', 'user', 'category'])
             ->orderByDesc('created_at')
             ->get();
 
-        $categories = AdvertisementCategory::with('subCategories')->get();
+        $categories = AdvertisementCategory::with([
+            'subCategories' => function ($query) {
+                $query->withCount('advertisements');
+            }
+        ])
+            ->withCount('advertisements')
+            ->get();
 
         return Inertia::render('Adkoto/Index', [
             'advertisements' => $advertisements,
             'categories' => $categories
         ]);
     }
+
+
+
 
     public function create()
     {
@@ -63,7 +73,6 @@ class AdkotoController extends Controller
             'location' => $request->location,
         ]);
 
-        // Handle file uploads
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $file) {
                 $path = $file->store('advertisement_images', 'public');
@@ -71,7 +80,44 @@ class AdkotoController extends Controller
             }
         }
 
-        // Redirect or return response
         return redirect()->route('advertisements.create')->with('success', 'Advertisement created successfully!');
+    }
+
+    public function showCategory($category_name)
+    {
+        $category = AdvertisementCategory::withCount('advertisements')
+            ->where('name', $category_name)
+            ->with('subCategories.advertisements')
+            ->firstOrFail();
+
+        $advertisements = Advertisement::where('category_id', $category->id)
+            ->with(['attachments', 'user', 'category'])
+            ->get();
+
+        return Inertia::render('Adkoto/CategoryPage', [
+            'category' => $category,
+            'advertisements' => $advertisements,
+        ]);
+    }
+
+    public function showSubCategory($category_name, $subcategory_name)
+    {
+        $category = AdvertisementCategory::where('name', $category_name)
+            ->with('subCategories.advertisements')
+            ->firstOrFail();
+
+        $subCategory = AdvertisementSubCategory::where('name', $subcategory_name)
+            ->where('category_id', $category->id)
+            ->withCount('advertisements')
+            ->firstOrFail();
+
+        $advertisements = Advertisement::where('sub_category_id', $subCategory->id)
+            ->with(['attachments', 'user', 'category'])
+            ->get();
+
+        return Inertia::render('Adkoto/SubCategoryPage', [
+            'subCategory' => $subCategory,
+            'advertisements' => $advertisements,
+        ]);
     }
 }

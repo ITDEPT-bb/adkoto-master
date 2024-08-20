@@ -78,8 +78,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // Adkoto
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/adkoto', [AdkotoController::class, 'index'])->name('adkoto');
-    Route::get('/adkoto/create', [AdkotoController::class, 'create'])->name('advertisements.create');
-    Route::post('/adkoto', [AdkotoController::class, 'store'])->name('advertisements.store');
+    Route::get('/adkoto/create', [AdkotoController::class, 'create'])->name('adkoto.create');
+    Route::post('/adkoto', [AdkotoController::class, 'store'])->name('adkoto.store');
+    Route::get('adkoto/{id}', [AdkotoController::class, 'show'])->name('adkoto.show');
+    Route::get('adkoto/{id}/edit', [AdkotoController::class, 'edit'])->name('adkoto.edit');
+    Route::put('adkoto/{id}', [AdkotoController::class, 'update'])->name('adkoto.update');
+    Route::delete('adkoto/{id}', [AdkotoController::class, 'destroy'])->name('adkoto.destroy');
+
+    Route::get('/adkoto/category/{category_name}', [AdkotoController::class, 'showCategory'])->name('adkoto.showCategory');
+    Route::get('/adkoto/category/{category_name}/{subcategory_name}', [AdkotoController::class, 'showSubcategory'])->name('adkoto.showSubcategory');
 });
 
 Route::get('/u/{user:username}', [ProfileController::class, 'index'])
