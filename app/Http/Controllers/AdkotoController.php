@@ -16,12 +16,17 @@ use Inertia\Response;
 
 class AdkotoController extends Controller
 {
-
     public function index()
     {
         $advertisements = Advertisement::with(['attachments', 'user', 'category'])
             ->orderByDesc('created_at')
             ->get();
+
+        $advertisements->each(function ($ad) {
+            $ad->attachments->each(function ($attachment) {
+                $attachment->image_path = asset('storage/' . $attachment->image_path);
+            });
+        });
 
         $categories = AdvertisementCategory::with([
             'subCategories' => function ($query) {
@@ -37,9 +42,6 @@ class AdkotoController extends Controller
         ]);
     }
 
-
-
-
     public function create()
     {
         $categories = AdvertisementCategory::with('subCategories')->get();
@@ -48,7 +50,6 @@ class AdkotoController extends Controller
             'categories' => $categories
         ]);
     }
-
 
     public function store(Request $request)
     {
@@ -94,6 +95,12 @@ class AdkotoController extends Controller
             ->with(['attachments', 'user', 'category'])
             ->get();
 
+        $advertisements->each(function ($ad) {
+            $ad->attachments->each(function ($attachment) {
+                $attachment->image_path = asset('storage/' . $attachment->image_path);
+            });
+        });
+
         return Inertia::render('Adkoto/CategoryPage', [
             'category' => $category,
             'advertisements' => $advertisements,
@@ -115,9 +122,29 @@ class AdkotoController extends Controller
             ->with(['attachments', 'user', 'category'])
             ->get();
 
+        $advertisements->each(function ($ad) {
+            $ad->attachments->each(function ($attachment) {
+                $attachment->image_path = asset('storage/' . $attachment->image_path);
+            });
+        });
+
         return Inertia::render('Adkoto/SubCategoryPage', [
             'subCategory' => $subCategory,
             'advertisements' => $advertisements,
+        ]);
+    }
+
+    public function show($id)
+    {
+        $advertisement = Advertisement::with(['attachments', 'user', 'category'])
+            ->findOrFail($id);
+
+        $advertisement->attachments->each(function ($attachment) {
+            $attachment->image_path = asset('storage/' . $attachment->image_path);
+        });
+
+        return Inertia::render('Adkoto/Show', [
+            'advertisement' => $advertisement,
         ]);
     }
 }

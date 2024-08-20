@@ -4,19 +4,35 @@
             class="flex flex-col sm:flex-row items-start space-y-4 sm:space-y-0 sm:space-x-4"
         >
             <!-- Image Section -->
-            <img
-                :src="
-                    advertisement.attachments[0]?.image_path ||
-                    'https://via.placeholder.com/100'
+            <a
+                :href="
+                    route('adkoto.show', {
+                        id: advertisement.id,
+                    })
                 "
-                alt="Listing Image"
-                class="w-20 h-20 object-cover rounded mx-auto sm:mx-0"
-            />
+            >
+                <img
+                    :src="
+                        advertisement.attachments[0]?.image_path ||
+                        'https://via.placeholder.com/100'
+                    "
+                    alt="Listing Image"
+                    class="w-20 h-20 object-cover rounded mx-auto sm:mx-0"
+                />
+            </a>
             <!-- Details Section -->
             <div class="flex-1">
-                <h3 class="text-lg text-blue-400 font-semibold">
-                    {{ advertisement.title }}
-                </h3>
+                <a
+                    :href="
+                        route('adkoto.show', {
+                            id: advertisement.id,
+                        })
+                    "
+                >
+                    <h3 class="text-lg text-blue-400 font-semibold">
+                        {{ advertisement.title }}
+                    </h3>
+                </a>
                 <div class="flex flex-col sm:flex-row gap-2 sm:gap-4 mt-1">
                     <span class="flex items-center text-xs text-gray-400">
                         <UserIcon class="w-4 h-4 mr-1" />
