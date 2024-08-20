@@ -8,10 +8,10 @@
                     :categories="categories"
                     class="lg:col-span-8 col-span-12"
                 />
-                <SponsoredAds
-                    :sponsoredAds="sponsoredAds"
-                    class="lg:col-span-4 hidden lg:block"
-                />
+                <div class="lg:col-span-4 hidden lg:block">
+                    <ManageCard class="my-2" />
+                    <SponsoredAds :sponsoredAds="sponsoredAds" />
+                </div>
                 <Listings
                     :advertisements="advertisements"
                     class="lg:col-span-8 col-span-12"
@@ -31,6 +31,7 @@ import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
 import CategoryList from "@/Components/Adkoto/CategoryList.vue";
 import Listings from "@/Components/Adkoto/Listings.vue";
 import SponsoredAds from "@/Components/Adkoto/SponsoredAds.vue";
+import ManageCard from "@/Components/Adkoto/ManageCard.vue";
 
 const { props } = usePage();
 const advertisements = ref(props.advertisements);
