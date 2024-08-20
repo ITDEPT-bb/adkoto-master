@@ -10,6 +10,7 @@
         </p>
         <div class="mt-6 space-x-4">
             <a
+                :href="route('adkoto.showUserAds')"
                 class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 hover:cursor-pointer"
             >
                 Manage Ads

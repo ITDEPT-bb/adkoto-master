@@ -87,6 +87,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/adkoto/category/{category_name}', [AdkotoController::class, 'showCategory'])->name('adkoto.showCategory');
     Route::get('/adkoto/category/{category_name}/{subcategory_name}', [AdkotoController::class, 'showSubcategory'])->name('adkoto.showSubcategory');
+    Route::get('/adkoto/u/et/', [AdkotoController::class, 'showUserAds'])->name('adkoto.showUserAds');
 });
 
 Route::get('/u/{user:username}', [ProfileController::class, 'index'])

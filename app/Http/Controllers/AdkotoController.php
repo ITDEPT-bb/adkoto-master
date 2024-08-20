@@ -147,4 +147,23 @@ class AdkotoController extends Controller
             'advertisement' => $advertisement,
         ]);
     }
+
+    public function showUserAds()
+    {
+        $userId = Auth::id();
+
+        $advertisements = Advertisement::where('user_id', $userId)
+            ->with(['attachments', 'user', 'category'])
+            ->get();
+
+        $advertisements->each(function ($ad) {
+            $ad->attachments->each(function ($attachment) {
+                $attachment->image_path = asset('storage/' . $attachment->image_path);
+            });
+        });
+
+        return Inertia::render('Adkoto/Manage', [
+            'advertisements' => $advertisements,
+        ]);
+    }
 }
