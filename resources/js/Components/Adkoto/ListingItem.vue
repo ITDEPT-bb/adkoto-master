@@ -20,6 +20,7 @@
                     class="w-20 h-20 object-cover rounded mx-auto sm:mx-0"
                 />
             </a>
+
             <!-- Details Section -->
             <div class="flex-1">
                 <a
@@ -51,6 +52,7 @@
                     {{ advertisement.description }}
                 </p>
             </div>
+
             <!-- Price Section -->
             <div class="ml-auto flex-shrink-0">
                 <span
@@ -69,7 +71,7 @@ import UserIcon from "../Icons/UserIcon.vue";
 import ClockIcon from "../Icons/ClockIcon.vue";
 import SettingsIcon from "../Icons/SettingsIcon.vue";
 import TagIcon from "../Icons/TagIcon.vue";
-
+import { usePage, router } from "@inertiajs/vue3";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 
@@ -78,4 +80,10 @@ dayjs.extend(relativeTime);
 const props = defineProps({
     advertisement: Object,
 });
+
+const deleteAd = (id) => {
+    if (confirm("Are you sure you want to delete this advertisement?")) {
+        router.delete(route("adkoto.destroy", { id }));
+    }
+};
 </script>

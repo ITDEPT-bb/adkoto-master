@@ -61,6 +61,26 @@
                 </span>
             </div>
         </div>
+
+        <!-- Manage Button (Edit/Delete) -->
+        <div v-if="advertisement.user.id === authUser.id" class="flex-2">
+            <a
+                :href="
+                    route('adkoto.edit', {
+                        id: advertisement.id,
+                    })
+                "
+                class="bg-yellow-500 text-white py-1 px-2 rounded text-xs mr-2"
+            >
+                Edit
+            </a>
+            <button
+                @click="deleteAd(advertisement.id)"
+                class="bg-red-500 text-white py-1 px-2 rounded text-xs"
+            >
+                Delete
+            </button>
+        </div>
     </div>
 </template>
 
@@ -78,6 +98,9 @@ dayjs.extend(relativeTime);
 
 const { props } = usePage();
 const advertisement = ref(props.advertisement);
+
+// Get the authenticated user
+const authUser = usePage().props.auth.user;
 
 const currentIndex = ref(0);
 

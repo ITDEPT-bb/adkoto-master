@@ -5,6 +5,11 @@
         <div class="max-w-7xl mx-auto h-full overflow-y-auto p-4">
             <div class="grid grid-cols-12 gap-6">
                 <div class="col-span-8">
+                    <div class="bg-blue-400 p-4">
+                        <h1 class="text-lg text-white font-semibold">
+                            You can manage your Advertisements
+                        </h1>
+                    </div>
                     <div v-if="advertisements.length > 0">
                         <Listings :advertisements="advertisements" />
                     </div>

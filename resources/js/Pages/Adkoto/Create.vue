@@ -214,7 +214,7 @@ const handleFileUpload = (event) => {
 
 const removeImage = (index) => {
     form.images.splice(index, 1);
-    URL.revokeObjectURL(imagePreviews.value[index].url); // Clean up the object URL
+    URL.revokeObjectURL(imagePreviews.value[index].url);
     imagePreviews.value.splice(index, 1);
 };
 
