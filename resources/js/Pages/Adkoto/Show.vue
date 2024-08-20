@@ -8,10 +8,10 @@
                     :advertisements="advertisements"
                     class="lg:col-span-8 col-span-12"
                 />
-                <SponsoredAds
-                    :sponsoredAds="sponsoredAds"
-                    class="lg:col-span-4 hidden lg:block"
-                />
+                <div class="lg:col-span-4 hidden lg:block">
+                    <ManageCard class="my-2" />
+                    <SponsoredAds :sponsoredAds="sponsoredAds" />
+                </div>
             </div>
         </div>
     </AdkotoLayout>
@@ -26,6 +26,7 @@ import AdkotoLayout from "@/Layouts/AdkotoLayout.vue";
 import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
 import SponsoredAds from "@/Components/Adkoto/SponsoredAds.vue";
 import AdvertisementCard from "@/Components/Adkoto/AdvertisementCard.vue";
+import ManageCard from "@/Components/Adkoto/ManageCard.vue";
 
 const { props } = usePage();
 const advertisements = ref(props.advertisements);
