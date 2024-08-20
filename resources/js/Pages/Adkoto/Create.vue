@@ -127,6 +127,32 @@
                     />
                 </div>
 
+                <!-- Image Previews -->
+                <div v-if="form.images.length" class="mt-4">
+                    <h3 class="text-lg font-medium text-gray-700">
+                        Image Preview
+                    </h3>
+                    <div class="mt-2 flex flex-wrap space-x-2">
+                        <div
+                            v-for="(image, index) in imagePreviews"
+                            :key="index"
+                            class="relative"
+                        >
+                            <img
+                                :src="image.url"
+                                alt="Preview"
+                                class="w-24 h-24 object-cover rounded-md shadow-sm"
+                            />
+                            <button
+                                @click="removeImage(index)"
+                                class="absolute top-0 right-0 bg-red-600 text-white rounded-full p-1 shadow-md"
+                            >
+                                &times;
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Submit Button -->
                 <button
                     type="submit"
@@ -153,6 +179,7 @@ const props = defineProps({
 
 const subCategories = ref([]);
 const toast = useToast();
+const imagePreviews = ref([]);
 
 const form = useForm({
     category_id: "",
@@ -174,7 +201,21 @@ const fetchSubCategories = () => {
 };
 
 const handleFileUpload = (event) => {
-    form.images = Array.from(event.target.files);
+    const files = Array.from(event.target.files);
+    form.images.push(...files);
+
+    imagePreviews.value.push(
+        ...files.map((file) => ({
+            file,
+            url: URL.createObjectURL(file),
+        }))
+    );
+};
+
+const removeImage = (index) => {
+    form.images.splice(index, 1);
+    URL.revokeObjectURL(imagePreviews.value[index].url); // Clean up the object URL
+    imagePreviews.value.splice(index, 1);
 };
 
 const submitForm = () => {

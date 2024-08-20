@@ -81,7 +81,7 @@ class AdkotoController extends Controller
             }
         }
 
-        return redirect()->route('advertisements.create')->with('success', 'Advertisement created successfully!');
+        return redirect()->route('adkoto')->with('success', 'Advertisement created successfully!');
     }
 
     public function showCategory($category_name)
