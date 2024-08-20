@@ -239,4 +239,16 @@ class AdkotoController extends Controller
         return redirect()->route('adkoto')->with('success', 'Advertisement updated successfully!');
     }
 
+    public function destroy($id)
+    {
+        $advertisement = Advertisement::findOrFail($id);
+
+        if ($advertisement->user_id !== auth()->id()) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        $advertisement->delete();
+
+        return response()->json(['message' => 'Advertisement deleted successfully.']);
+    }
 }
