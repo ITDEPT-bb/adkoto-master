@@ -22,7 +22,7 @@ class AdkotoController extends Controller
     {
         $advertisements = Advertisement::with(['attachments', 'user', 'category'])
             ->orderByDesc('created_at')
-            ->paginate(10);
+            ->paginate(5);
 
         $advertisements->each(function ($ad) {
             $ad->attachments->each(function ($attachment) {
@@ -95,7 +95,7 @@ class AdkotoController extends Controller
 
         $advertisements = Advertisement::where('category_id', $category->id)
             ->with(['attachments', 'user', 'category'])
-            ->paginate(10);
+            ->paginate(5);
 
         $advertisements->each(function ($ad) {
             $ad->attachments->each(function ($attachment) {
@@ -103,8 +103,17 @@ class AdkotoController extends Controller
             });
         });
 
+        $categories = AdvertisementCategory::with([
+            'subCategories' => function ($query) {
+                $query->withCount('advertisements');
+            }
+        ])
+            ->withCount('advertisements')
+            ->get();
+
         return Inertia::render('Adkoto/CategoryPage', [
             'category' => $category,
+            'categories' => $categories,
             'advertisements' => $advertisements,
         ]);
     }
@@ -122,7 +131,7 @@ class AdkotoController extends Controller
 
         $advertisements = Advertisement::where('sub_category_id', $subCategory->id)
             ->with(['attachments', 'user', 'category'])
-            ->paginate(10);
+            ->paginate(5);
 
         $advertisements->each(function ($ad) {
             $ad->attachments->each(function ($attachment) {
@@ -130,8 +139,17 @@ class AdkotoController extends Controller
             });
         });
 
+        $categories = AdvertisementCategory::with([
+            'subCategories' => function ($query) {
+                $query->withCount('advertisements');
+            }
+        ])
+            ->withCount('advertisements')
+            ->get();
+
         return Inertia::render('Adkoto/SubCategoryPage', [
             'subCategory' => $subCategory,
+            'categories' => $categories,
             'advertisements' => $advertisements,
         ]);
     }
@@ -156,7 +174,7 @@ class AdkotoController extends Controller
 
         $advertisements = Advertisement::where('user_id', $userId)
             ->with(['attachments', 'user', 'category'])
-            ->paginate(10);
+            ->paginate(5);
 
         $advertisements->each(function ($ad) {
             $ad->attachments->each(function ($attachment) {

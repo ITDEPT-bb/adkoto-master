@@ -3,13 +3,13 @@
 
     <AdkotoLayout>
         <div class="max-w-7xl mx-auto h-full overflow-y-auto p-4">
-            <div class="grid grid-cols-12 gap-6">
-                <CategoryList
+            <div class="grid grid-cols-12 gap-4">
+                <CategoryDrawer
                     :categories="categories"
-                    class="lg:col-span-8 col-span-12"
+                    class="lg:col-span-12 col-span-12"
                 />
                 <div class="lg:col-span-4 hidden lg:block">
-                    <ManageCard class="my-2" />
+                    <ManageCard />
                     <SponsoredAds :sponsoredAds="sponsoredAds" />
                 </div>
                 <Listings
@@ -29,6 +29,7 @@ import { usePage, Head } from "@inertiajs/vue3";
 import AdkotoLayout from "@/Layouts/AdkotoLayout.vue";
 import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
 import CategoryList from "@/Components/Adkoto/CategoryList.vue";
+import CategoryDrawer from "@/Components/Adkoto/CategoryDrawer.vue";
 import Listings from "@/Components/Adkoto/Listings.vue";
 import SponsoredAds from "@/Components/Adkoto/SponsoredAds.vue";
 import ManageCard from "@/Components/Adkoto/ManageCard.vue";

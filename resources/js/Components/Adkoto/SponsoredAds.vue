@@ -1,5 +1,5 @@
 <template>
-    <aside class="bg-white p-4 shadow rounded-lg">
+    <aside class="bg-white p-4 shadow my-2 rounded-lg">
         <h2 class="text-2xl font-bold mb-4">Sponsored Ads</h2>
         <div class="space-y-4">
             <div

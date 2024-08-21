@@ -2,7 +2,16 @@
     <main class="bg-white p-4 shadow rounded-lg">
         <section>
             <div class="flex space-x-4 mb-4">
-                <h1 class="text-lg font-semibold">Advertisements</h1>
+                <h1 class="text-lg font-semibold">
+                    <!-- Check if category and subCategory exist -->
+                    {{
+                        subCategory
+                            ? `${subCategory.name}`
+                            : category
+                            ? category.name
+                            : "Advertisements"
+                    }}
+                </h1>
             </div>
 
             <!-- Render Each Advertisement -->
@@ -27,5 +36,7 @@ import Pagination from "./Pagination.vue";
 
 const props = defineProps({
     advertisements: Object,
+    category: Object,
+    subCategory: Object,
 });
 </script>

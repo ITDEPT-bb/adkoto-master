@@ -1,10 +1,15 @@
 <template>
-    <div class="bg-white p-6 rounded-lg shadow-md">
-        <!-- <p>
-            Welcome back, <strong>{{ userName }}</strong
-            >.
-        </p>
-        <p class="text-gray-500 text-sm">Last logged in: {{ memberSince }}</p> -->
+    <div class="bg-white p-6 rounded-lg shadow">
+        <div class="flex flex-col gap-2">
+            <p>
+                Welcome back,
+                <strong>{{ authUser.name }} {{ authUser.surname }}</strong
+                >.
+            </p>
+            <p class="text-gray-500 text-sm">
+                Member Since: {{ formatDate(authUser.created_at) }}
+            </p>
+        </div>
         <p class="mt-4">
             Manage your ads or create new ones from your personalized dashboard.
         </p>
@@ -27,9 +32,13 @@
 
 <script setup>
 import { ref } from "vue";
+import { usePage } from "@inertiajs/vue3";
+import dayjs from "dayjs";
 
-// const userName = ref("tianny");
-// const memberSince = ref("2024/08/20 2:55 PM");
+const authUser = usePage().props.auth.user;
+const formatDate = (date) => {
+    return dayjs(date).format("MMMM D, YYYY");
+};
 </script>
 
 <style scoped></style>
