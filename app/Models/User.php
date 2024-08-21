@@ -19,8 +19,8 @@ use Devdojo\Auth\Models\User as AuthUser;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-// class User extends Authenticatable implements MustVerifyEmail
-class User extends AuthUser implements MustVerifyEmail, FilamentUser
+class User extends Authenticatable implements MustVerifyEmail, FilamentUser
+    // class User extends AuthUser implements MustVerifyEmail, FilamentUser
 {
     use HasFactory, Notifiable;
 
@@ -91,15 +91,15 @@ class User extends AuthUser implements MustVerifyEmail, FilamentUser
         return $this->belongsToMany(User::class, 'followers', 'follower_id', 'user_id');
     }
 
-    public function ads()
+    public function advertisements()
     {
-        return $this->hasMany(Ad::class);
+        return $this->hasMany(Advertisement::class);
     }
 
-    public function comments()
-    {
-        return $this->hasMany(AdsComment::class);
-    }
+    // public function comments()
+    // {
+    //     return $this->hasMany(AdsComment::class);
+    // }
 
     /**
      * Determine if the user can access the specified Filament panel.
