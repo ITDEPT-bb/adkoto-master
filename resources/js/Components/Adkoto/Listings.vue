@@ -3,14 +3,19 @@
         <section>
             <div class="flex space-x-4 mb-4">
                 <h1 class="text-lg font-semibold">Advertisements</h1>
-                <!-- <button class="text-lg">Popular</button>
-                <button class="text-lg">Random</button> -->
             </div>
+
+            <!-- Render Each Advertisement -->
             <div
-                v-for="advertisement in advertisements"
+                v-for="advertisement in advertisements.data"
                 :key="advertisement.id"
             >
                 <ListingItem :advertisement="advertisement" />
+            </div>
+
+            <!-- Pagination Links -->
+            <div class="mt-4">
+                <Pagination :links="advertisements.links" />
             </div>
         </section>
     </main>
@@ -18,8 +23,9 @@
 
 <script setup>
 import ListingItem from "./ListingItem.vue";
+import Pagination from "./Pagination.vue";
 
 const props = defineProps({
-    advertisements: Array,
+    advertisements: Object,
 });
 </script>

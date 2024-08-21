@@ -22,7 +22,7 @@ class AdkotoController extends Controller
     {
         $advertisements = Advertisement::with(['attachments', 'user', 'category'])
             ->orderByDesc('created_at')
-            ->get();
+            ->paginate(10);
 
         $advertisements->each(function ($ad) {
             $ad->attachments->each(function ($attachment) {
@@ -95,7 +95,7 @@ class AdkotoController extends Controller
 
         $advertisements = Advertisement::where('category_id', $category->id)
             ->with(['attachments', 'user', 'category'])
-            ->get();
+            ->paginate(10);
 
         $advertisements->each(function ($ad) {
             $ad->attachments->each(function ($attachment) {
@@ -122,7 +122,7 @@ class AdkotoController extends Controller
 
         $advertisements = Advertisement::where('sub_category_id', $subCategory->id)
             ->with(['attachments', 'user', 'category'])
-            ->get();
+            ->paginate(10);
 
         $advertisements->each(function ($ad) {
             $ad->attachments->each(function ($attachment) {
@@ -156,7 +156,7 @@ class AdkotoController extends Controller
 
         $advertisements = Advertisement::where('user_id', $userId)
             ->with(['attachments', 'user', 'category'])
-            ->get();
+            ->paginate(10);
 
         $advertisements->each(function ($ad) {
             $ad->attachments->each(function ($attachment) {

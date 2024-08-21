@@ -10,14 +10,18 @@
                             You can manage your Advertisements
                         </h1>
                     </div>
-                    <div v-if="advertisements.length > 0">
+                    <!-- <div v-if="advertisements.length > 0">
                         <Listings :advertisements="advertisements" />
                     </div>
                     <div v-else class="text-center text-gray-600 py-4">
                         <div class="bg-white p-4 shadow rounded-lg">
                             You don't have any advertisements posted.
                         </div>
-                    </div>
+                    </div> -->
+                    <Listings
+                        :advertisements="advertisements"
+                        class="lg:col-span-8 col-span-12"
+                    />
                 </div>
                 <div class="col-span-4">
                     <ManageCard class="my-2" />
