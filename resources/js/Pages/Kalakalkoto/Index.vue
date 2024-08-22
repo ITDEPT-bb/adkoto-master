@@ -4,7 +4,7 @@
     <KalakalLayout>
         <div class="max-w-7xl mx-auto h-full overflow-y-auto p-4">
             <CategoryMenu :categories="categories" />
-            <ProductList :items="items" />
+            <ProductList :kalakalitems="kalakalitems" />
         </div>
     </KalakalLayout>
 
@@ -21,6 +21,6 @@ import CategoryMenu from "@/Components/Kalakalkoto/CategoryMenu.vue";
 import ProductList from "@/Components/Kalakalkoto/ProductList.vue";
 
 const { props } = usePage();
+const kalakalitems = ref(props.kalakalitems);
 const categories = ref(props.categories);
-const items = ref(props.items);
 </script>

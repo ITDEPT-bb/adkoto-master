@@ -24,7 +24,7 @@ class KalakalkotoItem extends Model
 
     public function attachments()
     {
-        return $this->hasMany(KalakalkotoItemAttachment::class);
+        return $this->hasMany(KalakalkotoItemAttachment::class, 'kalakal_id');
     }
 
     public function conversations()

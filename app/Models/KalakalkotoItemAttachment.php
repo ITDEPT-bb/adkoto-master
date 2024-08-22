@@ -12,8 +12,8 @@ class KalakalkotoItemAttachment extends Model
 
     protected $fillable = ['kalakal_id', 'image_path'];
 
-    public function advertisement()
+    public function kalakalkotoItem()
     {
-        return $this->belongsTo(Advertisement::class);
+        return $this->belongsTo(KalakalkotoItem::class, 'kalakal_id');
     }
 }
