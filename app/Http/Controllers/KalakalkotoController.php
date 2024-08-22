@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\KalakalkotoCategory;
 use App\Models\KalakalkotoItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class KalakalkotoController extends Controller
@@ -82,6 +83,30 @@ class KalakalkotoController extends Controller
         ]);
     }
 
+    public function showUserItems()
+    {
+        $userId = Auth::id();
+
+        $kalakalitems = KalakalkotoItem::where('user_id', $userId)
+            ->with(['attachments', 'user', 'category'])
+            ->orderByDesc('created_at')
+            ->paginate(12);
+
+        $kalakalitems->each(function ($kalakal) {
+            $kalakal->attachments->each(function ($attachment) {
+                $attachment->image_path = asset('storage/' . $attachment->image_path);
+            });
+        });
+
+        $categories = KalakalkotoCategory::all();
+
+        return Inertia::render('Kalakalkoto/Manage', [
+            'kalakalitems' => $kalakalitems,
+            'categories' => $categories,
+            'authId' => $userId
+        ]);
+    }
+
     public function edit($id)
     {
         $kalakalitem = KalakalkotoItem::findOrFail($id);
@@ -129,9 +154,13 @@ class KalakalkotoController extends Controller
     public function destroy($id)
     {
         $kalakalitem = KalakalkotoItem::findOrFail($id);
+        if ($kalakalitem->user_id !== auth()->id()) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
         $kalakalitem->delete();
 
-        return redirect()->route('kalakalkoto.index')->with('success', 'Item deleted successfully.');
+        return response()->json(['message' => 'Listing deleted successfully.']);
     }
 
     public function showCategory($category_name)

@@ -2,7 +2,14 @@
     <div class="p-4 rounded-lg dark:border-gray-700">
         <div class="flex space-x-4 mb-2">
             <h1 class="text-lg font-semibold">
-                {{ category ? category.name : "Listings" }}
+                <!-- {{ category ? category.name : "Listings" }} -->
+                {{
+                    authId
+                        ? "My Listings"
+                        : category
+                        ? category.name
+                        : "Listings"
+                }}
             </h1>
         </div>
 
@@ -31,4 +38,5 @@ const { props } = usePage();
 
 const category = ref(props.category);
 const kalakalitems = ref(props.kalakalitems);
+const authId = ref(props.authId);
 </script>

@@ -24,7 +24,7 @@
                     </li>
                     <li>
                         <a
-                            href="/kalakalkoto"
+                            :href="route('kalakalkoto.showUserItems')"
                             class="text-gray-900 font-bold dark:text-white hover:underline"
                         >
                             View My Listings

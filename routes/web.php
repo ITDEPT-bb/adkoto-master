@@ -41,6 +41,7 @@ Route::middleware(['auth', 'verified'])->prefix('/kalakalkoto')->group(function 
     // Show
     Route::get('/{id}', [KalakalkotoController::class, 'show'])->name('kalakalkoto.show');
     Route::get('/category/{category_name}', [KalakalkotoController::class, 'showCategory'])->name('kalakalkoto.showCategory');
+    Route::get('/u/items/et/', [KalakalkotoController::class, 'showUserItems'])->name('kalakalkoto.showUserItems');
 
     // Edit
     Route::get('/{id}/edit', [KalakalkotoController::class, 'edit'])->name('kalakalkoto.edit');

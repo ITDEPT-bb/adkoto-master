@@ -1,5 +1,5 @@
 <template>
-    <Head title="Kalakalkoto" />
+    <Head title="Adkoto" />
 
     <KalakalLayout>
         <div class="max-w-7xl mx-auto h-full overflow-y-auto p-4">
