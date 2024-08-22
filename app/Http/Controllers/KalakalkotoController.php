@@ -41,27 +41,30 @@ class KalakalkotoController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
-            'price' => 'required|numeric',
-            'description' => 'nullable|string',
-            'location' => 'required|string|max:255',
             'category_id' => 'required|exists:kalakalkoto_categories,id',
-            'attachments.*' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'price' => 'required|numeric|min:0',
+            'location' => 'required|string|max:255',
+            'attachments.*' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
         ]);
 
+        // Create the item
         $kalakalitem = KalakalkotoItem::create([
-            'title' => $request->input('title'),
-            'price' => $request->input('price'),
-            'description' => $request->input('description'),
-            'location' => $request->input('location'),
-            'category_id' => $request->input('category_id'),
+            'user_id' => auth()->id(),
+            'name' => $request->name,
+            'price' => $request->price,
+            'description' => $request->description,
+            'location' => $request->location,
+            'category_id' => $request->category_id,
         ]);
 
+        // Handle file uploads
         if ($request->hasFile('attachments')) {
-            foreach ($request->file('attachments') as $attachment) {
-                $path = $attachment->store('public/attachments');
+            foreach ($request->file('attachments') as $file) {
+                $path = $file->store('kalakalkoto_images', 'public');
                 $kalakalitem->attachments()->create([
-                    'image_path' => str_replace('public/', '', $path),
+                    'image_path' => $path,
                 ]);
             }
         }
