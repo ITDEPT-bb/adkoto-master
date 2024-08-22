@@ -10,11 +10,12 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('item_attachments', function (Blueprint $table) {
+        Schema::create('kalakalkoto_item_attachments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('item_id')->constrained()->onDelete('cascade');
-            $table->string('path');
+            $table->foreignId('kalakal_id')->constrained('kalakalkoto_items')->onDelete('cascade');
+            $table->string('image_path');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -23,6 +24,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('item_attachments');
+        Schema::dropIfExists('kalakalkoto_item_attachments');
     }
 };

@@ -37,7 +37,4 @@ import ManageCard from "@/Components/Adkoto/ManageCard.vue";
 const { props } = usePage();
 const advertisements = ref(props.advertisements);
 const categories = ref(props.categories);
-// const sponsoredAds = ref(props.sponsoredAds);
-
-console.log(categories.value);
 </script>

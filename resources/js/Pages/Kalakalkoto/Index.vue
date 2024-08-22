@@ -1,0 +1,26 @@
+<template>
+    <Head title="Kalakalkoto" />
+
+    <KalakalLayout>
+        <div class="max-w-7xl mx-auto h-full overflow-y-auto p-4">
+            <CategoryMenu :categories="categories" />
+            <ProductList :items="items" />
+        </div>
+    </KalakalLayout>
+
+    <UpdateProfileReminder />
+</template>
+
+<script setup>
+import { ref } from "vue";
+import { usePage, Head } from "@inertiajs/vue3";
+import KalakalLayout from "@/Layouts/KalakalLayout.vue";
+import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
+
+import CategoryMenu from "@/Components/Kalakalkoto/CategoryMenu.vue";
+import ProductList from "@/Components/Kalakalkoto/ProductList.vue";
+
+const { props } = usePage();
+const categories = ref(props.categories);
+const items = ref(props.items);
+</script>

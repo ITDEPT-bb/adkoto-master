@@ -10,16 +10,17 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('items', function (Blueprint $table) {
+        Schema::create('kalakalkoto_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('category_id')->constrained()->onDelete('cascade');
-            $table->string('title');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('category_id')->constrained('kalakalkoto_categories')->onDelete('cascade');
+            $table->string('name');
             $table->text('description');
             $table->decimal('price', 10, 2);
+            $table->enum('status', ['available', 'sold'])->default('available');
             $table->string('location');
-            $table->boolean('is_sold')->default(false);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -28,6 +29,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('items');
+        Schema::dropIfExists('kalakalkoto_items');
     }
 };
