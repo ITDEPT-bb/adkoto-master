@@ -46,6 +46,7 @@ Route::middleware(['auth', 'verified'])->prefix('/kalakalkoto')->group(function 
     // Edit
     Route::get('/{id}/edit', [KalakalkotoController::class, 'edit'])->name('kalakalkoto.edit');
     Route::put('/{id}', [KalakalkotoController::class, 'update'])->name('kalakalkoto.update');
+    Route::put('/mark-as-sold/{id}', [KalakalkotoController::class, 'markAsSold'])->name('kalakalkoto.markAsSold');
 
     // Delete
     Route::delete('/{id}', [KalakalkotoController::class, 'destroy'])->name('kalakalkoto.destroy');

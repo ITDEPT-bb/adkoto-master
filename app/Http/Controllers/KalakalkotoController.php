@@ -14,6 +14,7 @@ class KalakalkotoController extends Controller
     {
         $kalakalitems = KalakalkotoItem::with(['attachments', 'user', 'category'])
             ->orderByDesc('created_at')
+            ->where('status', 'available')
             ->paginate(12);
 
         $kalakalitems->each(function ($kalakal) {
@@ -92,6 +93,7 @@ class KalakalkotoController extends Controller
 
         $kalakalitems = KalakalkotoItem::where('user_id', $userId)
             ->with(['attachments', 'user', 'category'])
+            ->where('status', 'available')
             ->orderByDesc('created_at')
             ->paginate(12);
 
@@ -174,6 +176,7 @@ class KalakalkotoController extends Controller
         $kalakalitems = KalakalkotoItem::with(['attachments', 'user', 'category'])
             ->orderByDesc('created_at')
             ->where('category_id', $category->id)
+            ->where('status', 'available')
             ->paginate(12);
 
         $kalakalitems->each(function ($kalakal) {
@@ -190,4 +193,14 @@ class KalakalkotoController extends Controller
             'categories' => $categories
         ]);
     }
+
+    public function markAsSold($id)
+    {
+        $item = KalakalkotoItem::findOrFail($id);
+        $item->status = 'sold';
+        $item->save();
+
+        return response()->json(['message' => 'Item marked as sold successfully.']);
+    }
+
 }
