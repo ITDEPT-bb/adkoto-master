@@ -31,10 +31,23 @@ Route::get('/', [HomeController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('dashboard');
 
 // Kalakalkoto
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::prefix('/kalakalkoto')->group(function () {
-        Route::get('/', [KalakalkotoController::class, 'index'])->name('kalakalkoto');
-    });
+Route::middleware(['auth', 'verified'])->prefix('/kalakalkoto')->group(function () {
+    Route::get('/', [KalakalkotoController::class, 'index'])->name('kalakalkoto');
+
+    // Create
+    Route::get('/create', [KalakalkotoController::class, 'create'])->name('kalakalkoto.create');
+    Route::post('/', [KalakalkotoController::class, 'store'])->name('kalakalkoto.store');
+
+    // Show
+    Route::get('/{id}', [KalakalkotoController::class, 'show'])->name('kalakalkoto.show');
+    Route::get('/category/{category_name}', [KalakalkotoController::class, 'showCategory'])->name('kalakalkoto.showCategory');
+
+    // Edit
+    Route::get('/{id}/edit', [KalakalkotoController::class, 'edit'])->name('kalakalkoto.edit');
+    Route::put('/{id}', [KalakalkotoController::class, 'update'])->name('kalakalkoto.update');
+
+    // Delete
+    Route::delete('/{id}', [KalakalkotoController::class, 'destroy'])->name('kalakalkoto.destroy');
 });
 
 // Chatkoto
