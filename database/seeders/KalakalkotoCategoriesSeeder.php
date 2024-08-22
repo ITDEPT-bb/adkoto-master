@@ -15,15 +15,25 @@ class KalakalkotoCategoriesSeeder extends Seeder
     public function run(): void
     {
         $categories = [
-            ['name' => 'Electronics'],
-            ['name' => 'Fashion & Accessories'],
-            ['name' => 'Home & Furniture'],
-            ['name' => 'Sports & Fitness'],
             ['name' => 'Automotive & Vehicles'],
-            ['name' => 'Books & Stationery'],
+            ['name' => 'Beauty & Cosmetics'],
+            ['name' => 'Fashion & Accessories'],
+            ['name' => 'Food & Beverage'],
             ['name' => 'Health & Beauty'],
-            ['name' => 'Toys & Games'],
+            ['name' => 'Home & Garden'],
+            ['name' => 'Technology'],
+            ['name' => 'Travel & Hospitality'],
+            ['name' => 'Education'],
+            ['name' => 'Financial Services'],
             ['name' => 'Real Estate'],
+            ['name' => 'Retail'],
+            ['name' => 'Telecommunications'],
+            ['name' => 'Pets & Animals'],
+            ['name' => 'Gaming'],
+            ['name' => 'Electronics'],
+            ['name' => 'Sports & Fitness'],
+            ['name' => 'Books & Stationery'],
+            ['name' => 'Toys & Games'],
             ['name' => 'Services'],
         ];
 
