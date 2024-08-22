@@ -95,7 +95,7 @@
                 <div v-if="kalakalitem.user.id === authUser.id" class="flex-2">
                     <a
                         :href="
-                            route('adkoto.edit', {
+                            route('kalakalkoto.edit', {
                                 id: kalakalitem.id,
                             })
                         "

@@ -116,7 +116,7 @@ class KalakalkotoController extends Controller
         $categories = KalakalkotoCategory::all();
 
         return Inertia::render('Kalakalkoto/Edit', [
-            'kalakalitem' => $kalakalitem,
+            'item' => $kalakalitem,
             'categories' => $categories,
         ]);
     }
@@ -124,18 +124,18 @@ class KalakalkotoController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
-            'price' => 'required|numeric',
-            'description' => 'nullable|string',
-            'location' => 'required|string|max:255',
             'category_id' => 'required|exists:kalakalkoto_categories,id',
-            'attachments.*' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'price' => 'required|numeric|min:0',
+            'location' => 'required|string|max:255',
+            'attachments.*' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         $kalakalitem = KalakalkotoItem::findOrFail($id);
 
         $kalakalitem->update([
-            'title' => $request->input('title'),
+            'name' => $request->input('name'),
             'price' => $request->input('price'),
             'description' => $request->input('description'),
             'location' => $request->input('location'),
@@ -144,14 +144,14 @@ class KalakalkotoController extends Controller
 
         if ($request->hasFile('attachments')) {
             foreach ($request->file('attachments') as $attachment) {
-                $path = $attachment->store('public/attachments');
+                $path = $attachment->store('kalakalkoto_images', 'public');
                 $kalakalitem->attachments()->create([
-                    'image_path' => str_replace('public/', '', $path),
+                    'image_path' => $path,
                 ]);
             }
         }
 
-        return redirect()->route('kalakalkoto.index')->with('success', 'Item updated successfully.');
+        return redirect()->route('kalakalkoto')->with('success', 'Item updated successfully.');
     }
 
     public function destroy($id)
