@@ -30,6 +30,14 @@
                             View My Listings
                         </a>
                     </li>
+                    <li>
+                        <a
+                            :href="route('kalakalchat.index')"
+                            class="text-gray-900 font-bold dark:text-white hover:underline"
+                        >
+                            View Message
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>

@@ -12,9 +12,10 @@ return new class extends Migration {
     {
         Schema::create('kalakalkoto_messages', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('conversation_id')->constrained('kalakalkoto_conversations')->onDelete('cascade');
+            $table->longText('message')->nullable();
             $table->foreignId('sender_id')->constrained('users')->onDelete('cascade');
-            $table->text('content');
+            $table->foreignId('receiver_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('conversation_id')->constrained('kalakalkoto_conversations')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

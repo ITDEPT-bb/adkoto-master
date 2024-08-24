@@ -7,6 +7,7 @@ use App\Http\Controllers\AdkotoController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\KalakalkotoMessageController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
@@ -50,6 +51,9 @@ Route::middleware(['auth', 'verified'])->prefix('/kalakalkoto')->group(function 
 
     // Delete
     Route::delete('/{id}', [KalakalkotoController::class, 'destroy'])->name('kalakalkoto.destroy');
+
+    // Chat
+    Route::get('/u/chat/it', [KalakalkotoMessageController::class, 'index'])->name('kalakalchat.index');
 });
 
 // Chatkoto
