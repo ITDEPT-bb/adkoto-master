@@ -53,7 +53,11 @@ Route::middleware(['auth', 'verified'])->prefix('/kalakalkoto')->group(function 
     Route::delete('/{id}', [KalakalkotoController::class, 'destroy'])->name('kalakalkoto.destroy');
 
     // Chat
-    Route::get('/u/chat/it', [KalakalkotoMessageController::class, 'index'])->name('kalakalchat.index');
+    Route::get('/items/chat', [KalakalkotoMessageController::class, 'index'])->name('kalakalchat.index');
+    // Route::get('/items/chat/{kalakalId}', [KalakalkotoMessageController::class, 'showList'])->name('kalakalchat.showList');
+    Route::get('/chat/conversation/klklktu/{user}/{kalakalId}', [KalakalkotoMessageController::class, 'getConversation'])->name('kalakalchat.getConversation');
+    Route::post('/chat/conversations/{conversation}/message', [KalakalkotoMessageController::class, 'sendMessage'])->name('kalakalchat.messages.store');
+    Route::get('/chat/conversations/{conversationId}/messages', [KalakalkotoMessageController::class, 'fetchMessages'])->name('kalakalchat.conversations.fetchMessages');
 });
 
 // Chatkoto

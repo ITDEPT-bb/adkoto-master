@@ -42,8 +42,8 @@ class KalakalkotoConversation extends Model
         return $this->belongsTo(KalakalkotoItem::class, 'kalakal_id');
     }
 
-    // public function lastMessage()
-    // {
-    //     return $this->belongsTo(Message::class, 'last_message_id');
-    // }
+    public function lastMessage()
+    {
+        return $this->belongsTo(Message::class, 'last_message_id');
+    }
 }
