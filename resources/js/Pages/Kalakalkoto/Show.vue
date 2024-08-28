@@ -62,28 +62,56 @@
                             v-if="kalakalitem.user.id !== authUser.id"
                             class="mt-6 sm:gap-4 sm:items-center sm:flex sm:mt-8"
                         >
-                            <a
+                            <!-- <a
                                 href="#"
                                 title=""
                                 class="flex items-center justify-center py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                                 role="button"
+                            > -->
+                            <Link
+                                :href="
+                                    route('chat.conversations.show', {
+                                        user: kalakalitem.user.id,
+                                    })
+                                "
                             >
-                                <svg
-                                    class="w-5 h-5 -ms-2 me-2"
-                                    aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="24"
-                                    height="24"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                ></svg>
-                                Contact Seller
-                            </a>
+                                <div class="flex gap-3 hover:underline">
+                                    <MessageIcon />
+                                    <p class="font-bold">Contact Seller</p>
+                                </div>
+                                <!-- </a> -->
+                            </Link>
                         </div>
 
                         <hr
                             class="my-6 md:my-8 border-gray-200 dark:border-gray-800"
                         />
+
+                        <div
+                            class="flex items-center text-gray-700 my-2 dark:text-gray-300"
+                        >
+                            <UserIcon
+                                class="w-5 h-5 mr-2 text-gray-500 dark:text-gray-400"
+                            />
+                            <p
+                                class="text-sm font-semibold text-gray-600 dark:text-gray-400"
+                            >
+                                {{ kalakalitem.user.name }}
+                            </p>
+                        </div>
+
+                        <div
+                            class="flex items-center text-gray-700 my-2 dark:text-gray-300"
+                        >
+                            <MapPinIcon
+                                class="w-5 h-5 mr-2 text-gray-500 dark:text-gray-400"
+                            />
+                            <p
+                                class="text-sm font-semibold text-gray-600 dark:text-gray-400"
+                            >
+                                {{ kalakalitem.location }}
+                            </p>
+                        </div>
 
                         <p class="mb-6 text-gray-500 dark:text-gray-400">
                             {{ kalakalitem.description }}
@@ -318,7 +346,7 @@
 
 <script setup>
 import { ref } from "vue";
-import { usePage, Head } from "@inertiajs/vue3";
+import { usePage, Head, Link } from "@inertiajs/vue3";
 import KalakalLayout from "@/Layouts/KalakalLayout.vue";
 import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
 import KalakalMenu from "@/Components/Kalakalkoto/KalakalMenu.vue";
@@ -335,6 +363,9 @@ import {
     ExclamationTriangleIcon,
     CheckCircleIcon,
 } from "@heroicons/vue/24/outline";
+import MessageIcon from "@/Components/Icons/MessageIcon.vue";
+import UserIcon from "@/Components/Icons/UserIcon.vue";
+import MapPinIcon from "@/Components/Icons/MapPinIcon.vue";
 
 const open = ref(false);
 const openDeleteModal = () => {
