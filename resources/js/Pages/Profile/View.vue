@@ -20,6 +20,8 @@ import TextInput from "@/Components/TextInput.vue";
 import PostAttachments from "@/Components/Tribekoto/PostAttachments.vue";
 import TabPhotos from "@/Pages/Profile/TabPhotos.vue";
 import FollowingList from "@/Components/Tribekoto/FollowingList.vue";
+import ProfileCoverModal from "@/Components/Tribekoto/ProfileCoverModal.vue";
+import ProfileAvatarModal from "@/Components/Tribekoto/ProfileAvatarModal.vue";
 
 import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
 
@@ -27,19 +29,35 @@ import followIcon from "/public/img/icons/heartfollow.png";
 import unfollowIcon from "/public/img/icons/heartunfollow.png";
 import MessageIcon from "@/Components/Icons/MessageIcon.vue";
 
-const imagesForm = useForm({
-    avatar: null,
-    cover: null,
-});
+// const imagesForm = useForm({
+//     avatar: null,
+//     cover: null,
+// });
 
 const showNotification = ref(true);
-const coverImageSrc = ref("");
-const avatarImageSrc = ref("");
+// const coverImageSrc = ref("");
+// const avatarImageSrc = ref("");
 const searchFollowersKeyword = ref("");
 const searchFollowingsKeyword = ref("");
 const authUser = usePage().props.auth.user;
 
 const isMyProfile = computed(() => authUser && authUser.id === props.user.id);
+
+const isOpen = ref(false);
+const openModal = () => {
+    isOpen.value = true;
+};
+const closeModal = () => {
+    isOpen.value = false;
+};
+
+const isOpenAvatar = ref(false);
+const openModalAvatar = () => {
+    isOpenAvatar.value = true;
+};
+const closeModalAvatar = () => {
+    isOpenAvatar.value = false;
+};
 
 const props = defineProps({
     errors: Object,
@@ -63,63 +81,63 @@ const props = defineProps({
     photos: Array,
 });
 
-function onCoverChange(event) {
-    imagesForm.cover = event.target.files[0];
-    if (imagesForm.cover) {
-        const reader = new FileReader();
-        reader.onload = () => {
-            coverImageSrc.value = reader.result;
-        };
-        reader.readAsDataURL(imagesForm.cover);
-    }
-}
+// function onCoverChange(event) {
+//     imagesForm.cover = event.target.files[0];
+//     if (imagesForm.cover) {
+//         const reader = new FileReader();
+//         reader.onload = () => {
+//             coverImageSrc.value = reader.result;
+//         };
+//         reader.readAsDataURL(imagesForm.cover);
+//     }
+// }
 
-function onAvatarChange(event) {
-    imagesForm.avatar = event.target.files[0];
-    if (imagesForm.avatar) {
-        const reader = new FileReader();
-        reader.onload = () => {
-            avatarImageSrc.value = reader.result;
-        };
-        reader.readAsDataURL(imagesForm.avatar);
-    }
-}
+// function onAvatarChange(event) {
+//     imagesForm.avatar = event.target.files[0];
+//     if (imagesForm.avatar) {
+//         const reader = new FileReader();
+//         reader.onload = () => {
+//             avatarImageSrc.value = reader.result;
+//         };
+//         reader.readAsDataURL(imagesForm.avatar);
+//     }
+// }
 
-function resetCoverImage() {
-    imagesForm.cover = null;
-    coverImageSrc.value = null;
-}
+// function resetCoverImage() {
+//     imagesForm.cover = null;
+//     coverImageSrc.value = null;
+// }
 
-function resetAvatarImage() {
-    imagesForm.avatar = null;
-    avatarImageSrc.value = null;
-}
+// function resetAvatarImage() {
+//     imagesForm.avatar = null;
+//     avatarImageSrc.value = null;
+// }
 
-function submitCoverImage() {
-    imagesForm.post(route("profile.updateImages"), {
-        preserveScroll: true,
-        onSuccess: (user) => {
-            showNotification.value = true;
-            resetCoverImage();
-            setTimeout(() => {
-                showNotification.value = false;
-            }, 3000);
-        },
-    });
-}
+// function submitCoverImage() {
+//     imagesForm.post(route("profile.updateImages"), {
+//         preserveScroll: true,
+//         onSuccess: (user) => {
+//             showNotification.value = true;
+//             resetCoverImage();
+//             setTimeout(() => {
+//                 showNotification.value = false;
+//             }, 3000);
+//         },
+//     });
+// }
 
-function submitAvatarImage() {
-    imagesForm.post(route("profile.updateImages"), {
-        preserveScroll: true,
-        onSuccess: (user) => {
-            showNotification.value = true;
-            resetAvatarImage();
-            setTimeout(() => {
-                showNotification.value = false;
-            }, 3000);
-        },
-    });
-}
+// function submitAvatarImage() {
+//     imagesForm.post(route("profile.updateImages"), {
+//         preserveScroll: true,
+//         onSuccess: (user) => {
+//             showNotification.value = true;
+//             resetAvatarImage();
+//             setTimeout(() => {
+//                 showNotification.value = false;
+//             }, 3000);
+//         },
+//     });
+// }
 
 const isLoading = ref(false);
 function followUser() {
@@ -160,15 +178,23 @@ function followUser() {
                 <div
                     class="group relative bg-white dark:bg-slate-950 dark:text-gray-100"
                 >
-                    <img
-                        :src="
-                            coverImageSrc ||
-                            user.cover_url ||
-                            '/img/default_cover.jpg'
-                        "
+                    <!-- <img
+                        :src="user.cover_url || '/img/default_cover.jpg'"
                         class="w-full h-56 sm:h-[400px] object-cover"
+                    /> -->
+                    <img
+                        :src="user.cover_url || '/img/default_cover.jpg'"
+                        class="w-full h-56 sm:h-[400px] object-cover hover:opacity-90 hover:cursor-pointer"
+                        @click="openModal"
                     />
-                    <div v-if="isMyProfile" class="absolute top-2 right-2">
+
+                    <!-- Modal Component -->
+                    <ProfileCoverModal
+                        :imageSrc="user.cover_url || '/img/default_cover.jpg'"
+                        :isOpen="isOpen"
+                        @close="closeModal"
+                    />
+                    <!-- <div v-if="isMyProfile" class="absolute top-2 right-2">
                         <button
                             v-if="!coverImageSrc"
                             class="bg-gray-50 hover:bg-gray-100 text-gray-800 py-1 px-2 text-xs flex items-center opacity-0 group-hover:opacity-100"
@@ -219,7 +245,7 @@ function followUser() {
                                 Submit
                             </button>
                         </div>
-                    </div>
+                    </div> -->
 
                     <!-- <div class="flex flex-col md:flex-row"> -->
                     <div class="flex flex-row md:flex-row">
@@ -228,14 +254,22 @@ function followUser() {
                         >
                             <img
                                 :src="
-                                    avatarImageSrc ||
                                     user.avatar_url ||
                                     '/img/default_avatar.webp'
                                 "
-                                class="w-24 h-24 sm:w-full sm:h-full object-cover rounded-full"
+                                class="w-24 h-24 sm:w-full sm:h-full object-cover rounded-full hover:opacity-95 hover:cursor-pointer"
+                                @click="openModalAvatar"
                             />
 
-                            <button
+                            <ProfileAvatarModal
+                                :imageSrc="
+                                    user.avatar_url || '/img/default_avatar.jpg'
+                                "
+                                :isOpenAvatar="isOpenAvatar"
+                                @close="closeModalAvatar"
+                            />
+
+                            <!-- <button
                                 v-if="!avatarImageSrc"
                                 class="absolute left-0 top-0 right-0 bottom-0 bg-black/50 text-gray-200 rounded-full opacity-0 flex items-center justify-center group-hover/avatar:opacity-100"
                             >
@@ -264,7 +298,7 @@ function followUser() {
                                 >
                                     <CheckCircleIcon class="h-5 w-5" />
                                 </button>
-                            </div>
+                            </div> -->
                         </div>
                         <div
                             class="flex justify-between items-center flex-1 px-2 py-1 sm:px-4 sm:py-2"
