@@ -134,7 +134,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/profile/update-images', [ProfileController::class, 'updateImage'])
         ->name('profile.updateImages');
 
+
     Route::post('/user/follow/{user}', [UserController::class, 'follow'])->name('user.follow');
+
+    // Updating of cover photo and profile picture
+    Route::get('/user/cover/{user}', [ProfileController::class, 'coverPage'])->name('profile.coverPage');
+    Route::post('/profile/update-cover', [ProfileController::class, 'updateCover'])
+        ->name('profile.updateCover');
 
     Route::get('/api/check-profile', [ProfileController::class, 'checkProfile']);
 

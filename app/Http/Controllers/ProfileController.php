@@ -170,4 +170,37 @@ class ProfileController extends Controller
 
         return response()->json(new UserResource($user));
     }
+
+    public function coverPage(Request $request, User $user)
+    {
+        return Inertia::render('Profile/EditCover', [
+            'user' => new UserResource($user),
+        ]);
+    }
+
+    public function updateCover(Request $request)
+    {
+        $data = $request->validate([
+            'cover' => ['nullable', 'image'],
+        ]);
+
+        $user = $request->user();
+
+        /** @var \Illuminate\Http\UploadedFile $cover */
+        $cover = $data['cover'] ?? null;
+
+        if ($cover) {
+            if ($user->cover_path) {
+                Storage::disk('public')->delete($user->cover_path);
+            }
+
+            $path = $cover->store('user-' . $user->id, 'public');
+
+            $user->update(['cover_path' => $path]);
+
+            return response()->json(['message' => 'Your cover image was updated successfully!', 'path' => $path], 200);
+        }
+
+        return response()->json(['message' => 'No image provided'], 400);
+    }
 }

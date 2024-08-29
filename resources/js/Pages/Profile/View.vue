@@ -184,7 +184,7 @@ function followUser() {
                     /> -->
                     <img
                         :src="user.cover_url || '/img/default_cover.jpg'"
-                        class="w-full h-56 sm:h-[400px] object-cover hover:opacity-90 hover:cursor-pointer"
+                        class="w-full aspect-[3/1] min-h-[150px] max-h-[400px] object-cover hover:opacity-90 cursor-pointer"
                         @click="openModal"
                     />
 
