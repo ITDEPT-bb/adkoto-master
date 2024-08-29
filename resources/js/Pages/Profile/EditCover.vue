@@ -6,11 +6,14 @@ import { ref } from "vue";
 import { Cropper } from "vue-advanced-cropper";
 import "vue-advanced-cropper/dist/style.css";
 import axiosClient from "@/axiosClient.js";
+import { useToast } from "vue-toastification";
 
 // Local refs
 const img = ref(null);
 const fileInput = ref(null);
 const croppedImage = ref(null);
+const toast = useToast();
+const isLoading = ref(false);
 
 // Function to handle image upload
 const handleImageUpload = (event) => {
@@ -40,14 +43,12 @@ const resizeImage = (dataURL, width, height) => {
     });
 };
 
-// Function to crop the image and submit to the server
 const cropAndSubmit = async () => {
+    isLoading.value = true;
     const canvas = croppedImage.value.getCanvas();
     if (canvas) {
-        // Get the cropped image data URL
         const croppedDataURL = canvas.toDataURL();
 
-        // Resize the image to fit the target display dimensions (e.g., 1200x400 for a 3:1 aspect ratio)
         const resizedDataURL = await resizeImage(croppedDataURL, 1200, 400);
         const blob = await (await fetch(resizedDataURL)).blob();
         const formData = new FormData();
@@ -65,16 +66,18 @@ const cropAndSubmit = async () => {
             );
 
             if (response.status === 200) {
-                alert("Cover image has been updated successfully!");
+                toast.success("Cover image has been updated successfully!");
+                window.location.href = "/";
             }
         } catch (error) {
             console.error("Error uploading image:", error);
-            alert("There was an error updating your cover image.");
+            toast.error("There was an error updating your cover image.");
+        } finally {
+            isLoading.value = false;
         }
     }
 };
 
-// Function to reselect the image
 const reselectImage = () => {
     img.value = null;
     fileInput.value.value = null;
@@ -159,7 +162,13 @@ const reselectImage = () => {
             <button
                 v-if="img"
                 @click="cropAndSubmit"
-                class="mt-4 bg-blue-500 text-white py-2 px-4 rounded"
+                :disabled="isLoading"
+                :class="{
+                    'mt-4 bg-blue-100 text-white py-2 px-4 rounded transition duration-300 ease-in-out cursor-not-allowed':
+                        isLoading,
+                    'mt-4 bg-blue-500 text-white py-2 px-4 rounded transition duration-300 ease-in-out':
+                        !isLoading,
+                }"
             >
                 Save Cover Photo
             </button>

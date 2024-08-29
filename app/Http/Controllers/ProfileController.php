@@ -203,4 +203,36 @@ class ProfileController extends Controller
 
         return response()->json(['message' => 'No image provided'], 400);
     }
+
+    public function avatarPage(Request $request, User $user)
+    {
+        return Inertia::render('Profile/EditAvatar', [
+            'user' => new UserResource($user),
+        ]);
+    }
+
+    public function updateAvatar(Request $request)
+    {
+        $data = $request->validate([
+            'avatar' => ['nullable', 'image', 'max:2048'],
+        ]);
+
+        $user = $request->user();
+
+        /** @var \Illuminate\Http\UploadedFile $avatar */
+        $avatar = $data['avatar'] ?? null;
+
+        if ($avatar) {
+            if ($user->avatar_path) {
+                Storage::disk('public')->delete($user->avatar_path);
+            }
+
+            $path = $avatar->store('user-' . $user->id, 'public');
+            $user->update(['avatar_path' => $path]);
+
+            return response()->json(['message' => 'Avatar has been updated successfully!'], 200);
+        }
+
+        return response()->json(['error' => 'No image provided'], 400);
+    }
 }
