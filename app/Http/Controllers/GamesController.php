@@ -15,7 +15,7 @@ class GamesController extends Controller
             [
                 'id' => 1,
                 'name' => 'Meow',
-                'icon' => asset('img/GameIcons/galaxyshooter300200.webp'),
+                'icon' => asset('img/GameIcons/MeowIcon.jpeg'),
                 'description' => 'Meow.',
                 'iframe_url' => asset('Games/Meow/index.html'),
             ],
@@ -95,6 +95,13 @@ class GamesController extends Controller
                 'icon' => asset('img/GameIcons/Highway-Traffic-2-lg.jpg'),
                 'description' => 'Highway Traffic.',
                 'iframe_url' => 'https://www.onlinegames.io/games/2022/unity/highway-traffic/index.html',
+            ],
+            [
+                'id' => 13,
+                'name' => 'Cat Simulator',
+                'icon' => asset('img/GameIcons/Cat-Simulator-Online-lg.jpg'),
+                'description' => 'Cat Simulator.',
+                'iframe_url' => 'https://www.onlinegames.io/games/2022/unity4/cat-simulator/index.html',
             ],
         ];
 

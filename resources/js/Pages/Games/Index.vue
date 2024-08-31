@@ -2,7 +2,7 @@
     <Head title="Games" />
 
     <AuthenticatedLayout>
-        <div class="container mx-auto p-6">
+        <div class="container mx-auto p-6 h-full overflow-y-auto">
             <h1 class="text-3xl font-bold mb-6">Gameskoto</h1>
 
             <div
@@ -24,7 +24,7 @@
                             class="absolute inset-0 flex items-center justify-center text-white text-lg font-bold rounded-lg"
                         >
                             <p
-                                class="bg-black mt-16 bg-opacity-90 py-1 px-4 rounded"
+                                class="bg-blue-500 mt-16 bg-opacity-90 py-1 px-4 rounded"
                             >
                                 {{ game.name }}
                             </p>
