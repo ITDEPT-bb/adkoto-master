@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
@@ -7,7 +7,7 @@ import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
 import { Link, router, usePage } from "@inertiajs/vue3";
 import TextInput from "@/Components/TextInput.vue";
 import { MoonIcon } from "@heroicons/vue/24/solid";
-import logo from "/public/img/adkoto.png";
+import logo from "/public/img/tribekoto.png";
 
 // import tribekotoIcon from '/public/img/icons/tribekotoicon.png';
 // import adkotoIcon from '/public/img/icons/adkotoicon.png';
@@ -15,10 +15,11 @@ import logo from "/public/img/adkoto.png";
 import tribekotoIcon from "/public/img/icons/tribekoto.png";
 import adkotoIcon from "/public/img/icons/adkoto.png";
 import kalakalkotoIcon from "/public/img/icons/kalakalkoto.png";
-import gameIcon from "/public/img/icons/gameicon.png";
 import messageIcon from "/public/img/icons/message.png";
-import notificationIcon from "/public/img/icons/notification.png";
+// import notificationIcon from "/public/img/icons/notification.png";
 import NotificationDropdown from "@/Components/Notification/NotificationDropdown.vue";
+
+import axiosClient from "@/axiosClient.js";
 
 const showingNavigationDropdown = ref(false);
 const keywords = ref(usePage().props.search || "");
@@ -56,7 +57,7 @@ function toggleDarkMode() {
                     <div class="flex mr-2">
                         <!-- Logo -->
                         <div class="shrink-0 flex items-center">
-                            <Link :href="route('adkoto')">
+                            <Link :href="route('dashboard')">
                                 <!-- <ApplicationLogo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" /> -->
                                 <img
                                     :src="logo"
@@ -70,6 +71,12 @@ function toggleDarkMode() {
                     <!-- <div class="hidden sm:flex sm:items-center sm:ms-6"> -->
                     <!-- <div class="flex-1"> -->
                     <div class="flex items-center sm:gap-9 p-2 flex-1">
+                        <!-- <TextInput
+                            v-model="keywords"
+                            placeholder="Search on the website"
+                            class="w-full sm:w-8/12"
+                            @keyup.enter="search"
+                        /> -->
                         <TextInput
                             v-model="keywords"
                             placeholder="Search on the website"
@@ -81,7 +88,7 @@ function toggleDarkMode() {
                             <!-- Tribekoto -->
                             <img
                                 :src="tribekotoIcon"
-                                class="h-8 w-auto hidden sm:flex"
+                                class="hidden sm:flex h-8 w-auto"
                                 alt="Logo"
                             />
                         </Link>
@@ -90,21 +97,16 @@ function toggleDarkMode() {
                             <!-- Kalakalkoto -->
                             <img
                                 :src="kalakalkotoIcon"
-                                class="h-8 w-auto hidden sm:flex"
+                                class="hidden sm:flex h-8 w-auto"
                                 alt="Logo"
                             />
                         </Link>
 
-                        <!-- <Link :href="route('adkoto')"> -->
-                        <!-- Adkoto -->
-                        <!-- <img :src="adkotoIcon" class="h-8 w-auto hidden sm:flex" alt="Logo" />
-                            </Link> -->
-
-                        <Link :href="route('games.index')">
+                        <Link :href="route('adkoto')">
                             <!-- Adkoto -->
                             <img
-                                :src="gameIcon"
-                                class="h-8 w-auto hidden sm:flex"
+                                :src="adkotoIcon"
+                                class="hidden sm:flex h-8 w-auto"
                                 alt="Logo"
                             />
                         </Link>
@@ -251,18 +253,18 @@ function toggleDarkMode() {
                         </div>
 
                         <div class="mt-3 space-y-1">
-                            <ResponsiveNavLink :href="route('dashboard')">
+                            <!-- <ResponsiveNavLink :href="route('dashboard')">
                                 Tribekoto
-                            </ResponsiveNavLink>
+                            </ResponsiveNavLink> -->
                             <ResponsiveNavLink :href="route('chat.index')">
                                 Chat
                             </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('kalakalkoto')">
                                 Kalakalkoto
                             </ResponsiveNavLink>
-                            <!-- <ResponsiveNavLink :href="route('adkoto')">
+                            <ResponsiveNavLink :href="route('adkoto')">
                                 Adkoto
-                            </ResponsiveNavLink> -->
+                            </ResponsiveNavLink>
                             <ResponsiveNavLink
                                 :href="
                                     route('profile', {

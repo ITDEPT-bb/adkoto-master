@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\GamesController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\KalakalkotoController;
 use App\Http\Controllers\AdkotoController;
@@ -93,6 +94,10 @@ Route::get('/group/approve-invitation/{token}', [GroupController::class, 'approv
     ->name('group.approveInvitation');
 
 Route::middleware(['auth', 'verified'])->group(function () {
+
+    // Games
+    Route::get('/games', [GamesController::class, 'index'])->name('games.index');
+    Route::get('/games/{id}', [GamesController::class, 'show'])->name('game.show');
 
     // Groups
     Route::prefix('/group')->group(function () {

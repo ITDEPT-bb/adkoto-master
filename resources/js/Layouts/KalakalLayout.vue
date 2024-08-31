@@ -16,6 +16,7 @@ import tribekotoIcon from "/public/img/icons/tribekoto.png";
 import adkotoIcon from "/public/img/icons/adkoto.png";
 import kalakalkotoIcon from "/public/img/icons/kalakalkoto.png";
 import messageIcon from "/public/img/icons/message.png";
+import gameIcon from "/public/img/icons/gameicon.png";
 import notificationIcon from "/public/img/icons/notification.png";
 import NotificationDropdown from "@/Components/Notification/NotificationDropdown.vue";
 
@@ -95,6 +96,15 @@ function toggleDarkMode() {
                             <img
                                 :src="adkotoIcon"
                                 class="hidden sm:flex h-8 w-auto"
+                                alt="Logo"
+                            />
+                        </Link>
+
+                        <Link :href="route('games.index')">
+                            <!-- Adkoto -->
+                            <img
+                                :src="gameIcon"
+                                class="h-8 w-auto hidden sm:flex"
                                 alt="Logo"
                             />
                         </Link>
