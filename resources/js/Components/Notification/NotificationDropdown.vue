@@ -4,7 +4,7 @@
         <button @click="showDropdown = !showDropdown" class="relative block">
             <img
                 :src="notificationIcon"
-                class="h-8 w-auto"
+                class="md:h-auto md:w-12"
                 alt="Notifications"
             />
             <!-- Unread count indicator -->

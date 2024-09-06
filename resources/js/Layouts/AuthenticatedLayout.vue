@@ -71,7 +71,7 @@ function toggleDarkMode() {
 
                     <!-- <div class="hidden sm:flex sm:items-center sm:ms-6"> -->
                     <!-- <div class="flex-1"> -->
-                    <div class="flex items-center sm:gap-9 p-2 flex-1">
+                    <div class="flex items-center sm:gap-9 p-4 flex-1">
                         <!-- <TextInput
                             v-model="keywords"
                             placeholder="Search on the website"
@@ -94,7 +94,7 @@ function toggleDarkMode() {
                             <!-- Kalakalkoto -->
                             <img
                                 :src="kalakalkotoIcon"
-                                class="hidden sm:flex h-8 w-auto"
+                                class="hidden sm:flex h-auto md:w-12"
                                 alt="Logo"
                             />
                         </Link>
@@ -103,7 +103,7 @@ function toggleDarkMode() {
                             <!-- Adkoto -->
                             <img
                                 :src="adkotoIcon"
-                                class="hidden sm:flex h-8 w-auto"
+                                class="hidden sm:flex md:h-auto md:w-12"
                                 alt="Logo"
                             />
                         </Link>
@@ -112,7 +112,7 @@ function toggleDarkMode() {
                             <!-- Adkoto -->
                             <img
                                 :src="gameIcon"
-                                class="h-8 w-auto hidden sm:flex"
+                                class="hidden sm:flex md:h-auto md:w-12"
                                 alt="Logo"
                             />
                         </Link>
@@ -121,7 +121,7 @@ function toggleDarkMode() {
                             <!-- Chatkoto -->
                             <img
                                 :src="messageIcon"
-                                class="hidden sm:flex h-8 w-auto"
+                                class="hidden sm:flex md:h-auto md:w-12"
                                 alt="Logo"
                             />
                         </Link>
@@ -270,6 +270,13 @@ function toggleDarkMode() {
                             </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('adkoto')">
                                 Adkoto
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink
+                                :href="
+                                    route('notifications.fetchAllNotifications')
+                                "
+                            >
+                                Notifications
                             </ResponsiveNavLink>
                             <ResponsiveNavLink
                                 :href="

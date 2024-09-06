@@ -81,7 +81,7 @@ function toggleDarkMode() {
                             <!-- Tribekoto -->
                             <img
                                 :src="tribekotoIcon"
-                                class="hidden sm:flex h-8 w-auto"
+                                class="hidden sm:flex h-auto md:w-12"
                                 alt="Logo"
                             />
                         </Link>
@@ -90,7 +90,7 @@ function toggleDarkMode() {
                             <!-- Kalakalkoto -->
                             <img
                                 :src="kalakalkotoIcon"
-                                class="hidden sm:flex h-8 w-auto"
+                                class="hidden sm:flex h-auto md:w-12"
                                 alt="Logo"
                             />
                         </Link>
@@ -99,7 +99,7 @@ function toggleDarkMode() {
                             <!-- Adkoto -->
                             <img
                                 :src="adkotoIcon"
-                                class="hidden sm:flex h-8 w-auto"
+                                class="hidden sm:flex h-auto md:w-12"
                                 alt="Logo"
                             />
                         </Link>
@@ -108,7 +108,7 @@ function toggleDarkMode() {
                             <!-- Adkoto -->
                             <img
                                 :src="gameIcon"
-                                class="h-8 w-auto hidden sm:flex"
+                                class="h-auto md:w-12 hidden sm:flex"
                                 alt="Logo"
                             />
                         </Link>
@@ -262,6 +262,13 @@ function toggleDarkMode() {
                             </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('adkoto')">
                                 Adkoto
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink
+                                :href="
+                                    route('notifications.fetchAllNotifications')
+                                "
+                            >
+                                Notifications
                             </ResponsiveNavLink>
                             <ResponsiveNavLink
                                 :href="
