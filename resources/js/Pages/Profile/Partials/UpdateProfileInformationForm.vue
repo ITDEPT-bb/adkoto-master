@@ -108,7 +108,6 @@ const config = {
                     type="email"
                     class="mt-1 block w-full"
                     v-model="form.email"
-                    required
                     autocomplete="username"
                 />
 
@@ -144,7 +143,6 @@ const config = {
                     type="text"
                     class="mt-1 block w-full"
                     v-model="form.phone"
-                    required
                     autocomplete="phone"
                 />
 

@@ -159,7 +159,7 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
 
-        $isProfileComplete = $user->surname && $user->username && $user->phone && $user->birthday && $user->gender;
+        $isProfileComplete = $user->surname && $user->username && $user->birthday && $user->gender;
 
         return response()->json(['isProfileComplete' => $isProfileComplete]);
     }

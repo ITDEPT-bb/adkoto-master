@@ -19,7 +19,8 @@ use Devdojo\Auth\Models\User as AuthUser;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class User extends Authenticatable implements MustVerifyEmail, FilamentUser
+// class User extends Authenticatable implements MustVerifyEmail, FilamentUser
+class User extends Authenticatable implements FilamentUser
     // class User extends AuthUser implements MustVerifyEmail, FilamentUser
 {
     use HasFactory, Notifiable;
