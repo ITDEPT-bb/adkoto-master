@@ -22,9 +22,9 @@ const config = ref({
 const form = useForm({
     name: "",
     // surname: "",
-    // email: "",
-    contact: "",
-    // phone: "",
+    email: "",
+    // contact: "",
+    phone: "",
     // birthday: "",
     // gender: "",
     password: "",
@@ -65,16 +65,22 @@ const submit = () => {
                 <InputError class="mt-2" :message="form.errors.surname" />
             </div> -->
 
-            <!-- <div class="mt-4">
+            <div class="mt-4">
                 <InputLabel for="email" value="Email" />
 
-                <TextInput id="email" type="email" class="mt-1 block w-full" v-model="form.email" required
-                    autocomplete="username" />
+                <TextInput
+                    id="email"
+                    type="email"
+                    class="mt-1 block w-full"
+                    v-model="form.email"
+                    required
+                    autocomplete="username"
+                />
 
                 <InputError class="mt-2" :message="form.errors.email" />
-            </div> -->
+            </div>
 
-            <div class="mt-4">
+            <!-- <div class="mt-4">
                 <InputLabel for="contact" value="Email or Phone Number" />
 
                 <TextInput
@@ -87,14 +93,20 @@ const submit = () => {
                 />
 
                 <InputError class="mt-2" :message="form.errors.contact" />
-            </div>
-
-            <!-- <div class="mt-4">
-                <InputLabel for="phone" value="Mobile No." />
-                <TextInput id="phone" v-model="form.phone" type="tel" class="mt-1 block w-full" required
-                    autocomplete="phone" />
-                <InputError class="mt-2" :message="form.errors.phone" />
             </div> -->
+
+            <div class="mt-4">
+                <InputLabel for="phone" value="Mobile No." />
+                <TextInput
+                    id="phone"
+                    v-model="form.phone"
+                    type="tel"
+                    class="mt-1 block w-full"
+                    required
+                    autocomplete="phone"
+                />
+                <InputError class="mt-2" :message="form.errors.phone" />
+            </div>
 
             <!-- <div class="mt-4">
                 <InputLabel for="birthday" value="Birthday" />

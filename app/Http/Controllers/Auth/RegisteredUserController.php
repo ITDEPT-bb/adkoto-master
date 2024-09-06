@@ -37,49 +37,49 @@ class RegisteredUserController extends Controller
             'name' => 'required|string|max:255',
             // 'surname' => 'required|string|max:255',
             // 'username' => ['required', 'string', 'max:255', 'regex:/^[\w\-\.]+$/i'],
-            // 'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
-            // 'phone' => 'required|string|max:15',
+            'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
+            'phone' => 'required|string|max:15|unique:' . User::class,
             // 'birthday' => 'required|date|before:today',
             // 'gender' => ['required', Rule::in(['Male', 'Female', 'Other'])],
-            'contact' => [
-                'required',
-                function ($attribute, $value, $fail) {
-                    if (!filter_var($value, FILTER_VALIDATE_EMAIL) && !preg_match('/^09\d{9}$/', $value)) {
-                        $fail('The contact must be a valid email or a valid phone number');
-                    }
+            // 'contact' => [
+            //     'required',
+            //     function ($attribute, $value, $fail) {
+            //         if (!filter_var($value, FILTER_VALIDATE_EMAIL) && !preg_match('/^09\d{9}$/', $value)) {
+            //             $fail('The contact must be a valid email or a valid phone number');
+            //         }
 
-                    if (filter_var($value, FILTER_VALIDATE_EMAIL)) {
-                        if (User::where('email', $value)->exists()) {
-                            $fail('The email is already registered.');
-                        }
-                    } else {
-                        if (User::where('phone', $value)->exists()) {
-                            $fail('The phone number is already registered.');
-                        }
-                    }
-                },
-            ],
+            //         if (filter_var($value, FILTER_VALIDATE_EMAIL)) {
+            //             if (User::where('email', $value)->exists()) {
+            //                 $fail('The email is already registered.');
+            //             }
+            //         } else {
+            //             if (User::where('phone', $value)->exists()) {
+            //                 $fail('The phone number is already registered.');
+            //             }
+            //         }
+            //     },
+            // ],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        if (filter_var($request->contact, FILTER_VALIDATE_EMAIL)) {
-            $email = $request->contact;
-            $phone = null;
-        } else {
-            $email = null;
-            $phone = $request->contact;
-        }
+        // if (filter_var($request->contact, FILTER_VALIDATE_EMAIL)) {
+        //     $email = $request->contact;
+        //     $phone = null;
+        // } else {
+        //     $email = null;
+        //     $phone = $request->contact;
+        // }
 
         $user = User::create([
             'name' => $request->name,
             // 'surname' => $request->surname,
             // 'username' => $request->username,
-            // 'email' => $request->email,
-            // 'phone' => $request->phone,
+            'email' => $request->email,
+            'phone' => $request->phone,
             // 'birthday' => $request->birthday,
             // 'gender' => $request->gender,
-            'email' => $email,
-            'phone' => $phone,
+            // 'email' => $email,
+            // 'phone' => $phone,
             'password' => Hash::make($request->password),
         ]);
 
