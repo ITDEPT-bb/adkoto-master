@@ -62,7 +62,7 @@ function toggleDarkMode() {
                                 <!-- <ApplicationLogo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" /> -->
                                 <img
                                     :src="logo"
-                                    class="block h-9 w-auto"
+                                    class="block h-7 sm:h-9 w-auto"
                                     alt="Logo"
                                 />
                             </Link>
@@ -81,7 +81,7 @@ function toggleDarkMode() {
                         <TextInput
                             v-model="keywords"
                             placeholder="Search on the website"
-                            class="w-32 sm:w-1/2 sm:mr-32"
+                            class="w-32 sm:w-1/3 sm:mr-32"
                             @keyup.enter="search"
                         />
 

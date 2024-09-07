@@ -31,6 +31,18 @@ use Inertia\Inertia;
 Route::get('/', [HomeController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/terms', [HomeController::class, 'terms'])
+    ->name('terms.show');
+
+Route::get('/policy', [HomeController::class, 'policy'])
+    ->name('policy.show');
+
+Route::get('/copyright', [HomeController::class, 'copyright'])
+    ->name('copyright.show');
+
+Route::get('/faqs', [HomeController::class, 'faqs'])
+    ->name('faqs.show');
+
 // Kalakalkoto
 Route::middleware(['auth', 'verified'])->prefix('/kalakalkoto')->group(function () {
     Route::get('/', [KalakalkotoController::class, 'index'])->name('kalakalkoto');

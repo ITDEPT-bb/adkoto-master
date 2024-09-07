@@ -82,4 +82,28 @@ class HomeController extends Controller
             'suggestedUsers' => UserResource::collection($suggestedPeople)
         ]);
     }
+
+    public function policy(Request $request)
+    {
+        return Inertia::render('PrivacyPolicy', [
+        ]);
+    }
+
+    public function terms(Request $request)
+    {
+        return Inertia::render('TermsOfService', [
+        ]);
+    }
+
+    public function copyright(Request $request)
+    {
+        return Inertia::render('Copyright', [
+        ]);
+    }
+
+    public function faqs(Request $request)
+    {
+        return Inertia::render('Faqs', [
+        ]);
+    }
 }
