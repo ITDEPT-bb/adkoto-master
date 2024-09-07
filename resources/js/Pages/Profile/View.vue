@@ -182,11 +182,19 @@ function followUser() {
                         :src="user.cover_url || '/img/default_cover.jpg'"
                         class="w-full h-56 sm:h-[400px] object-cover"
                     /> -->
-                    <img
-                        :src="user.cover_url || '/img/default_cover.jpg'"
-                        class="w-full aspect-[3/1] min-h-[150px] max-h-[400px] object-cover hover:opacity-90 cursor-pointer"
-                        @click="openModal"
-                    />
+                    <div v-if="isMyProfile">
+                        <img
+                            :src="user.cover_url || '/img/default_cover.jpg'"
+                            class="w-full aspect-[3/1] min-h-[150px] max-h-[400px] object-cover hover:opacity-90 cursor-pointer"
+                            @click="openModal"
+                        />
+                    </div>
+                    <div v-else>
+                        <img
+                            :src="user.cover_url || '/img/default_cover.jpg'"
+                            class="w-full aspect-[3/1] min-h-[150px] max-h-[400px] object-cover hover:opacity-90 cursor-pointer"
+                        />
+                    </div>
 
                     <!-- Modal Component -->
                     <ProfileCoverModal
@@ -252,14 +260,25 @@ function followUser() {
                         <div
                             class="flex items-center justify-center relative group/avatar mt-[-32px] md:-mt-[64px] ml-[10px] w-[96px] h-[96px] md:w-[128px] md:h-[128px] rounded-full"
                         >
-                            <img
-                                :src="
-                                    user.avatar_url ||
-                                    '/img/default_avatar.webp'
-                                "
-                                class="w-24 h-24 sm:w-full sm:h-full object-cover rounded-full hover:opacity-95 hover:cursor-pointer"
-                                @click="openModalAvatar"
-                            />
+                            <div v-if="isMyProfile">
+                                <img
+                                    :src="
+                                        user.avatar_url ||
+                                        '/img/default_avatar.webp'
+                                    "
+                                    class="w-24 h-24 sm:w-full sm:h-full object-cover rounded-full hover:opacity-95 hover:cursor-pointer"
+                                    @click="openModalAvatar"
+                                />
+                            </div>
+                            <div v-else>
+                                <img
+                                    :src="
+                                        user.avatar_url ||
+                                        '/img/default_avatar.webp'
+                                    "
+                                    class="w-24 h-24 sm:w-full sm:h-full object-cover rounded-full hover:opacity-95 hover:cursor-pointer"
+                                />
+                            </div>
 
                             <ProfileAvatarModal
                                 :imageSrc="
