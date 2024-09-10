@@ -47,7 +47,7 @@
                 class="me-2 w-full focus-within:z-10 flex justify-center items-center align-middle"
             >
                 <a
-                    href="#"
+                    :href="route('auction')"
                     class="inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group"
                     :class="{
                         'text-blue-600 border-blue-600':

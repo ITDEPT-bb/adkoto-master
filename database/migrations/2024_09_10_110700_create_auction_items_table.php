@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->foreignId('category_id')->constrained('kalakalkoto_categories')->onDelete('cascade');
             $table->string('name');
             $table->text('description');
+            $table->string('location');
             $table->decimal('starting_price', 10, 2);
             $table->decimal('current_bid', 10, 2)->nullable();
             $table->decimal('bid_increment', 10, 2)->default(1.00);

@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('bids', function (Blueprint $table) {
             $table->id();
             $table->decimal('bid_amount', 10, 2);
-            $table->foreignId('item_id')->constrained('auction_items')->onDelete('cascade');
+            $table->foreignId('auction_item_id')->constrained('auction_items')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();

@@ -10,7 +10,15 @@ class KalakalkotoItem extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['user_id', 'category_id', 'name', 'description', 'price', 'status', 'location'];
+    protected $fillable = [
+        'user_id',
+        'category_id',
+        'name',
+        'description',
+        'price',
+        'status',
+        'location'
+    ];
 
     public function user()
     {

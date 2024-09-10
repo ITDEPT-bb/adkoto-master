@@ -5,6 +5,7 @@ use App\Http\Controllers\GamesController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\KalakalkotoController;
 use App\Http\Controllers\AdkotoController;
+use App\Http\Controllers\AuctionController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemController;
@@ -63,6 +64,15 @@ Route::middleware(['auth', 'verified'])->prefix('/kalakalkoto')->group(function 
 
     // Delete
     Route::delete('/{id}', [KalakalkotoController::class, 'destroy'])->name('kalakalkoto.destroy');
+});
+
+// Auction
+Route::middleware(['auth', 'verified'])->prefix('/auction')->group(function () {
+    Route::get('/', [AuctionController::class, 'index'])->name('auction');
+
+    // Create
+    Route::get('/create', [AuctionController::class, 'create'])->name('auction.create');
+    Route::post('/', [AuctionController::class, 'store'])->name('auction.store');
 });
 
 // Chatkoto
