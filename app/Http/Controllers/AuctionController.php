@@ -12,21 +12,33 @@ class AuctionController extends Controller
 {
     public function index()
     {
-        $auctionItem = AuctionItem::with(['attachments', 'user', 'category', 'bids'])
+        $normalBiddingItems = AuctionItem::with(['attachments', 'user', 'category', 'bids'])
             ->orderByDesc('created_at')
             ->where('bidding_type', 'normal')
             ->paginate(9);
 
-        $auctionItem->each(function ($auction) {
+        $normalBiddingItems->each(function ($auction) {
             $auction->attachments->each(function ($attachment) {
                 $attachment->image_path = asset('storage/' . $attachment->image_path);
             });
         });
 
+        $liveBiddingItem = AuctionItem::with(['attachments', 'user', 'category', 'bids'])
+            ->where('bidding_type', 'live')
+            ->inRandomOrder()
+            ->first();
+
+        if ($liveBiddingItem) {
+            $liveBiddingItem->attachments->each(function ($attachment) {
+                $attachment->image_path = asset('storage/' . $attachment->image_path);
+            });
+        }
+
         $categories = KalakalkotoCategory::all();
 
         return Inertia::render('Auction/Index', [
-            'normalBiddingItems' => $auctionItem,
+            'normalBiddingItems' => $normalBiddingItems,
+            'liveBiddingItem' => $liveBiddingItem,
             'categories' => $categories
         ]);
     }

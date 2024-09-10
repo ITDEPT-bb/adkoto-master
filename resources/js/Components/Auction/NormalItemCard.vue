@@ -23,30 +23,18 @@
             </p>
             <div class="mt-2">
                 <p class="text-md font-semibold text-gray-900">
-                    Starting Bid: {{ formatPrice(item.starting_bid) }}
+                    Starting Bid: {{ formatPrice(item.starting_price) }}
                 </p>
                 <p class="text-md font-semibold text-gray-900">
-                    Highest Bid: {{ formatPrice(item.highest_bid) }}
+                    Highest Bid: {{ formatPrice(item.current_bid) }}
                 </p>
             </div>
-            <!-- Uncomment if needed -->
-            <!-- <div class="mt-2 flex items-center text-gray-700">
-                <MapPinIcon class="w-5 h-5 mr-2 text-gray-500" />
-                <p class="text-sm font-semibold">{{ item.location }}</p>
-            </div>
-            <div class="flex items-center text-gray-700 mt-1">
-                <UserIcon class="w-5 h-5 mr-2 text-gray-500" />
-                <p class="text-sm font-semibold">{{ item.user.name }}</p>
-            </div> -->
         </div>
     </a>
 </template>
 
 <script setup>
 import { defineProps } from "vue";
-
-import MapPinIcon from "@/Components/Icons/MapPinIcon.vue";
-import UserIcon from "@/Components/Icons/UserIcon.vue";
 
 const props = defineProps({
     item: Object,

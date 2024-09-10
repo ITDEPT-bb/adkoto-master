@@ -10,7 +10,7 @@
                     <NormalItemList :items="normalBiddingItems" />
                 </div>
                 <div
-                    class="lg:col-span-3 bg-white px-6 py-4 rounded-lg shadow-sm"
+                    class="lg:col-span-3 bg-white px-4 py-4 lg:px-6 lg:py-6 rounded-lg shadow-sm"
                 >
                     <h2 class="text-2xl font-bold mb-4">Live Bidding</h2>
                     <NormalItemCard :item="liveBiddingItem" />
@@ -35,4 +35,5 @@ import NormalItemCard from "@/Components/Auction/NormalItemCard.vue";
 
 const { props } = usePage();
 const normalBiddingItems = ref(props.normalBiddingItems);
+const liveBiddingItem = ref(props.liveBiddingItem || null);
 </script>
