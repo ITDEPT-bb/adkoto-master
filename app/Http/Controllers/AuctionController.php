@@ -26,7 +26,7 @@ class AuctionController extends Controller
         $categories = KalakalkotoCategory::all();
 
         return Inertia::render('Auction/Index', [
-            'auctionItem' => $auctionItem,
+            'normalBiddingItems' => $auctionItem,
             'categories' => $categories
         ]);
     }
