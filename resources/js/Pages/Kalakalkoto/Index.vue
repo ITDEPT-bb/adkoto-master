@@ -3,6 +3,7 @@
 
     <KalakalLayout>
         <div class="max-w-7xl mx-auto h-full overflow-y-auto p-4">
+            <PageSelector />
             <KalakalMenu />
             <CategoryMenu :categories="categories" />
             <ProductList :kalakalitems="kalakalitems" />
@@ -21,6 +22,7 @@ import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
 import CategoryMenu from "@/Components/Kalakalkoto/CategoryMenu.vue";
 import ProductList from "@/Components/Kalakalkoto/ProductList.vue";
 import KalakalMenu from "@/Components/Kalakalkoto/KalakalMenu.vue";
+import PageSelector from "@/Components/Kalakalkoto/PageSelector.vue";
 
 const { props } = usePage();
 const kalakalitems = ref(props.kalakalitems);
