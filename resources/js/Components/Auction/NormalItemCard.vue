@@ -27,7 +27,12 @@
                         Starting Bid: {{ formatPrice(item.starting_price) }}
                     </p>
                     <p class="text-md font-semibold text-gray-900">
-                        Highest Bid: {{ formatPrice(item.current_bid) }}
+                        Highest Bid:
+                        {{
+                            item.highest_bid
+                                ? formatPrice(item.highest_bid)
+                                : "No bids yet"
+                        }}
                     </p>
                 </div>
             </div>

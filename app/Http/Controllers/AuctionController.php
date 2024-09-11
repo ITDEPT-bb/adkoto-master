@@ -8,6 +8,7 @@ use App\Models\KalakalkotoCategory;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
@@ -16,6 +17,7 @@ class AuctionController extends Controller
     public function index()
     {
         $normalBiddingItems = AuctionItem::with(['attachments', 'user', 'category', 'bids'])
+            ->select('*', DB::raw('(SELECT MAX(bid_amount) FROM bids WHERE bids.auction_item_id = auction_items.id) as highest_bid'))
             ->orderByDesc('created_at')
             ->where('bidding_type', 'normal')
             ->where('auction_ends_at', '>', Carbon::now())
@@ -28,6 +30,7 @@ class AuctionController extends Controller
         });
 
         $liveBiddingItem = AuctionItem::with(['attachments', 'user', 'category', 'bids'])
+            ->select('*', DB::raw('(SELECT MAX(bid_amount) FROM bids WHERE bids.auction_item_id = auction_items.id) as highest_bid'))
             ->where('bidding_type', 'live')
             ->inRandomOrder()
             ->first();
@@ -119,6 +122,7 @@ class AuctionController extends Controller
         $userId = Auth::id();
 
         $items = AuctionItem::where('user_id', $userId)
+            ->select('*', DB::raw('(SELECT MAX(bid_amount) FROM bids WHERE bids.auction_item_id = auction_items.id) as highest_bid'))
             ->with(['attachments', 'user', 'category'])
             ->orderByDesc('created_at')
             ->paginate(12);
