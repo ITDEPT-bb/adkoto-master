@@ -3,7 +3,7 @@
         v-if="item"
         class="block bg-white rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105"
     >
-        <a :href="route('kalakalkoto.show', { id: item.id })">
+        <a :href="route('auction.show', { id: item.id })">
             <div class="w-full h-48 bg-gray-200 overflow-hidden">
                 <img
                     :src="

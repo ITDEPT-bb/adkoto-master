@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\AuctionItem;
+use App\Models\Bid;
 use App\Models\KalakalkotoCategory;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
@@ -15,6 +17,7 @@ class AuctionController extends Controller
         $normalBiddingItems = AuctionItem::with(['attachments', 'user', 'category', 'bids'])
             ->orderByDesc('created_at')
             ->where('bidding_type', 'normal')
+            ->where('auction_ends_at', '>', Carbon::now())
             ->paginate(9);
 
         $normalBiddingItems->each(function ($auction) {
@@ -87,5 +90,26 @@ class AuctionController extends Controller
         }
 
         return redirect()->route('auction')->with('success', 'Item created successfully.');
+    }
+
+    public function show($id)
+    {
+        $auctionitem = AuctionItem::with(['attachments', 'user', 'category', 'bids.user'])
+            ->findOrFail($id);
+
+        $auctionitem->attachments->each(function ($attachment) {
+            $attachment->image_path = asset('storage/' . $attachment->image_path);
+        });
+
+        $highBid = Bid::with(['item', 'user'])
+            ->where('auction_item_id', $id)
+            ->orderBy('bid_amount', 'desc')
+            ->first();
+
+        return Inertia::render('Auction/Show', [
+            'item' => $auctionitem,
+            'highBid' => $highBid,
+            'bids' => $auctionitem->bids
+        ]);
     }
 }

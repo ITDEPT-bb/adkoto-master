@@ -73,6 +73,11 @@ Route::middleware(['auth', 'verified'])->prefix('/auction')->group(function () {
     // Create
     Route::get('/create', [AuctionController::class, 'create'])->name('auction.create');
     Route::post('/', [AuctionController::class, 'store'])->name('auction.store');
+
+    // Show
+    Route::get('/{id}', [AuctionController::class, 'show'])->name('auction.show');
+    Route::get('/category/{category_name}', [AuctionController::class, 'showCategory'])->name('auction.showCategory');
+    Route::get('/u/items/et/', [AuctionController::class, 'showUserItems'])->name('auction.showUserItems');
 });
 
 // Chatkoto
