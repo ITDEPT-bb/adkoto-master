@@ -88,18 +88,16 @@
                             </p>
                         </div>
 
-                        <div
-                            v-if="item.user.id !== authUser.id"
-                            class="mt-6 sm:gap-4 sm:items-center sm:flex sm:mt-8"
-                        >
+                        <div v-if="item.user.id !== authUser.id">
                             <Link
                                 :href="
                                     route('auction', {
                                         user: item.user.id,
                                     })
                                 "
+                                class="group my-6 sm:gap-4 sm:items-center justify-center sm:flex sm:my-4 bg-blue-300 hover:bg-blue-500 hover:text-white rounded-md p-2"
                             >
-                                <div class="flex gap-3 hover:underline">
+                                <div class="flex gap-3 group-hover:underline">
                                     <BankNoteIcon />
                                     <p class="font-bold">Place Bid</p>
                                 </div>
