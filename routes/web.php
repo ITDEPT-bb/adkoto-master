@@ -78,6 +78,11 @@ Route::middleware(['auth', 'verified'])->prefix('/auction')->group(function () {
     Route::get('/{id}', [AuctionController::class, 'show'])->name('auction.show');
     Route::get('/category/{category_name}', [AuctionController::class, 'showCategory'])->name('auction.showCategory');
     Route::get('/u/items/et/', [AuctionController::class, 'showUserItems'])->name('auction.showUserItems');
+
+    // Place Bid
+    Route::post('/bid/{id}', [AuctionController::class, 'placeBid'])->name('auction.placeBid');
+
+    Route::get('/{id}/bids', [AuctionController::class, 'getLatestBids']);
 });
 
 // Chatkoto

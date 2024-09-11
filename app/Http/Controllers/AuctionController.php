@@ -141,4 +141,47 @@ class AuctionController extends Controller
             'authId' => $userId
         ]);
     }
+
+    public function placeBid($id)
+    {
+        $auctionItem = AuctionItem::find($id);
+
+        if (!$auctionItem) {
+            return response()->json(['error' => 'Auction item not found'], 404);
+        }
+
+        $bidIncrement = $auctionItem->bid_increment;
+
+        $highestBid = $auctionItem->bids()->orderBy('bid_amount', 'desc')->first();
+        $currentHighestBidAmount = $highestBid ? $highestBid->bid_amount : 0;
+
+        $newBidAmount = $currentHighestBidAmount + $bidIncrement;
+
+        $userId = auth()->id();
+        $bid = new Bid();
+        $bid->auction_item_id = $auctionItem->id;
+        $bid->user_id = $userId;
+        $bid->bid_amount = $newBidAmount;
+        $bid->save();
+
+        // Step 6: Return a success response
+        return response()->json(['success' => 'Bid placed successfully', 'new_bid_amount' => $newBidAmount], 200);
+
+    }
+
+    public function getLatestBids($id)
+    {
+        $auctionitem = AuctionItem::with(['bids.user'])
+            ->findOrFail($id);
+
+        $highBid = Bid::with(['item', 'user'])
+            ->where('auction_item_id', $id)
+            ->orderBy('bid_amount', 'desc')
+            ->first();
+
+        return response()->json([
+            'bids' => $auctionitem->bids,
+            'highBid' => $highBid
+        ]);
+    }
 }

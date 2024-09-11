@@ -41,7 +41,7 @@
                         <p
                             class="text-sm font-bold text-gray-900 dark:text-white"
                         >
-                            {{ item.user.name }}
+                            {{ item.user.name }} {{ item.user.surname }}
                         </p>
                         <!-- Display the bid amount -->
                         <p
@@ -52,7 +52,6 @@
                     </div>
                     <!-- Display bid time -->
                     <p class="text-sm text-gray-500 dark:text-gray-400">
-                        <!-- {{ new Date(item.created_at).toLocaleString() }} -->
                         {{ dayjs(item.created_at).fromNow() }}
                     </p>
                 </li>

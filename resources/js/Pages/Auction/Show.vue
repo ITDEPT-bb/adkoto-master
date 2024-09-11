@@ -89,19 +89,20 @@
                         </div>
 
                         <div v-if="item.user.id !== authUser.id">
-                            <Link
-                                :href="
-                                    route('auction', {
-                                        user: item.user.id,
-                                    })
-                                "
-                                class="group my-6 sm:gap-4 sm:items-center justify-center sm:flex sm:my-4 bg-blue-300 hover:bg-blue-500 hover:text-white rounded-md p-2"
+                            <button
+                                @click="placeBid(item.id)"
+                                :class="{
+                                    'group my-6 w-full sm:gap-4 sm:items-center justify-center sm:flex sm:my-4 bg-blue-200 text-white rounded-md p-2 cursor-not-allowed':
+                                        isLoadingBid,
+                                    'group my-6 w-full sm:gap-4 sm:items-center justify-center sm:flex sm:my-4 bg-blue-300 hover:bg-blue-500 hover:text-white rounded-md p-2':
+                                        !isLoadingBid,
+                                }"
                             >
                                 <div class="flex gap-3 group-hover:underline">
                                     <BankNoteIcon />
                                     <p class="font-bold">Place Bid</p>
                                 </div>
-                            </Link>
+                            </button>
                         </div>
 
                         <div class="flex items-center my-2 dark:text-gray-300">
@@ -147,10 +148,6 @@
                         <p class="mb-6 text-gray-500 dark:text-gray-400">
                             {{ item.description }}
                         </p>
-
-                        <!-- <hr
-                            class="my-6 md:my-8 border-gray-200 dark:border-gray-800"
-                        /> -->
                     </div>
                     <BiddingList :items="bids" :highBid="highBid" />
                 </div>
@@ -258,7 +255,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { usePage, Head, Link } from "@inertiajs/vue3";
 import KalakalLayout from "@/Layouts/KalakalLayout.vue";
 import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
@@ -348,7 +345,7 @@ const isLoading = ref(false);
 const deleteAd = async (id) => {
     isLoading.value = true;
     try {
-        await axios.delete(`/auction/${id}`);
+        await axiosClient.delete(`/auction/${id}`);
         toast.success("Listing deleted successfully!");
         emit("deleted", id);
         isLoading.value = false;
@@ -359,6 +356,48 @@ const deleteAd = async (id) => {
         isLoading.value = false;
     }
 };
+
+const isLoadingBid = ref(false);
+const intervalId = ref(null);
+
+const placeBid = async (itemId) => {
+    isLoadingBid.value = true;
+    try {
+        const response = await axiosClient.post(`/auction/bid/${itemId}`);
+        toast.success("Bid successfully placed");
+        isLoadingBid.value = false;
+        fetchLatestBids();
+    } catch (error) {
+        toast.error("Failed to place bid.");
+        isLoadingBid.value = false;
+    }
+};
+
+const fetchLatestBids = async () => {
+    try {
+        const response = await axiosClient.get(
+            `/auction/${item.value.id}/bids`
+        );
+        bids.value = response.data.bids;
+        highBid.value = response.data.highBid;
+    } catch (error) {
+        console.error("Failed to fetch the latest bids:", error);
+    }
+};
+
+onMounted(() => {
+    intervalId.value = setInterval(() => {
+        fetchLatestBids();
+    }, 5000);
+
+    fetchLatestBids();
+});
+
+onBeforeUnmount(() => {
+    if (intervalId.value) {
+        clearInterval(intervalId.value);
+    }
+});
 </script>
 
 <style scoped></style>
