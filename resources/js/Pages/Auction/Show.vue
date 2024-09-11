@@ -41,6 +41,26 @@
                         >
                             &gt;
                         </button>
+
+                        <!-- Manage Button (Edit/Delete) -->
+                        <div v-if="item.user.id === authUser.id" class="flex-2">
+                            <!-- <a
+                                :href="
+                                    route('kalakalkoto.edit', {
+                                        id: item.id,
+                                    })
+                                "
+                                class="bg-yellow-500 text-white py-1 px-2 rounded text-xs mr-2"
+                            >
+                                Edit
+                            </a>
+                            <button
+                                @click="openDeleteModal"
+                                class="bg-red-500 text-white py-1 px-2 rounded text-xs m-2"
+                            >
+                                Delete
+                            </button> -->
+                        </div>
                     </div>
 
                     <!-- Item Details -->
@@ -135,26 +155,6 @@
                         /> -->
                     </div>
                     <BiddingList :items="bids" :highBid="highBid" />
-                </div>
-
-                <!-- Manage Button (Edit/Delete) -->
-                <div v-if="item.user.id === authUser.id" class="flex-2">
-                    <a
-                        :href="
-                            route('kalakalkoto.edit', {
-                                id: item.id,
-                            })
-                        "
-                        class="bg-yellow-500 text-white py-1 px-2 rounded text-xs mr-2"
-                    >
-                        Edit
-                    </a>
-                    <button
-                        @click="openDeleteModal"
-                        class="bg-red-500 text-white py-1 px-2 rounded text-xs m-2"
-                    >
-                        Delete
-                    </button>
                 </div>
             </div>
             <!-- Delete Modal -->

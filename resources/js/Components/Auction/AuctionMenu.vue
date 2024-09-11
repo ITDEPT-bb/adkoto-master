@@ -38,7 +38,7 @@
                     <!-- View My Listings Link -->
                     <li>
                         <a
-                            href="#"
+                            :href="route('auction.showUserItems')"
                             :class="{
                                 'text-gray-900 font-bold underline dark:text-white':
                                     route().current() ===

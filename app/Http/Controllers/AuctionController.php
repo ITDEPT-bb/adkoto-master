@@ -7,6 +7,7 @@ use App\Models\Bid;
 use App\Models\KalakalkotoCategory;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
@@ -110,6 +111,30 @@ class AuctionController extends Controller
             'item' => $auctionitem,
             'highBid' => $highBid,
             'bids' => $auctionitem->bids
+        ]);
+    }
+
+    public function showUserItems()
+    {
+        $userId = Auth::id();
+
+        $items = AuctionItem::where('user_id', $userId)
+            ->with(['attachments', 'user', 'category'])
+            ->orderByDesc('created_at')
+            ->paginate(12);
+
+        $items->each(function ($item) {
+            $item->attachments->each(function ($attachment) {
+                $attachment->image_path = asset('storage/' . $attachment->image_path);
+            });
+        });
+
+        $categories = KalakalkotoCategory::all();
+
+        return Inertia::render('Auction/Manage', [
+            'items' => $items,
+            'categories' => $categories,
+            'authId' => $userId
         ]);
     }
 }
