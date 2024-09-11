@@ -252,4 +252,24 @@ class AuctionController extends Controller
             'categories' => $categories
         ]);
     }
+
+    public function getLatestBidsLive()
+    {
+        $liveBiddingItem = AuctionItem::with(['attachments', 'user', 'category', 'bids'])
+            ->select('*', DB::raw('(SELECT MAX(bid_amount) FROM bids WHERE bids.auction_item_id = auction_items.id) as highest_bid'))
+            ->orderByDesc('created_at')
+            ->where('bidding_type', 'live')
+            ->where('auction_ends_at', '>', Carbon::now())
+            ->paginate(9);
+
+        $liveBiddingItem->each(function ($auction) {
+            $auction->attachments->each(function ($attachment) {
+                $attachment->image_path = asset('storage/' . $attachment->image_path);
+            });
+        });
+
+        return response()->json([
+            'liveBiddingItem' => $liveBiddingItem
+        ]);
+    }
 }

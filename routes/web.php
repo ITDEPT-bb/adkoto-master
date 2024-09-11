@@ -73,6 +73,7 @@ Route::middleware(['auth', 'verified'])->prefix('/auction')->group(function () {
 
     // Live Bidding
     Route::get('/live', [AuctionController::class, 'viewAllLive'])->name('auction.viewAllLive');
+    Route::get('/bids/live', [AuctionController::class, 'getLatestBidsLive']);
 
     // Create
     Route::get('/create', [AuctionController::class, 'create'])->name('auction.create');

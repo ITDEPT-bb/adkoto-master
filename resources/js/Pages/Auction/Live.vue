@@ -32,26 +32,26 @@ const { props } = usePage();
 const liveBiddingItem = ref(props.liveBiddingItem);
 const intervalId = ref(null);
 
-// const fetchLatestBidsList = async () => {
-//     try {
-//         const response = await axiosClient.get(`/auction/bids/list`);
-//         liveBiddingItem.value = response.data.liveBiddingItem;
-//     } catch (error) {
-//         console.error("Failed to fetch the latest bids:", error);
-//     }
-// };
+const fetchLatestBidsLive = async () => {
+    try {
+        const response = await axiosClient.get(`/auction/bids/live`);
+        liveBiddingItem.value = response.data.liveBiddingItem;
+    } catch (error) {
+        console.error("Failed to fetch the latest bids:", error);
+    }
+};
 
-// onMounted(() => {
-//     intervalId.value = setInterval(() => {
-//         fetchLatestBidsList();
-//     }, 5000);
+onMounted(() => {
+    intervalId.value = setInterval(() => {
+        fetchLatestBidsLive();
+    }, 5000);
 
-//     fetchLatestBidsList();
-// });
+    fetchLatestBidsLive();
+});
 
-// onBeforeUnmount(() => {
-//     if (intervalId.value) {
-//         clearInterval(intervalId.value);
-//     }
-// });
+onBeforeUnmount(() => {
+    if (intervalId.value) {
+        clearInterval(intervalId.value);
+    }
+});
 </script>
