@@ -32,7 +32,7 @@ class AuctionController extends Controller
         $liveBiddingItem = AuctionItem::with(['attachments', 'user', 'category', 'bids'])
             ->select('*', DB::raw('(SELECT MAX(bid_amount) FROM bids WHERE bids.auction_item_id = auction_items.id) as highest_bid'))
             ->where('bidding_type', 'live')
-            ->inRandomOrder()
+            // ->inRandomOrder()
             ->first();
 
         if ($liveBiddingItem) {
@@ -98,9 +98,6 @@ class AuctionController extends Controller
 
     public function show($id)
     {
-        // $auctionitem = AuctionItem::with(['attachments', 'user', 'category', 'bids.user'])
-        //     ->orderBy('created_at', 'desc')
-        //     ->findOrFail($id);
         $auctionitem = AuctionItem::with([
             'attachments',
             'user',
@@ -174,16 +171,12 @@ class AuctionController extends Controller
         $bid->bid_amount = $newBidAmount;
         $bid->save();
 
-        // Step 6: Return a success response
         return response()->json(['success' => 'Bid placed successfully', 'new_bid_amount' => $newBidAmount], 200);
 
     }
 
     public function getLatestBids($id)
     {
-        // $auctionitem = AuctionItem::with(['bids.user'])
-        //     ->orderBy('created_at', 'desc')
-        //     ->findOrFail($id);
         $auctionitem = AuctionItem::with([
             'bids' => function ($query) {
                 $query->orderBy('created_at', 'desc');
@@ -199,6 +192,64 @@ class AuctionController extends Controller
         return response()->json([
             'bids' => $auctionitem->bids,
             'highBid' => $highBid
+        ]);
+    }
+
+    public function getLatestBidsList()
+    {
+        $normalBiddingItems = AuctionItem::with(['attachments', 'user', 'category', 'bids'])
+            ->select('*', DB::raw('(SELECT MAX(bid_amount) FROM bids WHERE bids.auction_item_id = auction_items.id) as highest_bid'))
+            ->orderByDesc('created_at')
+            ->where('bidding_type', 'normal')
+            ->where('auction_ends_at', '>', Carbon::now())
+            ->paginate(9);
+
+        $normalBiddingItems->each(function ($auction) {
+            $auction->attachments->each(function ($attachment) {
+                $attachment->image_path = asset('storage/' . $attachment->image_path);
+            });
+        });
+
+        $liveBiddingItem = AuctionItem::with(['attachments', 'user', 'category', 'bids'])
+            ->select('*', DB::raw('(SELECT MAX(bid_amount) FROM bids WHERE bids.auction_item_id = auction_items.id) as highest_bid'))
+            ->where('bidding_type', 'live')
+            ->first();
+
+        if ($liveBiddingItem) {
+            $liveBiddingItem->attachments->each(function ($attachment) {
+                $attachment->image_path = asset('storage/' . $attachment->image_path);
+            });
+        }
+
+        $categories = KalakalkotoCategory::all();
+
+        return response()->json([
+            'normalBiddingItems' => $normalBiddingItems,
+            'liveBiddingItem' => $liveBiddingItem,
+            'categories' => $categories
+        ]);
+    }
+
+    public function viewAllLive()
+    {
+        $liveBiddingItem = AuctionItem::with(['attachments', 'user', 'category', 'bids'])
+            ->select('*', DB::raw('(SELECT MAX(bid_amount) FROM bids WHERE bids.auction_item_id = auction_items.id) as highest_bid'))
+            ->orderByDesc('created_at')
+            ->where('bidding_type', 'live')
+            ->where('auction_ends_at', '>', Carbon::now())
+            ->paginate(9);
+
+        $liveBiddingItem->each(function ($auction) {
+            $auction->attachments->each(function ($attachment) {
+                $attachment->image_path = asset('storage/' . $attachment->image_path);
+            });
+        });
+
+        $categories = KalakalkotoCategory::all();
+
+        return Inertia::render('Auction/Live', [
+            'liveBiddingItem' => $liveBiddingItem,
+            'categories' => $categories
         ]);
     }
 }

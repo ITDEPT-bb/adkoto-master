@@ -69,6 +69,10 @@ Route::middleware(['auth', 'verified'])->prefix('/kalakalkoto')->group(function 
 // Auction
 Route::middleware(['auth', 'verified'])->prefix('/auction')->group(function () {
     Route::get('/', [AuctionController::class, 'index'])->name('auction');
+    Route::get('/bids/list', [AuctionController::class, 'getLatestBidsList']);
+
+    // Live Bidding
+    Route::get('/live', [AuctionController::class, 'viewAllLive'])->name('auction.viewAllLive');
 
     // Create
     Route::get('/create', [AuctionController::class, 'create'])->name('auction.create');

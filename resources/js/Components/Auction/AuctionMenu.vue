@@ -51,6 +51,20 @@
                             View My Items
                         </a>
                     </li>
+
+                    <li>
+                        <a
+                            :href="route('auction.viewAllLive')"
+                            :class="{
+                                'text-gray-900 font-bold underline dark:text-white':
+                                    route().current() === 'auction.viewAllLive',
+                                'text-gray-900 font-bold dark:text-white hover:underline':
+                                    route().current() !== 'auction.viewAllLive',
+                            }"
+                        >
+                            Live Bidding
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
