@@ -98,8 +98,18 @@ class AuctionController extends Controller
 
     public function show($id)
     {
-        $auctionitem = AuctionItem::with(['attachments', 'user', 'category', 'bids.user'])
-            ->findOrFail($id);
+        // $auctionitem = AuctionItem::with(['attachments', 'user', 'category', 'bids.user'])
+        //     ->orderBy('created_at', 'desc')
+        //     ->findOrFail($id);
+        $auctionitem = AuctionItem::with([
+            'attachments',
+            'user',
+            'category',
+            'bids' => function ($query) {
+                $query->orderBy('created_at', 'desc');
+            },
+            'bids.user'
+        ])->findOrFail($id);
 
         $auctionitem->attachments->each(function ($attachment) {
             $attachment->image_path = asset('storage/' . $attachment->image_path);
@@ -171,8 +181,15 @@ class AuctionController extends Controller
 
     public function getLatestBids($id)
     {
-        $auctionitem = AuctionItem::with(['bids.user'])
-            ->findOrFail($id);
+        // $auctionitem = AuctionItem::with(['bids.user'])
+        //     ->orderBy('created_at', 'desc')
+        //     ->findOrFail($id);
+        $auctionitem = AuctionItem::with([
+            'bids' => function ($query) {
+                $query->orderBy('created_at', 'desc');
+            },
+            'bids.user'
+        ])->findOrFail($id);
 
         $highBid = Bid::with(['item', 'user'])
             ->where('auction_item_id', $id)

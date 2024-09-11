@@ -1,5 +1,5 @@
 <template>
-    <div class="p-4 bg-white rounded">
+    <div class="p-4 bg-white rounded h-full overflow-y-auto">
         <h2 class="text-xl font-bold text-gray-900 dark:text-white">
             Bidding List
         </h2>
@@ -9,7 +9,7 @@
                 <div class="flex justify-between items-center">
                     <!-- Display bidder's name -->
                     <p class="text-sm font-bold text-gray-900 dark:text-white">
-                        {{ highBid.user.name }}
+                        {{ highBid.user.name }} {{ highBid.user.surname }}
                     </p>
                     <!-- Display the bid amount -->
                     <p class="text-sm font-bold text-gray-900 dark:text-white">

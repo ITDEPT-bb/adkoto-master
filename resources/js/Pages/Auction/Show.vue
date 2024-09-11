@@ -64,7 +64,9 @@
                     </div>
 
                     <!-- Item Details -->
-                    <div class="mt-6 sm:mt-8 lg:mt-0 p-4 bg-white rounded">
+                    <div
+                        class="mt-6 sm:mt-8 lg:mt-0 p-4 h-screen overflow-hidden bg-white rounded"
+                    >
                         <h1
                             class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white"
                         >
@@ -91,16 +93,26 @@
                         <div v-if="item.user.id !== authUser.id">
                             <button
                                 @click="placeBid(item.id)"
-                                :class="{
-                                    'group my-6 w-full sm:gap-4 sm:items-center justify-center sm:flex sm:my-4 bg-blue-200 text-white rounded-md p-2 cursor-not-allowed':
-                                        isLoadingBid,
-                                    'group my-6 w-full sm:gap-4 sm:items-center justify-center sm:flex sm:my-4 bg-blue-300 hover:bg-blue-500 hover:text-white rounded-md p-2':
-                                        !isLoadingBid,
-                                }"
+                                :disabled="isLoadingBid"
+                                :class="[
+                                    'group my-6 w-full sm:gap-4 sm:items-center justify-center sm:flex sm:my-4 rounded-md p-2',
+                                    {
+                                        'bg-blue-200 text-white cursor-not-allowed':
+                                            isLoadingBid || isUserHighestBidder,
+                                        'bg-blue-300 hover:bg-blue-500 hover:text-white':
+                                            !isLoadingBid &&
+                                            !isUserHighestBidder,
+                                    },
+                                ]"
                             >
-                                <div class="flex gap-3 group-hover:underline">
+                                <div class="flex gap-3 items-center">
                                     <BankNoteIcon />
-                                    <p class="font-bold">Place Bid</p>
+                                    <p class="font-bold">
+                                        <span v-if="isLoadingBid"
+                                            >Placing Bid...</span
+                                        >
+                                        <span v-else>Place Bid</span>
+                                    </p>
                                 </div>
                             </button>
                         </div>
@@ -128,7 +140,7 @@
                             <p
                                 class="text-sm font-semibold text-gray-600 dark:text-gray-400"
                             >
-                                {{ item.user.name }}
+                                {{ item.user.name }} {{ item.user.surname }}
                             </p>
                         </div>
 
@@ -149,7 +161,10 @@
                             {{ item.description }}
                         </p>
                     </div>
-                    <BiddingList :items="bids" :highBid="highBid" />
+
+                    <div class="h-screen overflow-hidden">
+                        <BiddingList :items="bids" :highBid="highBid" />
+                    </div>
                 </div>
             </div>
             <!-- Delete Modal -->
@@ -360,15 +375,36 @@ const deleteAd = async (id) => {
 const isLoadingBid = ref(false);
 const intervalId = ref(null);
 
+const isUserHighestBidder = computed(() => {
+    return highBid.value && highBid.value.user_id === authUser.id;
+});
+
+// const placeBid = async (itemId) => {
+//     isLoadingBid.value = true;
+//     try {
+//         const response = await axiosClient.post(`/auction/bid/${itemId}`);
+//         toast.success("Bid successfully placed");
+//         isLoadingBid.value = false;
+//         fetchLatestBids();
+//     } catch (error) {
+//         toast.error("Failed to place bid.");
+//         isLoadingBid.value = false;
+//     }
+// };
 const placeBid = async (itemId) => {
+    if (isUserHighestBidder.value) {
+        toast.error("You already have the highest bid.");
+        return;
+    }
+
     isLoadingBid.value = true;
     try {
         const response = await axiosClient.post(`/auction/bid/${itemId}`);
         toast.success("Bid successfully placed");
-        isLoadingBid.value = false;
         fetchLatestBids();
     } catch (error) {
         toast.error("Failed to place bid.");
+    } finally {
         isLoadingBid.value = false;
     }
 };
