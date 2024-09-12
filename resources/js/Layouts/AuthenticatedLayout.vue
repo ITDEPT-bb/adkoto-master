@@ -94,7 +94,7 @@ function toggleDarkMode() {
                             <!-- Kalakalkoto -->
                             <img
                                 :src="kalakalkotoIcon"
-                                class="hidden sm:flex h-auto md:w-12"
+                                class="hidden sm:flex h-auto md:w-12 xl:w-10"
                                 alt="Logo"
                             />
                         </Link>
@@ -103,7 +103,7 @@ function toggleDarkMode() {
                             <!-- Adkoto -->
                             <img
                                 :src="adkotoIcon"
-                                class="hidden sm:flex md:h-auto md:w-12"
+                                class="hidden sm:flex md:h-auto md:w-12 xl:w-10"
                                 alt="Logo"
                             />
                         </Link>
@@ -112,7 +112,7 @@ function toggleDarkMode() {
                             <!-- Adkoto -->
                             <img
                                 :src="gameIcon"
-                                class="hidden sm:flex md:h-auto md:w-12"
+                                class="hidden sm:flex md:h-auto md:w-12 xl:w-10"
                                 alt="Logo"
                             />
                         </Link>
@@ -121,7 +121,7 @@ function toggleDarkMode() {
                             <!-- Chatkoto -->
                             <img
                                 :src="messageIcon"
-                                class="hidden sm:flex md:h-auto md:w-12"
+                                class="hidden sm:flex md:h-auto md:w-12 xl:w-10"
                                 alt="Logo"
                             />
                         </Link>
