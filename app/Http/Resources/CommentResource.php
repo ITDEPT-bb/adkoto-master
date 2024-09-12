@@ -27,6 +27,7 @@ class CommentResource extends JsonResource
             'user' => [
                 "id" => $this->user->id,
                 "name" => $this->user->name,
+                "surname" => $this->user->surname,
                 "username" => $this->user->username,
                 "avatar_url" => $this->user->avatar_path ? Storage::url($this->user->avatar_path) : '/img/default_avatar.webp',
             ]
