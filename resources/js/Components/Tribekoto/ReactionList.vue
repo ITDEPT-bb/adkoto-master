@@ -98,10 +98,10 @@
                             <div
                                 class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white"
                             >
-                                <span
-                                    >{{ getReactionIcon(reaction.type) }}
-                                    {{ reaction.type }}</span
-                                >
+                                <span>
+                                    {{ getReactionIcon(reaction.type) }}
+                                    {{ reaction.type }}
+                                </span>
                             </div>
                         </div>
                     </li>
@@ -176,18 +176,3 @@ const getReactionIcon = (reactionType) => {
     }
 };
 </script>
-
-<style scoped>
-.fixed {
-    animation: fadeIn 0.3s ease-in-out;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-</style>

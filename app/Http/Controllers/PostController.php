@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateCommentRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Http\Resources\CommentResource;
 use App\Http\Resources\PostResource;
+use App\Http\Resources\UserResource;
 use App\Models\Comment;
 use App\Models\Post;
 use App\Models\PostAttachment;
@@ -402,6 +403,15 @@ class PostController extends Controller
         //        return response("You don't have permission to perform this action", 403);
     }
 
+    // public function getReactions(Post $post)
+    // {
+    //     $reactions = Reaction::where('object_id', $post->id)
+    //         ->where('object_type', Post::class)
+    //         ->with('user')
+    //         ->get(['user_id', 'type']);
+
+    //     return response()->json($reactions);
+    // }
     public function getReactions(Post $post)
     {
         $reactions = Reaction::where('object_id', $post->id)
@@ -409,6 +419,13 @@ class PostController extends Controller
             ->with('user')
             ->get(['user_id', 'type']);
 
-        return response()->json($reactions);
+        $reactionsWithUser = $reactions->map(function ($reaction) {
+            return [
+                'user' => new UserResource($reaction->user),
+                'type' => $reaction->type,
+            ];
+        });
+
+        return response()->json($reactionsWithUser);
     }
 }
