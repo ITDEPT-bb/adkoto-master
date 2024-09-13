@@ -22,6 +22,7 @@ import {
     TransitionRoot,
 } from "@headlessui/vue";
 import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline";
+import ReactionList from "./ReactionList.vue";
 
 const open = ref(false);
 
@@ -110,14 +111,54 @@ function openAttachment(ind) {
     emit("attachmentClick", props.post, ind);
 }
 
+// const showReactions = ref(false);
+// const isLoading = ref(false);
+// function sendReaction() {
+//     isLoading.value = true;
+
+//     axiosClient
+//         .post(route("post.reaction", props.post), {
+//             reaction: "like",
+//         })
+//         .then(({ data }) => {
+//             props.post.current_user_has_reaction =
+//                 data.current_user_has_reaction;
+//             props.post.num_of_reactions = data.num_of_reactions;
+//         })
+//         .catch((error) => {
+//             console.error(error);
+//         })
+//         .finally(() => {
+//             isLoading.value = false;
+//         });
+// }
+
+const showReactions = ref(false);
 const isLoading = ref(false);
-function sendReaction() {
+const reactions = [
+    { name: "like", emoji: "👍", label: "Like" },
+    { name: "love", emoji: "❤️", label: "Love" },
+    { name: "haha", emoji: "😂", label: "Haha" },
+    { name: "wow", emoji: "😮", label: "Wow" },
+    { name: "sad", emoji: "😢", label: "Sad" },
+    { name: "angry", emoji: "😡", label: "Angry" },
+];
+
+// Long press detection for mobile
+let pressTimer;
+const startLongPress = () => {
+    pressTimer = setTimeout(() => {
+        showReactions.value = true;
+    }, 500);
+};
+const cancelLongPress = () => clearTimeout(pressTimer);
+
+// Function to send reaction
+const sendReaction = (type = "like") => {
     isLoading.value = true;
 
     axiosClient
-        .post(route("post.reaction", props.post), {
-            reaction: "like",
-        })
+        .post(route("post.reaction", props.post), { reaction: type })
         .then(({ data }) => {
             props.post.current_user_has_reaction =
                 data.current_user_has_reaction;
@@ -128,8 +169,9 @@ function sendReaction() {
         })
         .finally(() => {
             isLoading.value = false;
+            showReactions.value = false;
         });
-}
+};
 </script>
 
 <template>
@@ -174,24 +216,38 @@ function sendReaction() {
                 @attachmentClick="openAttachment"
             />
         </div>
+
+        <div>
+            <ReactionList :postId="post.id" />
+        </div>
+
         <Disclosure v-slot="{ open }">
-            <!--            Like & Comment buttons-->
-            <div class="flex gap-2">
-                <!-- <button
-                    @click="sendReaction"
-                    class="text-gray-800 dark:text-gray-100 flex gap-1 items-center justify-center rounded-lg py-2 px-4 flex-1"
-                    :class="[
-                        post.current_user_has_reaction
-                            ? 'bg-red-300 dark:bg-sky-900 hover:bg-red-400 dark:hover:bg-sky-950'
-                            : 'bg-red-100 dark:bg-slate-900 hover:bg-red-200 dark:hover:bg-slate-800',
-                    ]"
+            <div class="flex gap-2 relative">
+                <!-- Reaction Picker -->
+                <div
+                    v-if="showReactions && !post.current_user_has_reaction"
+                    @mouseleave="showReactions = false"
+                    class="absolute z-10 top-10 bg-white shadow-lg rounded-lg p-2"
                 >
-                    <HandThumbUpIcon class="w-5 h-5" />
-                    <span class="mr-2">{{ post.num_of_reactions }}</span>
-                    {{ post.current_user_has_reaction ? "Unlike" : "Like" }}
-                </button> -->
+                    <button
+                        v-for="reaction in reactions"
+                        :key="reaction.name"
+                        class="px-2 py-1 m-1 rounded bg-blue-200 hover:bg-blue-500 hover:text-white transition-all"
+                        @click="() => sendReaction(reaction.name)"
+                    >
+                        {{ reaction.emoji }} {{ reaction.label }}
+                    </button>
+                </div>
+
+                <!-- Like/React Button -->
                 <button
-                    @click="sendReaction"
+                    @click="sendReaction()"
+                    @mouseenter="
+                        !post.current_user_has_reaction &&
+                            (showReactions = true)
+                    "
+                    @touchstart="startLongPress"
+                    @touchend="cancelLongPress"
                     :class="[
                         post.current_user_has_reaction
                             ? isLoading
@@ -207,10 +263,12 @@ function sendReaction() {
                     <HandThumbUpIcon class="w-5 h-5" />
                     <span class="mr-2">{{ post.num_of_reactions }}</span>
                     <span v-if="!isLoading">{{
-                        post.current_user_has_reaction ? "Unlike" : "Like"
+                        post.current_user_has_reaction ? "Unlike" : "React"
                     }}</span>
                     <span v-else>Loading...</span>
                 </button>
+
+                <!-- Comment Button -->
                 <DisclosureButton
                     class="text-gray-800 dark:text-gray-100 flex gap-1 items-center justify-center bg-gray-100 dark:bg-slate-900 dark:hover:bg-slate-800 rounded-lg hover:bg-gray-200 py-2 px-4 flex-1"
                 >
@@ -319,3 +377,13 @@ function sendReaction() {
         </TransitionRoot>
     </div>
 </template>
+
+<style scoped>
+.reaction-picker {
+    display: flex;
+    gap: 1px;
+    background: white;
+    padding: 5px;
+    border-radius: 5px;
+}
+</style>

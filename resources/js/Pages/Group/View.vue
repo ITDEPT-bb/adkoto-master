@@ -536,7 +536,10 @@ const confirmLeave = () => {
                                 v-html="group.about"
                             ></div>
 
-                            <div class="flex justify-end">
+                            <div
+                                class="flex justify-end"
+                                v-if="isJoinedToGroup"
+                            >
                                 <PrimaryButton
                                     @click="openLeaveModal"
                                     class="ml-4 mt-2 bg-red-500 hover:bg-red-600"

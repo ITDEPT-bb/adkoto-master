@@ -213,17 +213,25 @@ class PostController extends Controller
             ->where('object_type', Post::class)
             ->first();
 
+        // if ($reaction) {
+        //     $hasReaction = false;
+        //     $reaction->delete();
         if ($reaction) {
-            $hasReaction = false;
-            $reaction->delete();
+            if ($reaction->type === $data['reaction']) {
+                $reaction->delete();
+                $hasReaction = false;
+            } else {
+                $reaction->update(['type' => $data['reaction']]);
+                $hasReaction = true;
+            }
         } else {
-            $hasReaction = true;
             Reaction::create([
                 'object_id' => $post->id,
                 'object_type' => Post::class,
                 'user_id' => $userId,
                 'type' => $data['reaction']
             ]);
+            $hasReaction = true;
 
             // Notify post owner about the new reaction
             $post->user->notify(new PostReacted(Auth::user(), $post, $data['reaction']));
@@ -392,5 +400,15 @@ class PostController extends Controller
         return back()->with('success', 'Post was successfully ' . ($pinned ? 'pinned' : 'unpinned'));
 
         //        return response("You don't have permission to perform this action", 403);
+    }
+
+    public function getReactions(Post $post)
+    {
+        $reactions = Reaction::where('object_id', $post->id)
+            ->where('object_type', Post::class)
+            ->with('user')
+            ->get(['user_id', 'type']);
+
+        return response()->json($reactions);
     }
 }

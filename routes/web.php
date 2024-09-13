@@ -218,6 +218,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::post('/{post}/pin', [PostController::class, 'pinUnpin'])
             ->name('post.pinUnpin');
+
+        Route::get('/{post}/reactions', [PostController::class, 'getReactions'])
+            ->name('post.getReactions');
     });
 
     // Comments

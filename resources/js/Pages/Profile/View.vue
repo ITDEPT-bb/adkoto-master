@@ -264,7 +264,7 @@ function followUser() {
                                 <img
                                     :src="
                                         user.avatar_url ||
-                                        '/img/default_avatar.webp'
+                                        '/img/default_avatar.png'
                                     "
                                     class="w-24 h-24 sm:w-full sm:h-full object-cover rounded-full hover:opacity-95 hover:cursor-pointer"
                                     @click="openModalAvatar"
@@ -274,7 +274,7 @@ function followUser() {
                                 <img
                                     :src="
                                         user.avatar_url ||
-                                        '/img/default_avatar.webp'
+                                        '/img/default_avatar.png'
                                     "
                                     class="w-24 h-24 sm:w-full sm:h-full object-cover rounded-full hover:opacity-95 hover:cursor-pointer"
                                 />
