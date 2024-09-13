@@ -3,7 +3,7 @@
 
     <KalakalLayout>
         <div class="max-w-7xl mx-auto h-full overflow-y-auto p-4">
-            <PageSelector />
+            <!-- <PageSelector /> -->
             <KalakalMenu />
             <CategoryMenu :categories="categories" />
             <ProductList :kalakalitems="kalakalitems" />
