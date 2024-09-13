@@ -69,7 +69,7 @@
                                     <img
                                         class="w-8 h-8 rounded-full"
                                         :src="
-                                            reaction.user.avatar_path ||
+                                            reaction.user.avatar_url ||
                                             '/img/default_avatar.png'
                                         "
                                         alt="User avatar"
