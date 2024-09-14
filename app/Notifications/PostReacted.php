@@ -68,7 +68,7 @@ class PostReacted extends Notification
             'post_title' => $this->post->title,
             'reaction' => $this->reaction,
             'route' => route('post.view', $this->post->id),
-            'message' => $this->user->username . ' reacted to your post'
+            'message' => $this->user->name . ' ' . $this->user->surname . ' reacted to your post'
         ];
     }
 }

@@ -234,8 +234,10 @@ class PostController extends Controller
             ]);
             $hasReaction = true;
 
-            // Notify post owner about the new reaction
-            $post->user->notify(new PostReacted(Auth::user(), $post, $data['reaction']));
+            if ($post->user->id !== $userId) {
+                // Notify post owner about the new reaction
+                $post->user->notify(new PostReacted(Auth::user(), $post, $data['reaction']));
+            }
         }
 
         $reactions = Reaction::where('object_id', $post->id)->where('object_type', Post::class)->count();
