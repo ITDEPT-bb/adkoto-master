@@ -214,7 +214,10 @@ function onCommentDelete(comment) {
                     <!-- <a href="javascript:void(0)"> -->
                     <Link :href="route('profile', comment.user.username)">
                         <img
-                            :src="comment.user.avatar_url"
+                            :src="
+                                comment.user.avatar_url ||
+                                '/img/default_avatar.png'
+                            "
                             class="w-10 h-10 object-cover rounded-full border-2 transition-all hover:border-red-500"
                         />
                     </Link>

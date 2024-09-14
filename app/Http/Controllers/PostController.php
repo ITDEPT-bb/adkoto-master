@@ -15,6 +15,7 @@ use App\Models\PostAttachment;
 use App\Models\Reaction;
 use App\Notifications\CommentDeleted;
 use App\Notifications\CommentPosted;
+use App\Notifications\CommentReplied;
 use App\Notifications\PostDeleted;
 use App\Notifications\PostReacted;
 use Illuminate\Http\Request;
@@ -259,12 +260,22 @@ class PostController extends Controller
         $comment = Comment::create([
             'post_id' => $post->id,
             'comment' => nl2br($data['comment']),
-            'user_id' => Auth::id(),
+            'user_id' => $userId,
             'parent_id' => $data['parent_id'] ?: null
         ]);
 
-        if ($post->user->id !== $userId) {
-            $post->user->notify(new CommentPosted(Auth::user(), $post, $data['comment']));
+        // Notify the post owner for top-level comments
+        if ($data['parent_id'] === null) {
+            if ($post->user->id !== $userId) {
+                $post->user->notify(new CommentPosted(Auth::user(), $post, $data['comment']));
+            }
+        } else {
+            // Notify the original comment owner for replies
+            $parentComment = Comment::find($data['parent_id']);
+
+            if ($parentComment && $parentComment->user_id !== $userId) {
+                $parentComment->user->notify(new CommentReplied(Auth::user(), $post, $data['comment'], $parentComment));
+            }
         }
 
         return response(new CommentResource($comment), 201);
