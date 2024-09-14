@@ -250,6 +250,7 @@ class PostController extends Controller
 
     public function createComment(Request $request, Post $post)
     {
+        $userId = Auth::id();
         $data = $request->validate([
             'comment' => ['required'],
             'parent_id' => ['nullable', 'exists:comments,id']
@@ -262,7 +263,9 @@ class PostController extends Controller
             'parent_id' => $data['parent_id'] ?: null
         ]);
 
-        $post->user->notify(new CommentPosted(Auth::user(), $post, $data['comment']));
+        if ($post->user->id !== $userId) {
+            $post->user->notify(new CommentPosted(Auth::user(), $post, $data['comment']));
+        }
 
         return response(new CommentResource($comment), 201);
     }
