@@ -76,8 +76,8 @@ Route::middleware(['auth', 'verified'])->prefix('/auction')->group(function () {
     Route::get('/bids/live', [AuctionController::class, 'getLatestBidsLive']);
 
     // Create
-    Route::get('/create', [AuctionController::class, 'create'])->name('auction.create');
-    Route::post('/', [AuctionController::class, 'store'])->name('auction.store');
+    // Route::get('/create', [AuctionController::class, 'create'])->name('auction.create');
+    // Route::post('/', [AuctionController::class, 'store'])->name('auction.store');
 
     // Show
     Route::get('/{id}', [AuctionController::class, 'show'])->name('auction.show');

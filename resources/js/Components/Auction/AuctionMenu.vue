@@ -21,7 +21,7 @@
                     </li>
 
                     <!-- Create Listing Link -->
-                    <li>
+                    <!-- <li>
                         <a
                             href="/auction/create"
                             :class="{
@@ -33,7 +33,7 @@
                         >
                             Create New Item
                         </a>
-                    </li>
+                    </li> -->
 
                     <!-- View My Listings Link -->
                     <li>

@@ -97,6 +97,7 @@
                                 class="text-sm font-semibold text-gray-600 dark:text-gray-400"
                             >
                                 {{ kalakalitem.user.name }}
+                                {{ kalakalitem.user.surname }}
                             </p>
                         </div>
 
@@ -127,22 +128,33 @@
                                 id: kalakalitem.id,
                             })
                         "
-                        class="bg-yellow-500 text-white py-1 px-2 rounded text-xs mr-2"
+                        class="bg-yellow-500 text-white py-1 px-2 rounded text-xs mr-2 hover:bg-yellow-800"
                     >
                         Edit
                     </a>
                     <button
                         @click="openDeleteModal"
-                        class="bg-red-500 text-white py-1 px-2 rounded text-xs m-2"
+                        class="bg-red-500 text-white py-1 px-2 rounded text-xs m-2 hover:bg-red-800"
                     >
                         Delete
                     </button>
                     <button
                         @click="openMarkAsSoldModal"
-                        class="bg-blue-500 text-white py-1 px-2 rounded text-xs m-2"
+                        class="bg-blue-500 text-white py-1 px-2 rounded text-xs m-2 hover:bg-blue-800"
                     >
                         Mark As Sold
                     </button>
+                    <button
+                        @click="auctionModalOpen = true"
+                        class="bg-green-500 text-white py-1 px-2 rounded text-xs m-2 hover:bg-green-800"
+                    >
+                        Move to Auction
+                    </button>
+                    <MoveToAuctionModal
+                        :isOpen="auctionModalOpen"
+                        :kalakalitem="kalakalitem"
+                        @close="auctionModalOpen = false"
+                    />
                 </div>
             </div>
             <!-- Delete Modal -->
@@ -366,6 +378,9 @@ import {
 import MessageIcon from "@/Components/Icons/MessageIcon.vue";
 import UserIcon from "@/Components/Icons/UserIcon.vue";
 import MapPinIcon from "@/Components/Icons/MapPinIcon.vue";
+
+import MoveToAuctionModal from "@/Components/Kalakalkoto/MoveToAuctionModal.vue";
+const auctionModalOpen = ref(false);
 
 const open = ref(false);
 const openDeleteModal = () => {

@@ -99,7 +99,7 @@
                                     {
                                         'bg-blue-200 text-white cursor-not-allowed':
                                             isLoadingBid || isUserHighestBidder,
-                                        'bg-blue-300 hover:bg-blue-500 hover:text-white':
+                                        'bg-blue-300 hover:bg-blue-500 transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-105 duration-300 hover:text-white':
                                             !isLoadingBid &&
                                             !isUserHighestBidder,
                                     },

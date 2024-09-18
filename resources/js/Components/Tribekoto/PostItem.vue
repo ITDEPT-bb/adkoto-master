@@ -23,6 +23,7 @@ import {
 } from "@headlessui/vue";
 import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline";
 import ReactionList from "./ReactionList.vue";
+import ShareIcon from "@/Components/Icons/ShareIcon.vue";
 
 const open = ref(false);
 
@@ -276,6 +277,14 @@ const sendReaction = (type = "like") => {
                     <span class="mr-2">{{ post.num_of_comments }}</span>
                     Comment
                 </DisclosureButton>
+
+                <!-- Share Button -->
+                <!-- <button
+                    class="text-gray-800 dark:text-gray-100 flex gap-1 items-center justify-center bg-gray-100 dark:bg-slate-900 dark:hover:bg-slate-800 rounded-lg hover:bg-gray-200 py-2 px-4 flex-1"
+                >
+                    <ShareIcon class="w-5 h-5" />
+                    Share
+                </button> -->
             </div>
 
             <DisclosurePanel
