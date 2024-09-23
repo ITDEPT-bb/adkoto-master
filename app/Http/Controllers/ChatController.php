@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\GroupChatResource;
 use App\Http\Resources\UserResource;
 use App\Models\MessageAttachment;
 use App\Models\User;
 use App\Models\Message;
 use App\Models\Conversation;
+use App\Models\GroupChat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -44,9 +46,15 @@ class ChatController extends Controller
             return $followings->contains('id', $participant->id);
         });
 
+        // Get user's group chats where they are a participant
+        $groupChats = GroupChat::whereHas('participants', function ($query) use ($user) {
+            $query->where('user_id', $user->id);
+        })->get();
+
         return Inertia::render('Chat/Home', [
             'followings' => UserResource::collection($followings),
             'participants' => UserResource::collection($filteredParticipants),
+            'groupChats' => GroupChatResource::collection($groupChats),
         ]);
     }
 
@@ -147,5 +155,19 @@ class ChatController extends Controller
             DB::rollBack();
             return response()->json(['error' => 'Failed to send message'], 500);
         }
+    }
+
+    public function sendGroupMessage(Request $request)
+    {
+        $message = Message::create([
+            'message' => $request->message,
+            'sender_id' => auth()->id(),
+            'group_id' => $request->group_id,
+        ]);
+
+        // Update last message in the group
+        GroupChat::where('id', $request->group_id)->update(['last_message_id' => $message->id]);
+
+        return response()->json($message);
     }
 }

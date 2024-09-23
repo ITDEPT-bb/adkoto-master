@@ -7,6 +7,7 @@ use App\Http\Controllers\KalakalkotoController;
 use App\Http\Controllers\AdkotoController;
 use App\Http\Controllers\AuctionController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\GroupChatController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\NotificationController;
@@ -96,6 +97,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/chat/conversation/adktu/{user}', [ChatController::class, 'getConversation'])->name('chat.conversations.show');
     Route::post('/chat/conversations/{conversation}/messages', [ChatController::class, 'sendMessage'])->name('chat.messages.store');
     Route::get('/chat/conversations/{conversationId}/messages', [ChatController::class, 'fetchMessages'])->name('chat.conversations.fetchMessages');
+});
+
+// Group Chat
+Route::middleware(['auth', 'verified'])->prefix('/group-chat')->group(function () {
+    Route::get('/{groupChat}', [GroupChatController::class, 'index'])->name('group-chats.index');
+    Route::post('/{groupChat}', [GroupChatController::class, 'create'])->name('group-chats.create');
+    Route::post('/{groupChat}/add-participant', [GroupChatController::class, 'addParticipant']);
+    Route::get('/{groupChat}/messages', [GroupChatController::class, 'getGroupMessages']);
+    Route::post('/{groupChat}/messages', [GroupChatController::class, 'sendMessage']);
+
+    Route::get('/fetchUsers', [GroupChatController::class, 'fetchUsers']);
+});
+Route::middleware(['auth', 'verified'])->prefix('/groupchat')->group(function () {
+    Route::get('/fetchUsers', [GroupChatController::class, 'fetchUsers']);
 });
 
 // Notification

@@ -12,8 +12,9 @@ class GroupChat extends Model
     protected $fillable = [
         'name',
         'description',
-        'owner_id',
+        'photo',
         'group_id',
+        'owner_id',
     ];
 
     public function owner()
@@ -24,7 +25,7 @@ class GroupChat extends Model
     public function participants()
     {
         return $this->belongsToMany(User::class, 'group_chat_participants', 'group_chat_id', 'user_id')
-                    ->withTimestamps();
+            ->withTimestamps();
     }
 
     public function messages()

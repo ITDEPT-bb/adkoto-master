@@ -38,6 +38,43 @@
                 </ul>
             </div>
 
+            <!-- Group Column -->
+            <div class="flex-1 overflow-y-auto pr-4">
+                <div class="sticky top-0 bg-white shadow-sm z-10 p-2">
+                    <h2 class="text-xl font-bold">My Groups</h2>
+                </div>
+                <ul>
+                    <li
+                        v-for="group in groupChats"
+                        :key="group.id"
+                        class="mb-1 px-3 py-1 border-b border-gray-200"
+                    >
+                        <Link :href="`/group-chat/${group.id}`">
+                            <div
+                                class="flex items-center space-x-4 transition-transform duration-300 ease-in-out transform hover:scale-105 hover:bg-gray-100 p-2 rounded-lg"
+                            >
+                                <img
+                                    :src="group.photo"
+                                    alt="Avatar"
+                                    class="w-10 h-10 rounded-full object-cover"
+                                />
+                                <div>
+                                    <h3 class="text-lg font-medium">
+                                        {{ group.name }}
+                                    </h3>
+                                    <p class="text-sm text-gray-600">
+                                        {{
+                                            group.description ||
+                                            "No description available"
+                                        }}
+                                    </p>
+                                </div>
+                            </div>
+                        </Link>
+                    </li>
+                </ul>
+            </div>
+
             <!-- Others Column -->
             <div class="flex-1 overflow-y-auto pl-4">
                 <div class="sticky top-0 bg-white shadow-sm z-10 p-2">
@@ -88,6 +125,10 @@ const props = defineProps({
         required: true,
     },
     participants: {
+        type: Array,
+        required: true,
+    },
+    groupChats: {
         type: Array,
         required: true,
     },
