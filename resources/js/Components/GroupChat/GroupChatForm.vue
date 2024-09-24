@@ -7,15 +7,15 @@ defineProps({
     form: Object,
 });
 
-const maxCharacters = 20;
-const form = ref({
-    description: "",
-});
-const remainingCharacters = ref(maxCharacters);
+// const maxCharacters = 20;
+// const form = ref({
+//     description: "",
+// });
+// const remainingCharacters = ref(maxCharacters);
 
-const updateCharacterCount = () => {
-    remainingCharacters.value = maxCharacters - form.value.description.length;
-};
+// const updateCharacterCount = () => {
+//     remainingCharacters.value = maxCharacters - form.value.description.length;
+// };
 </script>
 
 <template>
@@ -42,12 +42,10 @@ const updateCharacterCount = () => {
             <InputTextarea
                 v-model="form.description"
                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                :maxlength="maxCharacters"
-                @input="updateCharacterCount"
             ></InputTextarea>
-            <div class="mt-1 text-gray-600 text-sm">
+            <!-- <div class="mt-1 text-gray-600 text-sm">
                 {{ remainingCharacters }} characters remaining
-            </div>
+            </div> -->
         </div>
     </div>
 </template>

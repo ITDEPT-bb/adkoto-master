@@ -85,21 +85,15 @@
                                                             form.description
                                                         "
                                                         class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                                                        :maxlength="
-                                                            maxCharacters
-                                                        "
-                                                        @input="
-                                                            updateCharacterCount
-                                                        "
                                                     ></InputTextarea>
-                                                    <div
+                                                    <!-- <div
                                                         class="mt-1 text-gray-600 text-sm"
                                                     >
                                                         {{
                                                             remainingCharacters
                                                         }}
                                                         characters remaining
-                                                    </div>
+                                                    </div> -->
                                                 </div>
 
                                                 <!-- Group Chat Image -->
@@ -255,12 +249,12 @@ function submit() {
         });
 }
 
-const maxCharacters = 20;
-const remainingCharacters = ref(maxCharacters);
+// const maxCharacters = 20;
+// const remainingCharacters = ref(maxCharacters);
 
-const updateCharacterCount = () => {
-    remainingCharacters.value = maxCharacters - form.value.description.length;
-};
+// const updateCharacterCount = () => {
+//     remainingCharacters.value = maxCharacters - form.value.description.length;
+// };
 </script>
 
 <style scoped></style>
