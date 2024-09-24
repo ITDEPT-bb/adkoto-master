@@ -32,9 +32,9 @@
                 <div class="text-1xl font-semibold mt-1 flex items-center">
                     <span class="text-gray-700 mr-3">{{ group.name }}</span>
                 </div>
-                <span class="text-sm text-gray-600">{{
+                <!-- <span class="text-sm text-gray-600">{{
                     group.description
-                }}</span>
+                }}</span> -->
             </div>
         </div>
 
@@ -65,6 +65,15 @@
                     :group="group"
                     @close="GroupMemberModal = false"
                 />
+
+                <!-- Leave Button -->
+                <button
+                    class="inline-flex items-center justify-center rounded-lg border h-10 w-10 transition duration-500 ease-in-out text-gray-500 hover:bg-gray-300 focus:outline-none"
+                    type="button"
+                    @click="confirmLeaveGroup"
+                >
+                    <ArrowLeftStartOnRectangleIcon />
+                </button>
             </div>
         </div>
     </div>
@@ -72,11 +81,13 @@
 
 <script setup>
 import { ref } from "vue";
-import { Link } from "@inertiajs/vue3";
+import { Link, router } from "@inertiajs/vue3";
+import { useToast } from "vue-toastification";
+import axiosClient from "@/axiosClient.js";
 
 import SettingsIcon from "../Icons/SettingsIcon.vue";
-
 import UserGroupIcon from "../Kalakalkoto/UserGroupIcon.vue";
+import { ArrowLeftStartOnRectangleIcon } from "@heroicons/vue/24/outline";
 
 import UpdateInfoModal from "./UpdateInfoModal.vue";
 import GroupChatMemberModal from "./GroupChatMemberModal.vue";
@@ -89,4 +100,25 @@ const user = props.user;
 
 const GroupMemberModal = ref(false);
 const showUpdateModal = ref(false);
+
+const toast = useToast();
+
+const confirmLeaveGroup = () => {
+    if (confirm("Are you sure you want to leave this group?")) {
+        leaveGroup();
+    }
+};
+
+const leaveGroup = () => {
+    router
+        .delete(route("group-chats.leave", props.group), {
+            preserveScroll: true,
+        })
+        // .then(() => {
+        //     open.value = false;
+        // })
+        .catch((error) => {
+            console.error("Failed to leave group:", error);
+        });
+};
 </script>

@@ -11,17 +11,57 @@ use App\Models\GroupChatParticipant;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class GroupChatController extends Controller
 {
+    // public function index($groupChatId)
+    // {
+    //     $groupChat = GroupChat::with(['participants', 'messages.attachments', 'messages.sender', 'conversation'])
+    //         ->findOrFail($groupChatId);
+
+    //     $messages = $groupChat->messages->map(function ($message) {
+    //         return [
+    //             'id' => $message->id,
+    //             'message' => $message->message,
+    //             'attachments' => $message->attachments,
+    //             'sender_id' => $message->sender_id,
+    //             'sender' => new UserResource($message->sender),
+    //             'created_at' => $message->created_at,
+    //         ];
+    //     });
+
+    //     $authUser = auth()->user();
+
+    //     $conversation = $groupChat->conversation;
+
+    //     return Inertia::render('Chat/GroupChat', [
+    //         'groupChat' => new GroupChatResource($groupChat),
+    //         'messages' => $messages,
+    //         'conversation' => $conversation,
+    //         'authUser' => new UserResource($authUser),
+    //     ]);
+    // }
+
     public function index($groupChatId)
     {
+        $user = auth()->user();
+
         $groupChat = GroupChat::with(['participants', 'messages.attachments', 'messages.sender', 'conversation'])
             ->findOrFail($groupChatId);
 
-        // $messages = $groupChat->messages;
+        $isParticipant = $groupChat->participants()->where('user_id', $user->id)->exists();
+
+        // if (!$isParticipant) {
+        //     return response()->json(['message' => 'Unauthorized. You are not a participant of this group chat.'], 403);
+        // }
+        if (!$isParticipant) {
+            abort(403, 'Unauthorized');
+        }
+
+        // Map messages for the response
         $messages = $groupChat->messages->map(function ($message) {
             return [
                 'id' => $message->id,
@@ -33,18 +73,15 @@ class GroupChatController extends Controller
             ];
         });
 
-        $authUser = auth()->user();
-
         $conversation = $groupChat->conversation;
 
         return Inertia::render('Chat/GroupChat', [
             'groupChat' => new GroupChatResource($groupChat),
             'messages' => $messages,
             'conversation' => $conversation,
-            'authUser' => new UserResource($authUser),
+            'authUser' => new UserResource($user),
         ]);
     }
-
 
     public function create(Request $request)
     {
@@ -145,5 +182,22 @@ class GroupChatController extends Controller
         ]);
     }
 
+    public function leaveGroup(Request $request, $groupChatId)
+    {
+        $user = Auth::user();
 
+        $participant = GroupChatParticipant::where('group_chat_id', $groupChatId)
+            ->where('user_id', $user->id)
+            ->first();
+
+        if (!$participant) {
+            return response()->json(['message' => 'You are not a member of this group chat.'], 404);
+        }
+
+        // Delete the participant record
+        $participant->delete();
+
+        // return response()->json(['message' => 'You have left the group chat successfully.']);
+        return Redirect::to('/chat');
+    }
 }

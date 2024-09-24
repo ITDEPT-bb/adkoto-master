@@ -1,10 +1,21 @@
 <script setup>
+import { ref } from "vue";
 import InputTextarea from "@/Components/InputTextarea.vue";
 import TextInput from "@/Components/TextInput.vue";
 
 defineProps({
     form: Object,
 });
+
+const maxCharacters = 20;
+const form = ref({
+    description: "",
+});
+const remainingCharacters = ref(maxCharacters);
+
+const updateCharacterCount = () => {
+    remainingCharacters.value = maxCharacters - form.value.description.length;
+};
 </script>
 
 <template>
@@ -30,8 +41,13 @@ defineProps({
             >
             <InputTextarea
                 v-model="form.description"
-                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                :maxlength="maxCharacters"
+                @input="updateCharacterCount"
             ></InputTextarea>
+            <div class="mt-1 text-gray-600 text-sm">
+                {{ remainingCharacters }} characters remaining
+            </div>
         </div>
     </div>
 </template>

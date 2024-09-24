@@ -71,12 +71,12 @@
                                     <h3 class="text-lg font-medium">
                                         {{ group.name }}
                                     </h3>
-                                    <p class="text-sm text-gray-600">
+                                    <!-- <p class="text-sm text-gray-600 truncate">
                                         {{
                                             group.description ||
                                             "No description available"
                                         }}
-                                    </p>
+                                    </p> -->
                                 </div>
                             </div>
                         </Link>

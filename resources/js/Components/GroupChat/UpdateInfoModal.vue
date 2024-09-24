@@ -48,7 +48,7 @@
                                             as="h3"
                                             class="text-base mt-3 font-semibold leading-6 text-gray-900"
                                         >
-                                            Members
+                                            Update the Group Chat Infomation
                                         </DialogTitle>
                                         <div
                                             class="mt-2 p-4 dark:text-gray-100"
@@ -85,7 +85,21 @@
                                                             form.description
                                                         "
                                                         class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                                                        :maxlength="
+                                                            maxCharacters
+                                                        "
+                                                        @input="
+                                                            updateCharacterCount
+                                                        "
                                                     ></InputTextarea>
+                                                    <div
+                                                        class="mt-1 text-gray-600 text-sm"
+                                                    >
+                                                        {{
+                                                            remainingCharacters
+                                                        }}
+                                                        characters remaining
+                                                    </div>
                                                 </div>
 
                                                 <!-- Group Chat Image -->
@@ -240,6 +254,13 @@ function submit() {
             isLoading.value = false;
         });
 }
+
+const maxCharacters = 20;
+const remainingCharacters = ref(maxCharacters);
+
+const updateCharacterCount = () => {
+    remainingCharacters.value = maxCharacters - form.value.description.length;
+};
 </script>
 
 <style scoped></style>
