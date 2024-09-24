@@ -17,7 +17,12 @@ class Conversation extends Model
     public function participants()
     {
         return $this->belongsToMany(User::class, 'conversation_participants', 'conversation_id', 'user_id')
-                    ->withTimestamps();
+            ->withTimestamps();
+    }
+
+    public function group()
+    {
+        return $this->belongsTo(GroupChat::class, 'group_id');
     }
 
     public function messages()

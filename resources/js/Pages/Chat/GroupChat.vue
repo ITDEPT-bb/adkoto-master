@@ -12,6 +12,7 @@
             />
             <MessageInput
                 :conversation="conversation"
+                :user="authUser"
                 @message-sent="fetchMessages"
             />
         </div>

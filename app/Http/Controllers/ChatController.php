@@ -157,17 +157,46 @@ class ChatController extends Controller
         }
     }
 
-    public function sendGroupMessage(Request $request)
+    // public function sendGroupMessage(Request $request)
+    // {
+    //     $message = Message::create([
+    //         'message' => $request->message,
+    //         'sender_id' => auth()->id(),
+    //         'group_id' => $request->group_id,
+    //     ]);
+
+    //     GroupChat::where('id', $request->group_id)->update(['last_message_id' => $message->id]);
+
+    //     return response()->json($message);
+    // }
+
+    public function sendMessageToGroup(Request $request, GroupChat $group)
     {
-        $message = Message::create([
-            'message' => $request->message,
-            'sender_id' => auth()->id(),
-            'group_id' => $request->group_id,
-        ]);
+        $message = new Message();
+        $message->message = $request->message;
+        $message->sender_id = auth()->id();
+        $message->group_id = $group->id;
+        $message->save();
+
+        // Handle file attachments
+        if ($request->hasFile('files')) {
+            foreach ($request->file('files') as $file) {
+                // $path = $file->store('message_attachments');
+                $path = $file->store('message_attachments/' . $message->id, 'public');
+                $message->attachments()->create([
+                    'name' => $file->getClientOriginalName(),
+                    'path' => $path,
+                    'mime' => $file->getMimeType(),
+                    'size' => $file->getSize(),
+                ]);
+            }
+        }
 
         // Update last message in the group
-        GroupChat::where('id', $request->group_id)->update(['last_message_id' => $message->id]);
+        $group->last_message_id = $message->id;
+        $group->save();
 
         return response()->json($message);
     }
+
 }

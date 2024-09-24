@@ -17,16 +17,29 @@ class GroupChatController extends Controller
 {
     public function index($groupChatId)
     {
-        $groupChat = GroupChat::with(['participants', 'messages.attachments'])
+        $groupChat = GroupChat::with(['participants', 'messages.attachments', 'messages.sender', 'conversation'])
             ->findOrFail($groupChatId);
 
-        $messages = $groupChat->messages;
+        // $messages = $groupChat->messages;
+        $messages = $groupChat->messages->map(function ($message) {
+            return [
+                'id' => $message->id,
+                'message' => $message->message,
+                'attachments' => $message->attachments,
+                'sender_id' => $message->sender_id,
+                'sender' => new UserResource($message->sender),
+                'created_at' => $message->created_at,
+            ];
+        });
 
         $authUser = auth()->user();
+
+        $conversation = $groupChat->conversation;
 
         return Inertia::render('Chat/GroupChat', [
             'groupChat' => new GroupChatResource($groupChat),
             'messages' => $messages,
+            'conversation' => $conversation,
             'authUser' => new UserResource($authUser),
         ]);
     }
@@ -74,11 +87,31 @@ class GroupChatController extends Controller
         return response()->json(['message' => 'Participants added successfully']);
     }
 
+    // public function getGroupMessages($groupChatId)
+    // {
+    //     $groupChat = GroupChat::findOrFail($groupChatId);
+    //     $messages = $groupChat->messages()->with('sender', 'attachments')->get();
+
+    //     return response()->json($messages);
+    // }
     public function getGroupMessages($groupChatId)
     {
         $groupChat = GroupChat::findOrFail($groupChatId);
+
         $messages = $groupChat->messages()->with('sender', 'attachments')->get();
 
-        return response()->json($messages);
+        // Transform messages to include UserResource for sender
+        $transformedMessages = $messages->map(function ($message) {
+            return [
+                'id' => $message->id,
+                'message' => $message->message,
+                'created_at' => $message->created_at,
+                'attachments' => $message->attachments,
+                'sender_id' => $message->sender_id,
+                'sender' => new UserResource($message->sender),
+            ];
+        });
+
+        return response()->json($transformedMessages);
     }
 }

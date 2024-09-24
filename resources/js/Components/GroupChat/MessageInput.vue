@@ -1,6 +1,8 @@
 <template>
     <div class="border-t-2 border-gray-200 px-4 pt-4 mb-2 sm:mb-0">
-        <div class="flex items-center px-3 py-2 rounded-lg bg-gray-50 dark:bg-gray-700 relative">
+        <div
+            class="flex items-center px-3 py-2 rounded-lg bg-gray-50 dark:bg-gray-700 relative"
+        >
             <button
                 type="button"
                 class="inline-flex justify-center p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
@@ -70,15 +72,30 @@
             </button>
         </div>
         <!-- File Previews -->
-        <div v-if="selectedFiles.length" class="mt-2 flex flex-wrap justify-center gap-2">
+        <div
+            v-if="selectedFiles.length"
+            class="mt-2 flex flex-wrap justify-center gap-2"
+        >
             <div
                 v-for="(file, index) in selectedFiles"
                 :key="index"
                 class="relative"
             >
-                <img v-if="isImage(file)" :src="filePreview(file)" class="h-32 w-32 object-cover rounded-lg" />
-                <video v-if="isVideo(file)" :src="filePreview(file)" class="h-32 w-32 object-cover rounded-lg" controls />
-                <button @click="removeFile(index)" class="absolute top-1 right-1 bg-gray-600 text-white p-1 rounded-full">
+                <img
+                    v-if="isImage(file)"
+                    :src="filePreview(file)"
+                    class="h-32 w-32 object-cover rounded-lg"
+                />
+                <video
+                    v-if="isVideo(file)"
+                    :src="filePreview(file)"
+                    class="h-32 w-32 object-cover rounded-lg"
+                    controls
+                />
+                <button
+                    @click="removeFile(index)"
+                    class="absolute top-1 right-1 bg-gray-600 text-white p-1 rounded-full"
+                >
                     &times;
                 </button>
             </div>
@@ -152,8 +169,8 @@ function addEmoji(event) {
 
 // Function to send a new message
 async function sendMessage() {
-    if (!user.id || !conversation.id) {
-        console.error("User or Conversation information is missing.");
+    if (!user.id || (!conversation.id && !conversation.group_id)) {
+        console.error("User, Conversation, or Group information is missing.");
         return;
     }
 
@@ -161,19 +178,27 @@ async function sendMessage() {
 
     const formData = new FormData();
     formData.append("message", newMessage.value);
-    formData.append("receiver_id", user.id);
-    formData.append("conversation_id", conversation.id);
+
+    // Append appropriate receiver details
+    if (conversation.group_id) {
+        formData.append("group_id", conversation.group_id);
+    } else {
+        formData.append("receiver_id", user.id);
+        formData.append("conversation_id", conversation.id);
+    }
 
     selectedFiles.value.forEach((file, index) => {
         formData.append(`files[${index}]`, file);
     });
 
+    // Temporary message for real-time update
     const tempMessage = {
         id: Date.now(),
         message: newMessage.value,
         sender_id: user.id,
-        conversation_id: conversation.id,
-        files: selectedFiles.value.map(file => URL.createObjectURL(file)),
+        group_id: conversation.group_id || null,
+        conversation_id: conversation.id || null,
+        files: selectedFiles.value.map((file) => URL.createObjectURL(file)),
     };
 
     emit("message-sent", tempMessage);
@@ -181,10 +206,12 @@ async function sendMessage() {
     selectedFiles.value = [];
 
     try {
-        await axiosClient.post(
-            `/chat/conversations/${conversation.id}/messages`,
-            formData
-        );
+        // If group chat, send message to group endpoint, otherwise to individual chat endpoint
+        const url = conversation.group_id
+            ? `/chat/groups/${conversation.group_id}/messages`
+            : `/chat/conversations/${conversation.id}/messages`;
+
+        await axiosClient.post(url, formData);
     } catch (error) {
         console.error("Error sending message:", error);
     }

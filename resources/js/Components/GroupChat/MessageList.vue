@@ -21,6 +21,12 @@
                             message.sender_id !== authUser.id,
                     }"
                 >
+                    <span
+                        v-if="message.sender_id !== authUser.id"
+                        class="text-xs text-gray-500 mx-1"
+                    >
+                        {{ message.sender.name }} {{ message.sender.surname }}
+                    </span>
                     <div
                         class="max-w-lg p-2 rounded-lg"
                         :class="{
@@ -92,7 +98,7 @@
                 </div>
                 <img
                     v-if="message.sender_id !== authUser.id"
-                    :src="user.avatar_url"
+                    :src="message.sender.avatar_url"
                     alt="Profile Picture"
                     class="w-6 h-6 rounded-full"
                 />

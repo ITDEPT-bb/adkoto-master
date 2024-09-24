@@ -28,6 +28,11 @@ class GroupChat extends Model
             ->withTimestamps();
     }
 
+    public function group()
+    {
+        return $this->belongsTo(GroupChat::class, 'group_id');
+    }
+
     public function messages()
     {
         return $this->hasMany(Message::class, 'group_id');
@@ -36,5 +41,10 @@ class GroupChat extends Model
     public function lastMessage()
     {
         return $this->belongsTo(Message::class, 'last_message_id');
+    }
+
+    public function conversation()
+    {
+        return $this->hasOne(Conversation::class, 'group_id');
     }
 }
