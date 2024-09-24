@@ -64,12 +64,14 @@ class GroupChatController extends Controller
     {
         $groupChat = GroupChat::findOrFail($groupChatId);
 
-        GroupChatParticipant::create([
-            'group_chat_id' => $groupChat->id,
-            'user_id' => $request->user_id,
-        ]);
+        foreach ($request->users as $userId) {
+            GroupChatParticipant::firstOrCreate([
+                'group_chat_id' => $groupChat->id,
+                'user_id' => $userId,
+            ]);
+        }
 
-        return response()->json(['message' => 'Participant added successfully']);
+        return response()->json(['message' => 'Participants added successfully']);
     }
 
     public function getGroupMessages($groupChatId)

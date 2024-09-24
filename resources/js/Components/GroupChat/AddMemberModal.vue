@@ -181,6 +181,7 @@ import ProfileIcon from "../Icons/ProfileIcon.vue";
 const props = defineProps({
     isOpen: Boolean,
     kalakalitem: Object,
+    groupId: Number,
 });
 
 const emit = defineEmits(["close"]);
@@ -215,9 +216,8 @@ const selectUser = (user) => {
 
 const addSelectedUsers = () => {
     axiosClient
-        .post("/group-chat/add-participant", {
+        .post(`/group-chat/${props.groupId}/add-participant`, {
             users: selectedUsers.value,
-            group_id: props.groupId,
         })
         .then((response) => {
             console.log("Users added:", response.data);
