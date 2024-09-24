@@ -19,7 +19,7 @@ class GroupChatResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
-            'photo' => $this->thumbnail_path ? Storage::url($this->thumbnail_path) : '/img/no_image.png',
+            'photo' => $this->photo ? Storage::url($this->photo) : '/img/no_image.png',
             'owner' => new UserResource($this->owner),
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),

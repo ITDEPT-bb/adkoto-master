@@ -105,6 +105,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::middleware(['auth', 'verified'])->prefix('/group-chat')->group(function () {
     Route::get('/{groupChat}', [GroupChatController::class, 'index'])->name('group-chats.index');
     Route::post('/create', [GroupChatController::class, 'create'])->name('group-chats.create');
+    Route::post('/{groupChat}/update', [GroupChatController::class, 'update'])->name('group-chats.update');
     Route::post('/{groupChat}/add-participant', [GroupChatController::class, 'addParticipant']);
     Route::get('/{groupChat}/messages', [GroupChatController::class, 'getGroupMessages']);
     Route::post('/{groupChat}/messages', [GroupChatController::class, 'sendMessage']);

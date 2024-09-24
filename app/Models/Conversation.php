@@ -12,6 +12,7 @@ class Conversation extends Model
     protected $fillable = [
         'user_id1',
         'user_id2',
+        'group_id',
     ];
 
     public function participants()

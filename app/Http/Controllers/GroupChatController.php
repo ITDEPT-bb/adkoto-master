@@ -11,6 +11,7 @@ use App\Models\GroupChatParticipant;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class GroupChatController extends Controller
@@ -71,14 +72,19 @@ class GroupChatController extends Controller
     public function fetchUsers(Request $request)
     {
         $userId = Auth::id();
+        $groupId = $request->input('groupId');
 
         $users = User::where('id', '!=', $userId)
+            ->whereNotIn('id', function ($query) use ($groupId) {
+                $query->select('user_id')
+                    ->from('group_chat_participants')
+                    ->where('group_chat_id', $groupId);
+            })
             ->get();
 
-        $user = UserResource::collection($users);
-
-        return response()->json($user);
+        return response()->json(UserResource::collection($users));
     }
+
 
     public function addParticipant(Request $request, $groupChatId)
     {
@@ -94,20 +100,12 @@ class GroupChatController extends Controller
         return response()->json(['message' => 'Participants added successfully']);
     }
 
-    // public function getGroupMessages($groupChatId)
-    // {
-    //     $groupChat = GroupChat::findOrFail($groupChatId);
-    //     $messages = $groupChat->messages()->with('sender', 'attachments')->get();
-
-    //     return response()->json($messages);
-    // }
     public function getGroupMessages($groupChatId)
     {
         $groupChat = GroupChat::findOrFail($groupChatId);
 
         $messages = $groupChat->messages()->with('sender', 'attachments')->get();
 
-        // Transform messages to include UserResource for sender
         $transformedMessages = $messages->map(function ($message) {
             return [
                 'id' => $message->id,
@@ -121,4 +119,31 @@ class GroupChatController extends Controller
 
         return response()->json($transformedMessages);
     }
+
+    public function update(Request $request, GroupChat $groupChat)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'photo' => 'nullable|image|max:2048',
+        ]);
+
+        if ($request->hasFile('photo')) {
+            if ($groupChat->photo) {
+                Storage::delete('public/' . $groupChat->photo);
+            }
+
+            $imagePath = $request->file('photo')->store('group_chats/' . $groupChat->id, 'public');
+            $validated['photo'] = $imagePath;
+        }
+
+        $groupChat->update($validated);
+
+        return response()->json([
+            'message' => 'Group chat updated successfully',
+            'groupChat' => $groupChat,
+        ]);
+    }
+
+
 }
