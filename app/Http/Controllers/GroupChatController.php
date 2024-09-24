@@ -58,7 +58,14 @@ class GroupChatController extends Controller
             'user_id' => auth()->id(),
         ]);
 
-        return response()->json($groupChat);
+        Conversation::create([
+            'group_id' => $groupChat->id,
+        ]);
+
+        // return response()->json($groupChat);
+        return response()->json([
+            'groupChatUrl' => route('group-chats.index', ['groupChat' => $groupChat->id])
+        ]);
     }
 
     public function fetchUsers(Request $request)

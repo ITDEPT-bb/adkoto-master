@@ -40,8 +40,17 @@
 
             <!-- Group Column -->
             <div class="flex-1 overflow-y-auto pr-4">
-                <div class="sticky top-0 bg-white shadow-sm z-10 p-2">
-                    <h2 class="text-xl font-bold">My Groups</h2>
+                <div
+                    class="sticky flex justify-between top-0 bg-white shadow-sm z-10 p-2"
+                >
+                    <h2 class="text-xl font-bold">My Group Chats</h2>
+                    <button
+                        @click="showNewGroupModal = true"
+                        class="text-center items-center bg-red-500 hover:bg-red-600 text-white rounded py-1 px-2"
+                    >
+                        <!-- new group -->
+                        <PlusIcon class="h-8 w-8" />
+                    </button>
                 </div>
                 <ul>
                     <li
@@ -113,11 +122,15 @@
             </div>
         </div>
     </div>
+    <CreateGroupModal v-model="showNewGroupModal" @create="onGroupCreate" />
 </template>
 
 <script setup>
-import { defineProps } from "vue";
+import { defineProps, ref } from "vue";
 import { Link } from "@inertiajs/vue3";
+import { PlusIcon } from "@heroicons/vue/24/solid";
+
+import CreateGroupModal from "@/Components/GroupChat/CreateGroupModal.vue";
 
 const props = defineProps({
     followings: {
@@ -133,4 +146,10 @@ const props = defineProps({
         required: true,
     },
 });
+
+const showNewGroupModal = ref(false);
+
+// function onGroupCreate(group) {
+//     props.groups.unshift(group);
+// }
 </script>
