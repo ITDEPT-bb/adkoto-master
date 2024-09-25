@@ -5,7 +5,10 @@
         </h2>
         <div class="mt-4">
             <h1 class="text-lg font-bold px-2 text-center">Highest Bidder</h1>
-            <div class="bg-green-100 dark:bg-gray-800 p-4 rounded-lg my-1">
+            <div
+                v-if="highBid && highBid.user"
+                class="bg-green-100 dark:bg-gray-800 p-4 rounded-lg my-1"
+            >
                 <div class="flex justify-between items-center">
                     <!-- Display bidder's name -->
                     <p class="text-sm font-bold text-gray-900 dark:text-white">
@@ -18,13 +21,21 @@
                 </div>
                 <!-- Display bid time -->
                 <p class="text-sm text-gray-500 dark:text-gray-400">
-                    <!-- {{ new Date(item.created_at).toLocaleString() }} -->
                     {{ dayjs(highBid.created_at).fromNow() }}
                 </p>
             </div>
+            <div v-else class="text-gray-500 dark:text-gray-400">
+                <p>No bids placed yet.</p>
+            </div>
+
             <h1 class="text-lg font-bold px-2 text-center my-1">Bid History</h1>
             <ul class="space-y-2">
-                <!-- Loop through bids and highlight the highest one -->
+                <li
+                    v-if="items.length === 0"
+                    class="p-4 rounded-lg text-gray-500 dark:text-gray-400 text-center"
+                >
+                    No bid history available.
+                </li>
                 <li
                     v-for="item in items"
                     :key="item.id"

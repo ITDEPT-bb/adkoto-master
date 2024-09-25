@@ -78,7 +78,7 @@
                                                         class="font-semibold flex justify-between text-gray-900 dark:text-gray-300"
                                                         >Normal Bidding
                                                         <span
-                                                            >(₱1000.00)</span
+                                                            >(₱300.00)</span
                                                         ></label
                                                     >
                                                     <p
@@ -112,7 +112,7 @@
                                                         class="font-semibold flex justify-between text-gray-900 dark:text-gray-300"
                                                         >Live Bidding
                                                         <span
-                                                            >(₱2000.00)</span
+                                                            >(₱500.00)</span
                                                         ></label
                                                     >
                                                     <p
@@ -188,10 +188,23 @@ const closeModal = () => {
     emit("close");
 };
 
-const confirmAuctionType = () => {
-    console.log("Auction Type Selected:", auctionType.value);
-    // Trigger any logic related to moving to auction here, like an API call
-    closeModal();
+const confirmAuctionType = async () => {
+    try {
+        isLoading.value = true;
+
+        // Call the backend to create a PayMongo checkout session
+        const response = await axios.post("/auction/create-checkout-session", {
+            item_id: props.kalakalitem.id,
+            auction_type: auctionType.value,
+        });
+
+        window.location.href = response.data.checkout_url;
+    } catch (error) {
+        console.error("Error creating checkout session:", error);
+    } finally {
+        isLoading.value = false;
+        // closeModal();
+    }
 };
 </script>
 

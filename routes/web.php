@@ -11,6 +11,7 @@ use App\Http\Controllers\GroupChatController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SearchController;
@@ -89,6 +90,10 @@ Route::middleware(['auth', 'verified'])->prefix('/auction')->group(function () {
     Route::post('/bid/{id}', [AuctionController::class, 'placeBid'])->name('auction.placeBid');
 
     Route::get('/{id}/bids', [AuctionController::class, 'getLatestBids']);
+
+    Route::post('/create-checkout-session', [PaymentController::class, 'createCheckoutSession'])->name('payment.createCheckoutSession');
+    Route::get('/payment/success/{itemId}', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
+    Route::get('/payment/cancel', [PaymentController::class, 'paymentCancel'])->name('payment.cancel');
 });
 
 // Chatkoto
