@@ -16,8 +16,9 @@ class PaymentController extends Controller
     {
         $item = KalakalkotoItem::findOrFail($request->input('item_id'));
         $auctionType = $request->input('auction_type');
+        $amount = $request->input('amount');
 
-        $amount = $auctionType == 'normal' ? 30000 : 50000; // Amount in cents
+        // $amount = $auctionType == 'normal' ? 30000 : 50000;
         $lineItems = [
             [
                 'amount' => $amount,

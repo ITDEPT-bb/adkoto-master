@@ -78,7 +78,10 @@
                                                         class="font-semibold flex justify-between text-gray-900 dark:text-gray-300"
                                                         >Normal Bidding
                                                         <span
-                                                            >(₱300.00)</span
+                                                            >(₱
+                                                            {{
+                                                                normalPrice
+                                                            }})</span
                                                         ></label
                                                     >
                                                     <p
@@ -112,7 +115,10 @@
                                                         class="font-semibold flex justify-between text-gray-900 dark:text-gray-300"
                                                         >Live Bidding
                                                         <span
-                                                            >(₱500.00)</span
+                                                            >(₱
+                                                            {{
+                                                                livePrice
+                                                            }})</span
                                                         ></label
                                                     >
                                                     <p
@@ -164,7 +170,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps, defineEmits } from "vue";
+import { ref, computed, defineProps, defineEmits } from "vue";
 import {
     Dialog,
     DialogPanel,
@@ -184,6 +190,16 @@ const emit = defineEmits(["close"]);
 const auctionType = ref("normal");
 const isLoading = ref(false);
 
+// const normalPrice = computed(() => props.kalakalitem.price * 0.05);
+// const livePrice = computed(() => props.kalakalitem.price * 0.08);
+const normalPrice = computed(() => {
+    return Math.max(20, props.kalakalitem.price * 0.05);
+});
+
+const livePrice = computed(() => {
+    return Math.max(30, props.kalakalitem.price * 0.08);
+});
+
 const closeModal = () => {
     emit("close");
 };
@@ -192,10 +208,20 @@ const confirmAuctionType = async () => {
     try {
         isLoading.value = true;
 
-        // Call the backend to create a PayMongo checkout session
+        let amount;
+        if (auctionType.value === "normal") {
+            amount = Math.max(2000, Math.round(normalPrice.value * 100));
+        } else if (auctionType.value === "live") {
+            amount = Math.max(3000, Math.round(livePrice.value * 100));
+        }
+
+        // amount = Math.round(amount);
+        // amount = Math.max(2000, Math.round(amount));
+
         const response = await axios.post("/auction/create-checkout-session", {
             item_id: props.kalakalitem.id,
             auction_type: auctionType.value,
+            amount: amount,
         });
 
         window.location.href = response.data.checkout_url;
