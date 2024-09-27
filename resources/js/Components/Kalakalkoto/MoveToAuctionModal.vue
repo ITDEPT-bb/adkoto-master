@@ -193,11 +193,11 @@ const isLoading = ref(false);
 // const normalPrice = computed(() => props.kalakalitem.price * 0.05);
 // const livePrice = computed(() => props.kalakalitem.price * 0.08);
 const normalPrice = computed(() => {
-    return Math.max(20, props.kalakalitem.price * 0.05);
+    return Math.max(20, Math.round(props.kalakalitem.price * 0.05));
 });
 
 const livePrice = computed(() => {
-    return Math.max(30, props.kalakalitem.price * 0.08);
+    return Math.max(30, Math.round(props.kalakalitem.price * 0.08));
 });
 
 const closeModal = () => {
