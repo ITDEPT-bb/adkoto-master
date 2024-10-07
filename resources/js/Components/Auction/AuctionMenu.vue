@@ -1,27 +1,24 @@
 <template>
-    <nav class="w-full bg-white shadow rounded-lg mb-2">
-        <div class="max-w-screen-xl px-4 py-3 mx-auto">
-            <div class="flex items-center">
-                <ul
-                    class="flex flex-row font-medium mt-0 space-x-8 rtl:space-x-reverse text-sm"
-                >
-                    <!-- Home Link -->
-                    <li>
-                        <a
-                            :href="route('auction')"
-                            :class="{
-                                'text-gray-900 font-bold underline dark:text-white':
-                                    route().current() === 'auction',
-                                'text-gray-900 font-bold dark:text-white hover:underline':
-                                    route().current() !== 'auction',
-                            }"
-                        >
-                            Home
-                        </a>
-                    </li>
+	<nav class="w-full bg-white shadow rounded-lg mb-2">
+		<div class="max-w-screen-xl px-4 py-3 mx-auto">
+			<div class="flex items-center">
+				<ul class="flex flex-row font-medium mt-0 space-x-8 rtl:space-x-reverse text-sm">
+					<!-- Home Link -->
+					<li>
+						<a
+							:href="route('auction')"
+							:class="{
+								'text-gray-900 font-bold underline dark:text-white':
+									route().current() === 'auction',
+								'text-gray-900 font-bold dark:text-white hover:underline':
+									route().current() !== 'auction',
+							}">
+							Home
+						</a>
+					</li>
 
-                    <!-- Create Listing Link -->
-                    <!-- <li>
+					<!-- Create Listing Link -->
+					<!-- <li>
                         <a
                             href="/auction/create"
                             :class="{
@@ -35,40 +32,36 @@
                         </a>
                     </li> -->
 
-                    <!-- View My Listings Link -->
-                    <li>
-                        <a
-                            :href="route('auction.showUserItems')"
-                            :class="{
-                                'text-gray-900 font-bold underline dark:text-white':
-                                    route().current() ===
-                                    'auction.showUserItems',
-                                'text-gray-900 font-bold dark:text-white hover:underline':
-                                    route().current() !==
-                                    'auction.showUserItems',
-                            }"
-                        >
-                            View My Items
-                        </a>
-                    </li>
+					<!-- View My Listings Link -->
+					<li>
+						<a
+							:href="route('auction.showUserItems')"
+							:class="{
+								'text-gray-900 font-bold underline dark:text-white':
+									route().current() === 'auction.showUserItems',
+								'text-gray-900 font-bold dark:text-white hover:underline':
+									route().current() !== 'auction.showUserItems',
+							}">
+							View My Items
+						</a>
+					</li>
 
-                    <li>
-                        <a
-                            :href="route('auction.viewAllLive')"
-                            :class="{
-                                'text-gray-900 font-bold underline dark:text-white':
-                                    route().current() === 'auction.viewAllLive',
-                                'text-gray-900 font-bold dark:text-white hover:underline':
-                                    route().current() !== 'auction.viewAllLive',
-                            }"
-                        >
-                            Live Bidding
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+					<li>
+						<a
+							:href="route('auction.viewAllLive')"
+							:class="{
+								'text-gray-900 font-bold underline dark:text-white':
+									route().current() === 'auction.viewAllLive',
+								'text-gray-900 font-bold dark:text-white hover:underline':
+									route().current() !== 'auction.viewAllLive',
+							}">
+							Live Bidding
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
 </template>
 
 <script setup></script>

@@ -1,18 +1,15 @@
 <template>
-    <div>
-        <div
-            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6"
-        >
-            <NormalItemCard
-                v-for="item in items.data"
-                :key="item.id"
-                :item="item"
-            />
-        </div>
-        <div class="mt-4">
-            <Pagination :links="items.links" />
-        </div>
-    </div>
+	<div>
+		<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+			<NormalItemCard
+				v-for="item in items.data"
+				:key="item.id"
+				:item="item" />
+		</div>
+		<div class="mt-4">
+			<Pagination :links="items.links" />
+		</div>
+	</div>
 </template>
 
 <script setup>
@@ -21,7 +18,7 @@ import NormalItemCard from "./NormalItemCard.vue";
 import Pagination from "@/Components/Kalakalkoto/Pagination.vue";
 
 const props = defineProps({
-    items: Object,
+	items: Object,
 });
 </script>
 
