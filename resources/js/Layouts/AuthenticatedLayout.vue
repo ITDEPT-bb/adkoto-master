@@ -48,7 +48,7 @@ function toggleDarkMode() {
 		<nav class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
 			<!-- Primary Navigation Menu -->
 			<div
-				class="max-w-screen mx-auto px-4 sm:px-6 lg:px-16 bg-cover bg-center opacity-90"
+				class="max-w-screen mx-auto px-4 sm:px-6 lg:px-16 bg-cover bg-center bg-white"
 				style="background-image: url('/img/adkoto_halloween_web.png')">
 				<!-- <div class="flex items-center justify-between gap-4 h-16">
                     <div class="flex"> -->
