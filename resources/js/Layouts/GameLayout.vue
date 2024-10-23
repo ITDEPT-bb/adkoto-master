@@ -47,11 +47,11 @@ function toggleDarkMode() {
 		<nav class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
 			<!-- Primary Navigation Menu -->
 			<div
-				class="max-w-screen mx-auto px-4 sm:px-6 lg:px-8 bg-cover bg-center bg-white"
+				class="max-w-screen mx-auto px-4 sm:px-6 lg:px-16 bg-cover bg-center bg-white"
 				style="background-image: url('/img/adkoto_halloween_web.png')">
 				<!-- <div class="flex items-center justify-between gap-4 h-16">
                     <div class="flex"> -->
-				<div class="flex items-center justify-between gap-2 h-16">
+				<div class="flex items-center justify-evenly gap-2 h-16">
 					<div class="flex mr-2">
 						<!-- Logo -->
 						<div class="shrink-0 flex items-center bg-white bg-opacity-75 px-4 py-2 rounded-full">
@@ -91,7 +91,7 @@ function toggleDarkMode() {
 						<TextInput
 							v-model="keywords"
 							placeholder="Search on the website"
-							class="w-32 sm:w-1/2 sm:mr-32"
+							class="w-32 sm:w-1/2"
 							@keyup.enter="search" />
 
 						<Link

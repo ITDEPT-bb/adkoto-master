@@ -89,10 +89,15 @@ function toggleDarkMode() {
                             class="w-full sm:w-8/12"
                             @keyup.enter="search"
                         /> -->
+						<!-- <TextInput
+							v-model="keywords"
+							placeholder="Search on the website"
+							class="w-32 sm:w-1/2 sm:mr-32"
+							@keyup.enter="search" /> -->
 						<TextInput
 							v-model="keywords"
 							placeholder="Search on the website"
-							class="w-32 sm:w-1/3 sm:mr-32"
+							class="w-32 sm:w-1/2"
 							@keyup.enter="search" />
 
 						<!-- <Link :href="route('dashboard')"> -->
