@@ -14,6 +14,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RechargeWalletController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
@@ -94,6 +95,10 @@ Route::middleware(['auth', 'verified'])->prefix('/auction')->group(function () {
     Route::post('/create-checkout-session', [PaymentController::class, 'createCheckoutSession'])->name('payment.createCheckoutSession');
     Route::get('/payment/success/{itemId}', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
     Route::get('/payment/cancel', [PaymentController::class, 'paymentCancel'])->name('payment.cancel');
+
+    Route::post('/create-recharge-session', [RechargeWalletController::class, 'createRechargeSession'])->name('recharge.createRechargeSession');
+    Route::get('/recharge/success/{userId}', [RechargeWalletController::class, 'rechargeSuccess'])->name('recharge.success');
+    Route::get('/recharge/cancel', [RechargeWalletController::class, 'rechargeCancel'])->name('recharge.cancel');
 });
 
 // Chatkoto

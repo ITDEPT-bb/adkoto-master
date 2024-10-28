@@ -32,7 +32,11 @@ class AuctionController extends Controller
         $liveBiddingItem = AuctionItem::with(['attachments', 'user', 'category', 'bids'])
             ->select('*', DB::raw('(SELECT MAX(bid_amount) FROM bids WHERE bids.auction_item_id = auction_items.id) as highest_bid'))
             ->where('bidding_type', 'live')
+            ->where('auction_ends_at', '>', Carbon::now())
             // ->inRandomOrder()
+            ->whereHas('user.wallet', function ($query) {
+                $query->whereColumn('user_wallets.balance', '>=', 'auction_items.starting_price');
+            })
             ->first();
 
         if ($liveBiddingItem) {
@@ -43,10 +47,15 @@ class AuctionController extends Controller
 
         $categories = KalakalkotoCategory::all();
 
+        $user = Auth::user();
+        $walletBalance = $user->wallet ? $user->wallet->balance : 0;
+
         return Inertia::render('Auction/Index', [
             'normalBiddingItems' => $normalBiddingItems,
             'liveBiddingItem' => $liveBiddingItem,
-            'categories' => $categories
+            'categories' => $categories,
+            'user' => $user,
+            'walletBalance' => $walletBalance
         ]);
     }
 
@@ -117,10 +126,15 @@ class AuctionController extends Controller
             ->orderBy('bid_amount', 'desc')
             ->first();
 
+        $user = Auth::user();
+        $walletBalance = $user->wallet ? $user->wallet->balance : 0;
+
         return Inertia::render('Auction/Show', [
             'item' => $auctionitem,
             'highBid' => $highBid,
-            'bids' => $auctionitem->bids
+            'bids' => $auctionitem->bids,
+            'user' => $user,
+            'walletBalance' => $walletBalance
         ]);
     }
 
@@ -142,10 +156,15 @@ class AuctionController extends Controller
 
         $categories = KalakalkotoCategory::all();
 
+        $user = Auth::user();
+        $walletBalance = $user->wallet ? $user->wallet->balance : 0;
+
         return Inertia::render('Auction/Manage', [
             'items' => $items,
             'categories' => $categories,
-            'authId' => $userId
+            'authId' => $userId,
+            'user' => $user,
+            'walletBalance' => $walletBalance
         ]);
     }
 
@@ -213,6 +232,9 @@ class AuctionController extends Controller
         $liveBiddingItem = AuctionItem::with(['attachments', 'user', 'category', 'bids'])
             ->select('*', DB::raw('(SELECT MAX(bid_amount) FROM bids WHERE bids.auction_item_id = auction_items.id) as highest_bid'))
             ->where('bidding_type', 'live')
+            ->whereHas('user.wallet', function ($query) {
+                $query->whereColumn('user_wallets.balance', '>=', 'auction_items.starting_price');
+            })
             ->first();
 
         if ($liveBiddingItem) {
@@ -223,10 +245,15 @@ class AuctionController extends Controller
 
         $categories = KalakalkotoCategory::all();
 
+        $user = Auth::user();
+        $walletBalance = $user->wallet ? $user->wallet->balance : 0;
+
         return response()->json([
             'normalBiddingItems' => $normalBiddingItems,
             'liveBiddingItem' => $liveBiddingItem,
-            'categories' => $categories
+            'categories' => $categories,
+            'user' => $user,
+            'walletBalance' => $walletBalance
         ]);
     }
 
@@ -237,6 +264,9 @@ class AuctionController extends Controller
             ->orderByDesc('created_at')
             ->where('bidding_type', 'live')
             ->where('auction_ends_at', '>', Carbon::now())
+            ->whereHas('user.wallet', function ($query) {
+                $query->whereColumn('user_wallets.balance', '>=', 'auction_items.starting_price');
+            })
             ->paginate(9);
 
         $liveBiddingItem->each(function ($auction) {
@@ -247,9 +277,14 @@ class AuctionController extends Controller
 
         $categories = KalakalkotoCategory::all();
 
+        $user = Auth::user();
+        $walletBalance = $user->wallet ? $user->wallet->balance : 0;
+
         return Inertia::render('Auction/Live', [
             'liveBiddingItem' => $liveBiddingItem,
-            'categories' => $categories
+            'categories' => $categories,
+            'user' => $user,
+            'walletBalance' => $walletBalance
         ]);
     }
 
@@ -260,6 +295,9 @@ class AuctionController extends Controller
             ->orderByDesc('created_at')
             ->where('bidding_type', 'live')
             ->where('auction_ends_at', '>', Carbon::now())
+            ->whereHas('user.wallet', function ($query) {
+                $query->whereColumn('user_wallets.balance', '>=', 'auction_items.starting_price');
+            })
             ->paginate(9);
 
         $liveBiddingItem->each(function ($auction) {

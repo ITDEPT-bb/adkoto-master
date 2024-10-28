@@ -1,22 +1,31 @@
 <template>
-    <Head title="Kalakalkoto" />
+	<Head title="Kalakalkoto" />
 
-    <KalakalLayout>
-        <div class="max-w-7xl mx-auto h-full overflow-y-auto p-4">
-            <PageSelector />
-            <AuctionMenu />
-            <div class="bg-white p-6 rounded-lg shadow-sm">
-                <h2 class="text-2xl font-bold mb-4">Live Bidding</h2>
-                <NormalItemList :items="liveBiddingItem" />
-            </div>
-        </div>
-    </KalakalLayout>
+	<KalakalLayout>
+		<div class="max-w-7xl mx-auto h-full overflow-y-auto p-4">
+			<PageSelector />
+			<AuctionMenu />
+			<div class="bg-white p-6 rounded-lg shadow-sm">
+				<h2 class="text-2xl font-bold mb-4">Live Bidding</h2>
 
-    <UpdateProfileReminder />
+				<!-- Check if liveBiddingItem has items -->
+				<div v-if="liveBiddingItem && liveBiddingItem.length > 0">
+					<NormalItemList :items="liveBiddingItem" />
+				</div>
+				<div
+					v-else
+					class="text-gray-500">
+					No live bidding available
+				</div>
+			</div>
+		</div>
+	</KalakalLayout>
+
+	<UpdateProfileReminder />
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 import { usePage, Head } from "@inertiajs/vue3";
 import axiosClient from "@/axiosClient.js";
 
@@ -26,32 +35,31 @@ import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
 import AuctionMenu from "@/Components/Auction/AuctionMenu.vue";
 import PageSelector from "@/Components/Kalakalkoto/PageSelector.vue";
 import NormalItemList from "@/Components/Auction/NormalItemList.vue";
-import NormalItemCard from "@/Components/Auction/NormalItemCard.vue";
 
 const { props } = usePage();
 const liveBiddingItem = ref(props.liveBiddingItem);
 const intervalId = ref(null);
 
 const fetchLatestBidsLive = async () => {
-    try {
-        const response = await axiosClient.get(`/auction/bids/live`);
-        liveBiddingItem.value = response.data.liveBiddingItem;
-    } catch (error) {
-        console.error("Failed to fetch the latest bids:", error);
-    }
+	try {
+		const response = await axiosClient.get(`/auction/bids/live`);
+		liveBiddingItem.value = response.data.liveBiddingItem;
+	} catch (error) {
+		console.error("Failed to fetch the latest bids:", error);
+	}
 };
 
 onMounted(() => {
-    intervalId.value = setInterval(() => {
-        fetchLatestBidsLive();
-    }, 5000);
+	intervalId.value = setInterval(() => {
+		fetchLatestBidsLive();
+	}, 5000);
 
-    fetchLatestBidsLive();
+	fetchLatestBidsLive();
 });
 
 onBeforeUnmount(() => {
-    if (intervalId.value) {
-        clearInterval(intervalId.value);
-    }
+	if (intervalId.value) {
+		clearInterval(intervalId.value);
+	}
 });
 </script>

@@ -63,7 +63,7 @@ class KalakalkotoItemsSeeder extends Seeder
                 // Insert into the kalakalkoto_item_attachments table
                 DB::table('kalakalkoto_item_attachments')->insert([
                     'kalakal_id' => $itemId,
-                    'image_path' => 'kalakalkoto_images/' . $imagePath, // Save relative path to database
+                    'image_path' => 'kalakalkoto_images/' . $imagePath,
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now(),
                 ]);

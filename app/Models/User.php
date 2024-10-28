@@ -146,23 +146,28 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
     }
 
     // Kalakalkoto
-    public function items()
-    {
-        return $this->hasMany(Item::class);
-    }
+    // public function items()
+    // {
+    //     return $this->hasMany(Item::class);
+    // }
 
-    public function marketSentMessages()
-    {
-        return $this->hasMany(MarketMessage::class, 'sender_id');
-    }
+    // public function marketSentMessages()
+    // {
+    //     return $this->hasMany(MarketMessage::class, 'sender_id');
+    // }
 
-    public function marketReceivedMessages()
-    {
-        return $this->hasMany(MarketMessage::class, 'receiver_id');
-    }
+    // public function marketReceivedMessages()
+    // {
+    //     return $this->hasMany(MarketMessage::class, 'receiver_id');
+    // }
 
     public function transactions()
     {
         return $this->hasMany(Transaction::class, 'buyer_id');
+    }
+
+    public function wallet()
+    {
+        return $this->hasOne(UserWallet::class);
     }
 }

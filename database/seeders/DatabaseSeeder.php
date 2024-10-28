@@ -21,5 +21,6 @@ class DatabaseSeeder extends Seeder
         // ]);
         // $this->call(MarketplaceSeeder::class);
         $this->call(UserSeeder::class);
+        $this->call(WalletSeeder::class);
     }
 }
