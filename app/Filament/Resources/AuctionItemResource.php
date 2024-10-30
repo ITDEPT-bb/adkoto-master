@@ -52,6 +52,8 @@ class AuctionItemResource extends Resource
                     ])
                     ->default('normal')
                     ->required(),
+                Forms\Components\Toggle::make('is_active')
+                    ->required(),
                 Forms\Components\DateTimePicker::make('auction_ends_at')
                     ->required(),
             ]);
@@ -64,6 +66,8 @@ class AuctionItemResource extends Resource
                 Tables\Columns\TextColumn::make('name'),
                 Tables\Columns\TextColumn::make('starting_price')
                     ->money('php'),
+                Tables\Columns\IconColumn::make('is_active')
+                    ->boolean(),
                 Tables\Columns\TextColumn::make('bidding_type'),
                 Tables\Columns\TextColumn::make('auction_ends_at')->sortable(),
                 Tables\Columns\TextColumn::make('user.name'),

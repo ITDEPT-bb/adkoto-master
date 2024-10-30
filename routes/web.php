@@ -77,6 +77,8 @@ Route::middleware(['auth', 'verified'])->prefix('/auction')->group(function () {
     // Live Bidding
     Route::get('/live', [AuctionController::class, 'viewAllLive'])->name('auction.viewAllLive');
     Route::get('/bids/live', [AuctionController::class, 'getLatestBidsLive']);
+    Route::get('/stream', [AuctionController::class, 'watchStream'])->name('auction.watchStream');
+    Route::get('/stream/bidlist', [AuctionController::class, 'fetchShowWindowData'])->name('auction.fetchShowWindowData');
 
     // Create
     // Route::get('/create', [AuctionController::class, 'create'])->name('auction.create');

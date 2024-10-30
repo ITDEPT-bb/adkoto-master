@@ -33,11 +33,16 @@
 						<div
 							class="col-span-12 lg:col-span-3 bg-white px-4 py-4 lg:px-6 lg:py-6 rounded-lg shadow-sm flex flex-col justify-between">
 							<NormalItemCard :item="liveBiddingItem" />
-							<a
+							<!-- <a
 								:href="route('auction.viewAllLive')"
 								class="mt-4 lg:mt-6 w-full text-center font-bold bg-blue-300 hover:bg-blue-500 hover:text-white p-3 rounded-md transition-all duration-300 ease-in-out">
 								View All Live Bidding
-							</a>
+							</a> -->
+							<!-- <a
+								:href="route('auction.watchStream')"
+								class="mt-4 lg:mt-6 w-full text-center font-bold bg-blue-300 hover:bg-blue-500 hover:text-white p-3 rounded-md transition-all duration-300 ease-in-out">
+								View Live Bidding
+							</a> -->
 						</div>
 					</DisclosurePanel>
 				</Disclosure>
@@ -52,11 +57,16 @@
 					class="col-span-12 lg:col-span-3 bg-white px-4 py-4 lg:px-6 lg:py-6 rounded-lg shadow-sm hidden lg:block">
 					<h2 class="text-2xl font-bold mb-4">Live Bidding</h2>
 					<NormalItemCard :item="liveBiddingItem" />
-					<a
+					<!-- <a
 						:href="route('auction.viewAllLive')"
 						class="font-bold w-full sm:gap-4 sm:items-center justify-center sm:flex sm:my-4 rounded-md p-2 bg-blue-300 hover:bg-blue-500 hover:text-white">
 						View All Live Bidding
-					</a>
+					</a> -->
+					<!-- <a
+						:href="route('auction.watchStream')"
+						class="font-bold w-full sm:gap-4 sm:items-center justify-center sm:flex sm:my-4 rounded-md p-2 bg-blue-300 hover:bg-blue-500 hover:text-white">
+						View Live Bidding
+					</a> -->
 				</div>
 			</div>
 		</div>

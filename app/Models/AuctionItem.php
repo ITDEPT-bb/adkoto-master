@@ -20,6 +20,7 @@ class AuctionItem extends Model
         'current_bid',
         'bid_increment',
         'bidding_type',
+        'is_active',
         'auction_ends_at',
     ];
 
