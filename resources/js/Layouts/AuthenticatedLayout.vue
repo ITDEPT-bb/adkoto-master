@@ -41,25 +41,44 @@ function toggleDarkMode() {
 		localStorage.setItem("darkMode", "1");
 	}
 }
+
+const beforeEnter = (el) => {
+	el.style.transform = "translateX(100%)";
+};
+const enter = (el, done) => {
+	el.offsetHeight;
+	el.style.transition = "transform 0.3s ease-in-out";
+	el.style.transform = "translateX(0)";
+	done();
+};
+const leave = (el, done) => {
+	el.style.transition = "transform 0.3s ease-in-out";
+	el.style.transform = "translateX(100%)";
+	setTimeout(() => {
+		done();
+	}, 300);
+};
 </script>
 
 <template>
 	<div class="h-full mx-auto overflow-hidden flex flex-col bg-gray-100 dark:bg-gray-800">
 		<nav class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
 			<!-- Primary Navigation Menu -->
-			<div
+			<!-- <div
 				class="max-w-screen mx-auto px-4 sm:px-6 lg:px-16 bg-cover bg-center bg-white"
-				style="background-image: url('/img/adkoto_halloween_web.png')">
+				style="background-image: url('/img/adkoto_halloween_web.png')"> -->
+			<div class="max-w-screen mx-auto px-4 sm:px-6 lg:px-16">
 				<!-- <div class="flex items-center justify-between gap-4 h-16">
                     <div class="flex"> -->
 				<div class="flex items-center justify-between gap-2 h-16">
 					<div class="flex mr-2">
 						<!-- Logo -->
-						<div class="shrink-0 flex items-center bg-white bg-opacity-75 px-4 py-2 rounded-full">
+						<!-- <div class="shrink-0 flex items-center bg-white bg-opacity-75 px-4 py-2 rounded-full"> -->
+						<div class="shrink-0 flex items-center">
 							<Link :href="route('dashboard')">
 								<img
 									:src="logo"
-									class="block h-7 sm:h-9 w-auto"
+									class="block h-8 sm:h-9 w-auto"
 									alt="Logo" />
 							</Link>
 						</div>
@@ -83,20 +102,9 @@ function toggleDarkMode() {
 					<!-- <div class="hidden sm:flex sm:items-center sm:ms-6"> -->
 					<!-- <div class="flex-1"> -->
 					<div class="flex items-center sm:gap-9 p-4 flex-1">
-						<!-- <TextInput
-                            v-model="keywords"
-                            placeholder="Search on the website"
-                            class="w-full sm:w-8/12"
-                            @keyup.enter="search"
-                        /> -->
-						<!-- <TextInput
-							v-model="keywords"
-							placeholder="Search on the website"
-							class="w-32 sm:w-1/2 sm:mr-32"
-							@keyup.enter="search" /> -->
 						<TextInput
 							v-model="keywords"
-							placeholder="Search on the website"
+							placeholder="Search....."
 							class="w-32 sm:w-1/2"
 							@keyup.enter="search" />
 
@@ -128,7 +136,7 @@ function toggleDarkMode() {
 						<Link
 							:href="route('games.index')"
 							class="bg-white p-0.5 rounded-full hidden sm:flex">
-							<!-- Adkoto -->
+							<!-- Games -->
 							<img
 								:src="gameIcon"
 								class="hidden sm:flex md:h-auto md:w-12 xl:w-10"
@@ -209,6 +217,36 @@ function toggleDarkMode() {
 					</div>
 
 					<!-- Hamburger -->
+					<!-- <div class="-me-2 flex items-center sm:hidden">
+						<button
+							@click="showingNavigationDropdown = !showingNavigationDropdown"
+							class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out">
+							<svg
+								class="h-6 w-6"
+								stroke="currentColor"
+								fill="none"
+								viewBox="0 0 24 24">
+								<path
+									:class="{
+										hidden: showingNavigationDropdown,
+										'inline-flex': !showingNavigationDropdown,
+									}"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M4 6h16M4 12h16M4 18h16" />
+								<path
+									:class="{
+										hidden: !showingNavigationDropdown,
+										'inline-flex': showingNavigationDropdown,
+									}"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M6 18L18 6M6 6l12 12" />
+							</svg>
+						</button>
+					</div> -->
 					<div class="-me-2 flex items-center sm:hidden">
 						<button
 							@click="showingNavigationDropdown = !showingNavigationDropdown"
@@ -243,14 +281,15 @@ function toggleDarkMode() {
 			</div>
 
 			<!-- Responsive Navigation Menu -->
-			<div
+			<!-- <div
 				:class="{
 					block: showingNavigationDropdown,
 					hidden: !showingNavigationDropdown,
 				}"
-				class="sm:hidden">
-				<!-- Responsive Settings Options -->
-				<div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
+				class="sm
+                :hidden"> -->
+			<!-- Responsive Settings Options -->
+			<!-- <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
 					<template v-if="authUser">
 						<div class="px-4">
 							<div class="font-medium text-base text-gray-800 dark:text-gray-200">
@@ -262,9 +301,6 @@ function toggleDarkMode() {
 						</div>
 
 						<div class="mt-3 space-y-1">
-							<!-- <ResponsiveNavLink :href="route('dashboard')">
-                                Tribekoto
-                            </ResponsiveNavLink> -->
 							<ResponsiveNavLink :href="route('chat.index')"> Chat </ResponsiveNavLink>
 							<ResponsiveNavLink :href="route('kalakalkoto')"> Kalakalkoto </ResponsiveNavLink>
 							<ResponsiveNavLink :href="route('adkoto')"> Adkoto </ResponsiveNavLink>
@@ -289,7 +325,88 @@ function toggleDarkMode() {
 					</template>
 					<template> Login button </template>
 				</div>
-			</div>
+			</div> -->
+			<!-- Responsive Navigation Menu -->
+			<transition
+				name="slide"
+				@before-enter="beforeEnter"
+				@enter="enter"
+				@leave="leave">
+				<div
+					v-if="showingNavigationDropdown"
+					:class="[
+						'fixed top-0 right-0 z-40 h-screen p-4 pt-8 overflow-y-auto bg-white w-56 dark:bg-gray-800 shadow-2xl',
+						{
+							'translate-x-0': showingNavigationDropdown,
+							hidden: !showingNavigationDropdown,
+						},
+					]"
+					tabindex="-1"
+					id="drawer-right-example"
+					aria-labelledby="drawer-right-label">
+					<!-- Close Button -->
+					<button
+						type="button"
+						@click="showingNavigationDropdown = false"
+						class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-2.5 right-2.5 inline-flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white">
+						<svg
+							class="w-3 h-3 mt-5"
+							aria-hidden="true"
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 14 14">
+							<path
+								stroke="currentColor"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+						</svg>
+						<span class="sr-only">Close menu</span>
+					</button>
+
+					<!-- Responsive Settings Options -->
+					<div class="pt-4 pb-1">
+						<template v-if="authUser">
+							<div class="border-b border-gray-200 dark:border-gray-600">
+								<div class="flex items-center space-x-3 pb-2">
+									<img
+										class="h-10 w-10 rounded-full object-cover"
+										:src="authUser.avatar_url"
+										:alt="authUser.name" />
+									<div class="flex flex-col">
+										<div class="font-semibold text-md text-gray-800 dark:text-gray-200">
+											{{ authUser.name }}
+										</div>
+										<div class="font-medium text-sm text-gray-500">
+											{{ authUser.email }}
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="mt-3 space-y-1">
+								<ResponsiveNavLink :href="route('kalakalkoto')"> Kalakalkoto </ResponsiveNavLink>
+								<ResponsiveNavLink :href="route('adkoto')"> Adkoto </ResponsiveNavLink>
+								<ResponsiveNavLink :href="route('chat.index')"> Chat </ResponsiveNavLink>
+								<ResponsiveNavLink :href="route('notifications.fetchAllNotifications')">
+									Notifications
+								</ResponsiveNavLink>
+								<ResponsiveNavLink :href="route('profile', { username: authUser.username })">
+									Profile
+								</ResponsiveNavLink>
+								<ResponsiveNavLink
+									:href="route('logout')"
+									method="post"
+									as="button">
+									Log Out
+								</ResponsiveNavLink>
+							</div>
+						</template>
+						<template> Login button </template>
+					</div>
+				</div>
+			</transition>
 		</nav>
 
 		<!-- Page Heading -->
@@ -307,3 +424,14 @@ function toggleDarkMode() {
 		</main>
 	</div>
 </template>
+
+<style scoped>
+.slide-enter-active,
+.slide-leave-active {
+	transition: transform 0.3s ease-in-out;
+}
+.slide-enter,
+.slide-leave-to {
+	transform: translateX(100%);
+}
+</style>
