@@ -16,7 +16,15 @@ class RechargeWalletController extends Controller
         $user = $request->user();
 
         // Ensure the amount is multiplied by 100 and cast to integer
-        $amount = (int) ($request->input('amount') * 100);
+        // $amount = (int) ($request->input('amount') * 100);
+        $originalAmount = (float) $request->input('amount');
+
+        $chargePercentage = 0.05;
+        $chargeAmount = $originalAmount * $chargePercentage;
+
+        $finalAmount = $originalAmount + $chargeAmount;
+
+        $amount = (int) ($finalAmount * 100);
 
         // Ensure that the amount is valid
         if ($amount <= 0) {
@@ -48,7 +56,7 @@ class RechargeWalletController extends Controller
                 'data' => [
                     'attributes' => [
                         'line_items' => $lineItems,
-                        'payment_method_types' => ['card', 'gcash', 'paymaya'],
+                        'payment_method_types' => ['card', 'gcash', 'paymaya', 'qrph', 'billease', 'grab_pay', 'dob'],
                         'success_url' => route('recharge.success', ['userId' => $user->id]),
                         'cancel_url' => route('recharge.cancel'),
                     ],

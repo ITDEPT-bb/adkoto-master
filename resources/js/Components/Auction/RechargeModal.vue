@@ -48,7 +48,7 @@
 											upon confirmation.
 										</p>
 										<div class="mt-4 space-y-4">
-											<div class="flex items-center">
+											<!-- <div class="flex items-center">
 												<input
 													id="amount-50"
 													type="radio"
@@ -60,7 +60,7 @@
 													class="ml-2 text-sm font-semibold text-gray-900"
 													>₱ 50</label
 												>
-											</div>
+											</div> -->
 											<div class="flex items-center">
 												<input
 													id="amount-100"
@@ -114,6 +114,9 @@
 												>
 											</div>
 										</div>
+										<p class="mt-4 text-xs text-red-500">
+											* Note: A 5% charge will be applied to your selected recharge amount.
+										</p>
 									</div>
 								</div>
 							</div>
@@ -156,7 +159,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["close", "recharge"]);
-const rechargeAmount = ref(50);
+const rechargeAmount = ref(100);
 const isLoading = ref(false);
 
 const closeModal = () => {
