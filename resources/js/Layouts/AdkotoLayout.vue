@@ -245,7 +245,7 @@ const leave = (el, done) => {
 				<div
 					v-if="showingNavigationDropdown"
 					:class="[
-						'fixed top-0 right-0 z-40 h-screen p-4 pt-8 overflow-y-auto bg-white w-56 dark:bg-gray-800 shadow-2xl',
+						'fixed top-0 right-0 z-40 h-screen p-4 pt-8 overflow-y-auto bg-white w-60 dark:bg-gray-800 shadow-2xl',
 						{
 							'translate-x-0': showingNavigationDropdown,
 							hidden: !showingNavigationDropdown,
@@ -278,19 +278,19 @@ const leave = (el, done) => {
 					<!-- Responsive Settings Options -->
 					<div class="pt-4 pb-1">
 						<template v-if="authUser">
-							<div class="border-b border-gray-200 dark:border-gray-600">
-								<div class="flex items-center space-x-3 pb-2">
+							<div class="border-b border-gray-200 dark:border-gray-600 py-4 truncate">
+								<div class="flex flex-col items-center justify-center">
 									<img
 										class="h-10 w-10 rounded-full object-cover"
 										:src="authUser.avatar_url"
-										:alt="authUser.name" />
-									<div class="flex flex-col">
-										<div class="font-semibold text-md text-gray-800 dark:text-gray-200">
-											{{ authUser.name }}
-										</div>
-										<div class="font-medium text-sm text-gray-500">
-											{{ authUser.email }}
-										</div>
+										:alt="`${authUser.name} ${authUser.surname}`" />
+
+									<div class="font-semibold text-lg text-gray-800 dark:text-gray-200">
+										{{ authUser.name }} {{ authUser.surname }}
+									</div>
+
+									<div class="font-medium text-xs text-gray-500 dark:text-gray-400">
+										{{ authUser.email }}
 									</div>
 								</div>
 							</div>
