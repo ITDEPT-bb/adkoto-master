@@ -7,7 +7,8 @@
 			<AuctionMenu />
 
 			<div class="bg-white flex flex-col gap-4 p-6 rounded-lg shadow-sm">
-				<YouTubeLiveStream :channelId="youtubeChannelId" />
+				<!-- <YouTubeLiveStream :channelId="youtubeChannelId" /> -->
+				<VideoSDKLiveStream />
 
 				<ShowWindow
 					v-if="!noActiveBidding"
@@ -39,15 +40,8 @@ import AuctionMenu from "@/Components/Auction/AuctionMenu.vue";
 import PageSelector from "@/Components/Kalakalkoto/PageSelector.vue";
 import ShowWindow from "@/Components/Auction/ShowWindow.vue";
 import axios from "axios";
+import VideoSDKLiveStream from "@/Components/Auction/VideoSDKLiveStream.vue";
 
-// const props = defineProps({
-// 	noActiveBidding: Boolean,
-// 	item: Object,
-// 	highBid: Object,
-// 	bids: Array,
-// 	user: Object,
-// 	walletBalance: Number,
-// });
 const { props } = usePage();
 
 const updatedItem = ref(props.item);
