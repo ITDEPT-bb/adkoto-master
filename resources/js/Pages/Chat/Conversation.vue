@@ -1,22 +1,21 @@
 <template>
-    <Head title="Conversation" />
-    <AuthenticatedLayout>
-        <div class="flex-1 p:2 sm:p-6 justify-between max-w-7xl mx-auto flex flex-col h-full">
-            <ChatHeader :user="user" />
-            <MessageList
-                :messages="messages"
-                :authUser="authUser"
-                :user="user"
-                :conversation="conversation"
-            />
-            <MessageInput
-                :user="user"
-                :conversation="conversation"
-                @message-sent="fetchMessages"
-            />
-        </div>
-    </AuthenticatedLayout>
-    <UpdateProfileReminder />
+	<Head title="Conversation" />
+	<AuthenticatedLayout>
+		<div
+			class="flex-1 my-2 pb-6 justify-between max-w-7xl mx-auto bg-white rounded-lg border flex flex-col h-full">
+			<ChatHeader :user="user" />
+			<MessageList
+				:messages="messages"
+				:authUser="authUser"
+				:user="user"
+				:conversation="conversation" />
+			<MessageInput
+				:user="user"
+				:conversation="conversation"
+				@message-sent="fetchMessages" />
+		</div>
+	</AuthenticatedLayout>
+	<UpdateProfileReminder />
 </template>
 
 <script setup>
@@ -30,9 +29,9 @@ import { ref, onMounted } from "vue";
 import axiosClient from "@/axiosClient.js";
 
 const props = defineProps({
-    user: Object,
-    messages: Array,
-    conversation: Object,
+	user: Object,
+	messages: Array,
+	conversation: Object,
 });
 
 const user = props.user;
@@ -41,17 +40,15 @@ const conversation = props.conversation;
 const authUser = usePage().props.auth.user;
 
 const fetchMessages = async () => {
-    try {
-        const response = await axiosClient.get(
-            `/chat/conversations/${conversation.id}/messages`
-        );
-        messages.value = response.data;
-    } catch (error) {
-        console.error("Error fetching messages:", error);
-    }
+	try {
+		const response = await axiosClient.get(`/chat/conversations/${conversation.id}/messages`);
+		messages.value = response.data;
+	} catch (error) {
+		console.error("Error fetching messages:", error);
+	}
 };
 
 onMounted(() => {
-    fetchMessages();
+	fetchMessages();
 });
 </script>
