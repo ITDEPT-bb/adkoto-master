@@ -78,7 +78,7 @@
 					<ProfileIcon />
 				</button>
 			</Link>
-			<button
+			<!-- <button
 				type="button"
 				class="inline-flex items-center justify-center rounded-lg border h-10 w-10 transition duration-500 ease-in-out text-white hover:bg-gray-300 hover:text-black focus:outline-none"
 				@click="startVoiceCall">
@@ -89,7 +89,7 @@
 				class="inline-flex items-center justify-center rounded-lg border h-10 w-10 transition duration-500 ease-in-out text-white hover:bg-gray-300 hover:text-black focus:outline-none"
 				@click="startVideoCall">
 				<VideoCamera />
-			</button>
+			</button> -->
 		</div>
 
 		<!-- Dropdown Menu -->
@@ -102,7 +102,7 @@
 					<ProfileIcon class="mr-2" /> View Profile
 				</button>
 			</Link>
-			<button
+			<!-- <button
 				class="flex items-center w-full px-4 py-2 text-gray-800 hover:bg-gray-200"
 				@click="startVoiceCall">
 				<PhoneIcon class="mr-2" /> Voice Call
@@ -111,7 +111,7 @@
 				class="flex items-center w-full px-4 py-2 text-gray-800 hover:bg-gray-200"
 				@click="startVideoCall">
 				<VideoCamera class="mr-2" /> Video Call
-			</button>
+			</button> -->
 		</div>
 	</div>
 </template>

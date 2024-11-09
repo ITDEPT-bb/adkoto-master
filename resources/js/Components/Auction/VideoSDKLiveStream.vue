@@ -2,18 +2,38 @@
 	<div>
 		<div id="textDiv">{{ message }}</div>
 		<div class="controls">
-			<button @click="joinAsSpeaker">Join as Speaker</button>
-			<button @click="joinAsViewer">Join as Viewer</button>
-			<button
+			<PrimaryButton
+				v-if="authUser.is_filament_admin"
+				@click="joinAsSpeaker">
+				Join as Speaker
+			</PrimaryButton>
+			<PrimaryButton
+				v-if="!isStreamLive"
+				@click="joinAsViewer">
+				Join as Viewer
+			</PrimaryButton>
+			<PrimaryButton
 				v-if="hlsControls"
 				@click="startHLS">
 				Start HLS
-			</button>
-			<button
+			</PrimaryButton>
+			<PrimaryButton
 				v-if="hlsControls"
 				@click="stopHLS">
 				Stop HLS
-			</button>
+			</PrimaryButton>
+			<!-- New button for streamer to end meeting -->
+			<PrimaryButton
+				v-if="authUser.is_filament_admin && hlsControls"
+				@click="endMeeting">
+				End Meeting
+			</PrimaryButton>
+			<!-- New button for viewer to leave stream -->
+			<PrimaryButton
+				v-if="!authUser.is_filament_admin && isStreamLive"
+				@click="leaveStream">
+				Leave Stream
+			</PrimaryButton>
 		</div>
 		<div id="videoContainer">
 			<video
@@ -31,6 +51,8 @@ import { VideoSDK } from "@videosdk.live/js-sdk";
 import Hls from "hls.js";
 import { usePage } from "@inertiajs/vue3";
 
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+
 const authUser = usePage().props.auth.user;
 
 const message = ref("Join the meeting as a speaker or viewer");
@@ -38,6 +60,7 @@ const video = ref(null);
 let meeting = null;
 const hlsControls = ref(false);
 const isVideoPlaying = ref(false);
+const isStreamLive = ref(false);
 
 const joinAsSpeaker = async () => {
 	message.value = "Joining as Speaker...";
@@ -75,50 +98,34 @@ const setEventHandlers = (mode) => {
 
 	meeting.on("hls-state-changed", ({ downstreamUrl, status }) => {
 		handleHLSStateChange(status);
+		isStreamLive.value = status === "HLS_PLAYABLE";
 		if (mode === "VIEWER" && status === "HLS_PLAYABLE") {
 			playHLS(downstreamUrl);
 		}
 	});
+
+	meeting.on("meeting-ended", () => {
+		endStreamForAll();
+	});
 };
 
-// const playHLS = (url) => {
-// 	isVideoPlaying.value = true;
-// 	if (Hls.isSupported()) {
-// 		const hls = new Hls();
-// 		hls.loadSource(url);
-// 		hls.attachMedia(video.value);
-// 		hls.on(Hls.Events.MANIFEST_PARSED, () => {
-// 			video.value.play().catch(console.error);
-// 		});
-// 	} else if (video.value.canPlayType("application/vnd.apple.mpegurl")) {
-// 		video.value.src = url;
-// 		video.value.addEventListener("loadedmetadata", () => {
-// 			video.value.play().catch(console.error);
-// 		});
-// 	}
-// };
+// Polling function to check stream status
+const pollStreamStatus = () => {
+	const interval = setInterval(async () => {
+		const status = await meeting.getHlsState();
+		isStreamLive.value = status === "HLS_PLAYABLE";
+		if (!isStreamLive.value) clearInterval(interval);
+	}, 5000);
+};
+
+onMounted(() => {
+	pollStreamStatus();
+});
+
 const playHLS = (url) => {
 	isVideoPlaying.value = true;
 	if (Hls.isSupported()) {
-		const hls = new Hls({
-			maxLoadingDelay: 1, // max video loading delay used in automatic start level selection
-			defaultAudioCodec: "mp4a.40.2", // default audio codec
-			maxBufferLength: 0, // If buffer length is/become less than this value, a new fragment will be loaded
-			maxMaxBufferLength: 1, // Hls.js will never exceed this value
-			startLevel: 0, // Start playback at the lowest quality level
-			startPosition: -1, // set -1 playback will start from intialtime = 0
-			maxBufferHole: 0.001, // 'Maximum' inter-fragment buffer hole tolerance that hls.js can cope with when searching for the next fragment to load.
-			highBufferWatchdogPeriod: 0, // if media element is expected to play and if currentTime has not moved for more than highBufferWatchdogPeriod and if there are more than maxBufferHole seconds buffered upfront, hls.js will jump buffer gaps, or try to nudge playhead to recover playback.
-			nudgeOffset: 0.05, // In case playback continues to stall after first playhead nudging, currentTime will be nudged evenmore following nudgeOffset to try to restore playback. media.currentTime += (nb nudge retry -1)*nudgeOffset
-			nudgeMaxRetry: 1, // Max nb of nudge retries before hls.js raise a fatal BUFFER_STALLED_ERROR
-			maxFragLookUpTolerance: 0.1, // This tolerance factor is used during fragment lookup.
-			liveSyncDurationCount: 1, // if set to 3, playback will start from fragment N-3, N being the last fragment of the live playlist
-			abrEwmaFastLive: 1, // Fast bitrate Exponential moving average half-life, used to compute average bitrate for Live streams.
-			abrEwmaSlowLive: 3, // Slow bitrate Exponential moving average half-life, used to compute average bitrate for Live streams.
-			abrEwmaFastVoD: 1, // Fast bitrate Exponential moving average half-life, used to compute average bitrate for VoD streams
-			abrEwmaSlowVoD: 3, // Slow bitrate Exponential moving average half-life, used to compute average bitrate for VoD streams
-			maxStarvationDelay: 1,
-		});
+		const hls = new Hls();
 		hls.loadSource(url);
 		hls.attachMedia(video.value);
 		hls.on(Hls.Events.MANIFEST_PARSED, () => {
@@ -158,18 +165,44 @@ const startHLS = () => {
 
 const stopHLS = () => {
 	meeting.stopHls();
-	isVideoPlaying.value = false; // Stop video display when HLS is stopped
+	isVideoPlaying.value = false;
 };
 
 const handleHLSStateChange = (state) => {
 	console.log("HLS state changed:", state);
 };
 
+// Function to end the meeting and notify viewers
+const endMeeting = () => {
+	meeting.end();
+	endStreamForAll();
+};
+
+// Helper function to end the stream for all participants
+const endStreamForAll = () => {
+	hlsControls.value = false;
+	isVideoPlaying.value = false;
+	isStreamLive.value = false;
+	message.value = "Meeting has ended.";
+	if (video.value) video.value.srcObject = null;
+};
+
+// New function to leave the stream for viewers
+const leaveStream = () => {
+	meeting.leave();
+	isVideoPlaying.value = false;
+	isStreamLive.value = false;
+	message.value = "You have left the stream.";
+	if (video.value) video.value.srcObject = null;
+};
+
 onUnmounted(() => {
 	if (meeting) {
 		meeting.leave();
 	}
-	video.value && (video.value.srcObject = null);
+	if (video.value) {
+		video.value.srcObject = null;
+	}
 });
 </script>
 

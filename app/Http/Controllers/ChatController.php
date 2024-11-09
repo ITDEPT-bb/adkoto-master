@@ -29,22 +29,37 @@ class ChatController extends Controller
     {
         $user = auth()->user();
 
-        $followings = $user->followings()->get();
+        $messageUsers = Message::where(function ($query) use ($user) {
+            $query->where('sender_id', $user->id)
+                ->orWhere('receiver_id', $user->id);
+        })
+            ->with(['sender', 'receiver'])
+            ->latest('created_at')
+            ->get()
+            ->map(function ($message) use ($user) {
+                return $message->sender_id === $user->id
+                    ? $message->receiver
+                    : $message->sender;
+            })
+            ->unique('id')
+            ->values();
 
-        $conversations = Conversation::where(function ($query) use ($user) {
-            $query->where('user_id1', $user->id)
-                ->orWhere('user_id2', $user->id);
-        })->get();
+        // $followings = $user->followings()->get();
 
-        $participants = $conversations->map(function ($conversation) use ($user) {
-            return $conversation->user_id1 === $user->id
-                ? User::find($conversation->user_id2)
-                : User::find($conversation->user_id1);
-        })->unique('id');
+        // $conversations = Conversation::where(function ($query) use ($user) {
+        //     $query->where('user_id1', $user->id)
+        //         ->orWhere('user_id2', $user->id);
+        // })->get();
 
-        $filteredParticipants = $participants->reject(function ($participant) use ($followings) {
-            return $followings->contains('id', $participant->id);
-        });
+        // $participants = $conversations->map(function ($conversation) use ($user) {
+        //     return $conversation->user_id1 === $user->id
+        //         ? User::find($conversation->user_id2)
+        //         : User::find($conversation->user_id1);
+        // })->unique('id');
+
+        // $filteredParticipants = $participants->reject(function ($participant) use ($followings) {
+        //     return $followings->contains('id', $participant->id);
+        // });
 
         // Get user's group chats where they are a participant
         $groupChats = GroupChat::whereHas('participants', function ($query) use ($user) {
@@ -52,8 +67,8 @@ class ChatController extends Controller
         })->get();
 
         return Inertia::render('Chat/Home', [
-            'followings' => UserResource::collection($followings),
-            'participants' => UserResource::collection($filteredParticipants),
+            'followings' => UserResource::collection($messageUsers),
+            // 'participants' => UserResource::collection($filteredParticipants),
             'groupChats' => GroupChatResource::collection($groupChats),
         ]);
     }
