@@ -71,7 +71,7 @@ const leave = (el, done) => {
 							<Link :href="route('adkoto')">
 								<img
 									:src="logo"
-									class="block h-8 sm:h-8 w-auto"
+									class="block h-8 sm:h-8 w-auto ml-2 sm:ml-4 md:ml-6 lg:ml-2 xl:ml-7 2xl:ml-[70px]"
 									alt="Logo" />
 							</Link>
 						</div>
