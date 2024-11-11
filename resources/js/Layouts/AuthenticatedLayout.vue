@@ -64,10 +64,10 @@ const leave = (el, done) => {
 	<div class="h-full mx-auto overflow-hidden flex flex-col bg-gray-100 dark:bg-gray-800">
 		<nav class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
 			<!-- Primary Navigation Menu -->
-			<!-- <div
+			<div
 				class="max-w-screen mx-auto px-4 sm:px-6 lg:px-16 bg-cover bg-center bg-white"
-				style="background-image: url('/img/adkoto_halloween_web.png')"> -->
-			<div class="max-w-screen mx-auto px-4 sm:px-6 lg:px-16">
+				style="background-image: url('/img/christmas.jpg')">
+				<!-- <div class="max-w-screen mx-auto px-4 sm:px-6 lg:px-16"> -->
 				<!-- <div class="flex items-center justify-between gap-4 h-16">
                     <div class="flex"> -->
 				<div class="flex items-center justify-between gap-2 h-16">
@@ -78,7 +78,7 @@ const leave = (el, done) => {
 							<Link :href="route('dashboard')">
 								<img
 									:src="logo"
-									class="block h-8 sm:h-9 w-auto"
+									class="block h-8 sm:h-8 w-auto"
 									alt="Logo" />
 							</Link>
 						</div>
@@ -113,10 +113,9 @@ const leave = (el, done) => {
 						<!-- <img :src="tribekotoIcon" class="hidden sm:flex h-8 w-auto" alt="Logo" />
                             </Link> -->
 
-						<Link
+						<!-- <Link
 							:href="route('kalakalkoto')"
 							class="bg-white p-0.5 rounded-full hidden sm:flex">
-							<!-- Kalakalkoto -->
 							<img
 								:src="kalakalkotoIcon"
 								class="hidden sm:flex h-auto md:w-12 xl:w-10"
@@ -126,7 +125,6 @@ const leave = (el, done) => {
 						<Link
 							:href="route('adkoto')"
 							class="bg-white p-0.5 rounded-full hidden sm:flex">
-							<!-- Adkoto -->
 							<img
 								:src="adkotoIcon"
 								class="hidden sm:flex md:h-auto md:w-12 xl:w-10"
@@ -136,7 +134,6 @@ const leave = (el, done) => {
 						<Link
 							:href="route('games.index')"
 							class="bg-white p-0.5 rounded-full hidden sm:flex">
-							<!-- Games -->
 							<img
 								:src="gameIcon"
 								class="hidden sm:flex md:h-auto md:w-12 xl:w-10"
@@ -146,15 +143,50 @@ const leave = (el, done) => {
 						<Link
 							:href="route('chat.index')"
 							class="bg-white p-0.5 rounded-full hidden sm:flex">
-							<!-- Chatkoto -->
 							<img
 								:src="messageIcon"
 								class="hidden sm:flex md:h-auto md:w-12 xl:w-10"
 								alt="Logo" />
+						</Link> -->
+						<Link
+							:href="route('kalakalkoto')"
+							class="rounded-full hidden sm:flex">
+							<img
+								:src="kalakalkotoIcon"
+								class="hidden sm:flex h-auto md:w-12 xl:w-[58px]"
+								alt="Logo" />
+						</Link>
+
+						<Link
+							:href="route('adkoto')"
+							class="rounded-full hidden sm:flex">
+							<img
+								:src="adkotoIcon"
+								class="hidden sm:flex md:h-auto md:w-12 xl:w-[58px]"
+								alt="Logo" />
+						</Link>
+
+						<Link
+							:href="route('games.index')"
+							class="rounded-full hidden sm:flex">
+							<img
+								:src="gameIcon"
+								class="hidden sm:flex md:h-auto md:w-12 xl:w-[58px]"
+								alt="Logo" />
+						</Link>
+
+						<Link
+							:href="route('chat.index')"
+							class="rounded-full hidden sm:flex">
+							<img
+								:src="messageIcon"
+								class="hidden sm:flex md:h-auto md:w-12 xl:w-[58px]"
+								alt="Logo" />
 						</Link>
 
 						<!-- Notification Dropdown Component -->
-						<NotificationDropdown class="hidden sm:flex bg-white p-0.5 rounded-full" />
+						<!-- <NotificationDropdown class="hidden sm:flex bg-white p-0.5 rounded-full" /> -->
+						<NotificationDropdown class="hidden sm:flex rounded-full" />
 
 						<!-- <button @click="toggleDarkMode" class="dark:text-white">
                             <MoonIcon class="w-5 h-5" />
