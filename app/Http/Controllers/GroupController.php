@@ -223,11 +223,23 @@ class GroupController extends Controller
             'created_by' => Auth::id(),
         ]);
 
-        $user->notify(new InvitationInGroup($group, $hours, $token));
+        $user->notify(new InvitationInGroup(Auth::getUser(), $group, $hours, $token));
 
 
-        return back()->with('success', 'User was invited to join to group');
+        return back()->with('success', 'User was invited to join the group');
     }
+
+    // public function searchUsers(Request $request)
+    // {
+    //     $request->validate(['query' => 'required|string']);
+
+    //     $users = User::where('username', 'LIKE', "%{$request->query('query')}%")
+    //         ->limit(5)
+    //         ->get(['username']);
+
+    //     return response()->json($users);
+    // }
+
 
     public function approveInvitation(string $token)
     {
@@ -244,9 +256,9 @@ class GroupController extends Controller
             $errorTitle = 'The link is expired';
         }
 
-        if ($errorTitle) {
-            return \inertia('Error', compact('errorTitle'));
-        }
+        // if ($errorTitle) {
+        //     return \inertia('Error', compact('errorTitle'));
+        // }
 
         $groupUser->status = GroupUserStatus::APPROVED->value;
         $groupUser->token_used = Carbon::now();

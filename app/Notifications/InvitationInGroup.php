@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Models\Group;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -12,12 +13,14 @@ class InvitationInGroup extends Notification
 {
     use Queueable;
 
+    public User $user;
+
     /**
      * Create a new notification instance.
      */
-    public function __construct(public Group $group, public int $hours, public string $token)
+    public function __construct(User $user, public Group $group, public int $hours, public string $token)
     {
-        //
+        $this->user = $user;
     }
 
     /**
@@ -27,7 +30,7 @@ class InvitationInGroup extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
     /**
@@ -46,10 +49,16 @@ class InvitationInGroup extends Notification
      *
      * @return array<string, mixed>
      */
-    public function toArray(object $notifiable): array
+    public function toDatabase(object $notifiable): array
     {
         return [
-            //
+            'group_id' => $this->group->id,
+            'user_id' => $this->user->id,
+            'group_name' => $this->group->name,
+            'hours' => $this->hours,
+            'token' => $this->token,
+            'route' => route('group.approveInvitation', $this->token),
+            'message' => 'You have been invited to join the group "' . $this->group->name . '".',
         ];
     }
 }

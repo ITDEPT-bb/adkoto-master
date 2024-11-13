@@ -34,23 +34,29 @@ class InviteUsersRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', function ($attribute, $value, \Closure $fail) {
-                $this->user = User::query()->where('email', $value)
-                    ->orWhere('username', $value)
-                    ->first();
+            'email' => [
+                'required',
+                function ($attribute, $value, \Closure $fail) {
+                    $this->user = User::query()->where('email', $value)
+                        ->orWhere('username', $value)
+                        ->first();
 
-                if (!$this->user) {
-                    $fail('User does not exist');
+                    if (!$this->user) {
+                        $fail('User does not exist');
+                        return;
+                    }
+
+                    $this->groupUser = GroupUser::where('user_id', $this->user->id)
+                        ->where('group_id', $this->group->id)
+                        ->first();
+
+                    if ($this->groupUser && $this->groupUser->status === GroupUserStatus::APPROVED->value) {
+                        $fail('The user has already joined the group.');
+                    } elseif ($this->groupUser && $this->groupUser->status === GroupUserStatus::PENDING->value) {
+                        $fail('The user\'s status to join the group is still pending.');
+                    }
                 }
-
-                $this->groupUser = GroupUser::where('user_id', $this->user->id)
-                    ->where('group_id', $this->group->id)
-                    ->first();
-
-                if ($this->groupUser && $this->groupUser->status === GroupUserStatus::APPROVED->value) {
-                    $fail('User is already joined to the group');
-                }
-            }]
+            ]
         ];
     }
 }

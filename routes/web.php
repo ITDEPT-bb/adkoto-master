@@ -157,6 +157,8 @@ Route::get('/u/{user:username}', [ProfileController::class, 'index'])
 Route::get('/g/{group:slug}', [GroupController::class, 'profile'])
     ->name('group.profile');
 
+Route::get('/g/users/search', [GroupController::class, 'searchUsers'])->name('users.search');
+
 Route::get('/group/approve-invitation/{token}', [GroupController::class, 'approveInvitation'])
     ->name('group.approveInvitation');
 

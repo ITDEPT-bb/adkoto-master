@@ -65,7 +65,7 @@ class FollowUser extends Notification
             'username' => $this->user->username,
             'follow' => $this->follow,
             'route' => route('profile', $this->user->username),
-            'message' => $this->user->username . ' has followed you'
+            'message' => $this->user->name . ' has followed you'
         ];
     }
 }

@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 #app {
-    height: 100%;
+	height: 100%;
 }
 
 .ck-content > blockquote,
@@ -19,22 +19,28 @@
 .ck-content > figure,
 .ck-content > p,
 .ck-content > pre {
-    margin: revert;
+	margin: revert;
+}
+
+.ck-content-output {
+	overflow: hidden;
+	overflow-wrap: break-word;
+	word-break: break-word;
 }
 
 .ck-content-output > *:last-child {
-    margin-bottom: 0;
+	margin-bottom: 0;
 }
 
 .ck-content > ol,
 .ck-content > ul {
-    list-style: revert;
-    margin: revert;
-    padding: revert;
+	list-style: revert;
+	margin: revert;
+	padding: revert;
 }
 
 .ck-content > table {
-    border-collapse: revert;
+	border-collapse: revert;
 }
 
 .ck-content > h1,
@@ -43,13 +49,13 @@
 .ck-content > h4,
 .ck-content > h5,
 .ck-content > h6 {
-    font-size: revert;
-    font-weight: revert;
+	font-size: revert;
+	font-weight: revert;
 }
 
 .ck-content a {
-    text-decoration: underline;
-    color: #4b9afa;
+	text-decoration: underline;
+	color: #4b9afa;
 }
 
 .ck-content-output > blockquote,
@@ -65,18 +71,18 @@
 .ck-content-output > figure,
 .ck-content-output > p,
 .ck-content-output > pre {
-    margin: revert;
+	margin: revert;
 }
 
 .ck-content-output > ol,
 .ck-content-output > ul {
-    list-style: revert;
-    margin: revert;
-    padding: revert;
+	list-style: revert;
+	margin: revert;
+	padding: revert;
 }
 
 .ck-content-output > table {
-    border-collapse: revert;
+	border-collapse: revert;
 }
 
 .ck-content-output > h1,
@@ -85,28 +91,28 @@
 .ck-content-output > h4,
 .ck-content-output > h5,
 .ck-content-output > h6 {
-    font-size: revert;
-    font-weight: revert;
+	font-size: revert;
+	font-weight: revert;
 }
 
 .ck-content-output blockquote {
-    border-left: 5px solid #ccc;
-    font-style: italic;
-    margin-left: 0;
-    margin-right: 0;
-    overflow: hidden;
-    padding-left: 1.5em;
-    padding-right: 1.5em;
+	border-left: 5px solid #ccc;
+	font-style: italic;
+	margin-left: 0;
+	margin-right: 0;
+	overflow: hidden;
+	padding-left: 1.5em;
+	padding-right: 1.5em;
 }
 
 .ck-content-output a {
-    text-decoration: #4b9afa;
-    color: blue;
+	text-decoration: #4b9afa;
+	color: blue;
 }
 
 .ck-content-output a.hashtag {
-    background-color: #eaf4ff;
-    color: #4156e2;
+	background-color: #eaf4ff;
+	color: #4156e2;
 }
 
 /* WebKit browsers (Chrome, Safari) */
