@@ -94,6 +94,7 @@ class GroupChatController extends Controller
         GroupChatParticipant::create([
             'group_chat_id' => $groupChat->id,
             'user_id' => auth()->id(),
+            'is_admin' => true,
         ]);
 
         Conversation::create([
@@ -200,4 +201,36 @@ class GroupChatController extends Controller
         // return response()->json(['message' => 'You have left the group chat successfully.']);
         return Redirect::to('/chat');
     }
+
+    public function removeUser(Request $request, $groupChatId)
+    {
+        $admin = Auth::user();
+        $userId = $request->input('userId');
+
+        $isAdmin = GroupChatParticipant::where('group_chat_id', $groupChatId)
+            ->where('user_id', $admin->id)
+            ->where('is_admin', true)
+            ->exists();
+
+        if (!$isAdmin) {
+            return response()->json(['message' => 'Only admins can remove members from this group chat.'], 403);
+        }
+
+        $participant = GroupChatParticipant::where('group_chat_id', $groupChatId)
+            ->where('user_id', $userId)
+            ->first();
+
+        if (!$participant) {
+            return response()->json(['message' => 'The user is not a member of this group chat.'], 404);
+        }
+
+        $participant->delete();
+
+        // return response()->json(['message' => 'User removed from the group chat successfully.']);
+        return response()->json([
+            'message' => 'User removed from the group chat successfully.',
+            'redirect' => route('group-chats.index', ['groupChat' => $groupChatId])
+        ]);
+    }
+
 }

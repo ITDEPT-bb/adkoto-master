@@ -9,7 +9,7 @@ class GroupChatParticipant extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['group_chat_id', 'user_id'];
+    protected $fillable = ['group_chat_id', 'user_id', 'is_admin'];
 
     public function user()
     {
