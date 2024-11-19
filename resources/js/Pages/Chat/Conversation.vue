@@ -12,7 +12,7 @@
 			<MessageInput
 				:user="user"
 				:conversation="conversation"
-				@message-sent="fetchMessages" />
+				@message-sent="addMessage" />
 		</div>
 	</AuthenticatedLayout>
 	<UpdateProfileReminder />
@@ -46,6 +46,10 @@ const fetchMessages = async () => {
 	} catch (error) {
 		console.error("Error fetching messages:", error);
 	}
+};
+
+const addMessage = (newMessage) => {
+	messages.value.push(newMessage);
 };
 
 onMounted(() => {
