@@ -27,6 +27,9 @@
 				@click.away="showDropdown = false"
 				class="origin-top-right absolute right-0 mt-12 w-[400px] rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
 				<div class="py-1">
+					<div class="sticky flex justify-between top-0 bg-white shadow-sm z-10 px-4 py-2">
+						<h2 class="text-xl font-bold">Notifications</h2>
+					</div>
 					<div
 						v-if="loading"
 						class="p-4 text-center text-gray-500">
