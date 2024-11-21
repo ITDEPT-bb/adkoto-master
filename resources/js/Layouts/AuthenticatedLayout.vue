@@ -19,6 +19,7 @@ import gameIcon from "/public/img/icons/gameicon.png";
 import messageIcon from "/public/img/icons/message.png";
 // import notificationIcon from "/public/img/icons/notification.png";
 import NotificationDropdown from "@/Components/Notification/NotificationDropdown.vue";
+import MessageIcon from "@/Components/Chat/MessageIconDropdown.vue";
 
 import axiosClient from "@/axiosClient.js";
 
@@ -175,14 +176,16 @@ const leave = (el, done) => {
 								alt="Logo" />
 						</Link>
 
-						<Link
+						<!-- <Link
 							:href="route('chat.index')"
 							class="rounded-full hidden sm:flex">
 							<img
 								:src="messageIcon"
 								class="hidden sm:flex md:h-auto md:w-12 xl:w-[58px]"
 								alt="Logo" />
-						</Link>
+						</Link> -->
+
+						<MessageIcon class="hidden sm:flex rounded-full" />
 
 						<!-- Notification Dropdown Component -->
 						<!-- <NotificationDropdown class="hidden sm:flex bg-white p-0.5 rounded-full" /> -->

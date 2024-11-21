@@ -1,20 +1,19 @@
 <template>
-	<div class="h-full overflow-hidden w-full p-4 bg-white rounded-lg shadow">
+	<div class="h-full overflow-hidden w-full p-2 bg-white rounded-lg shadow">
 		<div class="flex h-full gap-4 lg:gap-0 flex-col sm:flex-row">
 			<!-- Followings Column -->
-			<div class="flex-1 overflow-y-auto pr-4">
+			<div class="flex-1 overflow-y-auto">
 				<div class="sticky flex justify-between top-0 bg-white shadow-sm z-10 p-2">
 					<h2 class="text-xl font-bold">Conversations</h2>
-					<button
+					<!-- <button
 						@click="openSearchModal"
 						class="text-center items-center bg-red-500 hover:bg-red-600 text-white rounded py-1 px-2">
-						<!-- new group -->
-						<MagnifyingGlassIcon class="h-7 w-7" />
-					</button>
+						<MagnifyingGlassIcon class="h-5 w-5" />
+					</button> -->
 				</div>
 				<ul>
 					<li
-						v-for="following in followings"
+						v-for="following in followings.slice(0, 5)"
 						:key="following.id"
 						class="mb-1 px-3 py-1 border-b border-gray-200">
 						<Link :href="`/chat/conversation/adktu/${following.id}`">
@@ -90,75 +89,8 @@
 					</li>
 				</ul>
 			</div>
-
-			<!-- Group Column -->
-			<div class="flex-1 overflow-y-auto pr-4">
-				<div class="sticky flex justify-between top-0 bg-white shadow-sm z-10 p-2">
-					<h2 class="text-xl font-bold">Group Chats</h2>
-					<button
-						@click="showNewGroupModal = true"
-						class="text-center items-center bg-red-500 hover:bg-red-600 text-white rounded py-1 px-2">
-						<!-- new group -->
-						<PlusIcon class="h-7 w-7" />
-					</button>
-				</div>
-				<ul>
-					<li
-						v-for="group in groupChats"
-						:key="group.id"
-						class="mb-1 px-3 py-1 border-b border-gray-200">
-						<Link :href="`/group-chat/${group.id}`">
-							<div
-								class="flex items-center space-x-4 transition-transform duration-300 ease-in-out transform hover:scale-105 hover:bg-gray-100 p-2 rounded-lg">
-								<img
-									:src="group.photo"
-									alt="Avatar"
-									class="w-10 h-10 rounded-full object-cover" />
-								<div>
-									<h3 class="text-lg font-medium">
-										{{ group.name }}
-									</h3>
-								</div>
-							</div>
-						</Link>
-					</li>
-				</ul>
-			</div>
-
-			<!-- Others Column -->
-			<!-- <div class="flex-1 overflow-y-auto pl-4">
-				<div class="sticky top-0 bg-white shadow-sm z-10 p-2">
-					<h2 class="text-xl font-bold">Others</h2>
-				</div>
-				<ul>
-					<li
-						v-for="participant in participants"
-						:key="participant.id"
-						class="mb-1 px-3 py-1 border-b border-gray-200">
-						<Link :href="`/chat/conversation/adktu/${participant.id}`">
-							<div
-								class="flex items-center space-x-4 transition-transform duration-300 ease-in-out transform hover:scale-105 hover:bg-gray-100 p-2 rounded-lg">
-								<img
-									:src="participant.avatar_url"
-									alt="Avatar"
-									class="w-10 h-10 rounded-full object-cover" />
-								<div>
-									<h3 class="text-lg font-medium">
-										{{ participant.name }}
-										{{ participant.surname }}
-									</h3>
-									<p class="text-sm text-gray-600">@{{ participant.username }}</p>
-								</div>
-							</div>
-						</Link>
-					</li>
-				</ul>
-			</div> -->
 		</div>
 	</div>
-	<CreateGroupModal
-		v-model="showNewGroupModal"
-		@create="onGroupCreate" />
 
 	<SearchModal
 		:isOpen="isSearchModalOpen"
@@ -168,9 +100,8 @@
 <script setup>
 import { defineProps, ref, onMounted, onUnmounted } from "vue";
 import { Link, usePage } from "@inertiajs/vue3";
-import { PlusIcon, MagnifyingGlassIcon } from "@heroicons/vue/24/solid";
+import { MagnifyingGlassIcon } from "@heroicons/vue/24/solid";
 
-import CreateGroupModal from "@/Components/GroupChat/CreateGroupModal.vue";
 import SearchModal from "@/Components/Chat/SearchModal.vue";
 
 const authUser = usePage().props.auth.user;
@@ -180,17 +111,7 @@ const props = defineProps({
 		type: Array,
 		required: true,
 	},
-	// participants: {
-	// 	type: Array,
-	// 	required: true,
-	// },
-	groupChats: {
-		type: Array,
-		required: true,
-	},
 });
-
-const showNewGroupModal = ref(false);
 
 const isSearchModalOpen = ref(false);
 

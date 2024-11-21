@@ -111,8 +111,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/chat/conversations/{conversationId}/messages', [ChatController::class, 'fetchMessages'])->name('chat.conversations.fetchMessages');
 
     Route::get('/chat/search-followings', [ChatController::class, 'searchFollowings'])->name('chat.conversations.show');
-    Route::get('/chat/latest-messages', [ChatController::class, 'getLatestMessages'])->name('chat.conversations.show');
+    Route::get('/chat/latest-messages', [ChatController::class, 'getLatestMessages'])->name('chat.conversations.getLatestMessages');
+    Route::get('/chat/unread-count', [ChatController::class, 'getUnreadCount'])->name('chat.conversations.getUnreadCount');
     Route::post('/chat/groups/{group}/messages', [ChatController::class, 'sendMessageToGroup']);
+
+    Route::post('/chat/mark-as-read/{conversationId}', [ChatController::class, 'markAsRead']);
 });
 
 // Group Chat

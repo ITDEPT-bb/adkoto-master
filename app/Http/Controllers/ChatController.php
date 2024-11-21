@@ -113,7 +113,13 @@ class ChatController extends Controller
 
             if ($contact) {
                 $contact->last_message = $message->message;
+                $contact->last_message_read_at = $message->read_at;
                 $contact->last_message_sender_name = $message->sender->name;
+                $contact->last_message_sender_id = $message->sender->id;
+                $contact->unread_count = Message::where('sender_id', $contact->id)
+                    ->where('receiver_id', $user->id)
+                    ->whereNull('read_at')
+                    ->count();
             }
 
             return $contact;
@@ -152,7 +158,13 @@ class ChatController extends Controller
 
             if ($contact) {
                 $contact->last_message = $message->message;
+                $contact->last_message_read_at = $message->read_at;
                 $contact->last_message_sender_name = $message->sender->name;
+                $contact->last_message_sender_id = $message->sender->id;
+                $contact->unread_count = Message::where('sender_id', $contact->id)
+                    ->where('receiver_id', $user->id)
+                    ->whereNull('read_at')
+                    ->count();
             }
 
             return $contact;
@@ -166,6 +178,33 @@ class ChatController extends Controller
             'messageUsers' => UserResource::collection($messageUsers),
             'groupChats' => GroupChatResource::collection($groupChats),
         ]);
+    }
+
+    public function getUnreadCount(Request $request)
+    {
+        $user = auth()->user();
+
+        $unreadCount = Message::where('receiver_id', $user->id)
+            ->whereNull('read_at')
+            ->distinct('sender_id')
+            ->count('sender_id');
+
+        return response()->json([
+            'unreadCount' => $unreadCount,
+        ]);
+    }
+
+
+    public function markAsRead($conversationId)
+    {
+        $user = auth()->user();
+
+        Message::where('conversation_id', $conversationId)
+            ->where('receiver_id', $user->id)
+            ->whereNull('read_at')
+            ->update(['read_at' => now()]);
+
+        return response()->json(['status' => 'success']);
     }
 
     public function searchFollowings(Request $request)

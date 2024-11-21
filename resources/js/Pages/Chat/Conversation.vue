@@ -48,11 +48,20 @@ const fetchMessages = async () => {
 	}
 };
 
+const markAsRead = async () => {
+	try {
+		await axios.post(`/chat/mark-as-read/${conversation.id}`);
+	} catch (error) {
+		console.error("Failed to mark messages as read:", error);
+	}
+};
+
 const addMessage = (newMessage) => {
 	messages.value.push(newMessage);
 };
 
 onMounted(() => {
 	fetchMessages();
+	markAsRead();
 });
 </script>
