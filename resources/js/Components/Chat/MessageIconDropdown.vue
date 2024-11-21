@@ -2,7 +2,7 @@
 	<div class="relative">
 		<!-- Notification Bell Icon/Button -->
 		<button
-			@click="showDropdown = !showDropdown"
+			@click="toggleModal"
 			class="relative block">
 			<img
 				:src="messageIcon"
@@ -25,8 +25,8 @@
 			leave-from-class="transform opacity-100 scale-100"
 			leave-to-class="transform opacity-0 scale-95">
 			<div
-				v-if="showDropdown"
-				@click.away="showDropdown = false"
+				v-if="showModal"
+				@click.away="showModal = false"
 				class="origin-top-right absolute right-0 mt-12 w-[400px] rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
 				<div class="py-1">
 					<ChatListDropdown
@@ -58,7 +58,7 @@ import messageIcon from "/public/img/icons/message.png";
 
 dayjs.extend(relativeTime);
 
-const showDropdown = ref(false);
+const showModal = ref(false);
 const unreadCount = ref(0);
 const loading = ref(true);
 
@@ -67,24 +67,20 @@ const props = defineProps({
 		type: Array,
 		required: true,
 	},
-	// participants: {
-	// 	type: Array,
-	// 	required: true,
-	// },
 	groupChats: {
 		type: Array,
 		required: true,
 	},
 });
 
-const messageUsers = ref(props.messageUsers);
-const groupChats = ref(props.groupChats);
+const messageUsers = ref([]);
+const groupChats = ref([]);
 
 const fetchLatestMessages = async () => {
 	try {
-		const response = await axios.get("/chat/latest-messages");
-		messageUsers.value = response.data.messageUsers;
-		groupChats.value = response.data.groupChats;
+		const response = await axiosClient.get("/chat/latest-messages");
+		messageUsers.value = response.data.messageUsers || [];
+		groupChats.value = response.data.groupChats || [];
 	} catch (error) {
 		console.error("Error fetching latest messages", error);
 	}
@@ -93,10 +89,14 @@ const fetchLatestMessages = async () => {
 const fetchUnreadCount = async () => {
 	try {
 		const response = await axiosClient.get("/chat/unread-count");
-		unreadCount.value = response.data.unreadCount;
+		unreadCount.value = response.data.unreadCount || 0;
 	} catch (error) {
 		console.error("Error fetching unread count", error);
 	}
+};
+
+const toggleModal = () => {
+	showModal.value = !showModal.value;
 };
 
 onMounted(() => {
@@ -104,7 +104,6 @@ onMounted(() => {
 	const interval = setInterval(fetchLatestMessages, 1000);
 
 	fetchUnreadCount();
-
 	const unreadInterval = setInterval(fetchUnreadCount, 1000);
 
 	onUnmounted(() => {
