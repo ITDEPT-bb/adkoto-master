@@ -25,51 +25,164 @@ class ChatController extends Controller
     //         'followings' => UserResource::collection($followings),
     //     ]);
     // }
+    // public function index(Request $request)
+    // {
+    //     $user = auth()->user();
+
+    //     $followings = $user->followings()->get();
+
+    //     $conversations = Conversation::where(function ($query) use ($user) {
+    //         $query->where('user_id1', $user->id)
+    //             ->orWhere('user_id2', $user->id);
+    //     })->get();
+
+    //     $participants = $conversations->map(function ($conversation) use ($user) {
+    //         return $conversation->user_id1 === $user->id
+    //             ? User::find($conversation->user_id2)
+    //             : User::find($conversation->user_id1);
+    //     })->unique('id');
+
+    //     $filteredParticipants = $participants->reject(function ($participant) use ($followings) {
+    //         return $followings->contains('id', $participant->id);
+    //     });
+
+    //     $groupChats = GroupChat::whereHas('participants', function ($query) use ($user) {
+    //         $query->where('user_id', $user->id);
+    //     })->get();
+
+    //     return Inertia::render('Chat/Home', [
+    //         'followings' => UserResource::collection($followings),
+    //         'participants' => UserResource::collection($filteredParticipants),
+    //         'groupChats' => GroupChatResource::collection($groupChats),
+    //     ]);
+    // }
+
+    // public function index(Request $request)
+    // {
+    //     $user = auth()->user();
+
+    //     $messageUsers = Message::where(function ($query) use ($user) {
+    //         $query->where('sender_id', $user->id)
+    //             ->orWhere('receiver_id', $user->id);
+    //     })
+    //         ->with(['sender', 'receiver'])
+    //         ->latest('created_at')
+    //         ->get()
+    //         ->map(function ($message) use ($user) {
+    //             if ($message->sender_id === $user->id && $message->receiver) {
+    //                 return $message->receiver;
+    //             } elseif ($message->receiver_id === $user->id && $message->sender) {
+    //                 return $message->sender;
+    //             }
+    //             return null;
+    //         })
+    //         ->filter()
+    //         ->unique('id')
+    //         ->values();
+
+    //     $groupChats = GroupChat::whereHas('participants', function ($query) use ($user) {
+    //         $query->where('user_id', $user->id);
+    //     })->get();
+
+    //     return Inertia::render('Chat/Home', [
+    //         'messageUsers' => UserResource::collection($messageUsers),
+    //         'groupChats' => GroupChatResource::collection($groupChats),
+    //     ]);
+    // }
+
     public function index(Request $request)
     {
         $user = auth()->user();
 
-        // $messageUsers = Message::where(function ($query) use ($user) {
-        //     $query->where('sender_id', $user->id)
-        //         ->orWhere('receiver_id', $user->id);
-        // })
-        //     ->with(['sender', 'receiver'])
-        //     ->latest('created_at')
-        //     ->get()
-        //     ->map(function ($message) use ($user) {
-        //         return $message->sender_id === $user->id
-        //             ? $message->receiver
-        //             : $message->sender;
-        //     })
-        //     ->unique('id')
-        //     ->values();
+        $latestMessages = Message::where(function ($query) use ($user) {
+            $query->where('sender_id', $user->id)
+                ->orWhere('receiver_id', $user->id);
+        })
+            ->latest('created_at')
+            ->get()
+            ->unique(function ($message) use ($user) {
+                return $message->sender_id === $user->id
+                    ? $message->receiver_id
+                    : $message->sender_id;
+            });
 
-        $followings = $user->followings()->get();
+        $messageUsers = $latestMessages->map(function ($message) use ($user) {
+            $contact = $message->sender_id === $user->id
+                ? $message->receiver
+                : $message->sender;
 
-        $conversations = Conversation::where(function ($query) use ($user) {
-            $query->where('user_id1', $user->id)
-                ->orWhere('user_id2', $user->id);
-        })->get();
+            if ($contact) {
+                $contact->last_message = $message->message;
+                $contact->last_message_sender_name = $message->sender->name;
+            }
 
-        $participants = $conversations->map(function ($conversation) use ($user) {
-            return $conversation->user_id1 === $user->id
-                ? User::find($conversation->user_id2)
-                : User::find($conversation->user_id1);
-        })->unique('id');
+            return $contact;
+        })->filter();
 
-        $filteredParticipants = $participants->reject(function ($participant) use ($followings) {
-            return $followings->contains('id', $participant->id);
-        });
-
-        // Get user's group chats where they are a participant
         $groupChats = GroupChat::whereHas('participants', function ($query) use ($user) {
             $query->where('user_id', $user->id);
         })->get();
 
         return Inertia::render('Chat/Home', [
-            'followings' => UserResource::collection($followings),
-            'participants' => UserResource::collection($filteredParticipants),
+            'messageUsers' => UserResource::collection($messageUsers),
             'groupChats' => GroupChatResource::collection($groupChats),
+        ]);
+    }
+
+    public function getLatestMessages(Request $request)
+    {
+        $user = auth()->user();
+
+        $latestMessages = Message::where(function ($query) use ($user) {
+            $query->where('sender_id', $user->id)
+                ->orWhere('receiver_id', $user->id);
+        })
+            ->latest('created_at')
+            ->get()
+            ->unique(function ($message) use ($user) {
+                return $message->sender_id === $user->id
+                    ? $message->receiver_id
+                    : $message->sender_id;
+            });
+
+        $messageUsers = $latestMessages->map(function ($message) use ($user) {
+            $contact = $message->sender_id === $user->id
+                ? $message->receiver
+                : $message->sender;
+
+            if ($contact) {
+                $contact->last_message = $message->message;
+                $contact->last_message_sender_name = $message->sender->name;
+            }
+
+            return $contact;
+        })->filter();
+
+        $groupChats = GroupChat::whereHas('participants', function ($query) use ($user) {
+            $query->where('user_id', $user->id);
+        })->get();
+
+        return response()->json([
+            'messageUsers' => UserResource::collection($messageUsers),
+            'groupChats' => GroupChatResource::collection($groupChats),
+        ]);
+    }
+
+    public function searchFollowings(Request $request)
+    {
+        $user = auth()->user();
+
+        $query = $request->input('query', '');
+
+        $followings = $user->followings()
+            ->where('name', 'like', '%' . $query . '%')
+            ->orWhere('surname', 'like', '%' . $query . '%')
+            ->orWhere('username', 'like', '%' . $query . '%')
+            ->get();
+
+        // return response()->json($followings);
+        return response()->json([
+            'followings' => UserResource::collection($followings),
         ]);
     }
 
@@ -139,6 +252,14 @@ class ChatController extends Controller
                 'receiver_id' => $request->receiver_id,
                 'conversation_id' => $request->conversation_id,
                 'message' => $request->message,
+            ]);
+
+            // $message->conversation->update([
+            //     'last_message_id' => $message->id,
+            // ]);
+
+            Conversation::where('id', $request->conversation_id)->update([
+                'last_message_id' => $message->id,
             ]);
 
             // Handle file uploads if there are any
