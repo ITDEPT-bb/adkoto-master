@@ -1,11 +1,5 @@
 <?php
 
-/**
- * User: Zura
- * Date: 12/9/2023
- * Time: 12:48 AM
- */
-
 namespace App\Http\Enums;
 
 enum GroupUserStatus: string
