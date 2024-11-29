@@ -251,6 +251,15 @@ class ChatController extends Controller
         ]);
     }
 
+    public function callPage($userId)
+    {
+        $user = User::findOrFail($userId);
+        return Inertia::render('Chat/Call', [
+            'user' => new UserResource($user),
+        ]);
+    }
+
+
     public function fetchMessages($conversationId)
     {
         $conversation = Conversation::with('messages.attachments')
