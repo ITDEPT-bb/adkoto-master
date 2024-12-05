@@ -10,4 +10,4 @@ window.Echo = new Echo({
 	forceTLS: true,
 });
 
-console.log("Echo initialized:", window.Echo);
+// console.log("Echo initialized:", window.Echo);

@@ -141,7 +141,7 @@ const getUserOnlineStatus = (id) => {
 const placeCall = async (id, calleeName, calleeId) => {
 	try {
 		const channelName = `${id}_${calleeName}`;
-		const tokenRes = await generateToken(channelName);
+		const token = await generateToken(channelName);
 
 		await axios.post("/agora/call-user", {
 			user_to_call: calleeId,
@@ -149,7 +149,8 @@ const placeCall = async (id, calleeName, calleeId) => {
 			channel_name: channelName,
 		});
 
-		initializeAgora(tokenRes.data.token, channelName);
+		initializeAgora();
+		await joinChannel(token, channelName);
 	} catch (error) {
 		console.error("Error in placeCall:", error.response?.data || error.message);
 	}
@@ -157,14 +158,11 @@ const placeCall = async (id, calleeName, calleeId) => {
 
 const acceptCall = async () => {
 	try {
-		const tokenRes = await generateToken(agoraChannel.value);
-
-		console.log("Token received for acceptCall:", tokenRes.data.token);
-
-		initializeAgora(tokenRes.data.token, agoraChannel.value);
-
+		const token = await generateToken(agoraChannel.value);
+		initializeAgora();
 		incomingCall.value = false;
 		callPlaced.value = true;
+		await joinChannel(token, agoraChannel.value);
 	} catch (error) {
 		console.error("Error in acceptCall:", error.response?.data || error.message);
 	}
@@ -174,97 +172,56 @@ const declineCall = () => {
 	incomingCall.value = false;
 };
 
-const generateToken = (channelName) => {
-	return axios
-		.post("/agora/token", { channelName })
-		.then((response) => {
-			if (!response.data.token) {
-				console.error("No token received:", response);
-				throw new Error("Token generation failed");
-			}
-			console.log("Token received:", response.data.token);
-			return response;
-		})
-		.catch((error) => {
-			console.error("Error generating token:", error.response?.data || error.message);
-			alert("Failed to generate token. Please try again.");
-		});
+const generateToken = async (channelName) => {
+	try {
+		const response = await axios.post("/agora/token", { channelName });
+		if (!response.data.token) throw new Error("Token generation failed");
+		console.log("Token received:", response.data.token);
+		return response.data.token;
+	} catch (error) {
+		console.error("Error generating token:", error.response?.data || error.message);
+		alert("Failed to generate token. Please try again.");
+		throw error;
+	}
 };
 
-const initializeAgora = (token, channelName) => {
+const initializeAgora = () => {
 	client.value = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
-	const uid = authUser.id;
+	client.value.on("user-published", async (user, mediaType) => {
+		try {
+			console.log("User published:", user);
+			await client.value.subscribe(user, mediaType);
+			if (mediaType === "video") user.videoTrack.play("remote-video");
+			if (mediaType === "audio") user.audioTrack.play();
+		} catch (error) {
+			console.error("Failed to subscribe to remote stream:", error);
+		}
+	});
 
-	client.value
-		.join(props.agora_id, channelName, token, uid)
-		.then((uid) => {
-			console.log("Joined channel with UID:", uid);
-			callPlaced.value = true;
-			createLocalStream();
+	client.value.on("user-unpublished", (user) => {
+		console.log("User unpublished:", user);
+		user.videoTrack?.stop();
+		user.audioTrack?.stop();
+	});
 
-			client.value.on("user-published", async (user, mediaType) => {
-				try {
-					// Log when the user publishes
-					console.log("User published:", user);
-
-					// Make sure the user is actually publishing a stream
-					if (user && user.videoTrack) {
-						console.log("Subscribing to video track...");
-						await client.value.subscribe(user, mediaType);
-						if (mediaType === "video") {
-							console.log("Playing video...");
-							user.videoTrack.play("remote-video");
-						}
-					} else if (user && user.audioTrack) {
-						console.log("Subscribing to audio track...");
-						await client.value.subscribe(user, mediaType);
-						if (mediaType === "audio") {
-							user.audioTrack.play();
-						}
-					} else {
-						console.warn("User published with no media (audio/video).");
-					}
-				} catch (error) {
-					console.error("Failed to subscribe to remote stream:", error);
-				}
-			});
-
-			// Listen for user-left events to handle disconnection
-			client.value.on("user-left", (user) => {
-				console.log("User left:", user);
-				// Optionally, stop the video/audio track if needed
-				user.videoTrack.stop();
-				user.audioTrack.stop();
-			});
-		})
-		.catch((err) => {
-			console.error("Failed to join channel:", err);
-		});
+	client.value.on("user-left", (user) => {
+		console.log("User left:", user);
+		user.videoTrack?.stop();
+		user.audioTrack?.stop();
+	});
 };
 
-const joinRoom = (token, channel) => {
-	client.value.join(
-		token,
-		channel,
-		props.authuser,
-		(uid) => {
-			console.log(`User ${uid} joined channel`);
-			callPlaced.value = true;
-			createLocalStream();
-			client.value.on("stream-added", (evt) => {
-				const remoteStream = evt.stream;
-				client.value.subscribe(remoteStream, (err) =>
-					console.error("Subscribe stream failed", err)
-				);
-			});
-
-			client.value.on("stream-subscribed", (evt) => {
-				const remoteStream = evt.stream;
-				remoteStream.play("remote-video");
-			});
-		},
-		(err) => console.error("Join channel failed", err)
-	);
+const joinChannel = async (token, channelName) => {
+	try {
+		const uid = authUser.id || null;
+		await client.value.join(props.agora_id, channelName, token, uid);
+		console.log("Joined channel with UID:", uid);
+		callPlaced.value = true;
+		createLocalStream();
+	} catch (error) {
+		console.error("Failed to join channel:", error);
+		throw error;
+	}
 };
 
 const createLocalStream = () => {
@@ -297,32 +254,40 @@ const endCall = () => {
 		localStream.value.videoTrack.close();
 	}
 
-	client.value
-		.leave()
-		.then(() => {
-			console.log("Left the channel");
-			callPlaced.value = false;
-		})
-		.catch((err) => {
-			console.error("Error leaving the channel:", err);
-		});
+	if (client.value) {
+		client.value
+			.leave()
+			.then(() => {
+				console.log("Left channel");
+				callPlaced.value = false;
+			})
+			.catch((err) => {
+				console.error("Error leaving channel:", err);
+			});
+	}
 };
 
 const toggleAudio = () => {
-	if (localStream.value.audioTrack) {
-		mutedAudio.value
-			? localStream.value.audioTrack.setEnabled(true)
-			: localStream.value.audioTrack.setEnabled(false);
-		mutedAudio.value = !mutedAudio.value;
+	if (localStream.value) {
+		if (mutedAudio.value) {
+			localStream.value.audioTrack.setMuted(false);
+			mutedAudio.value = false;
+		} else {
+			localStream.value.audioTrack.setMuted(true);
+			mutedAudio.value = true;
+		}
 	}
 };
 
 const toggleVideo = () => {
-	if (localStream.value.videoTrack) {
-		mutedVideo.value
-			? localStream.value.videoTrack.setEnabled(true)
-			: localStream.value.videoTrack.setEnabled(false);
-		mutedVideo.value = !mutedVideo.value;
+	if (localStream.value) {
+		if (mutedVideo.value) {
+			localStream.value.videoTrack.setEnabled(true);
+			mutedVideo.value = false;
+		} else {
+			localStream.value.videoTrack.setEnabled(false);
+			mutedVideo.value = true;
+		}
 	}
 };
 
@@ -330,40 +295,3 @@ onMounted(() => {
 	initUserOnlineChannel();
 });
 </script>
-
-<style scoped>
-/* Ensure the container takes up the full height */
-.video-call-container {
-	display: flex;
-	justify-content: center; /* Centers content horizontally */
-	align-items: center; /* Centers content vertically */
-	height: 100vh; /* Full height of the viewport */
-	position: relative;
-}
-
-/* Style for individual video feeds */
-.video-feed {
-	width: 100%; /* Allow video feed to scale */
-	max-width: 500px; /* Maximum width */
-	position: absolute; /* Allow absolute positioning */
-	top: 50%; /* Center vertically */
-	left: 50%; /* Center horizontally */
-	transform: translate(-50%, -50%); /* Adjust to center the element */
-}
-
-.local-video,
-.remote-video {
-	width: 100%; /* Adjust video feed width */
-	height: auto; /* Maintain aspect ratio */
-}
-
-/* Optional: Style for smaller video in the bottom left */
-.small-video {
-	width: 120px;
-	height: auto;
-	position: absolute;
-	bottom: 20px;
-	left: 20px;
-	z-index: 10; /* Ensure it's on top of other videos */
-}
-</style>

@@ -52,7 +52,7 @@ class LoginRequest extends FormRequest
         // }
         $loginField = filter_var($credentials['login'], FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
 
-        if (!Auth::attempt([$loginField => $credentials['login'], 'password' => $credentials['password']])) {
+        if (!Auth::attempt([$loginField => $credentials['login'], 'password' => $credentials['password']], $this->boolean('remember'))) {
             throw ValidationException::withMessages([
                 'login' => ['The provided credentials do not match our records.'],
             ]);
