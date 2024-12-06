@@ -17,7 +17,7 @@
     <!-- Scripts -->
     @routes
     @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
-    <script src="https://download.agora.io/sdk/release/AgoraRTC_N-4.22.0.js"></script>
+    {{-- <script src="https://download.agora.io/sdk/release/AgoraRTC_N-4.22.0.js"></script> --}}
     @inertiaHead
 </head>
 {{-- <body class="font-sans antialiased"> --}}

@@ -149,7 +149,7 @@ const placeCall = async (id, calleeName, calleeId) => {
 			channel_name: channelName,
 		});
 
-		initializeAgora();
+		await initializeAgora();
 		await joinChannel(token, channelName);
 	} catch (error) {
 		console.error("Error in placeCall:", error.response?.data || error.message);

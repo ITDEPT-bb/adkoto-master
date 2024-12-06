@@ -210,20 +210,22 @@ class ChatController extends Controller
     public function searchFollowings(Request $request)
     {
         $user = auth()->user();
-
         $query = $request->input('query', '');
 
         $followings = $user->followings()
-            ->where('name', 'like', '%' . $query . '%')
-            ->orWhere('surname', 'like', '%' . $query . '%')
-            ->orWhere('username', 'like', '%' . $query . '%')
+            ->where(function ($queryBuilder) use ($query) {
+                $queryBuilder->where('name', 'like', '%' . $query . '%')
+                    ->orWhere('surname', 'like', '%' . $query . '%')
+                    ->orWhere('username', 'like', '%' . $query . '%');
+            })
+            ->distinct()
             ->get();
 
-        // return response()->json($followings);
         return response()->json([
             'followings' => UserResource::collection($followings),
         ]);
     }
+
 
     public function getConversation(User $user)
     {

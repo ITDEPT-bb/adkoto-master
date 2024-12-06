@@ -118,9 +118,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('/chat/mark-as-read/{conversationId}', [ChatController::class, 'markAsRead']);
 
-    Route::get('/chat/call/{userId}', [ChatController::class, 'callPage'])->name('chat.callPage');
-    Route::post('/agora/token', [AgoraVideoController::class, 'token']);
-    Route::post('/agora/call-user', [AgoraVideoController::class, 'callUser']);
+    // Route::get('/chat/call/{userId}', [ChatController::class, 'callPage'])->name('chat.callPage');
+    // Route::post('/agora/token', [AgoraVideoController::class, 'token']);
+    // Route::post('/agora/call-user', [AgoraVideoController::class, 'callUser']);
 });
 
 // Group Chat
