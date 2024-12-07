@@ -56,7 +56,7 @@
 				<div
 					class="col-span-12 lg:col-span-3 bg-white px-4 py-4 lg:px-6 lg:py-6 rounded-lg shadow-sm hidden lg:block">
 					<h2 class="text-2xl font-bold mb-4">Live Bidding</h2>
-					<NormalItemCard :item="liveBiddingItem" />
+					<LiveItemCard :item="liveBiddingItem" />
 					<!-- <a
 						:href="route('auction.viewAllLive')"
 						class="font-bold w-full sm:gap-4 sm:items-center justify-center sm:flex sm:my-4 rounded-md p-2 bg-blue-300 hover:bg-blue-500 hover:text-white">
@@ -88,6 +88,7 @@ import AuctionMenu from "@/Components/Auction/AuctionMenu.vue";
 import PageSelector from "@/Components/Kalakalkoto/PageSelector.vue";
 import NormalItemList from "@/Components/Auction/NormalItemList.vue";
 import NormalItemCard from "@/Components/Auction/NormalItemCard.vue";
+import LiveItemCard from "@/Components/Auction/LiveItemCard.vue";
 
 const { props } = usePage();
 const normalBiddingItems = ref(props.normalBiddingItems);

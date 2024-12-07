@@ -58,7 +58,7 @@
 							View My Items
 						</a>
 					</li>
-					<li>
+					<!-- <li>
 						<a
 							:href="route('auction.viewAllLive')"
 							:class="{
@@ -69,7 +69,7 @@
 							}">
 							Live Bidding
 						</a>
-					</li>
+					</li> -->
 				</ul>
 			</div>
 

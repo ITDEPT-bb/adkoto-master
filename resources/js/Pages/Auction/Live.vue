@@ -10,7 +10,7 @@
 
 				<!-- Check if liveBiddingItem has items -->
 				<div v-if="liveBiddingItem && liveBiddingItem.length > 0">
-					<NormalItemList :items="liveBiddingItem" />
+					<LiveItemCard :items="liveBiddingItem" />
 				</div>
 				<div
 					v-else
@@ -34,7 +34,7 @@ import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
 
 import AuctionMenu from "@/Components/Auction/AuctionMenu.vue";
 import PageSelector from "@/Components/Kalakalkoto/PageSelector.vue";
-import NormalItemList from "@/Components/Auction/NormalItemList.vue";
+import LiveItemCard from "@/Components/Auction/LiveItemCard.vue";
 
 const { props } = usePage();
 const liveBiddingItem = ref(props.liveBiddingItem);
