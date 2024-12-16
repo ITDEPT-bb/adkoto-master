@@ -3,7 +3,7 @@ import { ref, onMounted } from "vue";
 
 const showOverlay = ref(false);
 const text = ref("");
-const fullText = "Where Real Human Connects";
+const fullText = "Where Real Humans Connect";
 
 onMounted(() => {
 	if (!sessionStorage.getItem("welcomeOverlayShown")) {
