@@ -32,6 +32,8 @@ class HomeController extends Controller
                     ->where('gu.user_id', '=', $userId)
                     ->where('gu.status', GroupUserStatus::APPROVED->value);
             })
+            ->join('users', 'users.id', '=', 'posts.user_id')
+            ->whereNull('users.deleted_at')
             ->where(function ($query) use ($userId) {
                 /** @var \Illuminate\Database\Query\Builder $query */
                 $query->whereNotNull('f.follower_id')

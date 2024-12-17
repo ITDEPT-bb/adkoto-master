@@ -233,6 +233,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/api/check-profile', [ProfileController::class, 'checkProfile']);
 
+    // Deactivate Profile
+    Route::post('/account/validate-password', [ProfileController::class, 'validatePassword'])->name('account.validatePassword');
+    Route::delete('/account/deactivate', [ProfileController::class, 'deactivate'])->name('account.deactivate');
+
     // Posts
     Route::prefix('/post')->group(function () {
         Route::get('/{post}', [PostController::class, 'view'])

@@ -20,6 +20,7 @@ use App\Models\PostAttachment;
 use Illuminate\Support\Facades\Storage;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
@@ -116,6 +117,28 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    public function validatePassword(Request $request)
+    {
+        $request->validate(['password' => 'required']);
+
+        if (!Hash::check($request->password, $request->user()->password)) {
+            return response()->json(['error' => 'The password is incorrect.'], 422);
+        }
+
+        return response()->json(['success' => true]);
+    }
+
+    public function deactivate(Request $request)
+    {
+        $user = $request->user();
+        try {
+            $user->delete();
+            return response()->json(['success' => true], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'An error occurred while deactivating your account.'], 500);
+        }
     }
 
     public function updateImage(Request $request)
