@@ -179,11 +179,34 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+    // public function destroy(Post $post)
+    // {
+    //     $id = Auth::id();
+
+    //     if ($post->isOwner($id) || $post->group && $post->group->isAdmin($id)) {
+    //         $post->delete();
+
+    //         if (!$post->isOwner($id)) {
+    //             $post->user->notify(new PostDeleted($post->group));
+    //         }
+
+    //         return back();
+    //     }
+
+    //     return response("You don't have permission to delete this post", 403);
+    // }
     public function destroy(Post $post)
     {
         $id = Auth::id();
 
         if ($post->isOwner($id) || $post->group && $post->group->isAdmin($id)) {
+            if ($post->attachments()->exists()) {
+                foreach ($post->attachments as $attachment) {
+                    Storage::delete($attachment->path);
+                    $attachment->delete();
+                }
+            }
+
             $post->delete();
 
             if (!$post->isOwner($id)) {
@@ -195,6 +218,7 @@ class PostController extends Controller
 
         return response("You don't have permission to delete this post", 403);
     }
+
 
     public function downloadAttachment(PostAttachment $attachment)
     {
