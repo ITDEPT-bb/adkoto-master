@@ -12,9 +12,12 @@ trait HandlesSoftDeletes
      * @param  \Illuminate\Database\Eloquent\Model|null  $model
      * @return bool
      */
-    public function isDeactivated(Model $model): bool
+    public function isDeactivated($model)
     {
-        // Check if the model exists and has a `deleted_at` timestamp
-        return $model && $model->deleted_at !== null;
+        if ($model instanceof \Illuminate\Database\Eloquent\Model) {
+            return $model->deleted_at !== null;
+        }
+
+        return false;
     }
 }

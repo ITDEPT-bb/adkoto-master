@@ -20,7 +20,7 @@ class PostResource extends JsonResource
         $comments = $this->comments;
 
         $user = $this->user;
-        $isUserDeactivated = $this->isDeactivated($user);
+        $isDeactivated = $user ? $this->isDeactivated($user) : false;
 
         return [
             'id' => $this->id,
@@ -29,10 +29,9 @@ class PostResource extends JsonResource
             'preview_url' => $this->preview_url,
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
             'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
-            // 'user' => new UserResource($this->user),
-            'user' => $isUserDeactivated ? [
-                'id' => $user->id,
-                'name' => $user->name,
+            'user' => $isDeactivated ? [
+                'id' => $user ? $user->id : null,
+                'name' => $user ? $user->name : null,
                 'status' => 'Deactivated',
             ] : new UserResource($user),
             'group' => new GroupResource($this->group),

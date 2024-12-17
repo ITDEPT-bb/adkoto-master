@@ -52,10 +52,13 @@ class GroupController extends Controller
         if ($group->hasApprovedUser($userId)) {
             $posts = Post::postsForTimeline($userId, false)
                 ->leftJoin('groups AS g', 'g.pinned_post_id', 'posts.id')
+                ->join('users', 'posts.user_id', '=', 'users.id') // Join the users table
+                ->whereNull('users.deleted_at') // Ensure the user is not soft-deleted
                 ->where('group_id', $group->id)
                 ->orderBy('g.pinned_post_id', 'desc')
                 ->orderBy('posts.created_at', 'desc')
                 ->paginate(10);
+
             $posts = PostResource::collection($posts);
         } else {
             return Inertia::render('Group/View', [
@@ -66,6 +69,7 @@ class GroupController extends Controller
                 'requests' => []
             ]);
         }
+
 
         if ($request->wantsJson()) {
             // return PostResource::collection($posts);

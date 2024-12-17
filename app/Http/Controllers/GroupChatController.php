@@ -49,26 +49,36 @@ class GroupChatController extends Controller
     {
         $user = auth()->user();
 
-        $groupChat = GroupChat::with(['participants', 'messages.attachments', 'messages.sender', 'conversation'])
+        // Retrieve group chat with relationships and handle soft-deleted users
+        $groupChat = GroupChat::with([
+            'participants' => function ($query) {
+                // Exclude soft-deleted participants
+                $query->whereNull('deleted_at');
+            },
+            'messages.attachments',
+            'messages.sender',
+            'conversation'
+        ])
             ->findOrFail($groupChatId);
 
+        // Check if the user is a participant in the group chat
         $isParticipant = $groupChat->participants()->where('user_id', $user->id)->exists();
 
-        // if (!$isParticipant) {
-        //     return response()->json(['message' => 'Unauthorized. You are not a participant of this group chat.'], 403);
-        // }
         if (!$isParticipant) {
             abort(403, 'Unauthorized');
         }
 
-        // Map messages for the response
+        // Map messages for the response, excluding soft-deleted senders
         $messages = $groupChat->messages->map(function ($message) {
+            // Check if the sender is soft-deleted
+            $sender = $message->sender()->withTrashed()->first(); // Include trashed users to check soft-deleted status
+
             return [
                 'id' => $message->id,
                 'message' => $message->message,
                 'attachments' => $message->attachments,
                 'sender_id' => $message->sender_id,
-                'sender' => new UserResource($message->sender),
+                'sender' => $sender ? new UserResource($sender) : null,  // Handle soft-deleted sender
                 'created_at' => $message->created_at,
             ];
         });
@@ -82,6 +92,7 @@ class GroupChatController extends Controller
             'authUser' => new UserResource($user),
         ]);
     }
+
 
     public function create(Request $request)
     {

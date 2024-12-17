@@ -18,7 +18,7 @@ class CommentResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $isDeactivated = $this->resource ? $this->isDeactivated($this->resource) : false;
+        $isDeactivated = $this->user ? $this->isDeactivated($this->user) : false;
 
         return [
             'id' => $this->id,
@@ -38,7 +38,6 @@ class CommentResource extends JsonResource
                     ? Storage::url($this->user->avatar_path)
                     : '/img/default_avatar.png',
             ],
-
             'is_deactivated' => $isDeactivated,
             'deactivation_message' => $isDeactivated ? 'This user has been deactivated.' : null,
         ];
