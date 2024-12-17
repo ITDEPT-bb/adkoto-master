@@ -2,11 +2,14 @@
 
 namespace App\Http\Resources;
 
+use App\Traits\HandlesSoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PostResource extends JsonResource
 {
+    use HandlesSoftDeletes;
+
     /**
      * Transform the resource into an array.
      *
@@ -16,6 +19,9 @@ class PostResource extends JsonResource
     {
         $comments = $this->comments;
 
+        $user = $this->user;
+        $isUserDeactivated = $this->isDeactivated($user);
+
         return [
             'id' => $this->id,
             'body' => $this->body,
@@ -23,7 +29,12 @@ class PostResource extends JsonResource
             'preview_url' => $this->preview_url,
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
             'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
-            'user' => new UserResource($this->user),
+            // 'user' => new UserResource($this->user),
+            'user' => $isUserDeactivated ? [
+                'id' => $user->id,
+                'name' => $user->name,
+                'status' => 'Deactivated',
+            ] : new UserResource($user),
             'group' => new GroupResource($this->group),
             'attachments' => PostAttachmentResource::collection($this->attachments),
             'num_of_reactions' => $this->reactions_count,

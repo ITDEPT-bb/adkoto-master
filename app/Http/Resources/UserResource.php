@@ -2,12 +2,16 @@
 
 namespace App\Http\Resources;
 
+use App\Traits\HandlesSoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 
 class UserResource extends JsonResource
 {
+
+    use HandlesSoftDeletes;
+
     /**
      * Transform the resource into an array.
      *
@@ -16,6 +20,8 @@ class UserResource extends JsonResource
     public function toArray(Request $request): array
     {
         // return parent::toArray($request);
+        $isDeactivated = $this->isDeactivated($this->resource);
+
         return [
             "id" => $this->id,
             "name" => $this->name,
@@ -39,6 +45,8 @@ class UserResource extends JsonResource
             'last_message_sender_id' => $this->when(isset($this->last_message_sender_id), $this->last_message_sender_id),
             'last_message_read_at' => $this->when(isset($this->last_message_read_at), $this->last_message_read_at),
             'unread_count' => $this->when(isset($this->unread_count), $this->unread_count),
+            'is_deactivated' => $isDeactivated,
+            'deactivation_message' => $isDeactivated ? 'This user has been deactivated.' : null,
         ];
     }
 }

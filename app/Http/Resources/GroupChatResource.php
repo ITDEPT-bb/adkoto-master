@@ -15,6 +15,10 @@ class GroupChatResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $participants = $this->participants->filter(function ($participant) {
+            return !$participant->deleted_at;
+        });
+
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -23,7 +27,8 @@ class GroupChatResource extends JsonResource
             'owner' => new UserResource($this->owner),
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
-            'participants' => UserResource::collection($this->participants),
+            // 'participants' => UserResource::collection($this->participants),
+            'participants' => UserResource::collection($participants),
             'last_message' => $this->when(isset($this->last_message), $this->last_message),
             'last_message_sender_name' => $this->when(isset($this->last_message_sender_name), $this->last_message_sender_name),
         ];

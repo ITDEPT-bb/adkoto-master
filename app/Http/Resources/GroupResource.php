@@ -16,6 +16,11 @@ class GroupResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+
+        $participants = $this->participants ? $this->participants->filter(function ($participant) {
+            return !$participant->deleted_at;
+        }) : collect();
+
         return [
             'id' => $this->id,
             'name' => $this->name,

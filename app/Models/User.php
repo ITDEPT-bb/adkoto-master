@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Traits\HandlesSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -28,6 +29,8 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
     use HasSlug;
 
     use SoftDeletes;
+
+    use HandlesSoftDeletes;
 
     /**
      * The attributes that are mass assignable.

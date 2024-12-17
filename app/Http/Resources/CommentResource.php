@@ -2,12 +2,15 @@
 
 namespace App\Http\Resources;
 
+use App\Traits\HandlesSoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 
 class CommentResource extends JsonResource
 {
+    use HandlesSoftDeletes;
+
     /**
      * Transform the resource into an array.
      *
@@ -15,6 +18,8 @@ class CommentResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $isDeactivated = $this->resource ? $this->isDeactivated($this->resource) : false;
+
         return [
             'id' => $this->id,
             'comment' => $this->comment,
@@ -25,12 +30,17 @@ class CommentResource extends JsonResource
             'current_user_has_reaction' => $this->reactions->count() > 0,
             'comments' => $this->childComments,
             'user' => [
-                "id" => $this->user->id,
-                "name" => $this->user->name,
-                "surname" => $this->user->surname,
-                "username" => $this->user->username,
-                "avatar_url" => $this->user->avatar_path ? Storage::url($this->user->avatar_path) : '/img/default_avatar.png',
-            ]
+                "id" => $this->user ? $this->user->id : null,
+                "name" => $this->user ? $this->user->name : null,
+                "surname" => $this->user ? $this->user->surname : null,
+                "username" => $this->user ? $this->user->username : null,
+                "avatar_url" => $this->user && $this->user->avatar_path
+                    ? Storage::url($this->user->avatar_path)
+                    : '/img/default_avatar.png',
+            ],
+
+            'is_deactivated' => $isDeactivated,
+            'deactivation_message' => $isDeactivated ? 'This user has been deactivated.' : null,
         ];
     }
 }
