@@ -17,6 +17,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RechargeWalletController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\TextController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -47,6 +48,8 @@ Route::get('/copyright', [HomeController::class, 'copyright'])
 
 Route::get('/faqs', [HomeController::class, 'faqs'])
     ->name('faqs.show');
+
+Route::post('/profanity-check', [TextController::class, 'checkProfanity']);
 
 // Kalakalkoto
 Route::middleware(['auth', 'verified'])->prefix('/kalakalkoto')->group(function () {
