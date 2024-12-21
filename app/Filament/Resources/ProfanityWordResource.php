@@ -25,6 +25,7 @@ class ProfanityWordResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('word')
                     ->required()
+                    ->unique()
                     ->maxLength(255),
             ]);
     }
