@@ -1,12 +1,19 @@
 <template>
 	<div class="relative">
 		<!-- Notification Bell Icon/Button -->
-		<button
+		<!-- <button
 			@click="toggleModal"
 			class="relative block">
 			<img
 				:src="messageIcon"
 				class="md:h-auto md:w-12 xl:w-[58px]"
+				alt="Notifications" /> -->
+		<button
+			@click="toggleModal"
+			class="relative block bg-white p-0.5 rounded-full">
+			<img
+				:src="messageIcon"
+				class="md:h-auto md:w-12 xl:w-10"
 				alt="Notifications" />
 			<!-- Unread count indicator -->
 			<div
@@ -54,7 +61,7 @@ import ChatListDropdown from "@/Components/Chat/ChatListDropdown.vue";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 
-import messageIcon from "/public/img/icons/message.png";
+import messageIcon from "/public/img/icons/message-bk.png";
 
 dayjs.extend(relativeTime);
 

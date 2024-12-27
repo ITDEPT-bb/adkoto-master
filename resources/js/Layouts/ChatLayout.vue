@@ -12,12 +12,12 @@ import logo from "/public/img/tribekoto.png";
 // import tribekotoIcon from '/public/img/icons/tribekotoicon.png';
 // import adkotoIcon from '/public/img/icons/adkotoicon.png';
 // import kalakalkotoIcon from '/public/img/icons/kalakalkotoicon.png';
-import tribekotoIcon from "/public/img/icons/tribekoto.png";
-import adkotoIcon from "/public/img/icons/adkoto.png";
-import kalakalkotoIcon from "/public/img/icons/kalakalkoto.png";
-import gameIcon from "/public/img/icons/gameicon.png";
-import messageIcon from "/public/img/icons/message.png";
-import notificationIcon from "/public/img/icons/notification.png";
+import tribekotoIcon from "/public/img/icons/tribekoto-bk.png";
+import adkotoIcon from "/public/img/icons/adkoto-bk.png";
+import kalakalkotoIcon from "/public/img/icons/kalakalkoto-bk.png";
+import gameIcon from "/public/img/icons/gameicon-bk.png";
+import messageIcon from "/public/img/icons/message-bk.png";
+import notificationIcon from "/public/img/icons/notification-bk.png";
 import NotificationDropdown from "@/Components/Notification/NotificationDropdown.vue";
 
 const showingNavigationDropdown = ref(false);
@@ -64,7 +64,7 @@ const leave = (el, done) => {
 			<!-- Primary Navigation Menu -->
 			<div
 				class="max-w-screen mx-auto px-4 sm:px-6 lg:px-16 bg-cover bg-center bg-white"
-				style="background-image: url('/img/christmas.jpg')">
+				style="background-image: url('/img/adkoto_newyear.png')">
 				<!-- <div class="flex items-center justify-between gap-4 h-16">
                     <div class="flex"> -->
 				<div class="flex items-center justify-evenly gap-2 h-16">
@@ -74,7 +74,7 @@ const leave = (el, done) => {
 							<Link :href="route('chat.index')">
 								<img
 									:src="logo"
-									class="block h-8 sm:h-8 w-auto ml-2 sm:ml-4 md:ml-6 lg:ml-2 xl:ml-7 2xl:ml-[70px]"
+									class="block h-7 sm:h-10 w-auto ml-2 sm:ml-4 md:ml-6 lg:ml-2 xl:ml-7 2xl:ml-[70px] bg-white rounded-full px-2 py-1"
 									alt="Logo" />
 							</Link>
 						</div>
@@ -106,41 +106,41 @@ const leave = (el, done) => {
 
 						<Link
 							:href="route('dashboard')"
-							class="rounded-full hidden sm:flex">
+							class="bg-white p-0.5 rounded-full hidden sm:flex">
 							<!-- Tribekoto -->
 							<img
 								:src="tribekotoIcon"
-								class="hidden sm:flex h-auto md:w-12 xl:w-[58px]"
+								class="hidden sm:flex h-auto md:w-12 xl:w-10"
 								alt="Logo" />
 						</Link>
 
 						<Link
 							:href="route('kalakalkoto')"
-							class="rounded-full hidden sm:flex">
+							class="bg-white p-0.5 rounded-full hidden sm:flex">
 							<!-- Kalakalkoto -->
 							<img
 								:src="kalakalkotoIcon"
-								class="hidden sm:flex h-auto md:w-12 xl:w-[58px]"
+								class="hidden sm:flex h-auto md:w-12 xl:w-10"
 								alt="Logo" />
 						</Link>
 
 						<Link
 							:href="route('adkoto')"
-							class="rounded-full hidden sm:flex">
+							class="bg-white p-0.5 rounded-full hidden sm:flex">
 							<!-- Adkoto -->
 							<img
 								:src="adkotoIcon"
-								class="hidden sm:flex h-auto md:w-12 xl:w-[58px]"
+								class="hidden sm:flex h-auto md:w-12 xl:w-10"
 								alt="Logo" />
 						</Link>
 
 						<Link
 							:href="route('games.index')"
-							class="rounded-full hidden sm:flex">
+							class="bg-white p-0.5 rounded-full hidden sm:flex">
 							<!-- Adkoto -->
 							<img
 								:src="gameIcon"
-								class="h-auto md:w-12 xl:w-[58px] hidden sm:flex"
+								class="hidden sm:flex h-auto md:w-12 xl:w-10"
 								alt="Logo" />
 						</Link>
 

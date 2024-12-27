@@ -1,12 +1,19 @@
 <template>
 	<div class="relative">
 		<!-- Notification Bell Icon/Button -->
-		<button
+		<!-- <button
 			@click="showDropdown = !showDropdown"
 			class="relative block">
 			<img
 				:src="notificationIcon"
 				class="md:h-auto md:w-12 xl:w-[58px]"
+				alt="Notifications" /> -->
+		<button
+			@click="showDropdown = !showDropdown"
+			class="relative block bg-white p-0.5 rounded-full">
+			<img
+				:src="notificationIcon"
+				class="md:h-auto md:w-12 xl:w-10"
 				alt="Notifications" />
 			<!-- Unread count indicator -->
 			<div
@@ -132,7 +139,7 @@ const notifications = ref([]);
 const loading = ref(true);
 const userProfile = ref({});
 
-import notificationIcon from "/public/img/icons/notification.png";
+import notificationIcon from "/public/img/icons/notification-bk.png";
 
 const unreadCount = computed(() => {
 	return notifications.value.filter((notification) => !notification.read_at).length;
