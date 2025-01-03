@@ -65,10 +65,10 @@ const leave = (el, done) => {
 	<div class="h-full mx-auto overflow-hidden flex flex-col bg-gray-100 dark:bg-gray-800">
 		<nav class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
 			<!-- Primary Navigation Menu -->
-			<div
+			<!-- <div
 				class="max-w-screen mx-auto px-4 sm:px-6 lg:px-16 bg-cover bg-center bg-white"
-				style="background-image: url('/img/adkoto_newyear.png')">
-				<!-- <div class="max-w-screen mx-auto px-4 sm:px-6 lg:px-16"> -->
+				style="background-image: url('/img/adkoto_newyear.png')"> -->
+			<div class="max-w-screen mx-auto px-4 sm:px-6 lg:px-16">
 				<!-- <div class="flex items-center justify-between gap-4 h-16">
                     <div class="flex"> -->
 				<div class="flex items-center justify-between gap-2 h-16">
@@ -77,14 +77,14 @@ const leave = (el, done) => {
 						<!-- <div class="shrink-0 flex items-center bg-white bg-opacity-75 px-4 py-2 rounded-full"> -->
 						<div class="shrink-0 flex items-center">
 							<Link :href="route('dashboard')">
-								<!-- <img
-									:src="logo"
-									class="block h-8 sm:h-8 w-auto ml-2 sm:ml-4 md:ml-6 lg:ml-2 xl:ml-7 2xl:ml-[70px]"
-									alt="Logo" /> -->
 								<img
 									:src="logo"
-									class="block h-7 sm:h-10 w-auto ml-2 sm:ml-4 md:ml-6 lg:ml-2 xl:ml-7 2xl:ml-[70px] bg-white rounded-full px-2 py-1"
+									class="block h-8 sm:h-8 w-auto ml-2 sm:ml-4 md:ml-6 lg:ml-2 xl:ml-7 2xl:ml-[70px]"
 									alt="Logo" />
+								<!-- <img
+									:src="logo"
+									class="block h-7 sm:h-10 w-auto ml-2 sm:ml-4 md:ml-6 lg:ml-2 xl:ml-7 2xl:ml-[70px] bg-white rounded-full px-2 py-1"
+									alt="Logo" /> -->
 							</Link>
 						</div>
 						<!-- <div

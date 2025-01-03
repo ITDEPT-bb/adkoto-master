@@ -63,9 +63,7 @@ const leave = (el, done) => {
 	<div class="h-full mx-auto overflow-hidden flex flex-col bg-gray-100 dark:bg-gray-800">
 		<nav class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
 			<!-- Primary Navigation Menu -->
-			<div
-				class="max-w-screen mx-auto px-4 sm:px-6 lg:px-16 bg-cover bg-center bg-white"
-				style="background-image: url('/img/adkoto_newyear.png')">
+			<div class="max-w-screen mx-auto px-4 sm:px-6 lg:px-16">
 				<!-- <div class="flex items-center justify-between gap-4 h-16">
                     <div class="flex"> -->
 				<div class="flex items-center justify-evenly gap-2 h-16">
@@ -75,7 +73,7 @@ const leave = (el, done) => {
 							<Link :href="route('kalakalkoto')">
 								<img
 									:src="logo"
-									class="block h-7 sm:h-10 w-auto ml-2 sm:ml-4 md:ml-6 lg:ml-2 xl:ml-7 2xl:ml-[70px] bg-white rounded-full px-6 py-1"
+									class="block h-8 sm:h-8 w-auto ml-2 sm:ml-4 md:ml-6 lg:ml-2 xl:ml-7 2xl:ml-[70px]"
 									alt="Logo" />
 							</Link>
 						</div>
