@@ -6,6 +6,6 @@
     </svg> -->
 	<!-- <img src="img/adkoto.png" alt="Adkoto Logo"> -->
 	<img
-		src="img/1aaadkotoa1.png"
+		src="img/adkoto_png_2.png"
 		alt="Adkoto Logo" />
 </template>

@@ -20,6 +20,7 @@ class SearchController extends Controller
 
         $users = User::query()
             ->where('name', 'like', "%$search%")
+            ->orWhere('surname', 'like', "%$search%")
             ->orWhere('username', 'like', "%$search%")
             ->latest()
             ->get();
