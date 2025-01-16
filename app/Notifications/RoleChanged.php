@@ -27,7 +27,7 @@ class RoleChanged extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
     /**
@@ -49,7 +49,13 @@ class RoleChanged extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            'group_id' => $this->group->id,
+            'group_name' => $this->group->name,
+            'user_id' => auth()->user()->id,
+            'changed_by' => auth()->user()->name,
+            'role' => $this->role,
+            'route' => route('group.profile', $this->group),
+            'message' => 'Your role was changed into "' . $this->role . '" in the group "' . $this->group->name . '".',
         ];
     }
 }
