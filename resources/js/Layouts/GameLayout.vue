@@ -16,6 +16,7 @@ import tribekotoIcon from "/public/img/icons/tribekoto-bk.png";
 import adkotoIcon from "/public/img/icons/adkoto-bk.png";
 import kalakalkotoIcon from "/public/img/icons/kalakalkoto-bk.png";
 import messageIcon from "/public/img/icons/message-bk.png";
+import gameIcon from "/public/img/icons/gameicon-bk.png";
 // import notificationIcon from "/public/img/icons/notification.png";
 import NotificationDropdown from "@/Components/Notification/NotificationDropdown.vue";
 import MessageIcon from "@/Components/Chat/MessageIconDropdown.vue";
@@ -74,7 +75,7 @@ const leave = (el, done) => {
 							<Link :href="route('dashboard')">
 								<img
 									:src="logo"
-									class="block h-6 sm:h-8 w-auto ml-2 sm:ml-4 md:ml-6 lg:ml-2 xl:ml-7 2xl:ml-[70px]"
+									class="block h-6 sm:h-8 w-auto ml-2 sm:ml-4 md:ml-6 lg:ml-2 xl:ml-7 2xl:ml-[70px] hover:scale-110 transition duration-200 ease-in-out"
 									alt="Logo" />
 							</Link>
 						</div>
@@ -112,8 +113,7 @@ const leave = (el, done) => {
 
 						<Link
 							:href="route('dashboard')"
-							class="bg-white p-0.5 rounded-full hidden sm:flex">
-							<!-- Tribekoto -->
+							class="bg-white p-0.5 rounded-full hidden sm:flex hover:bg-red-500 hover:text-white hover:border-red-700 hover:shadow-md hover:scale-105 transition duration-200 ease-in-out">
 							<img
 								:src="tribekotoIcon"
 								class="hidden sm:flex h-auto md:w-12 xl:w-10"
@@ -122,8 +122,7 @@ const leave = (el, done) => {
 
 						<Link
 							:href="route('kalakalkoto')"
-							class="bg-white p-0.5 rounded-full hidden sm:flex">
-							<!-- Kalakalkoto -->
+							class="bg-white p-0.5 rounded-full hidden sm:flex hover:bg-red-500 hover:text-white hover:border-red-700 hover:shadow-md hover:scale-105 transition duration-200 ease-in-out">
 							<img
 								:src="kalakalkotoIcon"
 								class="hidden sm:flex h-auto md:w-12 xl:w-10"
@@ -132,11 +131,19 @@ const leave = (el, done) => {
 
 						<Link
 							:href="route('adkoto')"
-							class="bg-white p-0.5 rounded-full hidden sm:flex">
-							<!-- Adkoto -->
+							class="bg-white p-0.5 rounded-full hidden sm:flex hover:bg-red-500 hover:text-white hover:border-red-700 hover:shadow-md hover:scale-105 transition duration-200 ease-in-out">
 							<img
 								:src="adkotoIcon"
-								class="hidden sm:flex h-auto md:w-12 xl:w-10"
+								class="hidden sm:flex md:h-auto md:w-12 xl:w-10"
+								alt="Logo" />
+						</Link>
+
+						<Link
+							:href="route('games.index')"
+							class="bg-white p-0.5 rounded-full hidden sm:flex border border-red-500 hover:bg-red-500 hover:text-white hover:border-red-700 hover:shadow-md hover:scale-105 transition duration-200 ease-in-out">
+							<img
+								:src="gameIcon"
+								class="hidden sm:flex md:h-auto md:w-12 xl:w-10"
 								alt="Logo" />
 						</Link>
 

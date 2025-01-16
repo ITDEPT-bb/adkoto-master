@@ -19,6 +19,7 @@ import gameIcon from "/public/img/icons/gameicon-bk.png";
 import messageIcon from "/public/img/icons/message-bk.png";
 import notificationIcon from "/public/img/icons/notification-bk.png";
 import NotificationDropdown from "@/Components/Notification/NotificationDropdown.vue";
+import MessageIcon from "@/Components/Chat/MessageIconDropdown.vue";
 
 const showingNavigationDropdown = ref(false);
 const keywords = ref(usePage().props.search || "");
@@ -72,7 +73,7 @@ const leave = (el, done) => {
 							<Link :href="route('chat.index')">
 								<img
 									:src="logo"
-									class="block h-6 sm:h-8 w-auto ml-2 sm:ml-4 md:ml-6 lg:ml-2 xl:ml-7 2xl:ml-[70px]"
+									class="block h-6 sm:h-8 w-auto ml-2 sm:ml-4 md:ml-6 lg:ml-2 xl:ml-7 2xl:ml-[70px] hover:scale-110 transition duration-200 ease-in-out"
 									alt="Logo" />
 							</Link>
 						</div>
@@ -146,6 +147,8 @@ const leave = (el, done) => {
 						<!-- Chatkoto -->
 						<!-- <img :src="messageIcon" class="hidden sm:flex h-8 w-auto" alt="Logo" />
                             </Link> -->
+
+						<MessageIcon class="hidden sm:flex rounded-full border border-red-500" />
 
 						<!-- Notification Dropdown Component -->
 						<NotificationDropdown class="hidden sm:flex rounded-full" />

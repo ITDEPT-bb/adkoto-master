@@ -10,7 +10,7 @@
 				alt="Notifications" /> -->
 		<button
 			@click="toggleModal"
-			class="relative block bg-white p-0.5 rounded-full">
+			class="relative block bg-white p-0.5 rounded-full hover:bg-red-500 hover:text-white hover:border-red-700 hover:shadow-md hover:scale-105 transition duration-200 ease-in-out">
 			<img
 				:src="messageIcon"
 				class="md:h-auto md:w-12 xl:w-10"

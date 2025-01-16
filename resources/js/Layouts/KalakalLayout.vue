@@ -73,7 +73,7 @@ const leave = (el, done) => {
 							<Link :href="route('kalakalkoto')">
 								<img
 									:src="logo"
-									class="block h-8 sm:h-8 w-auto ml-2 sm:ml-4 md:ml-6 lg:ml-2 xl:ml-7 2xl:ml-[70px]"
+									class="block h-8 sm:h-8 w-auto ml-2 sm:ml-4 md:ml-6 lg:ml-2 xl:ml-7 2xl:ml-[70px] hover:scale-110 transition duration-200 ease-in-out"
 									alt="Logo" />
 							</Link>
 						</div>
@@ -105,7 +105,7 @@ const leave = (el, done) => {
 
 						<Link
 							:href="route('dashboard')"
-							class="bg-white p-0.5 rounded-full hidden sm:flex">
+							class="bg-white p-0.5 rounded-full hidden sm:flex hover:bg-red-500 hover:text-white hover:border-red-700 hover:shadow-md hover:scale-105 transition duration-200 ease-in-out">
 							<!-- Tribekoto -->
 							<img
 								:src="tribekotoIcon"
@@ -113,14 +113,19 @@ const leave = (el, done) => {
 								alt="Logo" />
 						</Link>
 
-						<!-- <Link :href="route('kalakalkoto')"> -->
-						<!-- Kalakalkoto -->
-						<!-- <img :src="kalakalkotoIcon" class="hidden sm:flex h-8 w-auto" alt="Logo" />
-                            </Link> -->
+						<Link
+							:href="route('kalakalkoto')"
+							class="bg-white p-0.5 rounded-full hidden sm:flex border border-red-500 hover:bg-red-500 hover:text-white hover:border-red-700 hover:shadow-md hover:scale-105 transition duration-200 ease-in-out">
+							<!-- Kalakalkoto -->
+							<img
+								:src="kalakalkotoIcon"
+								class="hidden sm:flex h-auto md:w-12 xl:w-10"
+								alt="Logo" />
+						</Link>
 
 						<Link
 							:href="route('adkoto')"
-							class="bg-white p-0.5 rounded-full hidden sm:flex">
+							class="bg-white p-0.5 rounded-full hidden sm:flex hover:bg-red-500 hover:text-white hover:border-red-700 hover:shadow-md hover:scale-105 transition duration-200 ease-in-out">
 							<!-- Adkoto -->
 							<img
 								:src="adkotoIcon"
@@ -130,7 +135,7 @@ const leave = (el, done) => {
 
 						<Link
 							:href="route('games.index')"
-							class="bg-white p-0.5 rounded-full hidden sm:flex">
+							class="bg-white p-0.5 rounded-full hidden sm:flex hover:bg-red-500 hover:text-white hover:border-red-700 hover:shadow-md hover:scale-105 transition duration-200 ease-in-out">
 							<!-- Adkoto -->
 							<img
 								:src="gameIcon"

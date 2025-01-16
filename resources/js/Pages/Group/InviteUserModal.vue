@@ -68,6 +68,7 @@ function submit() {
 					v-model="form.email"
 					required
 					autofocus />
+				<small>Don't include the "@" sign when using username</small>
 				<div class="text-red-500 px-1">{{ page.props.errors.email }}</div>
 			</div>
 		</div>
