@@ -6,6 +6,7 @@ use App\Http\Resources\GroupChatResource;
 use App\Http\Resources\GroupResource;
 use App\Http\Resources\UserResource;
 use App\Models\Conversation;
+use App\Models\Group;
 use App\Models\GroupChat;
 use App\Models\GroupChatParticipant;
 use App\Models\User;
@@ -93,12 +94,12 @@ class GroupChatController extends Controller
         ]);
     }
 
-
     public function create(Request $request)
     {
         $groupChat = GroupChat::create([
             'name' => $request->name,
             'description' => $request->description,
+            'group_id' => $request->group_id,
             'owner_id' => auth()->id(),
         ]);
 
@@ -117,6 +118,29 @@ class GroupChatController extends Controller
             'groupChatUrl' => route('group-chats.index', ['groupChat' => $groupChat->id])
         ]);
     }
+
+    public function handleGroupChat($group_id)
+    {
+        $group = GroupChat::where('group_id', $group_id)->first();
+
+        if ($group) {
+            return response()->json(['redirect' => route('group-chats.index', ['groupChat' => $group->id])]);
+        }
+
+        return response()->json(['message' => 'No group found'], 404);
+    }
+
+
+    // public function handleGroupChat($group_id)
+    // {
+    //     $group = GroupChat::where('group_id', $group_id)->first();
+
+    //     if ($group) {
+    //         return response()->json(['redirectUrl' => route('group-chats.index', ['groupChat' => $group->id])]);
+    //     }
+
+    //     return response()->json(['message' => 'No group found'], 404);
+    // }
 
     public function fetchUsers(Request $request)
     {
@@ -206,12 +230,21 @@ class GroupChatController extends Controller
             return response()->json(['message' => 'You are not a member of this group chat.'], 404);
         }
 
-        // Delete the participant record
         $participant->delete();
 
-        // return response()->json(['message' => 'You have left the group chat successfully.']);
+        $remainingParticipants = GroupChatParticipant::where('group_chat_id', $groupChatId)->count();
+
+        if ($remainingParticipants == 0) {
+            $groupChat = GroupChat::find($groupChatId);
+            if ($groupChat) {
+                $groupChat->delete();
+            }
+        }
+
+        // Redirect the user to the chat page
         return Redirect::to('/chat');
     }
+
 
     public function removeUser(Request $request, $groupChatId)
     {

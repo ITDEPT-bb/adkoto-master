@@ -137,6 +137,7 @@ Route::middleware(['auth', 'verified'])->prefix('/group-chat')->group(function (
     Route::post('/{groupChat}/messages', [GroupChatController::class, 'sendMessage']);
 
     Route::delete('/{groupChat}/leave', [GroupChatController::class, 'leaveGroup'])->name('group-chats.leave');
+    Route::get('/group-check/{group_id}', [GroupChatController::class, 'handleGroupChat'])->name('group.handle');
 });
 Route::middleware(['auth', 'verified'])->prefix('/groupchat')->group(function () {
     Route::get('/fetchUsers', [GroupChatController::class, 'fetchUsers']);
