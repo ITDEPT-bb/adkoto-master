@@ -21,6 +21,28 @@ class HomeController extends Controller
         $userId = Auth::id();
         $user = $request->user();
 
+        // $posts = Post::postsForTimeline($userId)
+        //     ->select('posts.*')
+        //     ->leftJoin('followers AS f', function ($join) use ($userId) {
+        //         $join->on('posts.user_id', '=', 'f.user_id')
+        //             ->where('f.follower_id', '=', $userId);
+        //     })
+        //     ->leftJoin('group_users AS gu', function ($join) use ($userId) {
+        //         $join->on('gu.group_id', '=', 'posts.group_id')
+        //             ->where('gu.user_id', '=', $userId)
+        //             ->where('gu.status', GroupUserStatus::APPROVED->value);
+        //     })
+        //     ->join('users', 'users.id', '=', 'posts.user_id')
+        //     ->whereNull('users.deleted_at')
+        //     ->where(function ($query) use ($userId) {
+        /** @var \Illuminate\Database\Query\Builder $query */
+        //     $query->whereNotNull('f.follower_id')
+        //         ->orWhereNotNull('gu.group_id')
+        //         ->orWhere('posts.user_id', $userId);
+        // })
+        // ->latest()
+        // ->paginate(10);
+
         $posts = Post::postsForTimeline($userId)
             ->select('posts.*')
             ->leftJoin('followers AS f', function ($join) use ($userId) {
@@ -40,7 +62,17 @@ class HomeController extends Controller
                     ->orWhereNotNull('gu.group_id')
                     ->orWhere('posts.user_id', $userId);
             })
-            // ->whereNot('posts.user_id', $userId)
+            ->where(function ($query) use ($userId) {
+                /** @var \Illuminate\Database\Query\Builder $query */
+                $query->whereNull('posts.group_id') // Include posts not associated with any group
+                    ->orWhereExists(function ($subquery) use ($userId) {
+                        $subquery->select('id')
+                            ->from('group_users')
+                            ->whereColumn('group_users.group_id', 'posts.group_id')
+                            ->where('group_users.user_id', '=', $userId)
+                            ->where('group_users.status', GroupUserStatus::APPROVED->value);
+                    });
+            })
             ->latest()
             ->paginate(10);
 
