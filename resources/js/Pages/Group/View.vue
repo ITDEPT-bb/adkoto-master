@@ -346,7 +346,11 @@ const handleChatClick = async (groupId) => {
 							<h2 class="font-bold text-lg">{{ group.name }}</h2>
 
 							<div class="flex gap-2">
-								<PrimaryButton @click="handleChatClick(group.id)"> Chat </PrimaryButton>
+								<PrimaryButton
+									v-if="authUser && isJoinedToGroup"
+									@click="handleChatClick(group.id)">
+									Chat
+								</PrimaryButton>
 
 								<PrimaryButton
 									v-if="!authUser"
