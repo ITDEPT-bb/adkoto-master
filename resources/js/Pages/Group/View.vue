@@ -488,7 +488,7 @@ const handleChatClick = async (groupId) => {
 						</TabPanel>
 						<!-- <TabPanel class="bg-white p-3 shadow"> -->
 						<TabPanel>
-							<template v-if="isCurrentUserAdmin">
+							<template v-if="isCurrentUserAdmin && isJoinedToGroup">
 								<GroupForm :form="aboutForm" />
 								<PrimaryButton
 									@click="updateGroup"

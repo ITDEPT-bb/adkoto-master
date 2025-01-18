@@ -81,6 +81,7 @@ class GroupController extends Controller
             ->join('group_users AS gu', 'gu.user_id', 'users.id')
             ->orderBy('users.name')
             ->where('group_id', $group->id)
+            ->where('gu.status', GroupUserStatus::APPROVED->value)
             ->get();
 
         $requests = $group->pendingUsers()->orderBy('name')->get();
@@ -322,10 +323,11 @@ class GroupController extends Controller
             if ($data['action'] === 'approve') {
                 $approved = true;
                 $groupUser->status = GroupUserStatus::APPROVED->value;
+                $groupUser->save();
             } else {
                 $groupUser->status = GroupUserStatus::REJECTED->value;
+                $groupUser->delete();
             }
-            $groupUser->save();
 
             $user = $groupUser->user;
             $user->notify(new RequestApproved($groupUser->group, $user, $approved));
