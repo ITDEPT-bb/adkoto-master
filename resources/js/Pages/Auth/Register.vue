@@ -55,226 +55,218 @@ const submit = () => {
 	<GuestLayout>
 		<Head title="Register" />
 
-		<form @submit.prevent="submit">
-			<div>
-				<InputLabel
-					for="name"
-					value="Name" />
+		<div className="flex flex-col gap-6">
+			<div class="overflow-hidden rounded-xl border bg-card text-card-foreground shadow-lg">
+				<div class="grid md:grid-cols-2 bg-white">
+					<div className="relative hidden md:flex bg-blue-primary p-4">
+						<div className="flex flex-col items-center justify-center w-full h-full gap-2">
+							<img
+								src="img/Auth/adkoto_logo.png"
+								alt="Adkoto Logo"
+								className="h-auto max-w-[60%] object-contain px-6 md:px-8" />
 
-				<TextInput
-					id="name"
-					type="text"
-					class="mt-1 block w-full"
-					v-model="form.name"
-					required
-					autocomplete="name" />
-
-				<InputError
-					class="mt-2"
-					:message="form.errors.name" />
-			</div>
-
-			<!-- <div class="mt-4">
-                <InputLabel for="surname" value="Surname" />
-                <TextInput id="surname" v-model="form.surname" type="text" class="mt-1 block w-full" required
-                    autocomplete="surname" />
-                <InputError class="mt-2" :message="form.errors.surname" />
-            </div> -->
-
-			<div class="mt-4">
-				<InputLabel
-					for="email"
-					value="Email" />
-
-				<TextInput
-					id="email"
-					type="email"
-					class="mt-1 block w-full"
-					v-model="form.email"
-					required
-					autocomplete="username" />
-
-				<InputError
-					class="mt-2"
-					:message="form.errors.email" />
-			</div>
-
-			<!-- <div class="mt-4">
-                <InputLabel for="contact" value="Email or Phone Number" />
-
-                <TextInput
-                    id="contact"
-                    type="text"
-                    class="mt-1 block w-full"
-                    v-model="form.contact"
-                    required
-                    autocomplete="username"
-                />
-
-                <InputError class="mt-2" :message="form.errors.contact" />
-            </div> -->
-
-			<div class="mt-4">
-				<InputLabel
-					for="phone"
-					value="Mobile No." />
-
-				<TextInput
-					id="phone"
-					v-model="form.phone"
-					type="tel"
-					class="mt-1 block w-full"
-					required
-					autocomplete="phone"
-					@input="validatePhone" />
-
-				<InputError
-					class="mt-2"
-					:message="
-						!isValidPhilippinePhone
-							? 'Please enter a valid Philippine phone number.'
-							: form.errors.phone
-					" />
-			</div>
-
-			<!-- <div class="mt-4">
-                <InputLabel for="birthday" value="Birthday" />
-                <TextInput
-                    id="birthday"
-                    v-model="form.birthday"
-                    type="date"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="bday"
-                />
-                <InputError class="mt-2" :message="form.errors.birthday" />
-            </div> -->
-
-			<!-- <div class="mt-4">
-                <InputLabel for="birthday" value="Birthday" />
-                <flat-pickr id="birthday" v-model="form.birthday" type="date"
-                    class="mt-1 block w-full rounded-md shadow-sm border-gray-300 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 focus:border-red-500 focus:ring dark:focus:border-red-600 focus:ring-red-500 dark:focus:ring-red-600 focus:ring-opacity-50"
-                    required autocomplete="birthday" placeholder="Select date" :config="config" />
-                <InputError class="mt-2" :message="form.errors.birthday" />
-            </div> -->
-
-			<!-- <div class="mt-4">
-                <InputLabel for="gender" value="Gender" />
-                <select v-model="form.gender" id="gender"
-                    class="mt-1 block w-full rounded-md shadow-sm border-gray-300 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 focus:border-red-500 focus:ring dark:focus:border-red-600 focus:ring-red-500 dark:focus:ring-red-600 focus:ring-opacity-50"
-                    required>
-                    <option disabled value="">Select One</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Other">Other</option>
-                </select>
-                <InputError class="mt-2" :message="form.errors.gender" />
-            </div> -->
-
-			<div class="mt-4 relative">
-				<InputLabel
-					for="password"
-					value="Password" />
-
-				<TextInput
-					:type="showPassword ? 'text' : 'password'"
-					id="password"
-					class="mt-1 block w-full pr-10"
-					v-model="form.password"
-					required
-					autocomplete="new-password" />
-
-				<span
-					class="absolute inset-y-0 mt-5 right-0 flex items-center pr-3 cursor-pointer text-gray-500 dark:text-gray-400"
-					@click="showPassword = !showPassword">
-					<EyeIcon
-						v-if="!showPassword"
-						class="h-6 w-6" />
-					<EyeSlashIcon
-						v-else
-						class="h-6 w-6" />
-				</span>
-
-				<InputError
-					class="mt-2"
-					:message="form.errors.password" />
-			</div>
-
-			<div class="mt-4 relative">
-				<InputLabel
-					for="password_confirmation"
-					value="Confirm Password" />
-
-				<TextInput
-					:type="showPasswordConfirmation ? 'text' : 'password'"
-					id="password_confirmation"
-					class="mt-1 block w-full pr-10"
-					v-model="form.password_confirmation"
-					required
-					autocomplete="new-password" />
-
-				<span
-					class="absolute inset-y-0 mt-5 right-0 flex items-center pr-3 cursor-pointer text-gray-500 dark:text-gray-400"
-					@click="showPasswordConfirmation = !showPasswordConfirmation">
-					<EyeIcon
-						v-if="!showPasswordConfirmation"
-						class="h-6 w-6" />
-					<EyeSlashIcon
-						v-else
-						class="h-6 w-6" />
-				</span>
-
-				<InputError
-					class="mt-2"
-					:message="form.errors.password_confirmation" />
-			</div>
-
-			<div class="mt-4">
-				<InputLabel for="terms">
-					<div class="flex items-center">
-						<Checkbox
-							id="terms"
-							v-model:checked="form.terms"
-							name="terms"
-							required />
-
-						<div class="ms-2">
-							I agree to the
-							<a
-								target="_blank"
-								:href="route('terms.show')"
-								class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
-								>Terms of Service</a
-							>
-							and
-							<a
-								target="_blank"
-								:href="route('policy.show')"
-								class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
-								>Privacy Policy</a
-							>
+							<img
+								src="img/Auth/adkoto_reg.png"
+								alt="Adkoto Vector"
+								className="h-auto max-w-[100%] object-contain px-6 md:px-8" />
 						</div>
 					</div>
-					<InputError
-						class="mt-2"
-						:message="form.errors.terms" />
-				</InputLabel>
-			</div>
+					<form
+						@submit.prevent="submit"
+						className="p-2 md:p-6 md:py-10">
+						<div className="flex flex-col gap-6">
+							<div className="flex flex-col items-center text-center">
+								<h1 className="text-2xl font-bold text-blue-primary">Welcome to Adkoto</h1>
+								<p className="text-balance text-muted-foreground">Create your new Adkoto account</p>
+							</div>
 
-			<div class="flex items-center justify-end mt-4">
-				<Link
-					:href="route('login')"
-					class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 dark:focus:ring-offset-gray-800">
-					Already registered?
-				</Link>
+							<div class="grid gap-2">
+								<InputLabel
+									for="name"
+									value="Name"
+									class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" />
 
-				<PrimaryButton
-					class="ms-4"
-					:class="{ 'opacity-25': form.processing }"
-					:disabled="form.processing">
-					Register
-				</PrimaryButton>
+								<TextInput
+									id="name"
+									type="text"
+									class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+									v-model="form.name"
+									required
+									autocomplete="name" />
+
+								<InputError
+									class="mt-2"
+									:message="form.errors.name" />
+							</div>
+
+							<div class="grid gap-2">
+								<InputLabel
+									for="email"
+									value="Email"
+									class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" />
+
+								<TextInput
+									id="email"
+									type="email"
+									class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+									v-model="form.email"
+									required
+									autocomplete="username" />
+
+								<InputError
+									class="mt-2"
+									:message="form.errors.email" />
+							</div>
+
+							<div class="grid gap-2">
+								<InputLabel
+									for="phone"
+									value="Mobile No."
+									class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" />
+
+								<TextInput
+									id="phone"
+									v-model="form.phone"
+									type="tel"
+									class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+									required
+									autocomplete="phone"
+									@input="validatePhone" />
+
+								<InputError
+									class="mt-2"
+									:message="
+										!isValidPhilippinePhone
+											? 'Please enter a valid Philippine phone number.'
+											: form.errors.phone
+									" />
+							</div>
+
+							<div class="grid gap-2 relative">
+								<InputLabel
+									for="password"
+									value="Password"
+									class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" />
+
+								<TextInput
+									:type="showPassword ? 'text' : 'password'"
+									id="password"
+									class="mt-1 block w-full pr-10"
+									v-model="form.password"
+									required
+									autocomplete="new-password" />
+
+								<span
+									class="absolute inset-y-0 mt-5 right-0 flex items-center pr-3 cursor-pointer text-gray-500 dark:text-gray-400"
+									@click="showPassword = !showPassword">
+									<EyeIcon
+										v-if="!showPassword"
+										class="h-6 w-6" />
+									<EyeSlashIcon
+										v-else
+										class="h-6 w-6" />
+								</span>
+
+								<InputError
+									class="mt-2"
+									:message="form.errors.password" />
+							</div>
+
+							<div class="grid gap-2 relative">
+								<InputLabel
+									for="password_confirmation"
+									value="Confirm Password"
+									class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" />
+
+								<TextInput
+									:type="showPasswordConfirmation ? 'text' : 'password'"
+									id="password_confirmation"
+									class="mt-1 block w-full pr-10"
+									v-model="form.password_confirmation"
+									required
+									autocomplete="new-password" />
+
+								<span
+									class="absolute inset-y-0 mt-5 right-0 flex items-center pr-3 cursor-pointer text-gray-500 dark:text-gray-400"
+									@click="showPasswordConfirmation = !showPasswordConfirmation">
+									<EyeIcon
+										v-if="!showPasswordConfirmation"
+										class="h-6 w-6" />
+									<EyeSlashIcon
+										v-else
+										class="h-6 w-6" />
+								</span>
+
+								<InputError
+									class="mt-2"
+									:message="form.errors.password_confirmation" />
+							</div>
+
+							<div class="grid gap-2">
+								<InputLabel for="terms">
+									<div class="flex items-center">
+										<Checkbox
+											id="terms"
+											v-model:checked="form.terms"
+											name="terms"
+											required />
+
+										<div class="ms-2">
+											I agree to the
+											<a
+												target="_blank"
+												:href="route('terms.show')"
+												class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+												>Terms of Service</a
+											>
+											and
+											<a
+												target="_blank"
+												:href="route('policy.show')"
+												class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+												>Privacy Policy</a
+											>
+										</div>
+									</div>
+									<InputError
+										class="mt-2"
+										:message="form.errors.terms" />
+								</InputLabel>
+							</div>
+
+							<PrimaryButton
+								class="w-full bg-blue-primary hover:bg-blue-hover inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0"
+								:class="{ 'opacity-25': form.processing }"
+								:disabled="form.processing">
+								Register
+							</PrimaryButton>
+
+							<!-- <div class="flex items-center justify-end mt-4">
+								<Link
+									:href="route('login')"
+									class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 dark:focus:ring-offset-gray-800">
+									Already registered?
+								</Link>
+
+								<PrimaryButton
+									class="w-full bg-blue-primary hover:bg-blue-hover inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0"
+									:class="{ 'opacity-25': form.processing }"
+									:disabled="form.processing">
+									Register
+								</PrimaryButton>
+							</div> -->
+						</div>
+						<div className="text-center text-sm mt-4">
+							Already have an account?
+							<Link
+								:href="route('login')"
+								className="underline underline-offset-4 text-blue-primary hover:text-blue-hover">
+								Sign In
+							</Link>
+						</div>
+					</form>
+				</div>
 			</div>
-		</form>
+		</div>
 	</GuestLayout>
 </template>

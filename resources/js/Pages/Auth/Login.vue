@@ -20,7 +20,6 @@ defineProps({
 });
 
 const form = useForm({
-	// email: '',
 	login: "",
 	password: "",
 	remember: false,
@@ -38,7 +37,7 @@ const submit = () => {
 <template>
 	<GuestLayout>
 		<Head title="Log in" />
-		<div class="text-center dark:text-gray-100">
+		<!-- <div class="text-center dark:text-gray-100">
 			<h2 class="text-2xl text-center">Login</h2>
 			<span class="text-gray-400 text-sm">or</span>
 			<div class="flex justify-center">
@@ -48,7 +47,7 @@ const submit = () => {
 					Create new account
 				</Link>
 			</div>
-		</div>
+		</div> -->
 
 		<div
 			v-if="status"
@@ -56,101 +55,142 @@ const submit = () => {
 			{{ status }}
 		</div>
 
-		<form @submit.prevent="submit">
-			<!-- <div>
-                <InputLabel for="email" value="Email" />
+		<div className="flex flex-col gap-6">
+			<div class="overflow-hidden rounded-xl border bg-card text-card-foreground shadow-lg">
+				<div class="grid md:grid-cols-2 bg-white">
+					<form
+						@submit.prevent="submit"
+						className="p-2 md:p-6 md:py-10">
+						<div className="flex flex-col gap-6">
+							<div className="flex flex-col items-center text-center">
+								<h1 className="text-2xl font-bold text-blue-primary">Welcome back</h1>
+								<p className="text-balance text-muted-foreground">Login to your Adkoto account</p>
+							</div>
+							<div class="grid gap-2">
+								<InputLabel
+									for="login"
+									value="Email or Phone Number"
+									class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" />
 
-                <TextInput id="email" type="email" class="mt-1 block w-full" v-model="form.email" required autofocus
-                    autocomplete="username" />
+								<TextInput
+									id="login"
+									type="text"
+									class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+									v-model="form.login"
+									required
+									autofocus
+									autocomplete="username" />
 
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div> -->
-			<div class="mt-4">
-				<InputLabel
-					for="login"
-					value="Email or Phone Number" />
+								<InputError
+									class="mt-2"
+									:message="form.errors.login" />
+							</div>
 
-				<TextInput
-					id="login"
-					type="text"
-					class="mt-1 block w-full"
-					v-model="form.login"
-					required
-					autofocus
-					autocomplete="username" />
+							<div class="grid gap-2">
+								<InputLabel
+									for="password"
+									value="Password"
+									class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" />
 
-				<InputError
-					class="mt-2"
-					:message="form.errors.login" />
+								<div class="relative">
+									<TextInput
+										:type="showPassword ? 'text' : 'password'"
+										id="password"
+										class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+										v-model="form.password"
+										required
+										autocomplete="current-password" />
+
+									<span
+										class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer text-gray-500 dark:text-gray-400"
+										@click="showPassword = !showPassword">
+										<EyeIcon
+											class="h-6 w-6"
+											v-if="!showPassword" />
+										<EyeSlashIcon
+											class="h-6 w-6"
+											v-else />
+									</span>
+								</div>
+
+								<InputError
+									class="mt-2"
+									:message="form.errors.password" />
+							</div>
+
+							<div className="flex items-center pt-2 px-0.5">
+								<div className="flex items-center space-x-2">
+									<Checkbox
+										name="remember"
+										v-model:checked="form.remember" />
+									<span class="ms-1 text-sm text-gray-600 dark:text-gray-400">Remember me</span>
+								</div>
+
+								<Link
+									v-if="canResetPassword"
+									:href="route('password.request')"
+									class="ml-auto text-sm underline-offset-4 text-blue-primary hover:text-blue-hover hover:underline">
+									Forgot your password?
+								</Link>
+							</div>
+
+							<!-- <div class="flex items-center justify-end mt-4">
+								<Link
+									v-if="canResetPassword"
+									:href="route('password.request')"
+									class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
+									Forgot your password?
+								</Link>
+
+								<PrimaryButton
+									class="ms-4"
+									:class="{ 'opacity-25': form.processing }"
+									:disabled="form.processing">
+									Log in
+								</PrimaryButton>
+
+								<div className="text-center text-sm">
+									Don&apos;t have an account?
+									<Link
+										:href="route('register')"
+										className="underline underline-offset-4 text-blue-primary hover:text-blue-hover">
+										Sign Up
+									</Link>
+								</div>
+							</div> -->
+
+							<PrimaryButton
+								class="w-full bg-blue-primary hover:bg-blue-hover inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0"
+								:class="{ 'opacity-25': form.processing }"
+								:disabled="form.processing">
+								Log in
+							</PrimaryButton>
+
+							<div className="text-center text-sm">
+								Don&apos;t have an account?
+								<Link
+									:href="route('register')"
+									className="underline underline-offset-4 text-blue-primary hover:text-blue-hover">
+									Sign Up
+								</Link>
+							</div>
+						</div>
+					</form>
+					<div className="relative hidden md:flex bg-blue-primary p-4">
+						<div className="flex flex-col items-center justify-center w-full h-full gap-2">
+							<img
+								src="img/Auth/adkoto_logo.png"
+								alt="Adkoto Logo"
+								className="h-auto max-w-[60%] object-contain px-6 md:px-8" />
+
+							<img
+								src="img/Auth/adkoto_vector.png"
+								alt="Adkoto Vector"
+								className="h-auto max-w-[100%] object-contain px-6 md:px-8" />
+						</div>
+					</div>
+				</div>
 			</div>
-
-			<!-- <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="current-password"
-                />
-
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div> -->
-			<div class="mt-4 relative">
-				<InputLabel
-					for="password"
-					value="Password" />
-
-				<TextInput
-					:type="showPassword ? 'text' : 'password'"
-					id="password"
-					class="mt-1 block w-full pr-10"
-					v-model="form.password"
-					required
-					autocomplete="current-password" />
-
-				<span
-					class="absolute inset-y-0 mt-5 right-0 flex items-center pr-3 cursor-pointer text-gray-500 dark:text-gray-400"
-					@click="showPassword = !showPassword">
-					<EyeIcon
-						class="h-6 w-6"
-						v-if="!showPassword" />
-					<EyeSlashIcon
-						class="h-6 w-6"
-						v-else />
-				</span>
-
-				<InputError
-					class="mt-2"
-					:message="form.errors.password" />
-			</div>
-
-			<div class="block mt-4">
-				<label class="flex items-center">
-					<Checkbox
-						name="remember"
-						v-model:checked="form.remember" />
-					<span class="ms-2 text-sm text-gray-600 dark:text-gray-400">Remember me</span>
-				</label>
-			</div>
-
-			<div class="flex items-center justify-end mt-4">
-				<Link
-					v-if="canResetPassword"
-					:href="route('password.request')"
-					class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
-					Forgot your password?
-				</Link>
-
-				<PrimaryButton
-					class="ms-4"
-					:class="{ 'opacity-25': form.processing }"
-					:disabled="form.processing">
-					Log in
-				</PrimaryButton>
-			</div>
-		</form>
+		</div>
 	</GuestLayout>
 </template>
