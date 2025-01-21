@@ -247,7 +247,7 @@ const handleChatClick = async (groupId) => {
 	<AuthenticatedLayout>
 		<Head title="Group" />
 		<!-- <div class="max-w-[768px] mx-auto h-full overflow-auto"> -->
-		<div class="mx-auto h-full overflow-auto scrollbar-thin">
+		<div class="mx-auto max-w-7xl h-full overflow-auto scrollbar-thin p-0.5 bg-white">
 			<div class="px-4">
 				<div
 					v-show="showNotification && success"
@@ -260,9 +260,12 @@ const handleChatClick = async (groupId) => {
 					{{ errors.cover }}
 				</div>
 				<div class="group relative bg-white dark:bg-slate-950 dark:text-gray-100">
+					<!-- <img
+						:src="coverImageSrc || group.cover_url || '/img/default_cover.jpg'"
+						class="w-full h-[200px] object-cover" /> -->
 					<img
 						:src="coverImageSrc || group.cover_url || '/img/default_cover.jpg'"
-						class="w-full h-[200px] object-cover" />
+						class="w-full aspect-[3/1] min-h-[150px] max-h-[400px] object-cover" />
 					<div
 						v-if="isCurrentUserAdmin"
 						class="absolute top-2 right-2">
@@ -310,12 +313,17 @@ const handleChatClick = async (groupId) => {
 						</div>
 					</div>
 
-					<div class="flex">
+					<div class="flex flex-row md:flex-row">
+						<!-- <div
+							class="flex items-center justify-center relative group/thumbnail -mt-[64px] ml-[48px] w-[128px] h-[128px] rounded-full"> -->
 						<div
-							class="flex items-center justify-center relative group/thumbnail -mt-[64px] ml-[48px] w-[128px] h-[128px] rounded-full">
+							class="flex items-center justify-center relative group/avatar mt-[-32px] md:-mt-[64px] ml-[10px] w-[96px] h-[96px] md:w-[128px] md:h-[128px] rounded-full">
+							<!-- <img
+								:src="thumbnailImageSrc || group.thumbnail_url || '/img/default_avatar.webp'"
+								class="w-full h-full object-cover rounded-full" /> -->
 							<img
 								:src="thumbnailImageSrc || group.thumbnail_url || '/img/default_avatar.webp'"
-								class="w-full h-full object-cover rounded-full" />
+								class="w-24 h-24 sm:w-full sm:h-full object-cover rounded-full" />
 							<button
 								v-if="isCurrentUserAdmin && !thumbnailImageSrc"
 								class="absolute left-0 top-0 right-0 bottom-0 bg-black/50 text-gray-200 rounded-full opacity-0 flex items-center justify-center group-hover/thumbnail:opacity-100">
@@ -342,10 +350,11 @@ const handleChatClick = async (groupId) => {
 								</button>
 							</div>
 						</div>
-						<div class="flex justify-between items-center flex-1 p-4">
+						<!-- <div class="flex justify-between items-center flex-1 p-4"> -->
+						<div class="flex justify-between items-center flex-1 px-2 py-1 sm:px-4 sm:py-2">
 							<h2 class="font-bold text-lg">{{ group.name }}</h2>
 
-							<div class="flex gap-2">
+							<div class="flex mt-6 me-1 gap-3 sm:me-0 sm:mt-0">
 								<PrimaryButton
 									v-if="authUser && isJoinedToGroup"
 									@click="handleChatClick(group.id)">
