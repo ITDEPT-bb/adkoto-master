@@ -1,10 +1,6 @@
 <script setup>
 import { computed, ref } from "vue";
-import {
-    XMarkIcon,
-    CheckCircleIcon,
-    CameraIcon,
-} from "@heroicons/vue/24/solid";
+import { XMarkIcon, CheckCircleIcon, CameraIcon } from "@heroicons/vue/24/solid";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import { usePage, Link, Head } from "@inertiajs/vue3";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
@@ -45,40 +41,40 @@ const isMyProfile = computed(() => authUser && authUser.id === props.user.id);
 
 const isOpen = ref(false);
 const openModal = () => {
-    isOpen.value = true;
+	isOpen.value = true;
 };
 const closeModal = () => {
-    isOpen.value = false;
+	isOpen.value = false;
 };
 
 const isOpenAvatar = ref(false);
 const openModalAvatar = () => {
-    isOpenAvatar.value = true;
+	isOpenAvatar.value = true;
 };
 const closeModalAvatar = () => {
-    isOpenAvatar.value = false;
+	isOpenAvatar.value = false;
 };
 
 const props = defineProps({
-    errors: Object,
-    mustVerifyEmail: {
-        type: Boolean,
-    },
-    status: {
-        type: String,
-    },
-    success: {
-        type: String,
-    },
-    isCurrentUserFollower: Boolean,
-    followerCount: Number,
-    user: {
-        type: Object,
-    },
-    posts: Object,
-    followers: Array,
-    followings: Array,
-    photos: Array,
+	errors: Object,
+	mustVerifyEmail: {
+		type: Boolean,
+	},
+	status: {
+		type: String,
+	},
+	success: {
+		type: String,
+	},
+	isCurrentUserFollower: Boolean,
+	followerCount: Number,
+	user: {
+		type: Object,
+	},
+	posts: Object,
+	followers: Array,
+	followings: Array,
+	photos: Array,
 });
 
 // function onCoverChange(event) {
@@ -141,68 +137,61 @@ const props = defineProps({
 
 const isLoading = ref(false);
 function followUser() {
-    isLoading.value = true;
+	isLoading.value = true;
 
-    const form = useForm({
-        follow: !props.isCurrentUserFollower,
-    });
+	const form = useForm({
+		follow: !props.isCurrentUserFollower,
+	});
 
-    form.post(route("user.follow", props.user.id), {
-        preserveScroll: true,
-        onFinish: () => {
-            isLoading.value = false;
-        },
-    });
+	form.post(route("user.follow", props.user.id), {
+		preserveScroll: true,
+		onFinish: () => {
+			isLoading.value = false;
+		},
+	});
 }
 </script>
 
 <template>
-    <Head title="Profile" />
+	<Head title="Profile" />
 
-    <AuthenticatedLayout>
-        <div class="mx-auto max-w-7xl bg-white h-full overflow-auto">
-            <div class="px-4">
-                <div
-                    v-show="showNotification && success"
-                    class="my-2 py-2 px-3 font-medium text-sm bg-emerald-500 text-white"
-                >
-                    {{ success }}
-                </div>
-                <div
-                    v-if="errors.cover"
-                    class="my-2 py-2 px-3 font-medium text-sm bg-red-400 text-white"
-                >
-                    {{ errors.cover }}
-                </div>
+	<AuthenticatedLayout>
+		<div class="mx-auto max-w-7xl bg-white h-full overflow-auto scrollbar-thin">
+			<div class="px-4">
+				<div
+					v-show="showNotification && success"
+					class="my-2 py-2 px-3 font-medium text-sm bg-emerald-500 text-white">
+					{{ success }}
+				</div>
+				<div
+					v-if="errors.cover"
+					class="my-2 py-2 px-3 font-medium text-sm bg-red-400 text-white">
+					{{ errors.cover }}
+				</div>
 
-                <div
-                    class="group relative bg-white dark:bg-slate-950 dark:text-gray-100"
-                >
-                    <!-- <img
+				<div class="group relative bg-white dark:bg-slate-950 dark:text-gray-100">
+					<!-- <img
                         :src="user.cover_url || '/img/default_cover.jpg'"
                         class="w-full h-56 sm:h-[400px] object-cover"
                     /> -->
-                    <div v-if="isMyProfile">
-                        <img
-                            :src="user.cover_url || '/img/default_cover.jpg'"
-                            class="w-full aspect-[3/1] min-h-[150px] max-h-[400px] object-cover hover:opacity-90 cursor-pointer"
-                            @click="openModal"
-                        />
-                    </div>
-                    <div v-else>
-                        <img
-                            :src="user.cover_url || '/img/default_cover.jpg'"
-                            class="w-full aspect-[3/1] min-h-[150px] max-h-[400px] object-cover hover:opacity-90 cursor-pointer"
-                        />
-                    </div>
+					<div v-if="isMyProfile">
+						<img
+							:src="user.cover_url || '/img/default_cover.jpg'"
+							class="w-full aspect-[3/1] min-h-[150px] max-h-[400px] object-cover hover:opacity-90 cursor-pointer"
+							@click="openModal" />
+					</div>
+					<div v-else>
+						<img
+							:src="user.cover_url || '/img/default_cover.jpg'"
+							class="w-full aspect-[3/1] min-h-[150px] max-h-[400px] object-cover hover:opacity-90 cursor-pointer" />
+					</div>
 
-                    <!-- Modal Component -->
-                    <ProfileCoverModal
-                        :imageSrc="user.cover_url || '/img/default_cover.jpg'"
-                        :isOpen="isOpen"
-                        @close="closeModal"
-                    />
-                    <!-- <div v-if="isMyProfile" class="absolute top-2 right-2">
+					<!-- Modal Component -->
+					<ProfileCoverModal
+						:imageSrc="user.cover_url || '/img/default_cover.jpg'"
+						:isOpen="isOpen"
+						@close="closeModal" />
+					<!-- <div v-if="isMyProfile" class="absolute top-2 right-2">
                         <button
                             v-if="!coverImageSrc"
                             class="bg-gray-50 hover:bg-gray-100 text-gray-800 py-1 px-2 text-xs flex items-center opacity-0 group-hover:opacity-100"
@@ -255,40 +244,28 @@ function followUser() {
                         </div>
                     </div> -->
 
-                    <!-- <div class="flex flex-col md:flex-row"> -->
-                    <div class="flex flex-row md:flex-row">
-                        <div
-                            class="flex items-center justify-center relative group/avatar mt-[-32px] md:-mt-[64px] ml-[10px] w-[96px] h-[96px] md:w-[128px] md:h-[128px] rounded-full"
-                        >
-                            <div v-if="isMyProfile">
-                                <img
-                                    :src="
-                                        user.avatar_url ||
-                                        '/img/default_avatar.png'
-                                    "
-                                    class="w-24 h-24 sm:w-full sm:h-full object-cover rounded-full hover:opacity-95 hover:cursor-pointer"
-                                    @click="openModalAvatar"
-                                />
-                            </div>
-                            <div v-else>
-                                <img
-                                    :src="
-                                        user.avatar_url ||
-                                        '/img/default_avatar.png'
-                                    "
-                                    class="w-24 h-24 sm:w-full sm:h-full object-cover rounded-full hover:opacity-95 hover:cursor-pointer"
-                                />
-                            </div>
+					<!-- <div class="flex flex-col md:flex-row"> -->
+					<div class="flex flex-row md:flex-row">
+						<div
+							class="flex items-center justify-center relative group/avatar mt-[-32px] md:-mt-[64px] ml-[10px] w-[96px] h-[96px] md:w-[128px] md:h-[128px] rounded-full">
+							<div v-if="isMyProfile">
+								<img
+									:src="user.avatar_url || '/img/default_avatar.png'"
+									class="w-24 h-24 sm:w-full sm:h-full object-cover rounded-full hover:opacity-95 hover:cursor-pointer"
+									@click="openModalAvatar" />
+							</div>
+							<div v-else>
+								<img
+									:src="user.avatar_url || '/img/default_avatar.png'"
+									class="w-24 h-24 sm:w-full sm:h-full object-cover rounded-full hover:opacity-95 hover:cursor-pointer" />
+							</div>
 
-                            <ProfileAvatarModal
-                                :imageSrc="
-                                    user.avatar_url || '/img/default_avatar.jpg'
-                                "
-                                :isOpenAvatar="isOpenAvatar"
-                                @close="closeModalAvatar"
-                            />
+							<ProfileAvatarModal
+								:imageSrc="user.avatar_url || '/img/default_avatar.jpg'"
+								:isOpenAvatar="isOpenAvatar"
+								@close="closeModalAvatar" />
 
-                            <!-- <button
+							<!-- <button
                                 v-if="!avatarImageSrc"
                                 class="absolute left-0 top-0 right-0 bottom-0 bg-black/50 text-gray-200 rounded-full opacity-0 flex items-center justify-center group-hover/avatar:opacity-100"
                             >
@@ -318,208 +295,200 @@ function followUser() {
                                     <CheckCircleIcon class="h-5 w-5" />
                                 </button>
                             </div> -->
-                        </div>
-                        <div
-                            class="flex justify-between items-center flex-1 px-2 py-1 sm:px-4 sm:py-2"
-                        >
-                            <div>
-                                <h2 class="font-bold text-lg text-nowrap">
-                                    {{ user.name }} {{ user.surname }}
-                                </h2>
-                                <p class="text-sm text-gray-500 mb-1">
-                                    @{{ user.username }}
-                                </p>
-                                <p class="text-xs text-gray-500 ps-1">
-                                    {{ followerCount }} follower(s)
-                                </p>
-                            </div>
+						</div>
+						<div class="flex justify-between items-center flex-1 px-2 py-1 sm:px-4 sm:py-2">
+							<div>
+								<h2 class="font-bold text-lg text-nowrap">{{ user.name }} {{ user.surname }}</h2>
+								<p class="text-sm text-gray-500 mb-1">@{{ user.username }}</p>
+								<p class="text-xs text-gray-500 ps-1">{{ followerCount }} follower(s)</p>
+							</div>
 
-                            <div
-                                v-if="!isMyProfile"
-                                class="flex mt-6 me-1 gap-3 sm:me-0 sm:mt-0"
-                            >
-                                <Link
-                                    :href="`/chat/conversation/adktu/${user.id}`"
-                                >
-                                    <button
-                                        type="button"
-                                        class="inline-flex items-center justify-center rounded-lg p-2 h-8 w-auto transition duration-500 ease-in-out text-gray-500 hover:bg-gray-300 focus:outline-none"
-                                    >
-                                        <MessageIcon />
-                                    </button>
-                                </Link>
-                                <PrimaryButton
-                                    v-if="!isCurrentUserFollower"
-                                    @click="followUser"
-                                    :disabled="isLoading"
-                                    :class="{
-                                        'bg-gray-300 cursor-not-allowed':
-                                            isLoading,
-                                        'bg-blue-500': !isLoading,
-                                    }"
-                                >
-                                    <template v-if="!isLoading">
-                                        <img
-                                            :src="followIcon"
-                                            class="h-6 w-auto flex sm:hidden"
-                                            alt="FollowIcon"
-                                        />
-                                        <p class="hidden sm:flex">Follow</p>
-                                    </template>
-                                    <p v-else class="hidden sm:flex">
-                                        Loading...
-                                    </p>
-                                </PrimaryButton>
-                                <DangerButton
-                                    v-else
-                                    @click="followUser"
-                                    :disabled="isLoading"
-                                    :class="{
-                                        'bg-gray-300 cursor-not-allowed':
-                                            isLoading,
-                                        'bg-red-500': !isLoading,
-                                    }"
-                                >
-                                    <template v-if="!isLoading">
-                                        <img
-                                            :src="unfollowIcon"
-                                            class="h-6 w-auto flex sm:hidden"
-                                            alt="UnfollowIcon"
-                                        />
-                                        <p class="hidden sm:flex">Unfollow</p>
-                                    </template>
-                                    <p v-else class="hidden sm:flex">
-                                        Loading...
-                                    </p>
-                                </DangerButton>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- <div class="border-t p-4 pt-0"> -->
-            <div class="border-t m-4 mt-0">
-                <TabGroup>
-                    <TabList
-                        class="flex bg-white dark:bg-slate-950 dark:text-white"
-                    >
-                        <Tab v-slot="{ selected }" as="template">
-                            <TabItem text="Posts" :selected="selected" />
-                        </Tab>
-                        <Tab v-slot="{ selected }" as="template">
-                            <TabItem text="Followers" :selected="selected" />
-                        </Tab>
-                        <Tab v-slot="{ selected }" as="template">
-                            <TabItem text="Followings" :selected="selected" />
-                        </Tab>
-                        <Tab v-slot="{ selected }" as="template">
-                            <TabItem text="Photos" :selected="selected" />
-                        </Tab>
-                        <Tab
-                            v-if="isMyProfile"
-                            v-slot="{ selected }"
-                            as="template"
-                        >
-                            <TabItem text="My Profile" :selected="selected" />
-                        </Tab>
-                    </TabList>
+							<div
+								v-if="!isMyProfile"
+								class="flex mt-6 me-1 gap-3 sm:me-0 sm:mt-0">
+								<Link :href="`/chat/conversation/adktu/${user.id}`">
+									<button
+										type="button"
+										class="inline-flex items-center justify-center rounded-lg p-2 h-8 w-auto transition duration-500 ease-in-out text-gray-500 hover:bg-gray-300 focus:outline-none">
+										<MessageIcon />
+									</button>
+								</Link>
+								<PrimaryButton
+									v-if="!isCurrentUserFollower"
+									@click="followUser"
+									:disabled="isLoading"
+									:class="{
+										'bg-gray-300 cursor-not-allowed': isLoading,
+										'bg-blue-500': !isLoading,
+									}">
+									<template v-if="!isLoading">
+										<img
+											:src="followIcon"
+											class="h-6 w-auto flex sm:hidden"
+											alt="FollowIcon" />
+										<p class="hidden sm:flex">Follow</p>
+									</template>
+									<p
+										v-else
+										class="hidden sm:flex">
+										Loading...
+									</p>
+								</PrimaryButton>
+								<DangerButton
+									v-else
+									@click="followUser"
+									:disabled="isLoading"
+									:class="{
+										'bg-gray-300 cursor-not-allowed': isLoading,
+										'bg-red-500': !isLoading,
+									}">
+									<template v-if="!isLoading">
+										<img
+											:src="unfollowIcon"
+											class="h-6 w-auto flex sm:hidden"
+											alt="UnfollowIcon" />
+										<p class="hidden sm:flex">Unfollow</p>
+									</template>
+									<p
+										v-else
+										class="hidden sm:flex">
+										Loading...
+									</p>
+								</DangerButton>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- <div class="border-t p-4 pt-0"> -->
+			<div class="border-t m-4 mt-0">
+				<TabGroup>
+					<TabList class="flex bg-white dark:bg-slate-950 dark:text-white">
+						<Tab
+							v-slot="{ selected }"
+							as="template">
+							<TabItem
+								text="Posts"
+								:selected="selected" />
+						</Tab>
+						<Tab
+							v-slot="{ selected }"
+							as="template">
+							<TabItem
+								text="Followers"
+								:selected="selected" />
+						</Tab>
+						<Tab
+							v-slot="{ selected }"
+							as="template">
+							<TabItem
+								text="Followings"
+								:selected="selected" />
+						</Tab>
+						<Tab
+							v-slot="{ selected }"
+							as="template">
+							<TabItem
+								text="Photos"
+								:selected="selected" />
+						</Tab>
+						<Tab
+							v-if="isMyProfile"
+							v-slot="{ selected }"
+							as="template">
+							<TabItem
+								text="My Profile"
+								:selected="selected" />
+						</Tab>
+					</TabList>
 
-                    <TabPanels class="mt-2">
-                        <TabPanel>
-                            <div class="bg-gray-100">
-                                <div
-                                    class="grid max-w-7xl mx-auto lg:grid-cols-12 gap-3 p-4 h-auto"
-                                >
-                                    <!-- <div
+					<TabPanels class="mt-2">
+						<TabPanel>
+							<div class="bg-gray-100">
+								<div class="grid max-w-7xl mx-auto lg:grid-cols-12 gap-3 p-4 h-auto">
+									<!-- <div
                                         class="lg:col-span-4 lg:order-1 h-full overflow-hidden"
                                     >
                                         <FollowingList :users="followings" />
                                     </div> -->
-                                    <div
-                                        class="lg:col-span-12 lg:order-2 h-auto w-full mx-auto overflow-hidden lg:px-10 flex flex-col"
-                                    >
-                                        <template v-if="posts">
-                                            <!-- <CreatePost /> -->
-                                            <template v-if="isMyProfile">
-                                                <CreatePost />
-                                            </template>
-                                            <PostList
-                                                :posts="posts.data"
-                                                class="flex-1"
-                                            />
-                                        </template>
-                                        <div
-                                            v-else
-                                            class="py-8 text-center dark:text-gray-100"
-                                        >
-                                            You don't have permission to view
-                                            these posts.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </TabPanel>
-                        <TabPanel>
-                            <div class="mb-3">
-                                <TextInput
-                                    :model-value="searchFollowersKeyword"
-                                    placeholder="Type to search"
-                                    class="w-full"
-                                />
-                            </div>
-                            <div
-                                v-if="followers.length"
-                                class="grid grid-cols-2 gap-3"
-                            >
-                                <UserListItem
-                                    v-for="user of followers"
-                                    :user="user"
-                                    :key="user.id"
-                                    class="shadow rounded-lg"
-                                />
-                            </div>
-                            <div v-else class="text-center py-8">
-                                User does not have followers.
-                            </div>
-                        </TabPanel>
-                        <TabPanel>
-                            <div class="mb-3">
-                                <TextInput
-                                    :model-value="searchFollowingsKeyword"
-                                    placeholder="Type to search"
-                                    class="w-full"
-                                />
-                            </div>
-                            <div
-                                v-if="followings.length"
-                                class="grid grid-cols-2 gap-3"
-                            >
-                                <UserListItem
-                                    v-for="user of followings"
-                                    :user="user"
-                                    :key="user.id"
-                                    class="shadow rounded-lg"
-                                />
-                            </div>
-                            <div v-else class="text-center py-8">
-                                The user is not following to anybody
-                            </div>
-                        </TabPanel>
-                        <TabPanel>
-                            <TabPhotos :photos="photos" />
-                        </TabPanel>
-                        <TabPanel v-if="isMyProfile">
-                            <Edit
-                                :must-verify-email="mustVerifyEmail"
-                                :status="status"
-                            />
-                        </TabPanel>
-                    </TabPanels>
-                </TabGroup>
-            </div>
-        </div>
-    </AuthenticatedLayout>
-    <UpdateProfileReminder />
+									<div
+										class="lg:col-span-12 lg:order-2 h-auto w-full mx-auto overflow-hidden lg:px-10 flex flex-col">
+										<template v-if="posts">
+											<!-- <CreatePost /> -->
+											<template v-if="isMyProfile">
+												<CreatePost />
+											</template>
+											<PostList
+												:posts="posts.data"
+												class="flex-1" />
+										</template>
+										<div
+											v-else
+											class="py-8 text-center dark:text-gray-100">
+											You don't have permission to view these posts.
+										</div>
+									</div>
+								</div>
+							</div>
+						</TabPanel>
+						<TabPanel>
+							<div class="mb-3">
+								<TextInput
+									:model-value="searchFollowersKeyword"
+									placeholder="Type to search"
+									class="w-full" />
+							</div>
+							<div
+								v-if="followers.length"
+								class="grid grid-cols-2 gap-3">
+								<UserListItem
+									v-for="user of followers"
+									:user="user"
+									:key="user.id"
+									class="shadow rounded-lg" />
+							</div>
+							<div
+								v-else
+								class="text-center py-8">
+								User does not have followers.
+							</div>
+						</TabPanel>
+						<TabPanel>
+							<div class="mb-3">
+								<TextInput
+									:model-value="searchFollowingsKeyword"
+									placeholder="Type to search"
+									class="w-full" />
+							</div>
+							<div
+								v-if="followings.length"
+								class="grid grid-cols-2 gap-3">
+								<UserListItem
+									v-for="user of followings"
+									:user="user"
+									:key="user.id"
+									class="shadow rounded-lg" />
+							</div>
+							<div
+								v-else
+								class="text-center py-8">
+								The user is not following to anybody
+							</div>
+						</TabPanel>
+						<TabPanel>
+							<TabPhotos :photos="photos" />
+						</TabPanel>
+						<TabPanel v-if="isMyProfile">
+							<Edit
+								:must-verify-email="mustVerifyEmail"
+								:status="status" />
+						</TabPanel>
+					</TabPanels>
+				</TabGroup>
+			</div>
+		</div>
+	</AuthenticatedLayout>
+	<UpdateProfileReminder />
 </template>
 
 <style scoped></style>

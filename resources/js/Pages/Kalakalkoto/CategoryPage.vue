@@ -1,15 +1,15 @@
 <template>
-    <Head title="Categories" />
+	<Head title="Categories" />
 
-    <AdkotoLayout>
-        <div class="max-w-7xl mx-auto h-full overflow-y-auto p-4">
-            <KalakalMenu />
-            <CategoryMenu :categories="categories" />
-            <ProductList :kalakalitems="kalakalitems" />
-        </div>
-    </AdkotoLayout>
+	<AdkotoLayout>
+		<div class="max-w-7xl mx-auto h-full overflow-y-auto p-4 scrollbar-thin">
+			<KalakalMenu />
+			<CategoryMenu :categories="categories" />
+			<ProductList :kalakalitems="kalakalitems" />
+		</div>
+	</AdkotoLayout>
 
-    <UpdateProfileReminder />
+	<UpdateProfileReminder />
 </template>
 
 <script setup>

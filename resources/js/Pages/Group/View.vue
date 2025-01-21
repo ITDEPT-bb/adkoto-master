@@ -247,7 +247,7 @@ const handleChatClick = async (groupId) => {
 	<AuthenticatedLayout>
 		<Head title="Group" />
 		<!-- <div class="max-w-[768px] mx-auto h-full overflow-auto"> -->
-		<div class="mx-auto h-full overflow-auto">
+		<div class="mx-auto h-full overflow-auto scrollbar-thin">
 			<div class="px-4">
 				<div
 					v-show="showNotification && success"

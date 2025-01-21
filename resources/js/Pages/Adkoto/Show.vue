@@ -1,22 +1,21 @@
 <template>
-    <Head title="View Advertisements" />
+	<Head title="View Advertisements" />
 
-    <AdkotoLayout>
-        <div class="max-w-7xl mx-auto h-full overflow-y-auto p-4">
-            <div class="grid grid-cols-12 gap-6">
-                <AdvertisementCard
-                    :advertisements="advertisements"
-                    class="lg:col-span-8 col-span-12"
-                />
-                <div class="lg:col-span-4 hidden lg:block">
-                    <ManageCard class="my-2" />
-                    <SponsoredAds :sponsoredAds="sponsoredAds" />
-                </div>
-            </div>
-        </div>
-    </AdkotoLayout>
+	<AdkotoLayout>
+		<div class="max-w-7xl mx-auto h-full overflow-y-auto p-4 scrollbar-thin">
+			<div class="grid grid-cols-12 gap-6">
+				<AdvertisementCard
+					:advertisements="advertisements"
+					class="lg:col-span-8 col-span-12" />
+				<div class="lg:col-span-4 hidden lg:block">
+					<ManageCard class="my-2" />
+					<SponsoredAds :sponsoredAds="sponsoredAds" />
+				</div>
+			</div>
+		</div>
+	</AdkotoLayout>
 
-    <UpdateProfileReminder />
+	<UpdateProfileReminder />
 </template>
 
 <script setup>

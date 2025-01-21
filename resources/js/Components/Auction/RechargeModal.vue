@@ -16,7 +16,7 @@
 				<div class="fixed inset-0 bg-gray-600 bg-opacity-90 transition-opacity" />
 			</TransitionChild>
 
-			<div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+			<div class="fixed inset-0 z-10 w-screen overflow-y-auto scrollbar-thin">
 				<div
 					class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
 					<TransitionChild

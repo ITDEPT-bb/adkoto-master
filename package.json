@@ -30,6 +30,7 @@
         "emoji-picker-element": "^1.21.3",
         "hls.js": "^1.5.17",
         "lodash": "^4.17.21",
+        "tailwind-scrollbar": "^3.1.0",
         "vue-advanced-cropper": "^2.8.9",
         "vue-flatpickr-component": "^11.0.5",
         "vue-sweetalert2": "^5.0.11",

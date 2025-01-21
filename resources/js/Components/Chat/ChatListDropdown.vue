@@ -2,7 +2,7 @@
 	<div class="h-full overflow-hidden w-full p-2 bg-white rounded-lg shadow">
 		<div class="flex h-full gap-4 lg:gap-0 flex-col sm:flex-row">
 			<!-- Followings Column -->
-			<div class="flex-1 overflow-y-auto">
+			<div class="flex-1 overflow-y-auto scrollbar-thin">
 				<div class="sticky flex justify-between top-0 bg-white shadow-sm z-10 p-2">
 					<h2 class="text-xl font-bold">Conversations</h2>
 					<!-- <button

@@ -2,7 +2,7 @@
 	<Head title="Chat" />
 
 	<AuthenticatedLayout>
-		<div class="home-page flex h-full overflow-y-auto container p-4 mx-auto">
+		<div class="home-page flex h-full overflow-y-auto container p-4 mx-auto scrollbar-thin">
 			<FollowingList
 				:followings="messageUsers"
 				:groupChats="groupChats" />

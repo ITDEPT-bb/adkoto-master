@@ -2,7 +2,7 @@
 	<Head title="Kalakalkoto" />
 
 	<KalakalLayout>
-		<div class="max-w-7xl mx-auto h-full overflow-y-auto p-4">
+		<div class="max-w-7xl mx-auto h-full overflow-y-auto p-4 scrollbar-thin">
 			<PageSelector />
 			<AuctionMenu />
 			<div class="bg-white p-6 rounded-lg shadow-sm">

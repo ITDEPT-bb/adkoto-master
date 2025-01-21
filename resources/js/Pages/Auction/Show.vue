@@ -2,7 +2,7 @@
 	<Head title="Item" />
 
 	<KalakalLayout>
-		<div class="max-w-7xl mx-auto h-full overflow-y-auto p-4">
+		<div class="max-w-7xl mx-auto h-full overflow-y-auto p-4 scrollbar-thin">
 			<AuctionMenu />
 			<div class="px-4 mx-auto 2xl:px-0 my-4">
 				<div class="lg:grid lg:grid-cols-3 lg:gap-8 xl:gap-10">

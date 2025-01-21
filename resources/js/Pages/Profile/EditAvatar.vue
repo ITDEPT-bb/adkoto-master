@@ -1,7 +1,7 @@
 <template>
 	<Head title="Update Your Profile Picture" />
 	<AuthenticatedLayout>
-		<div class="max-w-md mx-auto p-4 h-full overflow-y-auto">
+		<div class="max-w-md mx-auto p-4 h-full overflow-y-auto scrollbar-thin">
 			<h1 class="text-2xl font-bold text-gray-900 mb-6">Update Your Avatar</h1>
 
 			<div

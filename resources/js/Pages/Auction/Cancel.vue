@@ -1,5 +1,5 @@
 <template>
-	<div class="flex items-center justify-center h-screen bg-gray-100">
+	<div class="flex items-center justify-center h-screen bg-gray-100 scrollbar-thin">
 		<div class="text-center bg-white p-8 rounded-lg shadow-lg">
 			<h1 class="text-2xl font-bold mb-4">Checkout Canceled</h1>
 			<p class="text-gray-700 mb-6">

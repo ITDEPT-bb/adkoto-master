@@ -1,27 +1,25 @@
 <template>
-    <Head title="Adkoto" />
+	<Head title="Adkoto" />
 
-    <KalakalLayout>
-        <div class="max-w-7xl mx-auto h-full overflow-y-auto p-4">
-            <div class="grid grid-cols-12 gap-6">
-                <CategoryDrawer
-                    :categories="categories"
-                    class="lg:col-span-12 col-span-12"
-                />
-                <div class="lg:col-span-4 hidden lg:block">
-                    <ManageCard />
-                    <SponsoredAds :sponsoredAds="sponsoredAds" />
-                </div>
-                <Listings
-                    :advertisements="advertisements"
-                    :subCategory="subCategory"
-                    class="lg:col-span-8 col-span-12"
-                />
-            </div>
-        </div>
-    </KalakalLayout>
+	<KalakalLayout>
+		<div class="max-w-7xl mx-auto h-full overflow-y-auto p-4 scrollbar-thin">
+			<div class="grid grid-cols-12 gap-6">
+				<CategoryDrawer
+					:categories="categories"
+					class="lg:col-span-12 col-span-12" />
+				<div class="lg:col-span-4 hidden lg:block">
+					<ManageCard />
+					<SponsoredAds :sponsoredAds="sponsoredAds" />
+				</div>
+				<Listings
+					:advertisements="advertisements"
+					:subCategory="subCategory"
+					class="lg:col-span-8 col-span-12" />
+			</div>
+		</div>
+	</KalakalLayout>
 
-    <UpdateProfileReminder />
+	<UpdateProfileReminder />
 </template>
 
 <script setup>

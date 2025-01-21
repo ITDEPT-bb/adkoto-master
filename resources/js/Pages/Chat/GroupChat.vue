@@ -1,23 +1,20 @@
 <template>
-    <Head title="Conversation" />
-    <AuthenticatedLayout>
-        <div
-            class="flex-1 p:2 sm:p-6 justify-between max-w-7xl mx-auto flex flex-col h-full"
-        >
-            <ChatHeader :group="groupChat" />
-            <MessageList
-                :messages="messages"
-                :authUser="authUser"
-                :group="groupChat"
-            />
-            <MessageInput
-                :conversation="conversation"
-                :user="authUser"
-                @message-sent="fetchMessages"
-            />
-        </div>
-    </AuthenticatedLayout>
-    <UpdateProfileReminder />
+	<Head title="Conversation" />
+	<AuthenticatedLayout>
+		<div
+			class="flex-1 p:2 sm:p-6 justify-between max-w-7xl mx-auto flex flex-col h-full scrollbar-thin">
+			<ChatHeader :group="groupChat" />
+			<MessageList
+				:messages="messages"
+				:authUser="authUser"
+				:group="groupChat" />
+			<MessageInput
+				:conversation="conversation"
+				:user="authUser"
+				@message-sent="fetchMessages" />
+		</div>
+	</AuthenticatedLayout>
+	<UpdateProfileReminder />
 </template>
 
 <script setup>
@@ -31,9 +28,9 @@ import { ref, onMounted } from "vue";
 import axiosClient from "@/axiosClient.js";
 
 const props = defineProps({
-    groupChat: Object,
-    messages: Array,
-    conversation: Object,
+	groupChat: Object,
+	messages: Array,
+	conversation: Object,
 });
 
 const groupChat = props.groupChat;
@@ -42,17 +39,15 @@ const conversation = props.conversation;
 const authUser = usePage().props.auth.user;
 
 const fetchMessages = async () => {
-    try {
-        const response = await axiosClient.get(
-            `/group-chat/${groupChat.id}/messages`
-        );
-        messages.value = response.data;
-    } catch (error) {
-        console.error("Error fetching messages:", error);
-    }
+	try {
+		const response = await axiosClient.get(`/group-chat/${groupChat.id}/messages`);
+		messages.value = response.data;
+	} catch (error) {
+		console.error("Error fetching messages:", error);
+	}
 };
 
 onMounted(() => {
-    fetchMessages();
+	fetchMessages();
 });
 </script>

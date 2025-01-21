@@ -1,16 +1,14 @@
 <template>
-    <Head title="Adkoto" />
+	<Head title="Adkoto" />
 
-    <KalakalLayout>
-        <div class="max-w-7xl mx-auto h-full overflow-y-auto p-4">
-            <div class="grid grid-cols-12 gap-6">
-                <div class="col-span-8">
-                    <div class="bg-blue-400 p-4">
-                        <h1 class="text-lg text-white font-semibold">
-                            You can manage your Advertisements
-                        </h1>
-                    </div>
-                    <!-- <div v-if="advertisements.length > 0">
+	<KalakalLayout>
+		<div class="max-w-7xl mx-auto h-full overflow-y-auto p-4 scrollbar-thin">
+			<div class="grid grid-cols-12 gap-6">
+				<div class="col-span-8">
+					<div class="bg-blue-400 p-4">
+						<h1 class="text-lg text-white font-semibold">You can manage your Advertisements</h1>
+					</div>
+					<!-- <div v-if="advertisements.length > 0">
                         <Listings :advertisements="advertisements" />
                     </div>
                     <div v-else class="text-center text-gray-600 py-4">
@@ -18,20 +16,19 @@
                             You don't have any advertisements posted.
                         </div>
                     </div> -->
-                    <Listings
-                        :advertisements="advertisements"
-                        class="lg:col-span-8 col-span-12"
-                    />
-                </div>
-                <div class="col-span-4">
-                    <ManageCard class="my-2" />
-                    <SponsoredAds :sponsoredAds="sponsoredAds" />
-                </div>
-            </div>
-        </div>
-    </KalakalLayout>
+					<Listings
+						:advertisements="advertisements"
+						class="lg:col-span-8 col-span-12" />
+				</div>
+				<div class="col-span-4">
+					<ManageCard class="my-2" />
+					<SponsoredAds :sponsoredAds="sponsoredAds" />
+				</div>
+			</div>
+		</div>
+	</KalakalLayout>
 
-    <UpdateProfileReminder />
+	<UpdateProfileReminder />
 </template>
 
 <script setup>

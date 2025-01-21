@@ -38,7 +38,7 @@ function onModalHide() {
 	<Head title="Social Media Website" />
 
 	<AuthenticatedLayout>
-		<div class="p-8 sm:w-[600px] mx-auto h-full overflow-auto">
+		<div class="p-8 sm:w-[600px] mx-auto h-full overflow-auto scrollbar-thin">
 			<PostItem
 				:post="post"
 				@editClick="openEditModal"

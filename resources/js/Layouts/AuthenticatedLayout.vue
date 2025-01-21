@@ -450,7 +450,7 @@ const leave = (el, done) => {
 				<div
 					v-if="showingNavigationDropdown"
 					:class="[
-						'fixed top-0 right-0 z-40 h-screen p-4 pt-8 overflow-y-auto bg-white w-60 dark:bg-gray-800 shadow-2xl',
+						'fixed top-0 right-0 z-40 h-screen p-4 pt-8 overflow-y-auto bg-white w-60 dark:bg-gray-800 shadow-2xl scrollbar-thin',
 						{
 							'translate-x-0': showingNavigationDropdown,
 							hidden: !showingNavigationDropdown,

@@ -1,14 +1,14 @@
 <template>
-    <Head title="Kalakalkoto" />
+	<Head title="Kalakalkoto" />
 
-    <KalakalLayout>
-        <div class="max-w-7xl mx-auto h-full overflow-y-auto p-4">
-            <KalakalMenu />
-            <ProductList :kalakalitems="kalakalitems" />
-        </div>
-    </KalakalLayout>
+	<KalakalLayout>
+		<div class="max-w-7xl mx-auto h-full overflow-y-auto p-4 scrollbar-thin">
+			<KalakalMenu />
+			<ProductList :kalakalitems="kalakalitems" />
+		</div>
+	</KalakalLayout>
 
-    <UpdateProfileReminder />
+	<UpdateProfileReminder />
 </template>
 
 <script setup>

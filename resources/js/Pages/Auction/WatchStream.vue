@@ -2,7 +2,7 @@
 	<Head title="Live Auction" />
 
 	<KalakalLayout>
-		<div class="max-w-7xl mx-auto h-full overflow-y-auto p-4">
+		<div class="max-w-7xl mx-auto h-full overflow-y-auto p-4 scrollbar-thin">
 			<PageSelector />
 			<AuctionMenu />
 

@@ -23,5 +23,5 @@ export default {
 		},
 	},
 
-	plugins: [forms, "./node_modules/flowbite/**/*.js"],
+	plugins: [forms, "./node_modules/flowbite/**/*.js", require("tailwind-scrollbar")],
 };

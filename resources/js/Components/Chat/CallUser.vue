@@ -1,5 +1,5 @@
 <template>
-	<main class="mt-12 overflow-y-auto">
+	<main class="mt-12 overflow-y-auto scrollbar-thin">
 		<div class="container mx-auto text-center">
 			<h3 class="text-2xl font-bold">Video Call</h3>
 		</div>

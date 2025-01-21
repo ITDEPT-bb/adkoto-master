@@ -2,7 +2,7 @@
 	<Head title="Conversation" />
 	<AuthenticatedLayout>
 		<div
-			class="flex-1 my-2 pb-6 justify-between max-w-7xl mx-auto bg-white rounded-lg border flex flex-col h-full">
+			class="flex-1 my-2 pb-6 justify-between max-w-7xl mx-auto bg-white rounded-lg border flex flex-col h-full scrollbar-thin">
 			<ChatHeader
 				:user="user"
 				agora_id="{{ env('AGORA_APP_ID') }}" />
