@@ -73,6 +73,7 @@ class HomeController extends Controller
                             ->where('group_users.status', GroupUserStatus::APPROVED->value);
                     });
             })
+            ->withCount('reactions')
             ->latest()
             ->paginate(10);
 
