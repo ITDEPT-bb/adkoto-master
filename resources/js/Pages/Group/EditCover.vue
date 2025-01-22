@@ -14,6 +14,7 @@ const fileInput = ref(null);
 const croppedImage = ref(null);
 const toast = useToast();
 const isLoading = ref(false);
+const shareCover = ref(false);
 
 const props = defineProps({
 	group: {
@@ -62,6 +63,7 @@ const cropAndSubmit = async () => {
 		const blob = await (await fetch(resizedDataURL)).blob();
 		const formData = new FormData();
 		formData.append("cover", blob, "cover.jpg");
+		formData.append("share_cover", shareCover.value ? "1" : "0");
 
 		try {
 			const groupId = group.id;
@@ -144,27 +146,43 @@ const reselectImage = () => {
 					image-restriction="stencil"
 					ref="croppedImage" />
 
-				<!-- Button to reselect image -->
-				<button
-					@click="reselectImage"
-					class="mt-4 text-blue-500 underline">
-					Reselect Image
-				</button>
-			</div>
+				<div class="flex flex-col items-start gap-4 mt-4">
+					<div class="flex items-center gap-2">
+						<input
+							id="share-cover"
+							type="checkbox"
+							v-model="shareCover"
+							class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
+						<label
+							for="share-cover"
+							class="text-sm text-gray-700">
+							Share this cover as a post
+						</label>
+					</div>
+				</div>
 
-			<!-- Submit Button to Crop and Upload -->
-			<button
-				v-if="img"
-				@click="cropAndSubmit"
-				:disabled="isLoading"
-				:class="{
-					'mt-4 bg-blue-100 text-white py-2 px-4 rounded transition duration-300 ease-in-out cursor-not-allowed':
-						isLoading,
-					'mt-4 bg-blue-500 text-white py-2 px-4 rounded transition duration-300 ease-in-out':
-						!isLoading,
-				}">
-				Save Cover Photo
-			</button>
+				<div class="flex justify-between items-center w-full gap-4">
+					<!-- Button to reselect image -->
+					<button
+						@click="reselectImage"
+						class="mt-4 text-blue-500 underline">
+						Reselect Image
+					</button>
+					<!-- Submit Button to Crop and Upload -->
+					<button
+						v-if="img"
+						@click="cropAndSubmit"
+						:disabled="isLoading"
+						:class="{
+							'mt-4 bg-blue-100 text-white py-2 px-4 rounded transition duration-300 ease-in-out cursor-not-allowed':
+								isLoading,
+							'mt-4 bg-blue-500 text-white py-2 px-4 rounded transition duration-300 ease-in-out':
+								!isLoading,
+						}">
+						Save Cover Photo
+					</button>
+				</div>
+			</div>
 		</div>
 	</AuthenticatedLayout>
 

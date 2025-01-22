@@ -50,23 +50,39 @@
 					class="rounded-full"
 					image-restriction="stencil"
 					ref="croppedImage" />
-				<div class="flex gap-4">
-					<button
-						@click="reselectImage"
-						class="mt-4 text-blue-500 underline">
-						Reselect Image
-					</button>
-					<button
-						@click="cropAndSubmit"
-						:disabled="isLoading"
-						:class="{
-							'mt-4 bg-blue-100 text-white py-2 px-4 rounded transition duration-300 ease-in-out cursor-not-allowed':
-								isLoading,
-							'mt-4 bg-blue-500 text-white py-2 px-4 rounded transition duration-300 ease-in-out':
-								!isLoading,
-						}">
-						Save Thumbnail
-					</button>
+				<div class="flex flex-col items-start gap-4 mt-4">
+					<!-- Share Avatar Checkbox -->
+					<div class="flex items-center gap-2">
+						<input
+							id="share-avatar"
+							type="checkbox"
+							v-model="shareAvatar"
+							class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
+						<label
+							for="share-avatar"
+							class="text-sm text-gray-700">
+							Share this thumbnail as a post
+						</label>
+					</div>
+
+					<!-- Buttons Section -->
+					<div class="flex justify-between items-center w-full gap-4">
+						<button
+							@click="reselectImage"
+							class="text-blue-500 underline hover:text-blue-700 transition duration-200">
+							Reselect Image
+						</button>
+						<button
+							@click="cropAndSubmit"
+							:disabled="isLoading"
+							:class="{
+								'bg-blue-100 text-gray-500 py-2 px-4 rounded cursor-not-allowed': isLoading,
+								'bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300':
+									!isLoading,
+							}">
+							Save Thumbnail
+						</button>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -90,6 +106,7 @@ const fileInput = ref(null);
 const croppedImage = ref(null);
 const toast = useToast();
 const isLoading = ref(false);
+const shareAvatar = ref(false);
 
 const props = defineProps({
 	group: {
@@ -138,6 +155,7 @@ const cropAndSubmit = async () => {
 		const blob = await (await fetch(resizedDataURL)).blob();
 		const formData = new FormData();
 		formData.append("avatar", blob, "avatar.jpg");
+		formData.append("share_thumbnail", shareAvatar.value ? "1" : "0");
 
 		try {
 			const groupId = group.id;

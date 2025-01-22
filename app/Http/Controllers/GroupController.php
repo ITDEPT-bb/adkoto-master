@@ -212,8 +212,11 @@ class GroupController extends Controller
 
     public function updateGroupCover(Request $request, Group $group)
     {
+        $user = auth()->user();
+
         $data = $request->validate([
             'cover' => ['nullable', 'image'],
+            'share_cover' => ['nullable', 'boolean'],
         ]);
 
         /** @var \Illuminate\Http\UploadedFile $cover */
@@ -227,6 +230,37 @@ class GroupController extends Controller
             $path = $cover->store('group-' . $group->id, 'public');
 
             $group->update(['cover_path' => $path]);
+
+            // Share as a post if requested
+            if (!empty($data['share_cover'])) {
+                DB::beginTransaction();
+                try {
+                    // Create the post
+                    $post = Post::create([
+                        'body' => 'Check out our new Group Photo!',
+                        'user_id' => $user->id,
+                        'group_id' => $group->id,
+                    ]);
+
+                    $post_path = $cover->store('attachments/' . $post->id, 'public');
+                    // Create post attachment
+                    PostAttachment::create([
+                        'post_id' => $post->id,
+                        'name' => $cover->getClientOriginalName(),
+                        'path' => $post_path,
+                        'mime' => $cover->getMimeType(),
+                        'size' => $cover->getSize(),
+                        'created_by' => $user->id,
+                    ]);
+
+                    DB::commit();
+                } catch (\Exception $e) {
+                    // Rollback changes if any error occurs
+                    Storage::disk('public')->delete($path);
+                    DB::rollBack();
+                    throw $e;
+                }
+            }
 
             // return response()->json(['message' => 'Your cover image was updated successfully!', 'path' => $path], 200);
             return response()->json([
@@ -247,8 +281,11 @@ class GroupController extends Controller
 
     public function updateGroupThumbnail(Request $request, Group $group)
     {
+        $user = auth()->user();
+
         $data = $request->validate([
             'avatar' => ['nullable', 'image', 'max:2048'],
+            'share_thumbnail' => ['nullable', 'boolean'],
         ]);
 
         /** @var \Illuminate\Http\UploadedFile $avatar */
@@ -261,6 +298,37 @@ class GroupController extends Controller
 
             $path = $avatar->store('user-' . $group->id, 'public');
             $group->update(['thumbnail_path' => $path]);
+
+            // Share as a post if requested
+            if (!empty($data['share_thumbnail'])) {
+                DB::beginTransaction();
+                try {
+                    // Create the post
+                    $post = Post::create([
+                        'body' => 'Check out our new Thumbnail!',
+                        'user_id' => $user->id,
+                        'group_id' => $group->id,
+                    ]);
+
+                    $post_path = $avatar->store('attachments/' . $post->id, 'public');
+                    // Create post attachment
+                    PostAttachment::create([
+                        'post_id' => $post->id,
+                        'name' => $avatar->getClientOriginalName(),
+                        'path' => $post_path,
+                        'mime' => $avatar->getMimeType(),
+                        'size' => $avatar->getSize(),
+                        'created_by' => $user->id,
+                    ]);
+
+                    DB::commit();
+                } catch (\Exception $e) {
+                    // Rollback changes if any error occurs
+                    Storage::disk('public')->delete($path);
+                    DB::rollBack();
+                    throw $e;
+                }
+            }
 
             return response()->json([
                 'message' => 'Your thumbnail was updated successfully!',

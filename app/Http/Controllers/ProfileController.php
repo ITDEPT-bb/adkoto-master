@@ -20,6 +20,7 @@ use App\Models\PostAttachment;
 use Illuminate\Support\Facades\Storage;
 
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
@@ -204,7 +205,8 @@ class ProfileController extends Controller
     public function updateCover(Request $request)
     {
         $data = $request->validate([
-            'cover' => ['nullable', 'image'],
+            'cover' => ['nullable', 'image', 'max:2048'],
+            'share_cover' => ['nullable', 'boolean'],
         ]);
 
         $user = $request->user();
@@ -213,15 +215,49 @@ class ProfileController extends Controller
         $cover = $data['cover'] ?? null;
 
         if ($cover) {
+            // Delete old cover if it exists
             if ($user->cover_path) {
                 Storage::disk('public')->delete($user->cover_path);
             }
 
-            $path = $cover->store('user-' . $user->id, 'public');
-
+            // Store the new cover image
+            $path = $cover->store('user-' . $user->id . '/cover', 'public');
             $user->update(['cover_path' => $path]);
 
-            return response()->json(['message' => 'Your cover image was updated successfully!', 'path' => $path], 200);
+            // Share as a post if requested
+            if (!empty($data['share_cover'])) {
+                DB::beginTransaction();
+                try {
+                    // Create the post
+                    $post = Post::create([
+                        'body' => 'Check out my new Cover Photo!',
+                        'user_id' => $user->id,
+                    ]);
+
+                    $post_path = $cover->store('attachments/' . $post->id, 'public');
+                    // Create post attachment
+                    PostAttachment::create([
+                        'post_id' => $post->id,
+                        'name' => $cover->getClientOriginalName(),
+                        'path' => $post_path,
+                        'mime' => $cover->getMimeType(),
+                        'size' => $cover->getSize(),
+                        'created_by' => $user->id,
+                    ]);
+
+                    DB::commit();
+                } catch (\Exception $e) {
+                    // Rollback changes if any error occurs
+                    Storage::disk('public')->delete($path);
+                    DB::rollBack();
+                    throw $e;
+                }
+            }
+
+            return response()->json([
+                'message' => 'Your cover was updated successfully!',
+                'redirect' => route('profile', $user->username),
+            ], 200);
         }
 
         return response()->json(['message' => 'No image provided'], 400);
@@ -238,6 +274,7 @@ class ProfileController extends Controller
     {
         $data = $request->validate([
             'avatar' => ['nullable', 'image', 'max:2048'],
+            'share_avatar' => ['nullable', 'boolean'],
         ]);
 
         $user = $request->user();
@@ -246,14 +283,49 @@ class ProfileController extends Controller
         $avatar = $data['avatar'] ?? null;
 
         if ($avatar) {
+            // Delete old avatar if exists
             if ($user->avatar_path) {
                 Storage::disk('public')->delete($user->avatar_path);
             }
 
+            // Store new avatar
             $path = $avatar->store('user-' . $user->id, 'public');
             $user->update(['avatar_path' => $path]);
 
-            return response()->json(['message' => 'Avatar has been updated successfully!'], 200);
+            // Share as a post if requested
+            if (!empty($data['share_avatar'])) {
+                DB::beginTransaction();
+                try {
+                    // Create the post
+                    $post = Post::create([
+                        'body' => 'Check out my new Profile Picture!',
+                        'user_id' => $user->id,
+                    ]);
+
+                    $post_path = $avatar->store('attachments/' . $post->id, 'public');
+                    // Create post attachment
+                    PostAttachment::create([
+                        'post_id' => $post->id,
+                        'name' => $avatar->getClientOriginalName(),
+                        'path' => $post_path,
+                        'mime' => $avatar->getMimeType(),
+                        'size' => $avatar->getSize(),
+                        'created_by' => $user->id,
+                    ]);
+
+                    DB::commit();
+                } catch (\Exception $e) {
+                    // Rollback changes if any error occurs
+                    Storage::disk('public')->delete($path);
+                    DB::rollBack();
+                    throw $e;
+                }
+            }
+
+            return response()->json([
+                'message' => 'Your avatar was updated successfully!',
+                'redirect' => route('profile', $user->username),
+            ], 200);
         }
 
         return response()->json(['error' => 'No image provided'], 400);
