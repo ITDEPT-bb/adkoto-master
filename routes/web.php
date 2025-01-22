@@ -217,6 +217,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('group.delete');
     });
 
+    // Updating of cover photo and profile picture
+    Route::get('/group/cover/{group}', [GroupController::class, 'groupCoverPage'])->name('group.coverPage');
+    Route::post('/group/{group}/update-cover', [GroupController::class, 'updateGroupCover'])
+        ->name('group.updateGroupCover');
+
+    Route::get('/group/thumbnail/{group}', [GroupController::class, 'groupThumbnailPage'])->name('group.thumbnailPage');
+    Route::post('/group/{group}/update-thumbnail', [GroupController::class, 'updateGroupThumbnail'])
+        ->name('group.updateGroupThumbnail');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

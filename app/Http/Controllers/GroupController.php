@@ -203,6 +203,74 @@ class GroupController extends Controller
         return back()->with('success', $success);
     }
 
+    public function groupCoverPage(Request $request, Group $group)
+    {
+        return Inertia::render('Group/EditCover', [
+            'group' => new GroupResource($group),
+        ]);
+    }
+
+    public function updateGroupCover(Request $request, Group $group)
+    {
+        $data = $request->validate([
+            'cover' => ['nullable', 'image'],
+        ]);
+
+        /** @var \Illuminate\Http\UploadedFile $cover */
+        $cover = $data['cover'] ?? null;
+
+        if ($cover) {
+            if ($group->cover_path) {
+                Storage::disk('public')->delete($group->cover_path);
+            }
+
+            $path = $cover->store('group-' . $group->id, 'public');
+
+            $group->update(['cover_path' => $path]);
+
+            // return response()->json(['message' => 'Your cover image was updated successfully!', 'path' => $path], 200);
+            return response()->json([
+                'message' => 'Your cover image was updated successfully!',
+                'redirect' => route('group.profile', $group->slug),
+            ], 200);
+        }
+
+        return response()->json(['message' => 'No image provided'], 400);
+    }
+
+    public function groupThumbnailPage(Request $request, Group $group)
+    {
+        return Inertia::render('Group/EditThumbnail', [
+            'group' => new UserResource($group),
+        ]);
+    }
+
+    public function updateGroupThumbnail(Request $request, Group $group)
+    {
+        $data = $request->validate([
+            'avatar' => ['nullable', 'image', 'max:2048'],
+        ]);
+
+        /** @var \Illuminate\Http\UploadedFile $avatar */
+        $avatar = $data['avatar'] ?? null;
+
+        if ($avatar) {
+            if ($group->thumbnail_path) {
+                Storage::disk('public')->delete($group->thumbnail_path);
+            }
+
+            $path = $avatar->store('user-' . $group->id, 'public');
+            $group->update(['thumbnail_path' => $path]);
+
+            return response()->json([
+                'message' => 'Your thumbnail was updated successfully!',
+                'redirect' => route('group.profile', $group->slug),
+            ], 200);
+        }
+
+        return response()->json(['error' => 'No image provided'], 400);
+    }
+
     public function inviteUsers(InviteUsersRequest $request, Group $group)
     {
         $data = $request->validated();

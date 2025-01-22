@@ -21,6 +21,10 @@ import CreateGroupModal from "@/Components/GroupChat/CreateGroupModal.vue";
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from "@headlessui/vue";
 import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline";
 
+import GroupCoverModal from "@/Components/Group/GroupCoverModal.vue";
+import GroupThumbnailModal from "@/Components/Group/GroupThumbnailModal.vue";
+// import ProfileAvatarModal from "@/Components/Tribekoto/ProfileAvatarModal.vue";
+
 const imagesForm = useForm({
 	thumbnail: null,
 	cover: null,
@@ -38,6 +42,29 @@ const isCurrentUserAdmin = computed(() => props.group.role === "admin");
 const isJoinedToGroup = computed(() => props.group.role && props.group.status === "approved");
 
 const showNewGroupModal = ref(false);
+
+const isOpen = ref(false);
+const selectedGroupId = ref(null);
+
+const openModal = (groupId) => {
+	isOpen.value = true;
+	selectedGroupId.value = groupId;
+};
+const closeModal = () => {
+	isOpen.value = false;
+	selectedGroupId.value = null;
+};
+
+const isOpenThumbnail = ref(false);
+const openModalThumbnail = (groupId) => {
+	isOpenThumbnail.value = true;
+	selectedGroupId.value = groupId;
+};
+
+const closeModalThumbnail = () => {
+	isOpenThumbnail.value = false;
+	selectedGroupId.value = null;
+};
 
 const props = defineProps({
 	errors: Object,
@@ -259,14 +286,31 @@ const handleChatClick = async (groupId) => {
 					class="my-2 py-2 px-3 font-medium text-sm bg-red-400 text-white">
 					{{ errors.cover }}
 				</div>
+				<!-- <img
+                    :src="coverImageSrc || group.cover_url || '/img/default_cover.jpg'"
+                    class="w-full h-[200px] object-cover" /> -->
 				<div class="group relative bg-white dark:bg-slate-950 dark:text-gray-100">
 					<!-- <img
 						:src="coverImageSrc || group.cover_url || '/img/default_cover.jpg'"
-						class="w-full h-[200px] object-cover" /> -->
-					<img
-						:src="coverImageSrc || group.cover_url || '/img/default_cover.jpg'"
-						class="w-full aspect-[3/1] min-h-[150px] max-h-[400px] object-cover" />
-					<div
+						class="w-full aspect-[3/1] min-h-[150px] max-h-[400px] object-cover" /> -->
+					<div v-if="isCurrentUserAdmin">
+						<img
+							:src="coverImageSrc || group.cover_url || '/img/default_cover.jpg'"
+							class="w-full aspect-[3/1] min-h-[150px] max-h-[400px] object-cover hover:opacity-90 cursor-pointer"
+							@click="openModal(group.id)" />
+					</div>
+					<div v-else>
+						<img
+							:src="coverImageSrc || group.cover_url || '/img/default_cover.jpg'"
+							class="w-full aspect-[3/1] min-h-[150px] max-h-[400px] object-cover hover:opacity-90 cursor-pointer" />
+					</div>
+
+					<GroupCoverModal
+						:imageSrc="group.cover_url || '/img/default_cover.jpg'"
+						:isOpen="isOpen"
+						:group-id="selectedGroupId"
+						@close="closeModal" />
+					<!-- <div
 						v-if="isCurrentUserAdmin"
 						class="absolute top-2 right-2">
 						<button
@@ -311,17 +355,30 @@ const handleChatClick = async (groupId) => {
 								Submit
 							</button>
 						</div>
-					</div>
+					</div> -->
 
 					<div class="flex flex-row md:flex-row">
-						<!-- <div
-							class="flex items-center justify-center relative group/thumbnail -mt-[64px] ml-[48px] w-[128px] h-[128px] rounded-full"> -->
 						<div
 							class="flex items-center justify-center relative group/avatar mt-[-32px] md:-mt-[64px] ml-[10px] w-[96px] h-[96px] md:w-[128px] md:h-[128px] rounded-full">
+							<div v-if="isCurrentUserAdmin">
+								<img
+									:src="thumbnailImageSrc || group.thumbnail_url || '/img/default_avatar.webp'"
+									class="w-24 h-24 sm:w-full sm:h-full object-cover rounded-full hover:opacity-95 hover:cursor-pointer"
+									@click="openModalThumbnail(group.id)" />
+							</div>
+							<div v-else>
+								<img
+									:src="thumbnailImageSrc || group.thumbnail_url || '/img/default_avatar.webp'"
+									class="w-24 h-24 sm:w-full sm:h-full object-cover rounded-full hover:opacity-95 hover:cursor-pointer" />
+							</div>
+
+							<GroupThumbnailModal
+								:imageSrc="group.thumbnail_url || '/img/default_cover.jpg'"
+								:isOpenThumbnail="isOpenThumbnail"
+								:group-id="selectedGroupId"
+								@close="closeModalThumbnail" />
+
 							<!-- <img
-								:src="thumbnailImageSrc || group.thumbnail_url || '/img/default_avatar.webp'"
-								class="w-full h-full object-cover rounded-full" /> -->
-							<img
 								:src="thumbnailImageSrc || group.thumbnail_url || '/img/default_avatar.webp'"
 								class="w-24 h-24 sm:w-full sm:h-full object-cover rounded-full" />
 							<button
@@ -348,7 +405,7 @@ const handleChatClick = async (groupId) => {
 									class="w-7 h-7 flex items-center justify-center bg-emerald-500/80 text-white rounded-full">
 									<CheckCircleIcon class="h-5 w-5" />
 								</button>
-							</div>
+							</div> -->
 						</div>
 						<!-- <div class="flex justify-between items-center flex-1 p-4"> -->
 						<div class="flex justify-between items-center flex-1 px-2 py-1 sm:px-4 sm:py-2">
