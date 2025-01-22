@@ -56,8 +56,15 @@ const submit = () => {
 		<Head title="Register" />
 
 		<div className="flex flex-col gap-6">
-			<div class="overflow-hidden rounded-xl border bg-card text-card-foreground shadow-lg">
-				<div class="grid md:grid-cols-2 bg-white">
+			<div class="overflow-hidden rounded-xl bg-card text-card-foreground">
+				<div className="sm:hidden flex flex-col items-center justify-center w-full h-full gap-2">
+					<img
+						src="img/Auth/adkoto_logo.png"
+						alt="Adkoto Logo"
+						className="h-auto max-w-[100%] object-contain px-6 pb-4 md:px-8" />
+				</div>
+				<div
+					class="grid md:grid-cols-2 bg-white border shadow-lg sm:rounded-none rounded-lg sm:py-0 py-2 sm:px-0 px-1">
 					<div className="relative hidden md:flex bg-blue-primary p-4">
 						<div className="flex flex-col items-center justify-center w-full h-full gap-2">
 							<img
@@ -80,7 +87,7 @@ const submit = () => {
 								<p className="text-balance text-muted-foreground">Create your new Adkoto account</p>
 							</div>
 
-							<div class="grid gap-2">
+							<div class="grid gap-1 sm:gap-2">
 								<InputLabel
 									for="name"
 									value="Name"
@@ -99,7 +106,7 @@ const submit = () => {
 									:message="form.errors.name" />
 							</div>
 
-							<div class="grid gap-2">
+							<div class="grid gap-1 sm:gap-2">
 								<InputLabel
 									for="email"
 									value="Email"
@@ -118,7 +125,7 @@ const submit = () => {
 									:message="form.errors.email" />
 							</div>
 
-							<div class="grid gap-2">
+							<div class="grid gap-1 sm:gap-2">
 								<InputLabel
 									for="phone"
 									value="Mobile No."
@@ -142,7 +149,7 @@ const submit = () => {
 									" />
 							</div>
 
-							<div class="grid gap-2 relative">
+							<div class="grid gap-1 sm:gap-2 relative">
 								<InputLabel
 									for="password"
 									value="Password"
@@ -151,7 +158,7 @@ const submit = () => {
 								<TextInput
 									:type="showPassword ? 'text' : 'password'"
 									id="password"
-									class="mt-1 block w-full pr-10"
+									class="block w-full pr-10"
 									v-model="form.password"
 									required
 									autocomplete="new-password" />
@@ -172,7 +179,7 @@ const submit = () => {
 									:message="form.errors.password" />
 							</div>
 
-							<div class="grid gap-2 relative">
+							<div class="grid gap-1 sm:gap-2 relative">
 								<InputLabel
 									for="password_confirmation"
 									value="Confirm Password"
@@ -181,7 +188,7 @@ const submit = () => {
 								<TextInput
 									:type="showPasswordConfirmation ? 'text' : 'password'"
 									id="password_confirmation"
-									class="mt-1 block w-full pr-10"
+									class="block w-full pr-10"
 									v-model="form.password_confirmation"
 									required
 									autocomplete="new-password" />
@@ -202,7 +209,7 @@ const submit = () => {
 									:message="form.errors.password_confirmation" />
 							</div>
 
-							<div class="grid gap-2">
+							<div class="grid gap-1 sm:gap-2">
 								<InputLabel for="terms">
 									<div class="flex items-center">
 										<Checkbox
@@ -211,19 +218,19 @@ const submit = () => {
 											name="terms"
 											required />
 
-										<div class="ms-2">
+										<div class="ms-2 text-xs sm:text-normal">
 											I agree to the
 											<a
 												target="_blank"
 												:href="route('terms.show')"
-												class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+												class="underline text-xs sm:text-normal text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
 												>Terms of Service</a
 											>
 											and
 											<a
 												target="_blank"
 												:href="route('policy.show')"
-												class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+												class="underline text-xs sm:text-normal text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
 												>Privacy Policy</a
 											>
 										</div>

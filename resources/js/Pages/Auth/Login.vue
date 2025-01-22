@@ -56,8 +56,15 @@ const submit = () => {
 		</div>
 
 		<div className="flex flex-col gap-6">
-			<div class="overflow-hidden rounded-xl border bg-card text-card-foreground shadow-lg">
-				<div class="grid md:grid-cols-2 bg-white">
+			<div class="overflow-hidden rounded-xl bg-card text-card-foreground">
+				<div className="sm:hidden flex flex-col items-center justify-center w-full h-full gap-2">
+					<img
+						src="img/Auth/adkoto_logo.png"
+						alt="Adkoto Logo"
+						className="h-auto max-w-[100%] object-contain px-6 pb-4 md:px-8" />
+				</div>
+				<div
+					class="grid md:grid-cols-2 bg-white border shadow-lg sm:rounded-none rounded-lg sm:py-0 py-2 sm:px-0 px-1">
 					<form
 						@submit.prevent="submit"
 						className="p-2 md:p-6 md:py-10">
