@@ -49,15 +49,20 @@ defineProps({
 import DeactivateAccount from "./Partials/DeactivateAccount.vue";
 import DeleteUserForm from "./Partials/DeleteUserForm.vue";
 import Pages from "./Partials/Pages.vue";
+import ToggleAccountPrivacy from "./Partials/ToggleAccountPrivacy.vue";
 import UpdatePasswordForm from "./Partials/UpdatePasswordForm.vue";
 import UpdateProfileInformationForm from "./Partials/UpdateProfileInformationForm.vue";
+import { defineProps, watch } from "vue";
 
-defineProps({
+const props = defineProps({
 	mustVerifyEmail: {
 		type: Boolean,
 	},
 	status: {
 		type: String,
+	},
+	isPrivate: {
+		type: Boolean,
 	},
 });
 </script>
@@ -73,6 +78,12 @@ defineProps({
 
 		<div class="p-4 sm:p-8 bg-white dark:bg-slate-900 shadow sm:rounded-lg">
 			<UpdatePasswordForm class="max-w-xl" />
+		</div>
+
+		<div class="p-4 sm:p-8 bg-white dark:bg-slate-900 shadow sm:rounded-lg">
+			<ToggleAccountPrivacy
+				:is-private="isPrivate"
+				class="max-w-xl" />
 		</div>
 
 		<!-- <div class="p-4 sm:p-8 bg-white dark:bg-slate-900 shadow sm:rounded-lg">

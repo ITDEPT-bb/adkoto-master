@@ -47,7 +47,8 @@ class HomeController extends Controller
             ->select('posts.*')
             ->leftJoin('followers AS f', function ($join) use ($userId) {
                 $join->on('posts.user_id', '=', 'f.user_id')
-                    ->where('f.follower_id', '=', $userId);
+                    ->where('f.follower_id', '=', $userId)
+                    ->where('f.status', '=', 'accepted');
             })
             ->leftJoin('group_users AS gu', function ($join) use ($userId) {
                 $join->on('gu.group_id', '=', 'posts.group_id')
@@ -109,11 +110,14 @@ class HomeController extends Controller
             ->orderBy('name', 'desc')
             ->get();
 
+        $followings = $user->followings()->wherePivot('status', 'accepted')->get();
+
         return Inertia::render('Tribekoto/Home', [
             'posts' => $posts,
             'groups' => GroupResource::collection($groups),
             'suggestedGroups' => GroupResource::collection($suggestedGroups),
-            'followings' => UserResource::collection($user->followings),
+            // 'followings' => UserResource::collection($user->followings),
+            'followings' => UserResource::collection($followings),
             'suggestedUsers' => UserResource::collection($suggestedPeople)
         ]);
     }

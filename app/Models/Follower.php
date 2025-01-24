@@ -13,6 +13,12 @@ class Follower extends Model
 
     protected $fillable = [
         'user_id',
-        'follower_id'
+        'follower_id',
+        'status'
     ];
+
+    public function follower()
+    {
+        return $this->belongsTo(User::class, 'follower_id');
+    }
 }

@@ -48,6 +48,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
         'password',
         'cover_path',
         'avatar_path',
+        'is_private',
         'pinned_post_id'
     ];
 
@@ -87,12 +88,14 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
 
     public function followers(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'followers', 'user_id', 'follower_id');
+        return $this->belongsToMany(User::class, 'followers', 'user_id', 'follower_id')
+            ->withPivot('status');
     }
 
     public function followings(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'followers', 'follower_id', 'user_id');
+        return $this->belongsToMany(User::class, 'followers', 'follower_id', 'user_id')
+            ->withPivot('status');
     }
 
     public function advertisements()

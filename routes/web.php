@@ -228,12 +228,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/profile/privacy', [ProfileController::class, 'updatePrivacy'])->name('profile.updatePrivacy');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/profile/update-images', [ProfileController::class, 'updateImage'])
         ->name('profile.updateImages');
 
-
+    Route::get('/profile/pending-requests', [ProfileController::class, 'PendingRequest'])->name('profile.PendingRequest');
     Route::post('/user/follow/{user}', [UserController::class, 'follow'])->name('user.follow');
+    Route::post('/user/accept/{user}', [UserController::class, 'accept'])->name('user.accept');
+    Route::post('/user/reject/{user}', [UserController::class, 'reject'])->name('user.reject');
 
     // Updating of cover photo and profile picture
     Route::get('/user/cover/{user}', [ProfileController::class, 'coverPage'])->name('profile.coverPage');

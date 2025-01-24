@@ -39,11 +39,31 @@ class ProfileController extends Controller
 
     public function index(Request $request, User $user)
     {
+        // $isCurrentUserFollower = false;
+        // if (!Auth::guest()) {
+        //     $isCurrentUserFollower = Follower::where('user_id', $user->id)
+        //         ->where('follower_id', Auth::id())
+        //         ->where('status', 'accepted')
+        //         ->exists();
+        // }
         $isCurrentUserFollower = false;
+        $followRequestSent = false;
+
         if (!Auth::guest()) {
-            $isCurrentUserFollower = Follower::where('user_id', $user->id)->where('follower_id', Auth::id())->exists();
+            $followerRecord = Follower::where('user_id', $user->id)
+                ->where('follower_id', Auth::id())
+                ->first();
+
+            // Check if the current user is already a follower
+            $isCurrentUserFollower = $followerRecord && $followerRecord->status === 'accepted';
+
+            // Check if a follow request has been sent but not yet accepted
+            $followRequestSent = $followerRecord && $followerRecord->status === 'pending';
         }
-        $followerCount = Follower::where('user_id', $user->id)->count();
+
+        $followerCount = Follower::where('user_id', $user->id)
+            ->where('status', 'accepted')
+            ->count();
 
         $posts = Post::postsForTimeline(Auth::id(), false)
             ->leftJoin('users AS u', 'u.pinned_post_id', 'posts.id')
@@ -58,7 +78,9 @@ class ProfileController extends Controller
             return $posts;
         }
 
-        $followers = $user->followers;
+        // $followers = $user->followers;
+        $followers = $user->followers()->wherePivot('status', 'accepted')->get();
+        $PendingFollowers = $user->followers()->wherePivot('status', 'pending')->get();
 
         $followings = $user->followings;
 
@@ -68,17 +90,35 @@ class ProfileController extends Controller
             ->latest()
             ->get();
 
+        $isPrivate = auth()->user()->is_private;
+        // dd($isPrivate);
+
         return Inertia::render('Profile/View', [
             'mustVerifyEmail' => $user instanceof MustVerifyEmail,
             'status' => session('status'),
             'success' => session('success'),
             'isCurrentUserFollower' => $isCurrentUserFollower,
+            'followRequestSent' => $followRequestSent,
             'followerCount' => $followerCount,
             'user' => new UserResource($user),
+            // 'isPrivate' => $user->is_private,
+            'isPrivate' => $isPrivate,
             'posts' => $posts,
             'followers' => UserResource::collection($followers),
+            'PendingFollowers' => UserResource::collection($PendingFollowers),
             'followings' => UserResource::collection($followings),
             'photos' => PostAttachmentResource::collection($photos)
+        ]);
+    }
+
+    public function PendingRequest(): Response
+    {
+        $user = Auth::user();
+        $PendingFollowers = $user->followers()->wherePivot('status', 'pending')->get();
+
+        return Inertia::render('Profile/PendingRequest', [
+            'user' => new UserResource($user),
+            'PendingFollowers' => UserResource::collection($PendingFollowers),
         ]);
     }
 
@@ -97,6 +137,19 @@ class ProfileController extends Controller
 
         // return Redirect::route('profile.edit');
         return to_route('profile', $request->user())->with('success', 'Your profile details were updated.');
+    }
+
+    public function updatePrivacy(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'is_private' => 'required|boolean',
+        ]);
+
+        $user = $request->user();
+        $user->is_private = $request->input('is_private');
+        $user->save();
+
+        return to_route('profile', $user)->with('success', 'Your privacy settings were updated.');
     }
 
     /**

@@ -74,6 +74,9 @@ defineEmits(["approve", "reject", "roleChange", "delete"]);
 					</button>
 				</div>
 			</div>
+			<div class="actions">
+				<slot name="actions"></slot>
+			</div>
 		</div>
 	</div>
 </template>
