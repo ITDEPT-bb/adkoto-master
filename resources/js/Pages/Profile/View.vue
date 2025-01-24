@@ -447,7 +447,7 @@ function cancelFollowRequest() {
 									</p>
 								</DangerButton> -->
 								<PrimaryButton
-									v-if="!isCurrentUserFollower && !followRequestSent && isPrivate"
+									v-if="!isCurrentUserFollower && !followRequestSent"
 									@click="followUser"
 									:disabled="isLoading"
 									:class="{
