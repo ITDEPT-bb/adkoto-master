@@ -61,6 +61,7 @@ import ChatListDropdown from "@/Components/Chat/ChatListDropdown.vue";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 
+// import messageIcon from "/public/img/icons/message-bk.png";
 import messageIcon from "/public/img/icons/message-bk.png";
 
 dayjs.extend(relativeTime);

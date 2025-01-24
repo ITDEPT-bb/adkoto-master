@@ -1,7 +1,7 @@
 <template>
 	<Head title="Live Auction" />
 
-	<KalakalLayout>
+	<AuthenticatedLayout>
 		<div class="max-w-7xl mx-auto h-full overflow-y-auto p-4 scrollbar-thin">
 			<PageSelector />
 			<AuctionMenu />
@@ -25,7 +25,7 @@
 				</div>
 			</div>
 		</div>
-	</KalakalLayout>
+	</AuthenticatedLayout>
 
 	<UpdateProfileReminder />
 </template>
@@ -34,7 +34,7 @@
 import YouTubeLiveStream from "@/Components/Auction/YouTubeLiveStream.vue";
 import { Head, usePage } from "@inertiajs/vue3";
 import { ref, defineProps, onMounted, onUnmounted } from "vue";
-import KalakalLayout from "@/Layouts/KalakalLayout.vue";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
 import AuctionMenu from "@/Components/Auction/AuctionMenu.vue";
 import PageSelector from "@/Components/Kalakalkoto/PageSelector.vue";

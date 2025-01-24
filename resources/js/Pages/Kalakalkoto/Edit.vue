@@ -1,7 +1,7 @@
 <template>
 	<Head title="Kalakalkoto Edit" />
 
-	<KalakalLayout>
+	<AuthenticatedLayout>
 		<div
 			class="max-w-4xl mx-auto my-2 h-full overflow-y-auto p-6 bg-white shadow-md rounded-lg scrollbar-thin">
 			<h1 class="text-3xl font-bold mb-6">Edit Listing</h1>
@@ -139,14 +139,14 @@
 				</button>
 			</form>
 		</div>
-	</KalakalLayout>
+	</AuthenticatedLayout>
 	<UpdateProfileReminder />
 </template>
 
 <script setup>
 import { ref } from "vue";
 import { usePage, Head, useForm } from "@inertiajs/vue3";
-import KalakalLayout from "@/Layouts/KalakalLayout.vue";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
 import { useToast } from "vue-toastification";
 import axios from "axios";

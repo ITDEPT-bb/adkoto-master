@@ -38,7 +38,7 @@
 <script setup>
 import { defineProps } from "vue";
 import { Head, Link } from "@inertiajs/vue3";
-import AuthenticatedLayout from "@/Layouts/GameLayout.vue";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
 
 const props = defineProps({

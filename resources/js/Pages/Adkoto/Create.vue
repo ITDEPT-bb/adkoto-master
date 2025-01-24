@@ -1,7 +1,7 @@
 <template>
 	<Head title="Adkoto Create" />
 
-	<AdkotoLayout>
+	<AuthenticatedLayout>
 		<div
 			class="max-w-4xl mx-auto my-2 h-full overflow-y-auto p-6 bg-white shadow-md rounded-lg scrollbar-thin">
 			<h1 class="text-3xl font-bold mb-6">Create New Advertisement</h1>
@@ -158,14 +158,14 @@
 				</button>
 			</form>
 		</div>
-	</AdkotoLayout>
+	</AuthenticatedLayout>
 	<UpdateProfileReminder />
 </template>
 
 <script setup>
 import { ref, watch } from "vue";
 import { Head, useForm } from "@inertiajs/vue3";
-import AdkotoLayout from "@/Layouts/AdkotoLayout.vue";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
 import { useToast } from "vue-toastification";
 

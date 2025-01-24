@@ -1,7 +1,7 @@
 <template>
 	<Head title="Adkoto" />
 
-	<KalakalLayout>
+	<AuthenticatedLayout>
 		<div class="max-w-7xl mx-auto h-full overflow-y-auto p-4 scrollbar-thin">
 			<div class="grid grid-cols-12 gap-6">
 				<div class="col-span-8">
@@ -26,7 +26,7 @@
 				</div>
 			</div>
 		</div>
-	</KalakalLayout>
+	</AuthenticatedLayout>
 
 	<UpdateProfileReminder />
 </template>
@@ -34,7 +34,7 @@
 <script setup>
 import { ref } from "vue";
 import { usePage, Head } from "@inertiajs/vue3";
-import KalakalLayout from "@/Layouts/AdkotoLayout.vue";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
 import Listings from "@/Components/Adkoto/Listings.vue";
 import SponsoredAds from "@/Components/Adkoto/SponsoredAds.vue";

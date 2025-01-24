@@ -1,7 +1,7 @@
 <template>
 	<Head title="Auction Item Create" />
 
-	<KalakalkotoLayout>
+	<AuthenticatedLayout>
 		<div class="h-full overflow-y-auto scrollbar-thin">
 			<div class="max-w-7xl mx-auto p-4">
 				<AuctionMenu />
@@ -187,14 +187,14 @@
 				</form>
 			</div>
 		</div>
-	</KalakalkotoLayout>
+	</AuthenticatedLayout>
 	<UpdateProfileReminder />
 </template>
 
 <script setup>
 import { ref, watch, watchEffect } from "vue";
 import { Head, useForm } from "@inertiajs/vue3";
-import KalakalkotoLayout from "@/Layouts/KalakalLayout.vue";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
 import { useToast } from "vue-toastification";
 

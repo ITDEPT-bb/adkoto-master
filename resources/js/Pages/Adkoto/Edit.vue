@@ -1,7 +1,7 @@
 <template>
 	<Head title="Edit Advertisement" />
 
-	<AdkotoLayout>
+	<AuthenticatedLayout>
 		<div
 			class="max-w-4xl mx-auto h-full overflow-y-auto p-6 bg-white shadow-md rounded-lg scrollbar-thin">
 			<h1 class="text-3xl font-bold mb-6">Edit Advertisement</h1>
@@ -135,13 +135,13 @@
 				</button>
 			</form>
 		</div>
-	</AdkotoLayout>
+	</AuthenticatedLayout>
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
 import { Head, useForm } from "@inertiajs/vue3";
-import AdkotoLayout from "@/Layouts/AdkotoLayout.vue";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { useToast } from "vue-toastification";
 
 const props = defineProps({

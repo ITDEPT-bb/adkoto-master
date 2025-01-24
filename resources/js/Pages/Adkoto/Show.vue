@@ -1,7 +1,7 @@
 <template>
 	<Head title="View Advertisements" />
 
-	<AdkotoLayout>
+	<AuthenticatedLayout>
 		<div class="max-w-7xl mx-auto h-full overflow-y-auto p-4 scrollbar-thin">
 			<div class="grid grid-cols-12 gap-6">
 				<AdvertisementCard
@@ -13,7 +13,7 @@
 				</div>
 			</div>
 		</div>
-	</AdkotoLayout>
+	</AuthenticatedLayout>
 
 	<UpdateProfileReminder />
 </template>
@@ -21,7 +21,7 @@
 <script setup>
 import { ref } from "vue";
 import { usePage, Head } from "@inertiajs/vue3";
-import AdkotoLayout from "@/Layouts/AdkotoLayout.vue";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
 import SponsoredAds from "@/Components/Adkoto/SponsoredAds.vue";
 import AdvertisementCard from "@/Components/Adkoto/AdvertisementCard.vue";

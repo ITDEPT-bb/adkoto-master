@@ -1,7 +1,7 @@
 <template>
 	<Head title="Kalakalkoto" />
 
-	<KalakalLayout>
+	<AuthenticatedLayout>
 		<div class="max-w-7xl mx-auto h-full overflow-y-auto p-4 scrollbar-thin">
 			<PageSelector />
 			<AuctionMenu />
@@ -19,7 +19,7 @@
 				</div>
 			</div>
 		</div>
-	</KalakalLayout>
+	</AuthenticatedLayout>
 
 	<UpdateProfileReminder />
 </template>
@@ -29,7 +29,7 @@ import { ref, onMounted, onBeforeUnmount } from "vue";
 import { usePage, Head } from "@inertiajs/vue3";
 import axiosClient from "@/axiosClient.js";
 
-import KalakalLayout from "@/Layouts/KalakalLayout.vue";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
 
 import AuctionMenu from "@/Components/Auction/AuctionMenu.vue";

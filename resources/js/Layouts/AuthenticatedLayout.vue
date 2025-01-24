@@ -7,17 +7,22 @@ import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
 import { Link, router, usePage } from "@inertiajs/vue3";
 import TextInput from "@/Components/TextInput.vue";
 import { MoonIcon } from "@heroicons/vue/24/solid";
-import logo from "/public/img/tribekoto.png";
+// import logo from "/public/img/tribekoto.png";
 
 // import tribekotoIcon from '/public/img/icons/tribekotoicon.png';
 // import adkotoIcon from '/public/img/icons/adkotoicon.png';
 // import kalakalkotoIcon from '/public/img/icons/kalakalkotoicon.png';
+
 import tribekotoIcon from "/public/img/icons/tribekoto-bk.png";
 import adkotoIcon from "/public/img/icons/adkoto-bk.png";
 import kalakalkotoIcon from "/public/img/icons/kalakalkoto-bk.png";
 import gameIcon from "/public/img/icons/gameicon-bk.png";
-import messageIcon from "/public/img/icons/message-bk.png";
-// import notificationIcon from "/public/img/icons/notification.png";
+
+// import tribekotoIcon from "/public/img/icons/TRIBEKOTO_SIRKOL.png";
+// import adkotoIcon from "/public/img/icons/ADKOTO_SIRKOL.png";
+// import kalakalkotoIcon from "/public/img/icons/KALAKALKOTO_SIRKOL.png";
+// import gameIcon from "/public/img/icons/GAMES_SIRKOL.png";
+
 import NotificationDropdown from "@/Components/Notification/NotificationDropdown.vue";
 import MessageIcon from "@/Components/Chat/MessageIconDropdown.vue";
 
@@ -59,6 +64,56 @@ const leave = (el, done) => {
 		done();
 	}, 300);
 };
+
+const { url } = usePage();
+// Default logo
+let logoSrc = "/img/tribekoto.png";
+let logoClass =
+	"block h-6 sm:h-8 w-auto ml-2 sm:ml-4 md:ml-6 lg:ml-2 xl:ml-7 2xl:ml-[70px] hover:scale-110 transition duration-200 ease-in-out";
+let tribekotoClass = "";
+let kalakalkotoClass = "";
+let adkotoClass = "";
+let gamesClass = "";
+let notificationClass = "";
+
+// Dynamically change logo based on the current URL
+// Tribekoto
+if (url.startsWith("/tribekoto")) {
+	logoSrc = "/img/tribekoto.png";
+	logoClass =
+		"block h-6 sm:h-8 w-auto ml-2 sm:ml-4 md:ml-6 lg:ml-2 xl:ml-7 2xl:ml-[70px] hover:scale-110 transition duration-200 ease-in-out";
+	tribekotoClass = "border border-red-500";
+}
+// Kalakalkoto
+else if (url.startsWith("/kalakalkoto")) {
+	logoSrc = "/img/kalakalkoto.png";
+	logoClass =
+		"block h-8 sm:h-8 w-auto ml-2 sm:ml-4 md:ml-6 lg:ml-2 xl:ml-7 2xl:ml-[70px] hover:scale-110 transition duration-200 ease-in-out";
+	kalakalkotoClass = "border border-red-500";
+}
+// Adkoto
+else if (url.startsWith("/adkoto")) {
+	logoSrc = "/img/adkoto.png";
+	logoClass =
+		"block h-7 sm:h-10 w-auto ml-2 sm:ml-4 md:ml-6 lg:ml-2 xl:ml-7 2xl:ml-[70px] bg-white rounded-full px-3 py-1 hover:scale-110 transition duration-200 ease-in-out";
+	adkotoClass = "border border-red-500";
+}
+// Tribekoto other page
+else if (
+	url.startsWith("/") ||
+	url.startsWith("/g") ||
+	url.startsWith("/u") ||
+	url.startsWith("/profile") ||
+	url.startsWith("/notifications") ||
+	url.startsWith("/search") ||
+	url.startsWith("/post")
+) {
+	tribekotoClass = "border border-red-500";
+}
+// Games
+else if (url.startsWith("/games")) {
+	gamesClass = "border border-red-500";
+}
 </script>
 
 <template>
@@ -78,13 +133,9 @@ const leave = (el, done) => {
 						<div class="shrink-0 flex items-center">
 							<Link :href="route('dashboard')">
 								<img
-									:src="logo"
-									class="block h-6 sm:h-8 w-auto ml-2 sm:ml-4 md:ml-6 lg:ml-2 xl:ml-7 2xl:ml-[70px] hover:scale-110 transition duration-200 ease-in-out"
+									:src="logoSrc"
+									:class="logoClass"
 									alt="Logo" />
-								<!-- <img
-									:src="logo"
-									class="block h-7 sm:h-10 w-auto ml-2 sm:ml-4 md:ml-6 lg:ml-2 xl:ml-7 2xl:ml-[70px] bg-white rounded-full px-2 py-1"
-									alt="Logo" /> -->
 							</Link>
 						</div>
 						<!-- <div
@@ -113,7 +164,8 @@ const leave = (el, done) => {
 							class="w-32 sm:w-1/2"
 							@keyup.enter="search" />
 
-						<Link
+						<!-- Backup of default layout Start -->
+						<!-- <Link
 							:href="route('dashboard')"
 							data-tooltip-target="tribekoto-tooltip"
 							class="bg-white p-0.5 rounded-full hidden sm:flex border border-red-500 hover:bg-red-500 hover:text-white hover:border-red-700 hover:shadow-md hover:scale-105 transition duration-200 ease-in-out">
@@ -187,7 +239,152 @@ const leave = (el, done) => {
 							<div
 								class="tooltip-arrow"
 								data-popper-arrow></div>
+						</div> -->
+
+						<!-- Backup of default layout End (Message and Notif not Included) -->
+
+						<!-- 3D Icons Start -->
+						<!-- <Link
+							:href="route('dashboard')"
+							data-tooltip-target="tribekoto-tooltip"
+							class="bg-white p-0.5 rounded-full hidden sm:flex hover:bg-red-500 hover:text-white hover:border-red-700 hover:shadow-md hover:scale-105 transition duration-200 ease-in-out">
+							<img
+								:src="tribekotoIcon"
+								class="hidden sm:flex h-auto md:w-12 xl:w-10"
+								alt="Logo" />
+						</Link> -->
+						<Link
+							:href="route('dashboard')"
+							data-tooltip-target="tribekoto-tooltip"
+							v-bind:class="[
+								'bg-white',
+								'p-0.5',
+								'rounded-full',
+								'hidden',
+								'sm:flex',
+								'hover:bg-red-500',
+								'hover:text-white',
+								'hover:border-red-700',
+								'hover:scale-110',
+								'transition',
+								'duration-200',
+								'ease-in-out',
+								tribekotoClass,
+							]">
+							<img
+								:src="tribekotoIcon"
+								class="hidden sm:flex h-auto md:w-12 xl:w-10"
+								alt="Logo" />
+						</Link>
+						<div
+							id="tribekoto-tooltip"
+							role="tooltip"
+							class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-blue-500 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+							Tribekoto
+							<div
+								class="tooltip-arrow"
+								data-popper-arrow></div>
 						</div>
+
+						<Link
+							:href="route('kalakalkoto')"
+							data-tooltip-target="kalakalkoto-tooltip"
+							v-bind:class="[
+								'bg-white',
+								'p-0.5',
+								'rounded-full',
+								'hidden',
+								'sm:flex',
+								'hover:bg-red-500',
+								'hover:text-white',
+								'hover:border-red-700',
+								'hover:scale-110',
+								'transition',
+								'duration-200',
+								'ease-in-out',
+								kalakalkotoClass,
+							]">
+							<img
+								:src="kalakalkotoIcon"
+								class="hidden sm:flex h-auto md:w-12 xl:w-10"
+								alt="Logo" />
+						</Link>
+						<div
+							id="kalakalkoto-tooltip"
+							role="tooltip"
+							class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-blue-500 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+							Kalakalkoto
+							<div
+								class="tooltip-arrow"
+								data-popper-arrow></div>
+						</div>
+
+						<Link
+							:href="route('adkoto')"
+							data-tooltip-target="adkoto-tooltip"
+							v-bind:class="[
+								'bg-white',
+								'p-0.5',
+								'rounded-full',
+								'hidden',
+								'sm:flex',
+								'hover:bg-red-500',
+								'hover:text-white',
+								'hover:border-red-700',
+								'hover:scale-110',
+								'transition',
+								'duration-200',
+								'ease-in-out',
+								adkotoClass,
+							]">
+							<img
+								:src="adkotoIcon"
+								class="hidden sm:flex md:h-auto md:w-12 xl:w-10"
+								alt="Logo" />
+						</Link>
+						<div
+							id="adkoto-tooltip"
+							role="tooltip"
+							class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-blue-500 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+							Adkoto
+							<div
+								class="tooltip-arrow"
+								data-popper-arrow></div>
+						</div>
+
+						<Link
+							:href="route('games.index')"
+							data-tooltip-target="games-tooltip"
+							v-bind:class="[
+								'bg-white',
+								'p-0.5',
+								'rounded-full',
+								'hidden',
+								'sm:flex',
+								'hover:bg-red-500',
+								'hover:text-white',
+								'hover:border-red-700',
+								'hover:scale-110',
+								'transition',
+								'duration-200',
+								'ease-in-out',
+								gamesClass,
+							]">
+							<img
+								:src="gameIcon"
+								class="hidden sm:flex md:h-auto md:w-12 xl:w-10"
+								alt="Logo" />
+						</Link>
+						<div
+							id="games-tooltip"
+							role="tooltip"
+							class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-blue-500 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+							Games
+							<div
+								class="tooltip-arrow"
+								data-popper-arrow></div>
+						</div>
+						<!-- 3D Icons End (Chat and Notif not included) -->
 
 						<!-- <Link
 							:href="route('chat.index')"

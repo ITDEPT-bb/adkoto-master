@@ -1,7 +1,7 @@
 <template>
 	<Head title="Item" />
 
-	<KalakalLayout>
+	<AuthenticatedLayout>
 		<div class="max-w-7xl mx-auto h-full overflow-y-auto p-4 scrollbar-thin">
 			<AuctionMenu />
 			<div class="px-4 mx-auto 2xl:px-0 my-4">
@@ -216,7 +216,7 @@
 				</Dialog>
 			</TransitionRoot>
 		</div>
-	</KalakalLayout>
+	</AuthenticatedLayout>
 
 	<UpdateProfileReminder />
 </template>
@@ -224,7 +224,7 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { usePage, Head, Link } from "@inertiajs/vue3";
-import KalakalLayout from "@/Layouts/KalakalLayout.vue";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
 import KalakalMenu from "@/Components/Kalakalkoto/KalakalMenu.vue";
 import AuctionMenu from "@/Components/Auction/AuctionMenu.vue";
