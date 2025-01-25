@@ -45,9 +45,11 @@
 
 <script setup>
 import { defineProps, watch } from "vue";
-import { useForm } from "@inertiajs/vue3";
+import { useForm, usePage } from "@inertiajs/vue3";
 import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+
+const user = usePage().props.auth.user;
 
 const props = defineProps({
 	isPrivate: {
@@ -57,11 +59,13 @@ const props = defineProps({
 });
 
 const form = useForm({
-	is_private: props.isPrivate ? 1 : 0,
+	// is_private: props.isPrivate ? 1 : 0,
+	is_private: user.is_private ? 1 : 0,
 });
 
 watch(
-	() => props.isPrivate,
+	// () => props.isPrivate,
+	() => user.is_private,
 	(newVal) => {
 		form.is_private = newVal ? 1 : 0;
 	}
