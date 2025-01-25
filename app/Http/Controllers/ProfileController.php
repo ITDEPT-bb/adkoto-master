@@ -149,6 +149,12 @@ class ProfileController extends Controller
         $user->is_private = $request->input('is_private');
         $user->save();
 
+        if (!$user->is_private) {
+            Follower::where('user_id', $user->id)
+                ->where('status', 'pending')
+                ->update(['status' => 'accepted']);
+        }
+
         return to_route('profile', $user)->with('success', 'Your privacy settings were updated.');
     }
 

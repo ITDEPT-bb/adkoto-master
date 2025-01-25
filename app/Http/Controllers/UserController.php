@@ -124,8 +124,10 @@ class UserController extends Controller
             ->where('status', 'pending')
             ->firstOrFail();
 
-        $followRequest->status = 'rejected';
-        $followRequest->save();
+        // $followRequest->status = 'rejected';
+        // $followRequest->save();
+
+        $followRequest->delete();
 
         $message = 'Follow request rejected';
         return back()->with('success', $message);
