@@ -65,7 +65,6 @@
 									<MessageIcon />
 									<p class="font-bold">Contact Seller</p>
 								</div>
-								<!-- </a> -->
 							</Link>
 						</div>
 
@@ -96,7 +95,7 @@
 				<div
 					v-if="kalakalitem.user.id === authUser.id"
 					class="flex-2">
-					<a
+					<Link
 						:href="
 							route('kalakalkoto.edit', {
 								id: kalakalitem.id,
@@ -104,7 +103,7 @@
 						"
 						class="bg-yellow-500 text-white py-1 px-2 rounded text-xs mr-2 hover:bg-yellow-800">
 						Edit
-					</a>
+					</Link>
 					<button
 						@click="openDeleteModal"
 						class="bg-red-500 text-white py-1 px-2 rounded text-xs m-2 hover:bg-red-800">

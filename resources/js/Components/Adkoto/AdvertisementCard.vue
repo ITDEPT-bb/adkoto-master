@@ -58,7 +58,7 @@
 		<div
 			v-if="advertisement.user.id === authUser.id"
 			class="flex-2">
-			<a
+			<Link
 				:href="
 					route('adkoto.edit', {
 						id: advertisement.id,
@@ -66,7 +66,7 @@
 				"
 				class="bg-yellow-500 text-white py-1 px-2 rounded text-xs mr-2">
 				Edit
-			</a>
+			</Link>
 			<button
 				@click="openDeleteModal"
 				class="bg-red-500 text-white py-1 px-2 rounded text-xs">
@@ -159,7 +159,7 @@
 
 <script setup>
 import { ref } from "vue";
-import { usePage } from "@inertiajs/vue3";
+import { Link, usePage } from "@inertiajs/vue3";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import UserIcon from "@/Components/Icons/UserIcon.vue";

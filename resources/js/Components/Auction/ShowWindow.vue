@@ -34,7 +34,7 @@
 					<div
 						v-if="item.user.id === authUser.id"
 						class="flex-2">
-						<!-- <a
+						<!-- <Link
                                 :href="
                                     route('kalakalkoto.edit', {
                                         id: item.id,
@@ -43,7 +43,7 @@
                                 class="bg-yellow-500 text-white py-1 px-2 rounded text-xs mr-2"
                             >
                                 Edit
-                            </a>
+                            </Link>
                             <button
                                 @click="openDeleteModal"
                                 class="bg-red-500 text-white py-1 px-2 rounded text-xs m-2"

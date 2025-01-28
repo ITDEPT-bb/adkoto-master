@@ -15,7 +15,7 @@
 				<template
 					v-for="notification in notifications"
 					:key="notification.id">
-					<a
+					<Link
 						:href="notification.data.route"
 						@click="markAsRead(notification)">
 						<li
@@ -47,7 +47,7 @@
 								</p>
 							</div>
 						</li>
-					</a>
+					</Link>
 				</template>
 			</ul>
 		</div>
@@ -59,7 +59,7 @@
 import { defineProps, ref } from "vue";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { Head } from "@inertiajs/vue3";
+import { Head, Link } from "@inertiajs/vue3";
 import AuthenticatedLayout from "@/Layouts/NotificationLayout.vue";
 import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
 import axiosClient from "@/axiosClient.js";

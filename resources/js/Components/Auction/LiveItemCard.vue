@@ -3,7 +3,7 @@
 		v-if="item"
 		class="block bg-white rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105">
 		<!-- <a :href="route('auction.show', { id: item.id })"> -->
-		<a :href="route('auction.watchStream')">
+		<Link :href="route('auction.watchStream')">
 			<div class="w-full h-36 sm:h-48 md:h-64 bg-gray-200 overflow-hidden">
 				<img
 					:src="item.attachments[0]?.image_path || 'https://via.placeholder.com/400'"
@@ -28,7 +28,7 @@
 					</p>
 				</div>
 			</div>
-		</a>
+		</Link>
 	</div>
 
 	<div
@@ -40,6 +40,7 @@
 
 <script setup>
 import { defineProps } from "vue";
+import { Link } from "@inertiajs/vue3";
 
 const props = defineProps({
 	item: Object,

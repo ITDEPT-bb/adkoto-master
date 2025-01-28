@@ -28,7 +28,7 @@
 		<ul
 			class="hidden text-sm font-semibold text-center text-gray-500 rounded-lg shadow sm:flex dark:divide-gray-700 dark:text-gray-400">
 			<li class="me-2 w-full focus-within:z-10 flex justify-center items-center align-middle">
-				<a
+				<Link
 					:href="route('kalakalkoto')"
 					class="inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group"
 					:class="{
@@ -38,11 +38,11 @@
 					<ShoppingBagIcon
 						class="w-6 h-6 me-1 text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300" />
 					<p>Kalakalkoto</p>
-				</a>
+				</Link>
 			</li>
 
 			<li class="me-2 w-full focus-within:z-10 flex justify-center items-center align-middle">
-				<a
+				<Link
 					:href="route('auction')"
 					class="inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group"
 					:class="{
@@ -51,7 +51,7 @@
 					}">
 					<UserGroupIcon
 						class="w-6 h-6 me-1 text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300" />Auction
-				</a>
+				</Link>
 			</li>
 		</ul>
 	</div>
@@ -59,6 +59,7 @@
 
 <script setup>
 import { router } from "@inertiajs/vue3";
+import Link from "@inertiajs/vue3";
 import ShoppingBagIcon from "./ShoppingBagIcon.vue";
 import UserGroupIcon from "./UserGroupIcon.vue";
 

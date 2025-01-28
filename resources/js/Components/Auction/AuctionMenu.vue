@@ -34,7 +34,7 @@
 					class="flex flex-col md:flex-row font-medium mt-2 md:mt-0 space-y-2 md:space-y-0 md:space-x-8 rtl:space-x-reverse text-sm">
 					<!-- Home Link -->
 					<li>
-						<a
+						<Link
 							:href="route('auction')"
 							:class="{
 								'text-gray-900 font-bold underline dark:text-white':
@@ -43,11 +43,11 @@
 									route().current() !== 'auction',
 							}">
 							Home
-						</a>
+						</Link>
 					</li>
 					<!-- Other Links -->
 					<li>
-						<a
+						<Link
 							:href="route('auction.showUserItems')"
 							:class="{
 								'text-gray-900 font-bold underline dark:text-white':
@@ -56,10 +56,10 @@
 									route().current() !== 'auction.showUserItems',
 							}">
 							View My Items
-						</a>
+						</Link>
 					</li>
 					<!-- <li>
-						<a
+						<Link
 							:href="route('auction.viewAllLive')"
 							:class="{
 								'text-gray-900 font-bold underline dark:text-white':
@@ -68,7 +68,7 @@
 									route().current() !== 'auction.viewAllLive',
 							}">
 							Live Bidding
-						</a>
+						</Link>
 					</li> -->
 				</ul>
 			</div>
@@ -96,6 +96,7 @@
 <script setup>
 import { ref } from "vue";
 import { PlusCircleIcon } from "@heroicons/vue/24/outline";
+import Link from "@inertiajs/vue3";
 import { usePage } from "@inertiajs/vue3";
 import RechargeModal from "@/Components/Auction/RechargeModal.vue";
 

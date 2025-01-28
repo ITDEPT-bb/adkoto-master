@@ -64,12 +64,12 @@
 
 								<!-- Render other file types -->
 								<div v-else>
-									<a
+									<Link
 										:href="`/storage/${attachment.path}`"
 										target="_blank"
 										class="text-blue-500 underline">
 										{{ attachment.name }}
-									</a>
+									</Link>
 								</div>
 							</div>
 						</div>
@@ -93,6 +93,7 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount, nextTick, watch } from "vue";
 import axiosClient from "@/axiosClient.js";
+import { Link } from "@inertiajs/vue3";
 import ImageModal from "@/Components/Chat/ImageModal.vue";
 
 const props = defineProps({

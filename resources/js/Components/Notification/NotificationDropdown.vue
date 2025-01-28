@@ -59,7 +59,7 @@
                                         class="flex items-center hover:cursor-pointer gap-3 justify-start px-4 py-2 text-sm text-gray-700"
                                         @click="markAsRead(notification)"
                                     > -->
-									<a
+									<Link
 										:href="notification.data.route"
 										class="flex items-center hover:cursor-pointer gap-3 justify-start px-4 py-2 text-sm text-gray-700"
 										@click="markAsRead(notification)">
@@ -102,7 +102,7 @@
 												{{ notification.data.message }}
 											</p>
 										</div>
-									</a>
+									</Link>
 									<p
 										class="text-gray-400 hover:cursor-pointer text-xs flex items-center justify-between px-4">
 										{{ dayjs(notification.created_at).fromNow() }}
