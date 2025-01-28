@@ -634,7 +634,9 @@ function cancelFollowRequest() {
 							<template
 								v-if="!isPrivate || isMyProfile || isCurrentUserFollower"
 								class="px-10">
-								<div class="flex mb-6 pt-5">
+								<div
+									v-if="isMyProfile"
+									class="flex mb-6 pt-5">
 									<!-- Followers Tab Button -->
 									<button
 										:class="{
