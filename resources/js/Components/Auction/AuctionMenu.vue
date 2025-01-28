@@ -96,7 +96,7 @@
 <script setup>
 import { ref } from "vue";
 import { PlusCircleIcon } from "@heroicons/vue/24/outline";
-import Link from "@inertiajs/vue3";
+import { Link } from "@inertiajs/vue3";
 import { usePage } from "@inertiajs/vue3";
 import RechargeModal from "@/Components/Auction/RechargeModal.vue";
 

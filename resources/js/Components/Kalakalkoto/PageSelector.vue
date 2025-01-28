@@ -59,7 +59,7 @@
 
 <script setup>
 import { router } from "@inertiajs/vue3";
-import Link from "@inertiajs/vue3";
+import { Link } from "@inertiajs/vue3";
 import ShoppingBagIcon from "./ShoppingBagIcon.vue";
 import UserGroupIcon from "./UserGroupIcon.vue";
 
