@@ -105,7 +105,7 @@ class FollowUser extends Notification
         }
 
         if ($this->status === 'accepted') {
-            return route('profile', ['username' => $this->user->username]);
+            return route('profile', ['user' => $this->user->username]);
         }
 
         return route('dashboard');
