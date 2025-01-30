@@ -40,5 +40,21 @@ class NotificationController extends Controller
 
         return response()->json(['message' => 'Notification marked as read.']);
     }
+
+    public function markAllAsRead(Request $request)
+    {
+        $user = auth()->user();
+
+        $user->unreadNotifications->markAsRead();
+        return to_route('dashboard')->with('success', 'Notification marked as read.');
+    }
+
+    public function deleteAllNotif(Request $request)
+    {
+        $user = auth()->user();
+
+        $user->notifications()->delete();
+        return to_route('dashboard')->with('success', 'All Notifications Deleted.');
+    }
 }
 

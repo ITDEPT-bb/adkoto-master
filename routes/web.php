@@ -149,6 +149,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/notifications/all', [NotificationController::class, 'fetchAllNotifications'])->name('notifications.fetchAllNotifications');
     Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
     Route::get('/users/{user}', [ProfileController::class, 'fetchProfileNotif']);
+    Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
+    Route::post('/notifications/delete-all', [NotificationController::class, 'deleteAllNotif'])->name('notifications.deleteAllNotif');
 });
 
 // Adkoto

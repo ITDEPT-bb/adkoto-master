@@ -5,7 +5,46 @@
 		<div class="bg-gray-100 py-4 px-8">
 			<h1 class="text-2xl font-bold text-gray-800">All Notifications</h1>
 		</div>
+		<div
+			v-show="showNotification && success"
+			class="my-2 py-2 px-3 font-medium text-sm bg-emerald-500 text-white">
+			{{ success }}
+		</div>
 		<div class="container mx-auto p-4 py-2 h-full overflow-y-auto scrollbar-thin">
+			<div class="flex justify-between mb-4">
+				<!-- Mark All as Read Button -->
+				<button
+					@click="handleMarkAllAsRead"
+					:disabled="isLoading"
+					title="Mark All as Read"
+					class="flex items-center gap-2 px-4 py-2 text-white font-medium rounded-lg transition-all duration-300"
+					:class="{
+						'bg-gray-300 cursor-not-allowed': isLoading,
+						'bg-blue-500 hover:bg-blue-600': !isLoading,
+					}">
+					<template v-if="!isLoading">
+						<span>Mark All as Read</span>
+					</template>
+					<p v-else>Loading...</p>
+				</button>
+
+				<!-- Delete All Notifications Button -->
+				<button
+					@click="handleDeleteAllNotifications"
+					:disabled="isLoading"
+					title="Delete All Notifications"
+					class="flex items-center gap-2 px-4 py-2 text-white font-medium rounded-lg transition-all duration-300"
+					:class="{
+						'bg-gray-300 cursor-not-allowed': isLoading,
+						'bg-red-500 hover:bg-red-600': !isLoading,
+					}">
+					<template v-if="!isLoading">
+						<span>Delete All</span>
+					</template>
+					<p v-else>Loading...</p>
+				</button>
+			</div>
+
 			<template v-if="notifications.length === 0">
 				<div class="p-4 text-center text-gray-500">No notifications available.</div>
 			</template>
@@ -59,7 +98,7 @@
 import { defineProps, ref } from "vue";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { Head, Link } from "@inertiajs/vue3";
+import { Head, Link, useForm } from "@inertiajs/vue3";
 import AuthenticatedLayout from "@/Layouts/NotificationLayout.vue";
 import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
 import axiosClient from "@/axiosClient.js";
@@ -75,9 +114,41 @@ const props = defineProps({
 		type: Object,
 		required: true,
 	},
+	status: {
+		type: String,
+	},
+	success: {
+		type: String,
+	},
 });
 
+const showNotification = ref(true);
 const notifications = ref(props.notifications);
+const isLoading = ref(false);
+
+function handleMarkAllAsRead() {
+	isLoading.value = true;
+
+	const form = useForm({});
+	form.post(route("notifications.markAllAsRead"), {
+		preserveScroll: true,
+		onFinish: () => {
+			isLoading.value = false;
+		},
+	});
+}
+
+function handleDeleteAllNotifications() {
+	isLoading.value = true;
+
+	const form = useForm({});
+	form.post(route("notifications.deleteAllNotif"), {
+		preserveScroll: true,
+		onFinish: () => {
+			isLoading.value = false;
+		},
+	});
+}
 
 const markAsRead = async (notification) => {
 	if (!notification.read_at) {
