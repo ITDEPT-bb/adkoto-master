@@ -28,7 +28,7 @@
 						}">
 						<span
 							v-if="message.message"
-							class="block break-words">
+							class="block break-words whitespace-pre-wrap">
 							{{ message.message }}
 						</span>
 
