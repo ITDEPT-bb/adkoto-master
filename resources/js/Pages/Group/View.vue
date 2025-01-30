@@ -35,11 +35,13 @@ const coverImageSrc = ref("");
 const thumbnailImageSrc = ref("");
 const showInviteUserModal = ref(false);
 const searchKeyword = ref("");
+const isLoading = ref(false);
 
 const authUser = usePage().props.auth.user;
 
 const isCurrentUserAdmin = computed(() => props.group.role === "admin");
 const isJoinedToGroup = computed(() => props.group.role && props.group.status === "approved");
+const isPendingToGroup = computed(() => props.group.role && props.group.status === "pending");
 
 const showNewGroupModal = ref(false);
 
@@ -164,10 +166,15 @@ function submitThurmbnailImage() {
 }
 
 function joinToGroup() {
+	isLoading.value = true;
+
 	const form = useForm({});
 
 	form.post(route("group.join", props.group.slug), {
 		preserveScroll: true,
+		onFinish: () => {
+			isLoading.value = false;
+		},
 	});
 }
 
@@ -253,17 +260,21 @@ const confirmLeave = () => {
 };
 
 const handleChatClick = async (groupId) => {
+	isLoading.value = true;
 	try {
 		const response = await axios.get(route("group.handle", { group_id: groupId }));
 
 		if (response.data.redirect) {
+			isLoading.value = false;
 			window.location.href = response.data.redirect;
 		}
 	} catch (error) {
 		if (error.response && error.response.status === 404) {
+			isLoading.value = false;
 			group_Id.value = groupId;
 			showNewGroupModal.value = true;
 		} else {
+			isLoading.value = false;
 			console.error("An unexpected error occurred", error);
 		}
 	}
@@ -414,6 +425,11 @@ const handleChatClick = async (groupId) => {
 							<div class="flex mt-6 me-1 gap-3 sm:me-0 sm:mt-0">
 								<PrimaryButton
 									v-if="authUser && isJoinedToGroup"
+									:disabled="isLoading"
+									:class="{
+										'cursor-not-allowed': isLoading,
+										'': !isLoading,
+									}"
 									@click="handleChatClick(group.id)">
 									Chat
 								</PrimaryButton>
@@ -431,13 +447,29 @@ const handleChatClick = async (groupId) => {
 								</PrimaryButton>
 								<PrimaryButton
 									v-if="authUser && !group.role && group.auto_approval"
+									:disabled="isLoading"
+									:class="{
+										'cursor-not-allowed': isLoading,
+										'': !isLoading,
+									}"
 									@click="joinToGroup">
 									Join Group
 								</PrimaryButton>
 								<PrimaryButton
 									v-if="authUser && !group.role && !group.auto_approval"
+									:disabled="isLoading"
+									:class="{
+										'cursor-not-allowed': isLoading,
+										'': !isLoading,
+									}"
 									@click="joinToGroup">
 									Request to join
+								</PrimaryButton>
+								<PrimaryButton
+									v-if="authUser && isPendingToGroup"
+									:disabled="true"
+									class="opacity-50 cursor-not-allowed">
+									Waiting for Approval
 								</PrimaryButton>
 							</div>
 						</div>
@@ -492,100 +524,111 @@ const handleChatClick = async (groupId) => {
 						</Tab>
 					</TabList>
 
-					<TabPanels class="mt-2">
-						<TabPanel>
-							<template v-if="posts">
-								<CreatePost :group="group" />
-								<PostList
-									v-if="posts.data.length"
-									:posts="posts.data"
-									class="flex-1" />
+					<template v-if="group.group_status === 'public' || isJoinedToGroup">
+						<TabPanels class="mt-2">
+							<TabPanel>
+								<template v-if="posts">
+									<CreatePost :group="group" />
+									<PostList
+										v-if="posts.data.length"
+										:posts="posts.data"
+										class="flex-1" />
+									<div
+										v-else
+										class="py-8 text-center dark:text-gray-100">
+										There are no posts in this group. Be the first and create it.
+									</div>
+								</template>
 								<div
 									v-else
 									class="py-8 text-center dark:text-gray-100">
-									There are no posts in this group. Be the first and create it.
+									You don't have permission to view these posts.
 								</div>
-							</template>
-							<div
-								v-else
-								class="py-8 text-center dark:text-gray-100">
-								You don't have permission to view these posts.
-							</div>
-						</TabPanel>
-						<TabPanel v-if="isJoinedToGroup">
-							<div class="mb-3">
-								<TextInput
-									:model-value="searchKeyword"
-									placeholder="Type to search"
-									class="w-full" />
-							</div>
-							<div class="grid grid-cols-2 gap-3">
-								<UserListItem
-									v-for="user of users"
-									:user="user"
-									:key="user.id"
-									:show-role-dropdown="isCurrentUserAdmin"
-									:disable-role-dropdown="group.user_id === user.id"
-									class="shadow rounded-lg"
-									@role-change="onRoleChange"
-									@delete="deleteUser" />
-							</div>
-						</TabPanel>
-						<TabPanel
-							v-if="isCurrentUserAdmin"
-							class="">
-							<div
-								v-if="requests.length"
-								class="grid grid-cols-2 gap-3">
-								<UserListItem
-									v-for="user of requests"
-									:user="user"
-									:key="user.id"
-									:for-approve="true"
-									class="shadow rounded-lg"
-									@approve="approveUser"
-									@reject="rejectUser" />
-							</div>
-							<div class="py-8 text-center dark:text-gray-100">There are no pending requests.</div>
-						</TabPanel>
-						<!-- <TabPanel class="bg-white p-3 shadow"> -->
-						<TabPanel>
-							<TabPhotos :photos="photos" />
-						</TabPanel>
-						<!-- <TabPanel class="bg-white p-3 shadow"> -->
-						<TabPanel>
-							<template v-if="isCurrentUserAdmin && isJoinedToGroup">
-								<GroupForm :form="aboutForm" />
-								<PrimaryButton
-									@click="updateGroup"
-									class="mt-2">
-									Submit
-								</PrimaryButton>
-								<PrimaryButton
-									@click="openDeleteModalAds"
-									class="ml-4 mt-2 bg-red-500 hover:bg-red-600"
-									color="red">
-									Delete Group
-								</PrimaryButton>
-							</template>
+							</TabPanel>
+							<TabPanel v-if="isJoinedToGroup">
+								<div class="mb-3">
+									<TextInput
+										:model-value="searchKeyword"
+										placeholder="Type to search"
+										class="w-full" />
+								</div>
+								<div class="grid grid-cols-2 gap-3">
+									<UserListItem
+										v-for="user of users"
+										:user="user"
+										:key="user.id"
+										:show-role-dropdown="isCurrentUserAdmin"
+										:disable-role-dropdown="group.user_id === user.id"
+										class="shadow rounded-lg"
+										@role-change="onRoleChange"
+										@delete="deleteUser" />
+								</div>
+							</TabPanel>
+							<TabPanel
+								v-if="isCurrentUserAdmin"
+								class="">
+								<div
+									v-if="requests.length"
+									class="grid grid-cols-2 gap-3">
+									<UserListItem
+										v-for="user of requests"
+										:user="user"
+										:key="user.id"
+										:for-approve="true"
+										class="shadow rounded-lg"
+										@approve="approveUser"
+										@reject="rejectUser" />
+								</div>
+								<div
+									v-else
+									class="py-8 text-center dark:text-gray-100">
+									There are no pending requests.
+								</div>
+							</TabPanel>
+							<!-- <TabPanel class="bg-white p-3 shadow"> -->
+							<TabPanel>
+								<TabPhotos :photos="photos" />
+							</TabPanel>
+							<!-- <TabPanel class="bg-white p-3 shadow"> -->
+							<TabPanel>
+								<template v-if="isCurrentUserAdmin && isJoinedToGroup">
+									<GroupForm :form="aboutForm" />
+									<PrimaryButton
+										@click="updateGroup"
+										class="mt-2">
+										Submit
+									</PrimaryButton>
+									<PrimaryButton
+										@click="openDeleteModalAds"
+										class="ml-4 mt-2 bg-red-500 hover:bg-red-600"
+										color="red">
+										Delete Group
+									</PrimaryButton>
+								</template>
 
-							<div
-								v-else
-								class="ck-content-output dark:text-gray-100"
-								v-html="group.about"></div>
+								<div
+									v-else
+									class="ck-content-output dark:text-gray-100"
+									v-html="group.about"></div>
 
-							<div
-								class="flex justify-end"
-								v-if="isJoinedToGroup">
-								<PrimaryButton
-									@click="openLeaveModal"
-									class="ml-4 mt-2 bg-red-500 hover:bg-red-600"
-									color="red">
-									Leave Group
-								</PrimaryButton>
-							</div>
-						</TabPanel>
-					</TabPanels>
+								<div
+									class="flex justify-end"
+									v-if="isJoinedToGroup">
+									<PrimaryButton
+										@click="openLeaveModal"
+										class="ml-4 mt-2 bg-red-500 hover:bg-red-600"
+										color="red">
+										Leave Group
+									</PrimaryButton>
+								</div>
+							</TabPanel>
+						</TabPanels>
+					</template>
+					<template v-else>
+						<div class="py-8 text-center dark:text-gray-100">
+							<p>This is a private group. You need to join it to see these content.</p>
+						</div>
+					</template>
 				</TabGroup>
 			</div>
 

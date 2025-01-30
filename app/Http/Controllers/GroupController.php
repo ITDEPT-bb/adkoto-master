@@ -133,12 +133,36 @@ class GroupController extends Controller
     /**
      * Update the specified resource in storage.
      */
+    // public function update(UpdateGroupRequest $request, Group $group)
+    // {
+    //     $group->update($request->validated());
+
+    //     return back()->with('success', "Group was updated");
+    // }
     public function update(UpdateGroupRequest $request, Group $group)
     {
-        $group->update($request->validated());
+        $validatedData = $request->validated();
+
+        $wasPrivate = $group->group_status !== 'public' && $validatedData['group_status'] === 'public';
+
+        $group->update($validatedData);
+
+        if ($wasPrivate) {
+            $pendingUsers = GroupUser::where('group_id', $group->id)
+                ->where('status', GroupUserStatus::PENDING->value)
+                ->get();
+
+            foreach ($pendingUsers as $groupUser) {
+                $groupUser->status = GroupUserStatus::APPROVED->value;
+                $groupUser->save();
+
+                $groupUser->user->notify(new RequestApproved($groupUser->group, $groupUser->user, true));
+            }
+        }
 
         return back()->with('success', "Group was updated");
     }
+
 
     /**
      * Remove the specified resource from storage.
