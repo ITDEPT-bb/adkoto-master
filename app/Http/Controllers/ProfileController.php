@@ -14,6 +14,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 
 use App\Http\Resources\UserResource;
+use App\Models\Block;
 use App\Models\Follower;
 use App\Models\Post;
 use App\Models\PostAttachment;
@@ -46,6 +47,17 @@ class ProfileController extends Controller
         //         ->where('status', 'accepted')
         //         ->exists();
         // }
+
+        $isBlockedByAuthUser = Block::query()
+            ->where('user_id', auth()->id()) // Authenticated user blocked the other user
+            ->where('blocked_user_id', $user->id)
+            ->exists();
+
+        $isBlockedByOtherUser = Block::query()
+            ->where('user_id', $user->id) // Other user blocked the authenticated user
+            ->where('blocked_user_id', auth()->id())
+            ->exists();
+
         $isCurrentUserFollower = false;
         $followRequestSent = false;
 
@@ -64,6 +76,13 @@ class ProfileController extends Controller
         $followerCount = Follower::where('user_id', $user->id)
             ->where('status', 'accepted')
             ->count();
+        // $followerCount = Follower::where('user_id', $user->id)
+        //     ->where('status', 'accepted') 
+        //     ->whereDoesntHave('blockers', function ($query) use ($user) {
+        //         $query->where('blocked_user_id', $user->id)  
+        //             ->orWhere('user_id', $user->id);      
+        //     })
+        //     ->count();
 
         $posts = Post::postsForTimeline(Auth::id(), false)
             ->leftJoin('users AS u', 'u.pinned_post_id', 'posts.id')
@@ -79,10 +98,31 @@ class ProfileController extends Controller
         }
 
         // $followers = $user->followers;
-        $followers = $user->followers()->wherePivot('status', 'accepted')->get();
-        $PendingFollowers = $user->followers()->wherePivot('status', 'pending')->get();
+        // $followers = $user->followers()->wherePivot('status', 'accepted')->get();
+        $followers = $user->followers()
+            ->wherePivot('status', 'accepted')
+            ->whereDoesntHave('blocks', function ($query) use ($user) {
+                $query->where('blocked_user_id', $user->id)
+                    ->orWhere('user_id', $user->id);
+            })
+            ->get();
 
-        $followings = $user->followings;
+        // $PendingFollowers = $user->followers()->wherePivot('status', 'pending')->get();
+        $PendingFollowers = $user->followers()
+            ->wherePivot('status', 'pending')
+            ->whereDoesntHave('blocks', function ($query) use ($user) {
+                $query->where('blocked_user_id', $user->id)
+                    ->orWhere('user_id', $user->id);
+            })
+            ->get();
+
+        // $followings = $user->followings;
+        $followings = $user->followings()
+            ->whereDoesntHave('blocks', function ($query) use ($user) {
+                $query->where('blocked_user_id', $user->id)  // Exclude users who blocked the current user
+                    ->orWhere('user_id', $user->id);        // Exclude users that the current user has blocked
+            })
+            ->get();
 
         $photos = PostAttachment::query()
             ->where('mime', 'like', 'image/%')
@@ -107,7 +147,9 @@ class ProfileController extends Controller
             'followers' => UserResource::collection($followers),
             'PendingFollowers' => UserResource::collection($PendingFollowers),
             'followings' => UserResource::collection($followings),
-            'photos' => PostAttachmentResource::collection($photos)
+            'photos' => PostAttachmentResource::collection($photos),
+            'isBlockedByAuthUser' => $isBlockedByAuthUser,
+            'isBlockedByOtherUser' => $isBlockedByOtherUser,
         ]);
     }
 

@@ -25,6 +25,10 @@ import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
 import followIcon from "/public/img/icons/heartfollow.png";
 import unfollowIcon from "/public/img/icons/heartunfollow.png";
 import MessageIcon from "@/Components/Icons/MessageIcon.vue";
+import NoSymbol from "@/Components/Icons/NoSymbol.vue";
+import PlusCircle from "@/Components/Icons/PlusCircle.vue";
+
+import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from "@headlessui/vue";
 
 // const imagesForm = useForm({
 //     avatar: null,
@@ -73,6 +77,8 @@ const props = defineProps({
 	followRequestSent: Boolean,
 	followRequestPending: Boolean,
 	followRequest: Boolean,
+	isBlockedByAuthUser: Boolean,
+	isBlockedByOtherUser: Boolean,
 	followerCount: Number,
 	user: {
 		type: Object,
@@ -217,8 +223,51 @@ function rejectFollowRequest(userId) {
 	});
 }
 
+const isConfirmingBlock = ref(false);
+const isConfirmingUnblock = ref(false);
+
+function confirmBlock() {
+	isConfirmingBlock.value = true;
+}
+
+function confirmUnblock() {
+	isConfirmingUnblock.value = true;
+}
+
+function blockUser() {
+	isLoading.value = true;
+	isConfirmingBlock.value = false;
+
+	const form = useForm({});
+	form.post(route("user.block", props.user.id), {
+		preserveScroll: true,
+		onFinish: () => {
+			isLoading.value = false;
+		},
+	});
+}
+
+function unblockUser() {
+	isLoading.value = true;
+	isConfirmingUnblock.value = false;
+
+	const form = useForm({});
+	form.post(route("user.unblock", props.user.id), {
+		preserveScroll: true,
+		onFinish: () => {
+			isLoading.value = false;
+		},
+	});
+}
+
 function cancelFollowRequest() {
 	unfollowUser();
+}
+
+const showPosts = ref(false);
+
+function toggleShowPosts() {
+	showPosts.value = !showPosts.value;
 }
 </script>
 
@@ -372,17 +421,53 @@ function cancelFollowRequest() {
 								<p class="text-sm text-gray-500 mb-1">@{{ user.username }}</p>
 								<p class="text-xs text-gray-500 ps-1">{{ followerCount }} follower(s)</p>
 							</div>
+							<!-- <div>
+								<button
+									type="button"
+									v-if="!isBlockedByAuthUser"
+									@click="blockUser(userId)"
+									:disabled="isLoading"
+									:class="{
+										'bg-gray-300 cursor-not-allowed': isLoading,
+										'bg-red-500': !isLoading,
+									}"
+									class="inline-flex items-center justify-center rounded-lg p-2 h-8 w-auto transition duration-500 ease-in-out text-gray-500 hover:bg-gray-300 focus:outline-none">
+									<template v-if="!isLoading">
+										<NoSymbol />
+									</template>
+									<p v-else>Loading...</p>
+								</button>
+
+								<button
+									type="button"
+									v-else
+									@click="unblockUser(userId)"
+									:disabled="isLoading"
+									:class="{
+										'bg-gray-300 cursor-not-allowed': isLoading,
+										'bg-white': !isLoading,
+									}"
+									class="inline-flex items-center justify-center rounded-lg p-2 h-8 w-auto transition duration-500 ease-in-out text-gray-500 hover:bg-gray-300 focus:outline-none">
+									<template v-if="!isLoading">
+										<PlusCircle />
+									</template>
+									<p v-else>Loading...</p>
+								</button>
+							</div> -->
 
 							<div
 								v-if="!isMyProfile"
 								class="flex mt-6 me-1 gap-3 sm:me-0 sm:mt-0">
-								<Link :href="`/chat/conversation/adktu/${user.id}`">
-									<button
-										type="button"
-										class="inline-flex items-center justify-center rounded-lg p-2 h-8 w-auto transition duration-500 ease-in-out text-gray-500 hover:bg-gray-300 focus:outline-none">
-										<MessageIcon />
-									</button>
-								</Link>
+								<template v-if="!isBlockedByOtherUser && !isBlockedByAuthUser">
+									<Link :href="`/chat/conversation/adktu/${user.id}`">
+										<button
+											type="button"
+											class="inline-flex items-center justify-center rounded-lg p-2 h-8 w-auto transition duration-500 ease-in-out text-gray-500 hover:bg-gray-300 focus:outline-none">
+											<MessageIcon />
+										</button>
+									</Link>
+								</template>
+
 								<!-- <PrimaryButton
 									v-if="!isCurrentUserFollower && !followRequestSent && isPrivate"
 									@click="followUser"
@@ -446,392 +531,525 @@ function cancelFollowRequest() {
 										Loading...
 									</p>
 								</DangerButton> -->
-								<PrimaryButton
-									v-if="!isCurrentUserFollower && !followRequestSent"
-									@click="followUser"
-									:disabled="isLoading"
-									:class="{
-										'bg-gray-300 cursor-not-allowed': isLoading,
-										'bg-blue-500': !isLoading,
-									}">
-									<template v-if="!isLoading">
-										<p class="hidden sm:flex">Follow</p>
-									</template>
-									<p
-										v-else
-										class="hidden sm:flex">
-										Loading...
-									</p>
-								</PrimaryButton>
+								<template v-if="!isBlockedByAuthUser">
+									<PrimaryButton
+										v-if="!isCurrentUserFollower && !followRequestSent"
+										@click="followUser"
+										:disabled="isLoading"
+										:class="{
+											'bg-gray-300 cursor-not-allowed': isLoading,
+											'bg-blue-500': !isLoading,
+										}">
+										<template v-if="!isLoading">
+											<p class="hidden sm:flex">Follow</p>
+										</template>
+										<p
+											v-else
+											class="hidden sm:flex">
+											Loading...
+										</p>
+									</PrimaryButton>
 
-								<SecondaryButton
-									v-else-if="followRequestSent"
-									@click="cancelFollowRequest"
-									:disabled="isLoading"
-									:class="{
-										'bg-gray-300 cursor-not-allowed': isLoading,
-										'bg-red-500': !isLoading,
-									}">
-									<template v-if="!isLoading">
-										<p class="hidden sm:flex">Request Pending</p>
-									</template>
-									<p
-										v-else
-										class="hidden sm:flex">
-										Loading...
-									</p>
-								</SecondaryButton>
+									<SecondaryButton
+										v-else-if="followRequestSent"
+										@click="cancelFollowRequest"
+										:disabled="isLoading"
+										:class="{
+											'bg-gray-300 cursor-not-allowed': isLoading,
+											'bg-red-500': !isLoading,
+										}">
+										<template v-if="!isLoading">
+											<p class="hidden sm:flex">Request Pending</p>
+										</template>
+										<p
+											v-else
+											class="hidden sm:flex">
+											Loading...
+										</p>
+									</SecondaryButton>
 
-								<DangerButton
-									v-else-if="isCurrentUserFollower"
-									@click="unfollowUser"
-									:disabled="isLoading"
-									:class="{
-										'bg-gray-300 cursor-not-allowed': isLoading,
-										'bg-red-500': !isLoading,
-									}">
-									<template v-if="!isLoading">
-										<p class="hidden sm:flex">Unfollow</p>
-									</template>
-									<p
+									<DangerButton
+										v-else-if="isCurrentUserFollower"
+										@click="unfollowUser"
+										:disabled="isLoading"
+										:class="{
+											'bg-gray-300 cursor-not-allowed': isLoading,
+											'bg-red-500': !isLoading,
+										}">
+										<template v-if="!isLoading">
+											<p class="hidden sm:flex">Unfollow</p>
+										</template>
+										<p
+											v-else
+											class="hidden sm:flex">
+											Loading...
+										</p>
+									</DangerButton>
+								</template>
+
+								<template v-if="!isBlockedByOtherUser">
+									<!-- Block Button -->
+									<!-- Block Button -->
+									<button
+										v-if="!isBlockedByAuthUser"
+										@click="confirmBlock"
+										:disabled="isLoading"
+										title="Block User"
+										class="flex items-center gap-2 px-4 py-2 text-white font-medium rounded-lg transition-all duration-300"
+										:class="{
+											'bg-gray-300 cursor-not-allowed': isLoading,
+											'bg-red-500 hover:bg-red-600': !isLoading,
+										}">
+										<template v-if="!isLoading">
+											<NoSymbol class="w-5 h-5" />
+											<!-- <span>Block</span> -->
+										</template>
+										<p v-else>Loading...</p>
+									</button>
+
+									<!-- Unblock Button -->
+									<button
 										v-else
-										class="hidden sm:flex">
-										Loading...
-									</p>
-								</DangerButton>
+										@click="confirmUnblock"
+										:disabled="isLoading"
+										title="Unblock User"
+										class="flex items-center gap-2 px-4 py-2 text-white font-medium rounded-lg transition-all duration-300"
+										:class="{
+											'bg-gray-300 cursor-not-allowed': isLoading,
+											'bg-blue-500 hover:bg-blue-600': !isLoading,
+										}">
+										<template v-if="!isLoading">
+											<PlusCircle class="w-5 h-5" />
+											<!-- <span>Unblock</span> -->
+										</template>
+										<p v-else>Loading...</p>
+									</button>
+
+									<!-- Block Confirmation Modal -->
+									<TransitionRoot
+										as="template"
+										:show="isConfirmingBlock">
+										<Dialog
+											as="div"
+											class="relative z-50"
+											@close="isConfirmingBlock = false">
+											<div
+												class="fixed inset-0 bg-black bg-opacity-30"
+												aria-hidden="true" />
+											<div class="fixed inset-0 flex items-center justify-center p-4">
+												<DialogPanel class="bg-white rounded-lg shadow-xl p-6 max-w-sm w-full">
+													<DialogTitle class="text-lg font-medium text-gray-900"
+														>Confirm Block</DialogTitle
+													>
+													<p class="mt-2 text-sm text-gray-600">
+														Are you sure you want to block this user?
+													</p>
+													<div class="mt-4 flex justify-end space-x-2">
+														<button
+															@click="isConfirmingBlock = false"
+															class="px-4 py-2 text-gray-600 bg-gray-200 rounded-md">
+															Cancel
+														</button>
+														<button
+															@click="blockUser"
+															class="px-4 py-2 text-white bg-red-500 hover:bg-red-600 rounded-md">
+															Block
+														</button>
+													</div>
+												</DialogPanel>
+											</div>
+										</Dialog>
+									</TransitionRoot>
+
+									<!-- Unblock Confirmation Modal -->
+									<TransitionRoot
+										as="template"
+										:show="isConfirmingUnblock">
+										<Dialog
+											as="div"
+											class="relative z-50"
+											@close="isConfirmingUnblock = false">
+											<div
+												class="fixed inset-0 bg-black bg-opacity-30"
+												aria-hidden="true" />
+											<div class="fixed inset-0 flex items-center justify-center p-4">
+												<DialogPanel class="bg-white rounded-lg shadow-xl p-6 max-w-sm w-full">
+													<DialogTitle class="text-lg font-medium text-gray-900"
+														>Confirm Unblock</DialogTitle
+													>
+													<p class="mt-2 text-sm text-gray-600">
+														Are you sure you want to unblock this user?
+													</p>
+													<div class="mt-4 flex justify-end space-x-2">
+														<button
+															@click="isConfirmingUnblock = false"
+															class="px-4 py-2 text-gray-600 bg-gray-200 rounded-md">
+															Cancel
+														</button>
+														<button
+															@click="unblockUser"
+															class="px-4 py-2 text-white bg-blue-500 hover:bg-blue-600 rounded-md">
+															Unblock
+														</button>
+													</div>
+												</DialogPanel>
+											</div>
+										</Dialog>
+									</TransitionRoot>
+								</template>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
+
+			<div
+				v-if="isBlockedByAuthUser"
+				class="bg-red-100 text-red-600 p-4 rounded-lg mb-4">
+				You have blocked this user.
+				<SecondaryButton
+					class="ml-4 bg-blue-500 text-dark px-4 py-2 rounded hover:bg-blue-600"
+					@click="toggleShowPosts">
+					{{ showPosts ? "Hide Profile Details" : "Show Profile Details" }}
+				</SecondaryButton>
+			</div>
 			<!-- <div class="border-t p-4 pt-0"> -->
-			<div class="border-t m-4 mt-0">
-				<TabGroup>
-					<TabList class="flex bg-white dark:bg-slate-950 dark:text-white">
-						<Tab
-							v-slot="{ selected }"
-							as="template">
-							<TabItem
-								text="Posts"
-								:selected="selected" />
-						</Tab>
-						<Tab
-							v-slot="{ selected }"
-							as="template">
-							<TabItem
-								text="Followers"
-								:selected="selected" />
-						</Tab>
-						<Tab
-							v-slot="{ selected }"
-							as="template">
-							<TabItem
-								text="Followings"
-								:selected="selected" />
-						</Tab>
-						<Tab
-							v-slot="{ selected }"
-							as="template">
-							<TabItem
-								text="Photos"
-								:selected="selected" />
-						</Tab>
-						<Tab
-							v-if="isMyProfile"
-							v-slot="{ selected }"
-							as="template">
-							<TabItem
-								text="My Profile"
-								:selected="selected" />
-						</Tab>
-					</TabList>
-
-					<TabPanels class="mt-2">
-						<TabPanel>
-							<div class="bg-gray-100">
-								<div class="grid max-w-7xl mx-auto lg:grid-cols-12 gap-3 p-4 h-auto">
-									<!-- <div
-                                        class="lg:col-span-4 lg:order-1 h-full overflow-hidden"
-                                    >
-                                        <FollowingList :users="followings" />
-                                    </div> -->
-									<!-- <div
-										class="lg:col-span-12 lg:order-2 h-auto w-full mx-auto overflow-hidden lg:px-10 flex flex-col">
-										<template v-if="posts">
-											<template v-if="isMyProfile">
-												<CreatePost />
-											</template>
-											<PostList
-												:posts="posts.data"
-												class="flex-1" />
-										</template>
-										<div
-											v-else
-											class="py-8 text-center dark:text-gray-100">
-											You don't have permission to view these posts.
-										</div>
-									</div> -->
-									<div
-										class="lg:col-span-12 lg:order-2 h-auto w-full mx-auto overflow-hidden lg:px-10 flex flex-col">
-										<template v-if="!isPrivate || isMyProfile || isCurrentUserFollower">
-											<!-- Check if posts exist -->
-											<template v-if="posts">
-												<template v-if="isMyProfile">
-													<CreatePost />
-												</template>
-												<PostList
-													:posts="posts.data"
-													class="flex-1" />
-											</template>
-											<!-- No posts available -->
-											<div
-												v-else
-												class="py-8 text-center dark:text-gray-100">
-												No posts available.
-											</div>
-										</template>
-
-										<!-- If the profile is private and the user doesn't have access -->
-										<div
-											v-else
-											class="py-8 text-center dark:text-gray-100">
-											You don't have permission to view these posts.
-										</div>
-									</div>
-								</div>
-							</div>
-						</TabPanel>
-						<!-- <TabPanel>
-							<template v-if="!isPrivate || isMyProfile || isCurrentUserFollower">
-								<div class="mb-3">
-									<TextInput
-										:model-value="searchFollowersKeyword"
-										placeholder="Type to search"
-										class="w-full" />
-								</div>
-								<div
-									v-if="followers.length"
-									class="grid grid-cols-2 gap-3">
-									<UserListItem
-										v-for="user of followers"
-										:user="user"
-										:key="user.id"
-										class="shadow rounded-lg" />
-								</div>
-								<div
-									v-else
-									class="text-center py-8">
-									User does not have followers.
-								</div>
-							</template>
-							<div
-								v-else
-								class="py-8 text-center dark:text-gray-100">
-								You don't have permission to view this user's followers.
-							</div>
-						</TabPanel> -->
-						<TabPanel>
-							<template
-								v-if="!isPrivate || isMyProfile || isCurrentUserFollower"
-								class="px-10">
-								<div
+			<template v-if="!isBlockedByOtherUser">
+				<template v-if="!isBlockedByOtherUser && (!isBlockedByAuthUser || showPosts)">
+					<div class="border-t m-4 mt-0">
+						<TabGroup>
+							<TabList class="flex bg-white dark:bg-slate-950 dark:text-white">
+								<Tab
+									v-slot="{ selected }"
+									as="template">
+									<TabItem
+										text="Posts"
+										:selected="selected" />
+								</Tab>
+								<Tab
+									v-slot="{ selected }"
+									as="template">
+									<TabItem
+										text="Followers"
+										:selected="selected" />
+								</Tab>
+								<Tab
+									v-slot="{ selected }"
+									as="template">
+									<TabItem
+										text="Followings"
+										:selected="selected" />
+								</Tab>
+								<Tab
+									v-slot="{ selected }"
+									as="template">
+									<TabItem
+										text="Photos"
+										:selected="selected" />
+								</Tab>
+								<Tab
 									v-if="isMyProfile"
-									class="flex mb-6 pt-5">
-									<!-- Followers Tab Button -->
-									<button
-										:class="{
-											'bg-blue-500 text-white': isFollowersActive,
-											'bg-gray-300 text-gray-800': !isFollowersActive,
-										}"
-										@click="isFollowersActive = true"
-										class="px-4 py-2 rounded-l-lg focus:outline-none">
-										Followers
-									</button>
+									v-slot="{ selected }"
+									as="template">
+									<TabItem
+										text="My Profile"
+										:selected="selected" />
+								</Tab>
+							</TabList>
 
-									<!-- Pending Followers Tab Button -->
-									<button
-										:class="{
-											'bg-blue-500 text-white': !isFollowersActive,
-											'bg-gray-300 text-gray-800': isFollowersActive,
-										}"
-										@click="isFollowersActive = false"
-										class="px-4 py-2 rounded-r-lg focus:outline-none">
-										Pending Followers
-									</button>
-								</div>
-
-								<div class="mb-3">
-									<TextInput
-										:model-value="searchFollowersKeyword"
-										placeholder="Type to search"
-										class="w-full" />
-								</div>
-
-								<div
-									v-if="isFollowersActive"
-									class="flex-1 px-1">
-									<div
-										v-if="followers.length"
-										class="grid grid-cols-2 gap-3">
-										<UserListItem
-											v-for="user of followers"
-											:user="user"
-											:key="user.id"
-											class="shadow rounded-lg" />
-									</div>
-									<div
-										v-else
-										class="text-center py-8">
-										User does not have followers.
-									</div>
-								</div>
-
-								<div
-									v-else
-									class="flex-1 px-1">
-									<div
-										v-if="PendingFollowers.length"
-										class="mb-6">
-										<!-- <h3 class="text-lg font-medium mb-2">Pending Follow Requests</h3> -->
-										<div class="grid grid-cols-2 gap-3">
-											<UserListItem
-												v-for="user of PendingFollowers"
-												:key="user.id"
-												:user="user"
-												class="shadow rounded-lg">
-												<template v-slot:actions>
-													<div class="flex gap-6">
-														<!-- Accept Follow Request Button -->
-														<PrimaryButton
-															@click="acceptFollowRequest(user.id)"
-															:disabled="isLoading || user.isAccepted"
-															:class="{
-																'bg-gray-300 cursor-not-allowed': isLoading || user.isAccepted,
-																'bg-green-500': !isLoading && !user.isAccepted,
-															}">
-															<template v-if="!isLoading && !user.isAccepted">Accept</template>
-															<p
-																v-else
-																class="hidden sm:flex">
-																Loading...
-															</p>
-														</PrimaryButton>
-
-														<!-- Reject Follow Request Button -->
-														<PrimaryButton
-															@click="rejectFollowRequest(user.id)"
-															:disabled="isLoading || user.isAccepted"
-															:class="{
-																'bg-gray-300 cursor-not-allowed': isLoading || user.isAccepted,
-																'bg-red-500': !isLoading && !user.isAccepted,
-															}">
-															<template v-if="!isLoading && !user.isAccepted">Reject</template>
-															<p
-																v-else
-																class="hidden sm:flex">
-																Loading...
-															</p>
-														</PrimaryButton>
+							<TabPanels class="mt-2">
+								<TabPanel>
+									<div class="bg-gray-100">
+										<div class="grid max-w-7xl mx-auto lg:grid-cols-12 gap-3 p-4 h-auto">
+											<!-- <div
+													class="lg:col-span-4 lg:order-1 h-full overflow-hidden"
+												>
+													<FollowingList :users="followings" />
+												</div> -->
+											<!-- <div
+													class="lg:col-span-12 lg:order-2 h-auto w-full mx-auto overflow-hidden lg:px-10 flex flex-col">
+													<template v-if="posts">
+														<template v-if="isMyProfile">
+															<CreatePost />
+														</template>
+														<PostList
+															:posts="posts.data"
+															class="flex-1" />
+													</template>
+													<div
+														v-else
+														class="py-8 text-center dark:text-gray-100">
+														You don't have permission to view these posts.
+													</div>
+												</div> -->
+											<div
+												class="lg:col-span-12 lg:order-2 h-auto w-full mx-auto overflow-hidden lg:px-10 flex flex-col">
+												<template v-if="!isPrivate || isMyProfile || isCurrentUserFollower">
+													<!-- Check if posts exist -->
+													<template v-if="posts">
+														<template v-if="isMyProfile">
+															<CreatePost />
+														</template>
+														<PostList
+															:posts="posts.data"
+															class="flex-1" />
+													</template>
+													<!-- No posts available -->
+													<div
+														v-else
+														class="py-8 text-center dark:text-gray-100">
+														No posts available.
 													</div>
 												</template>
-											</UserListItem>
+
+												<!-- If the profile is private and the user doesn't have access -->
+												<div
+													v-else
+													class="py-8 text-center dark:text-gray-100">
+													You don't have permission to view these posts.
+												</div>
+											</div>
 										</div>
 									</div>
+								</TabPanel>
+								<!-- <TabPanel>
+										<template v-if="!isPrivate || isMyProfile || isCurrentUserFollower">
+											<div class="mb-3">
+												<TextInput
+													:model-value="searchFollowersKeyword"
+													placeholder="Type to search"
+													class="w-full" />
+											</div>
+											<div
+												v-if="followers.length"
+												class="grid grid-cols-2 gap-3">
+												<UserListItem
+													v-for="user of followers"
+													:user="user"
+													:key="user.id"
+													class="shadow rounded-lg" />
+											</div>
+											<div
+												v-else
+												class="text-center py-8">
+												User does not have followers.
+											</div>
+										</template>
+										<div
+											v-else
+											class="py-8 text-center dark:text-gray-100">
+											You don't have permission to view this user's followers.
+										</div>
+									</TabPanel> -->
+								<TabPanel>
+									<template
+										v-if="!isPrivate || isMyProfile || isCurrentUserFollower"
+										class="px-10">
+										<div
+											v-if="isMyProfile"
+											class="flex mb-6 pt-5">
+											<!-- Followers Tab Button -->
+											<button
+												:class="{
+													'bg-blue-500 text-white': isFollowersActive,
+													'bg-gray-300 text-gray-800': !isFollowersActive,
+												}"
+												@click="isFollowersActive = true"
+												class="px-4 py-2 rounded-l-lg focus:outline-none">
+												Followers
+											</button>
+
+											<!-- Pending Followers Tab Button -->
+											<button
+												:class="{
+													'bg-blue-500 text-white': !isFollowersActive,
+													'bg-gray-300 text-gray-800': isFollowersActive,
+												}"
+												@click="isFollowersActive = false"
+												class="px-4 py-2 rounded-r-lg focus:outline-none">
+												Pending Followers
+											</button>
+										</div>
+
+										<div class="mb-3">
+											<TextInput
+												:model-value="searchFollowersKeyword"
+												placeholder="Type to search"
+												class="w-full" />
+										</div>
+
+										<div
+											v-if="isFollowersActive"
+											class="flex-1 px-1">
+											<div
+												v-if="followers.length"
+												class="grid grid-cols-2 gap-3">
+												<UserListItem
+													v-for="user of followers"
+													:user="user"
+													:key="user.id"
+													class="shadow rounded-lg" />
+											</div>
+											<div
+												v-else
+												class="text-center py-8">
+												User does not have followers.
+											</div>
+										</div>
+
+										<div
+											v-else
+											class="flex-1 px-1">
+											<div
+												v-if="PendingFollowers.length"
+												class="mb-6">
+												<!-- <h3 class="text-lg font-medium mb-2">Pending Follow Requests</h3> -->
+												<div class="grid grid-cols-2 gap-3">
+													<UserListItem
+														v-for="user of PendingFollowers"
+														:key="user.id"
+														:user="user"
+														class="shadow rounded-lg">
+														<template v-slot:actions>
+															<div class="flex gap-6">
+																<!-- Accept Follow Request Button -->
+																<PrimaryButton
+																	@click="acceptFollowRequest(user.id)"
+																	:disabled="isLoading || user.isAccepted"
+																	:class="{
+																		'bg-gray-300 cursor-not-allowed': isLoading || user.isAccepted,
+																		'bg-green-500': !isLoading && !user.isAccepted,
+																	}">
+																	<template v-if="!isLoading && !user.isAccepted">Accept</template>
+																	<p
+																		v-else
+																		class="hidden sm:flex">
+																		Loading...
+																	</p>
+																</PrimaryButton>
+
+																<!-- Reject Follow Request Button -->
+																<PrimaryButton
+																	@click="rejectFollowRequest(user.id)"
+																	:disabled="isLoading || user.isAccepted"
+																	:class="{
+																		'bg-gray-300 cursor-not-allowed': isLoading || user.isAccepted,
+																		'bg-red-500': !isLoading && !user.isAccepted,
+																	}">
+																	<template v-if="!isLoading && !user.isAccepted">Reject</template>
+																	<p
+																		v-else
+																		class="hidden sm:flex">
+																		Loading...
+																	</p>
+																</PrimaryButton>
+															</div>
+														</template>
+													</UserListItem>
+												</div>
+											</div>
+											<div
+												v-else
+												class="text-center py-8">
+												No pending follow requests.
+											</div>
+										</div>
+									</template>
 									<div
 										v-else
-										class="text-center py-8">
-										No pending follow requests.
+										class="py-8 text-center dark:text-gray-100">
+										You don't have permission to view this user's followers.
 									</div>
-								</div>
-							</template>
-							<div
-								v-else
-								class="py-8 text-center dark:text-gray-100">
-								You don't have permission to view this user's followers.
-							</div>
 
-							<!-- Pending Follow Requests List -->
-							<!-- <div
-								v-if="PendingFollowers.length"
-								class="mb-6">
-								<h3 class="text-lg font-medium mb-2">Pending Follow Requests</h3>
-								<div class="grid grid-cols-2 gap-3">
-									<UserListItem
-										v-for="user of PendingFollowers"
-										:key="user.id"
-										:user="user"
-										class="shadow rounded-lg">
-										<template v-slot:actions>
-											<PrimaryButton
-												@click="acceptFollowRequest(user.id)"
-												:disabled="isLoading"
-												:class="{
-													'bg-gray-300 cursor-not-allowed': isLoading,
-													'bg-green-500': !isLoading,
-												}">
-												<template v-if="!isLoading">Accept Request</template>
-												<p
-													v-else
-													class="hidden sm:flex">
-													Loading...
-												</p>
-											</PrimaryButton>
-										</template>
-									</UserListItem>
-								</div>
-							</div>
-							<div
-								v-else
-								class="text-center py-8">
-								No pending follow requests.
-							</div> -->
-						</TabPanel>
-						<TabPanel>
-							<template v-if="!isPrivate || isMyProfile || isCurrentUserFollower">
-								<div class="mb-3">
-									<TextInput
-										:model-value="searchFollowingsKeyword"
-										placeholder="Type to search"
-										class="w-full" />
-								</div>
-								<div
-									v-if="followings.length"
-									class="grid grid-cols-2 gap-3">
-									<UserListItem
-										v-for="user of followings"
-										:user="user"
-										:key="user.id"
-										class="shadow rounded-lg" />
-								</div>
-								<div
-									v-else
-									class="text-center py-8">
-									The user is not following to anybody
-								</div>
-							</template>
-							<div
-								v-else
-								class="py-8 text-center dark:text-gray-100">
-								You don't have permission to view this user's followings.
-							</div>
-						</TabPanel>
-						<TabPanel>
-							<template v-if="!isPrivate || isMyProfile || isCurrentUserFollower">
-								<TabPhotos :photos="photos" />
-							</template>
-							<div
-								v-else
-								class="py-8 text-center dark:text-gray-100">
-								You don't have permission to view this user's photos.
-							</div>
-						</TabPanel>
-						<TabPanel v-if="isMyProfile">
-							<Edit
-								:must-verify-email="mustVerifyEmail"
-								:status="status" />
-						</TabPanel>
-					</TabPanels>
-				</TabGroup>
+									<!-- Pending Follow Requests List -->
+									<!-- <div
+											v-if="PendingFollowers.length"
+											class="mb-6">
+											<h3 class="text-lg font-medium mb-2">Pending Follow Requests</h3>
+											<div class="grid grid-cols-2 gap-3">
+												<UserListItem
+													v-for="user of PendingFollowers"
+													:key="user.id"
+													:user="user"
+													class="shadow rounded-lg">
+													<template v-slot:actions>
+														<PrimaryButton
+															@click="acceptFollowRequest(user.id)"
+															:disabled="isLoading"
+															:class="{
+																'bg-gray-300 cursor-not-allowed': isLoading,
+																'bg-green-500': !isLoading,
+															}">
+															<template v-if="!isLoading">Accept Request</template>
+															<p
+																v-else
+																class="hidden sm:flex">
+																Loading...
+															</p>
+														</PrimaryButton>
+													</template>
+												</UserListItem>
+											</div>
+										</div>
+										<div
+											v-else
+											class="text-center py-8">
+											No pending follow requests.
+										</div> -->
+								</TabPanel>
+								<TabPanel>
+									<template v-if="!isPrivate || isMyProfile || isCurrentUserFollower">
+										<div class="mb-3">
+											<TextInput
+												:model-value="searchFollowingsKeyword"
+												placeholder="Type to search"
+												class="w-full" />
+										</div>
+										<div
+											v-if="followings.length"
+											class="grid grid-cols-2 gap-3">
+											<UserListItem
+												v-for="user of followings"
+												:user="user"
+												:key="user.id"
+												class="shadow rounded-lg" />
+										</div>
+										<div
+											v-else
+											class="text-center py-8">
+											The user is not following to anybody
+										</div>
+									</template>
+									<div
+										v-else
+										class="py-8 text-center dark:text-gray-100">
+										You don't have permission to view this user's followings.
+									</div>
+								</TabPanel>
+								<TabPanel>
+									<template v-if="!isPrivate || isMyProfile || isCurrentUserFollower">
+										<TabPhotos :photos="photos" />
+									</template>
+									<div
+										v-else
+										class="py-8 text-center dark:text-gray-100">
+										You don't have permission to view this user's photos.
+									</div>
+								</TabPanel>
+								<TabPanel v-if="isMyProfile">
+									<Edit
+										:must-verify-email="mustVerifyEmail"
+										:status="status" />
+								</TabPanel>
+							</TabPanels>
+						</TabGroup>
+					</div>
+				</template>
+			</template>
+			<div
+				v-else-if="isBlockedByOtherUser"
+				class="bg-yellow-100 text-yellow-600 p-4 rounded-lg mb-4 my-10">
+				This User's Post are not currently available.
 			</div>
 		</div>
 	</AuthenticatedLayout>

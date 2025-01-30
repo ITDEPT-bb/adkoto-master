@@ -176,4 +176,9 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
     {
         return $this->hasOne(UserWallet::class);
     }
+
+    public function blocks()
+    {
+        return $this->hasMany(Block::class, 'user_id');
+    }
 }

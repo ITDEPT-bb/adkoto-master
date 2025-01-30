@@ -6,7 +6,7 @@
 			<ChatHeader
 				:user="user"
 				agora_id="{{ env('AGORA_APP_ID') }}" />
-			<MessageList
+			<!-- <MessageList
 				:messages="messages"
 				:authUser="authUser"
 				:user="user"
@@ -14,7 +14,34 @@
 			<MessageInput
 				:user="user"
 				:conversation="conversation"
-				@message-sent="addMessage" />
+				@message-sent="addMessage" /> -->
+			<!-- Show messages only if neither user has blocked the other -->
+			<template v-if="!isBlockedByAuthUser && !isBlockedByOtherUser">
+				<MessageList
+					:messages="messages"
+					:authUser="authUser"
+					:user="user"
+					:conversation="conversation" />
+				<MessageInput
+					:user="user"
+					:conversation="conversation"
+					@message-sent="addMessage" />
+			</template>
+
+			<!-- Show a message if blocked -->
+			<template v-else-if="isBlockedByAuthUser">
+				<div class="flex items-center justify-center h-64 text-gray-600">
+					<p>
+						You cannot send messages here because you blocked this user. (Visit their Profile to
+						Unblock them.)
+					</p>
+				</div>
+			</template>
+			<template v-else>
+				<div class="flex items-center justify-center h-64 text-gray-600">
+					<p>You cannot send messages because this conversation is restricted.</p>
+				</div>
+			</template>
 		</div>
 	</AuthenticatedLayout>
 	<UpdateProfileReminder />
@@ -34,6 +61,8 @@ const props = defineProps({
 	user: Object,
 	messages: Array,
 	conversation: Object,
+	isBlockedByAuthUser: Boolean,
+	isBlockedByOtherUser: Boolean,
 });
 
 const user = props.user;

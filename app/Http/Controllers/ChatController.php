@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\GroupChatResource;
 use App\Http\Resources\UserResource;
+use App\Models\Block;
 use App\Models\MessageAttachment;
 use App\Models\User;
 use App\Models\Message;
@@ -229,6 +230,16 @@ class ChatController extends Controller
 
     public function getConversation(User $user)
     {
+        $isBlockedByAuthUser = Block::query()
+            ->where('user_id', auth()->id()) // Authenticated user blocked the other user
+            ->where('blocked_user_id', $user->id)
+            ->exists();
+
+        $isBlockedByOtherUser = Block::query()
+            ->where('user_id', $user->id) // Other user blocked the authenticated user
+            ->where('blocked_user_id', auth()->id())
+            ->exists();
+
         $conversation = Conversation::where(function ($query) use ($user) {
             $query->where('user_id1', auth()->id())
                 ->where('user_id2', $user->id);
@@ -249,7 +260,9 @@ class ChatController extends Controller
         return Inertia::render('Chat/Conversation', [
             'conversation' => $conversation,
             'messages' => $messages,
-            'user' => new UserResource($user)
+            'user' => new UserResource($user),
+            'isBlockedByAuthUser' => $isBlockedByAuthUser,
+            'isBlockedByOtherUser' => $isBlockedByOtherUser,
         ]);
     }
 

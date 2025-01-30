@@ -21,4 +21,9 @@ class Follower extends Model
     {
         return $this->belongsTo(User::class, 'follower_id');
     }
+
+    public function blockers()
+    {
+        return $this->hasMany(Block::class, 'user_id');
+    }
 }

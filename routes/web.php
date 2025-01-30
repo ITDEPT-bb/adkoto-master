@@ -238,6 +238,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/user/accept/{user}', [UserController::class, 'accept'])->name('user.accept');
     Route::post('/user/reject/{user}', [UserController::class, 'reject'])->name('user.reject');
 
+    // Block/Unblock User
+    Route::post('/users/{user}/block', [UserController::class, 'block'])->name('user.block');
+    Route::post('/users/{user}/unblock', [UserController::class, 'unblock'])->name('user.unblock');
+
     // Updating of cover photo and profile picture
     Route::get('/user/cover/{user}', [ProfileController::class, 'coverPage'])->name('profile.coverPage');
     Route::post('/profile/update-cover', [ProfileController::class, 'updateCover'])

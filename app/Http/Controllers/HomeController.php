@@ -50,6 +50,15 @@ class HomeController extends Controller
                     ->where('f.follower_id', '=', $userId)
                     ->where('f.status', '=', 'accepted');
             })
+            ->leftJoin('blocks AS b', function ($join) use ($userId) {
+                $join->on('posts.user_id', '=', 'b.user_id')
+                    ->orOn('posts.user_id', '=', 'b.blocked_user_id')
+                    ->where(function ($query) use ($userId) {
+                        $query->where('b.user_id', '=', $userId)
+                            ->orWhere('b.blocked_user_id', '=', $userId);
+                    });
+            })
+            ->whereNull('b.id')
             ->leftJoin('group_users AS gu', function ($join) use ($userId) {
                 $join->on('gu.group_id', '=', 'posts.group_id')
                     ->where('gu.user_id', '=', $userId)
@@ -93,9 +102,20 @@ class HomeController extends Controller
             ->get();
 
         // Get suggested people who are not followed by the current user
+        // $suggestedPeople = User::where('id', '!=', $userId)
+        //     ->whereDoesntHave('followers', function ($query) use ($userId) {
+        //         $query->where('follower_id', $userId);
+        //     })
+        //     ->inRandomOrder()
+        //     ->limit(10)
+        //     ->get();
         $suggestedPeople = User::where('id', '!=', $userId)
             ->whereDoesntHave('followers', function ($query) use ($userId) {
                 $query->where('follower_id', $userId);
+            })
+            ->whereDoesntHave('blocks', function ($query) use ($userId) {
+                $query->where('blocked_user_id', $userId)
+                    ->orWhere('user_id', $userId);
             })
             ->inRandomOrder()
             ->limit(10)
@@ -110,7 +130,14 @@ class HomeController extends Controller
             ->orderBy('name', 'desc')
             ->get();
 
-        $followings = $user->followings()->wherePivot('status', 'accepted')->get();
+        // $followings = $user->followings()->wherePivot('status', 'accepted')->get();
+        $followings = $user->followings()
+            ->wherePivot('status', 'accepted')
+            ->whereDoesntHave('blocks', function ($query) use ($user) {
+                $query->where('blocked_user_id', $user->id)
+                    ->orWhere('user_id', $user->id);
+            })
+            ->get();
 
         return Inertia::render('Tribekoto/Home', [
             'posts' => $posts,

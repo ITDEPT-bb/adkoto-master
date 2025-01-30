@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Block;
 use App\Models\Follower;
 use App\Models\User;
 use App\Notifications\FollowRequestAccepted;
@@ -134,4 +135,63 @@ class UserController extends Controller
         // return response()->json(['message' => 'Follow request rejected.']);
     }
 
+    public function block(Request $request, User $user)
+    {
+        $authUserId = auth()->id();
+
+        if ($authUserId === $user->id) {
+            $message = 'You cannot block yourself.';
+            return back()->with('error', $message);
+        }
+
+        $alreadyBlocked = Block::where('user_id', $authUserId)
+            ->where('blocked_user_id', $user->id)
+            ->exists();
+
+        if ($alreadyBlocked) {
+            $message = 'User already blocked.';
+            return back()->with('error', $message);
+        }
+
+        Block::create([
+            'user_id' => $authUserId,
+            'blocked_user_id' => $user->id,
+        ]);
+
+        $message = 'User successfully blocked.';
+
+        return back()->with('success', $message);
+    }
+
+    public function unblock(Request $request, User $user)
+    {
+        $authUserId = auth()->id();
+
+        $block = Block::where('user_id', $authUserId)
+            ->where('blocked_user_id', $user->id)
+            ->first();
+
+        if (!$block) {
+            return back()->with('error', 'User not found in your blocked list.');
+        }
+
+        $block->delete();
+
+        // Check and delete the follower record if it exists
+        $followAuth = Follower::where('user_id', $authUserId)
+            ->where('follower_id', $user->id)
+            ->first();
+        if ($followAuth) {
+            $followAuth->delete();
+        }
+
+        $followUser = Follower::where('user_id', $user->id)
+            ->where('follower_id', $authUserId)
+            ->first();
+        if ($followUser) {
+            $followUser->delete();
+        }
+
+        return back()->with('success', 'User successfully unblocked.');
+    }
 }
