@@ -528,7 +528,9 @@ const handleChatClick = async (groupId) => {
 						<TabPanels class="mt-2">
 							<TabPanel>
 								<template v-if="posts">
-									<CreatePost :group="group" />
+									<template v-if="isJoinedToGroup">
+										<CreatePost :group="group" />
+									</template>
 									<PostList
 										v-if="posts.data.length"
 										:posts="posts.data"
@@ -536,7 +538,7 @@ const handleChatClick = async (groupId) => {
 									<div
 										v-else
 										class="py-8 text-center dark:text-gray-100">
-										There are no posts in this group. Be the first and create it.
+										There are no posts in this group.
 									</div>
 								</template>
 								<div
