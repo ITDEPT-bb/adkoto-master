@@ -28,7 +28,7 @@ class RequestApproved extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
     /**
@@ -50,10 +50,24 @@ class RequestApproved extends Notification
      *
      * @return array<string, mixed>
      */
-    public function toArray(object $notifiable): array
+    public function toDatabase(object $notifiable): array
     {
         return [
-            //
+            'group_id' => $this->group->id,
+            'user_id' => $this->user->id,
+            'approved' => $this->approved,
+            'message' => 'Your request to join the group "' . $this->group->name . '" has been ' . ($this->approved ? 'approved' : 'rejected'),
+            'route' => route('group.profile', $this->group),
+            // 'action_url' => url(route('group.profile', $this->group)),
         ];
     }
+    // public function toArray(object $notifiable): array
+    // {
+    //     return [
+    //         'group_id' => $this->group->id,
+    //         'user_id' => $this->user->id,
+    //         'approved' => $this->approved,
+    //         'message' => 'Your request to join the group "' . $this->group->name . '" has been ' . ($this->approved ? 'approved' : 'rejected'),
+    //     ];
+    // }
 }
