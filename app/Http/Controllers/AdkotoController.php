@@ -187,8 +187,32 @@ class AdkotoController extends Controller
             $attachment->image_path = asset('storage/' . $attachment->image_path);
         });
 
+        $featuredAds = Advertisement::with(['attachments', 'user', 'category'])
+            ->where('featured', true)
+            ->orderByDesc('created_at')
+            ->get();
+
+        $featuredAds->each(function ($ad) {
+            $ad->attachments->each(function ($attachment) {
+                $attachment->image_path = asset('storage/' . $attachment->image_path);
+            });
+        });
+
+        $sponsoredAds = Advertisement::with(['attachments', 'user', 'category'])
+            ->where('sponsored', true)
+            ->orderByDesc('created_at')
+            ->get();
+
+        $sponsoredAds->each(function ($ad) {
+            $ad->attachments->each(function ($attachment) {
+                $attachment->image_path = asset('storage/' . $attachment->image_path);
+            });
+        });
+
         return Inertia::render('Adkoto/Show', [
             'advertisement' => $advertisement,
+            'featuredAds' => $featuredAds,
+            'sponsoredAds' => $sponsoredAds,
         ]);
     }
 
@@ -206,8 +230,32 @@ class AdkotoController extends Controller
             });
         });
 
+        $featuredAds = Advertisement::with(['attachments', 'user', 'category'])
+            ->where('featured', true)
+            ->orderByDesc('created_at')
+            ->get();
+
+        $featuredAds->each(function ($ad) {
+            $ad->attachments->each(function ($attachment) {
+                $attachment->image_path = asset('storage/' . $attachment->image_path);
+            });
+        });
+
+        $sponsoredAds = Advertisement::with(['attachments', 'user', 'category'])
+            ->where('sponsored', true)
+            ->orderByDesc('created_at')
+            ->get();
+
+        $sponsoredAds->each(function ($ad) {
+            $ad->attachments->each(function ($attachment) {
+                $attachment->image_path = asset('storage/' . $attachment->image_path);
+            });
+        });
+
         return Inertia::render('Adkoto/Manage', [
             'advertisements' => $advertisements,
+            'featuredAds' => $featuredAds,
+            'sponsoredAds' => $sponsoredAds,
         ]);
     }
 
