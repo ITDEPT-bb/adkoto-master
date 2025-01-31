@@ -1,7 +1,7 @@
 <template>
 	<Head title="Play Game" />
 	<AuthenticatedLayout>
-		<div class="container mx-auto px-6 h-full scrollbar-thin">
+		<div class="container mx-auto bg-white px-6 h-full scrollbar-thin">
 			<div
 				v-if="game"
 				class="flex flex-col items-center my-2">

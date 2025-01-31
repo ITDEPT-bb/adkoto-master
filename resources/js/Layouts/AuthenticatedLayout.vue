@@ -123,17 +123,18 @@ else if (url.startsWith("/games")) {
 </script>
 
 <template>
+	<!-- <div class="h-full mx-auto overflow-hidden flex flex-col bg-gray-100 dark:bg-gray-800"></div> -->
 	<div class="h-full mx-auto overflow-hidden flex flex-col">
 		<nav class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
 			<!-- Primary Navigation Menu -->
 			<div
-				class="max-w-screen mx-auto px-4 py-0.5 sm:px-6 lg:px-16 bg-cover bg-center bg-white drop-shadow-lg"
+				class="max-w-screen mx-auto px-4 py-0.5 sm:px-6 lg:px-16 bg-cover bg-center drop-shadow-lg relative z-50"
 				style="background-image: url('/img/admoto/VD BACKGROUND HEAD.jpg')">
 				<!-- <div class="max-w-screen mx-auto px-4 sm:px-6 lg:px-16"> -->
 				<!-- <div class="flex items-center justify-between gap-4 h-16">
                     <div class="flex"> -->
 				<div class="flex items-center justify-between gap-2 h-16">
-					<div class="absolute -bottom-5 xl:left-6 2xl:left-12 lg:block hidden">
+					<div class="absolute -bottom-5 left-1 xl:left-6 2xl:left-12 lg:block hidden">
 						<img
 							:src="Cupid"
 							class="w-16 relative top-0 left-0 h-auto"
@@ -175,7 +176,7 @@ else if (url.startsWith("/games")) {
 							placeholder="Search....."
 							class="w-32 sm:w-1/3"
 							@keyup.enter="search" /> -->
-						<div class="relative w-48 sm:w-1/3 ps-16 -right-8">
+						<div class="relative w-48 sm:w-1/3 ps-16 sm:ps-0 -right-8">
 							<TextInput
 								v-model="keywords"
 								placeholder="Search..."
@@ -559,7 +560,7 @@ else if (url.startsWith("/games")) {
 						</div>
 					</div>
 
-					<div class="absolute -bottom-5 xl:right-1 2xl:right-2 lg:block hidden">
+					<div class="absolute -bottom-5 right-2 xl:right-2 2xl:right-5 lg:block hidden">
 						<img
 							:src="TeddyBear"
 							class="w-16 relative top-0 right-0 h-auto"

@@ -2,7 +2,7 @@
 	<Head title="Games" />
 
 	<AuthenticatedLayout>
-		<div class="container mx-auto p-6 h-full overflow-y-auto scrollbar-thin">
+		<div class="container mx-auto bg-white p-6 h-full overflow-y-auto scrollbar-thin">
 			<h1 class="text-3xl font-bold mb-6">Gameskoto</h1>
 
 			<FeaturedAds

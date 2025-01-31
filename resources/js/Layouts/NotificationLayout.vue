@@ -21,6 +21,12 @@ import messageIcon from "/public/img/icons/message-bk.png";
 import NotificationDropdown from "@/Components/Notification/NotificationDropdown.vue";
 import MessageIcon from "@/Components/Chat/MessageIconDropdown.vue";
 
+// Valentines Specific
+import Cupid from "/public/img/admoto/CUPID.jpg";
+import TeddyBear from "/public/img/admoto/TEDDYBEAR.png";
+import Ribbon from "/public/img/admoto/RIBBON.png";
+import HeartSearch from "/public/img/admoto/HEART HEART.png";
+
 import axiosClient from "@/axiosClient.js";
 
 const showingNavigationDropdown = ref(false);
@@ -62,16 +68,23 @@ const leave = (el, done) => {
 </script>
 
 <template>
-	<div class="h-full mx-auto overflow-hidden flex flex-col bg-gray-100 dark:bg-gray-800">
+	<!-- <div class="h-full mx-auto overflow-hidden flex flex-col bg-gray-100 dark:bg-gray-800"> -->
+	<div class="h-full mx-auto overflow-hidden flex flex-col">
 		<nav class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
 			<!-- Primary Navigation Menu -->
-			<!-- <div
-				class="max-w-screen mx-auto px-4 sm:px-6 lg:px-16 bg-cover bg-center bg-white"
-				style="background-image: url('/img/adkoto_newyear.png')"> -->
-			<div class="max-w-screen mx-auto px-4 sm:px-6 lg:px-16">
+			<div
+				class="max-w-screen mx-auto px-4 py-0.5 sm:px-6 lg:px-16 bg-cover bg-center bg-white drop-shadow-lg relative z-50"
+				style="background-image: url('/img/admoto/VD BACKGROUND HEAD.jpg')">
+				<!-- <div class="max-w-screen mx-auto px-4 sm:px-6 lg:px-16"> -->
 				<!-- <div class="flex items-center justify-between gap-4 h-16">
                     <div class="flex"> -->
 				<div class="flex items-center justify-between gap-2 h-16">
+					<div class="absolute -bottom-5 xl:left-6 2xl:left-12 lg:block hidden">
+						<img
+							:src="Cupid"
+							class="w-16 relative top-0 left-0 h-auto"
+							alt="Logo" />
+					</div>
 					<div class="flex mr-2">
 						<!-- Logo -->
 						<!-- <div class="shrink-0 flex items-center bg-white bg-opacity-75 px-4 py-2 rounded-full"> -->
@@ -79,7 +92,7 @@ const leave = (el, done) => {
 							<Link :href="route('dashboard')">
 								<img
 									:src="logo"
-									class="block h-6 sm:h-8 w-auto ml-2 sm:ml-4 md:ml-6 lg:ml-2 xl:ml-7 2xl:ml-[70px] hover:scale-110 transition duration-200 ease-in-out"
+									class="block h-6 sm:h-8 xl:h-10 2xl:h-12 w-auto ml-2 sm:ml-4 md:ml-6 lg:ml-2 xl:ml-7 2xl:ml-[70px] hover:scale-110 transition duration-200 ease-in-out"
 									alt="Logo" />
 								<!-- <img
 									:src="logo"
@@ -107,89 +120,101 @@ const leave = (el, done) => {
 					<!-- <div class="hidden sm:flex sm:items-center sm:ms-6"> -->
 					<!-- <div class="flex-1"> -->
 					<div class="flex items-center sm:gap-9 p-4 flex-1">
-						<TextInput
+						<!-- <TextInput
 							v-model="keywords"
 							placeholder="Search....."
 							class="w-32 sm:w-1/2"
-							@keyup.enter="search" />
-
-						<Link
-							:href="route('dashboard')"
-							data-tooltip-target="tribekoto-tooltip"
-							class="bg-white p-0.5 rounded-full hidden sm:flex hover:bg-red-500 hover:text-white hover:border-red-700 hover:shadow-md hover:scale-105 transition duration-200 ease-in-out">
+							@keyup.enter="search" /> -->
+						<div class="relative w-48 sm:w-1/3 ps-16 sm:ps-0 -right-8">
+							<TextInput
+								v-model="keywords"
+								placeholder="Search..."
+								class="w-full pr-10 pl-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+								@keyup.enter="search" />
 							<img
-								:src="tribekotoIcon"
-								class="hidden sm:flex h-auto md:w-12 xl:w-10"
-								alt="Logo" />
-						</Link>
-						<div
-							id="tribekoto-tooltip"
-							role="tooltip"
-							class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-blue-500 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-							Tribekoto
-							<div
-								class="tooltip-arrow"
-								data-popper-arrow></div>
+								:src="HeartSearch"
+								alt="Search"
+								class="absolute right-3 hidden sm:block top-1/2 transform -translate-y-1/2 w-20 h-auto text-gray-400" />
 						</div>
 
-						<Link
-							:href="route('kalakalkoto')"
-							data-tooltip-target="kalakalkoto-tooltip"
-							class="bg-white p-0.5 rounded-full hidden sm:flex hover:bg-red-500 hover:text-white hover:border-red-700 hover:shadow-md hover:scale-105 transition duration-200 ease-in-out">
-							<img
-								:src="kalakalkotoIcon"
-								class="hidden sm:flex h-auto md:w-12 xl:w-10"
-								alt="Logo" />
-						</Link>
-						<div
-							id="kalakalkoto-tooltip"
-							role="tooltip"
-							class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-blue-500 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-							Kalakalkoto
+						<div class="justify-end items-center flex flex-row sm:gap-9 p-4 flex-1">
+							<Link
+								:href="route('dashboard')"
+								data-tooltip-target="tribekoto-tooltip"
+								class="bg-white p-0.5 rounded-full hidden sm:flex hover:bg-red-500 hover:text-white hover:border-red-700 hover:shadow-md hover:scale-105 transition duration-200 ease-in-out">
+								<img
+									:src="tribekotoIcon"
+									class="hidden sm:flex h-auto md:w-12 xl:w-10"
+									alt="Logo" />
+							</Link>
 							<div
-								class="tooltip-arrow"
-								data-popper-arrow></div>
-						</div>
+								id="tribekoto-tooltip"
+								role="tooltip"
+								class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-blue-500 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+								Tribekoto
+								<div
+									class="tooltip-arrow"
+									data-popper-arrow></div>
+							</div>
 
-						<Link
-							:href="route('adkoto')"
-							data-tooltip-target="adkoto-tooltip"
-							class="bg-white p-0.5 rounded-full hidden sm:flex hover:bg-red-500 hover:text-white hover:border-red-700 hover:shadow-md hover:scale-105 transition duration-200 ease-in-out">
-							<img
-								:src="adkotoIcon"
-								class="hidden sm:flex md:h-auto md:w-12 xl:w-10"
-								alt="Logo" />
-						</Link>
-						<div
-							id="adkoto-tooltip"
-							role="tooltip"
-							class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-blue-500 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-							Adkoto
+							<Link
+								:href="route('kalakalkoto')"
+								data-tooltip-target="kalakalkoto-tooltip"
+								class="bg-white p-0.5 rounded-full hidden sm:flex hover:bg-red-500 hover:text-white hover:border-red-700 hover:shadow-md hover:scale-105 transition duration-200 ease-in-out">
+								<img
+									:src="kalakalkotoIcon"
+									class="hidden sm:flex h-auto md:w-12 xl:w-10"
+									alt="Logo" />
+							</Link>
 							<div
-								class="tooltip-arrow"
-								data-popper-arrow></div>
-						</div>
+								id="kalakalkoto-tooltip"
+								role="tooltip"
+								class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-blue-500 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+								Kalakalkoto
+								<div
+									class="tooltip-arrow"
+									data-popper-arrow></div>
+							</div>
 
-						<Link
-							:href="route('games.index')"
-							data-tooltip-target="games-tooltip"
-							class="bg-white p-0.5 rounded-full hidden sm:flex hover:bg-red-500 hover:text-white hover:border-red-700 hover:shadow-md hover:scale-105 transition duration-200 ease-in-out">
-							<img
-								:src="gameIcon"
-								class="hidden sm:flex md:h-auto md:w-12 xl:w-10"
-								alt="Logo" />
-						</Link>
-						<div
-							id="games-tooltip"
-							role="tooltip"
-							class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-blue-500 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-							Games
+							<Link
+								:href="route('adkoto')"
+								data-tooltip-target="adkoto-tooltip"
+								class="bg-white p-0.5 rounded-full hidden sm:flex hover:bg-red-500 hover:text-white hover:border-red-700 hover:shadow-md hover:scale-105 transition duration-200 ease-in-out">
+								<img
+									:src="adkotoIcon"
+									class="hidden sm:flex md:h-auto md:w-12 xl:w-10"
+									alt="Logo" />
+							</Link>
 							<div
-								class="tooltip-arrow"
-								data-popper-arrow></div>
-						</div>
+								id="adkoto-tooltip"
+								role="tooltip"
+								class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-blue-500 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+								Adkoto
+								<div
+									class="tooltip-arrow"
+									data-popper-arrow></div>
+							</div>
 
-						<!-- <Link
+							<Link
+								:href="route('games.index')"
+								data-tooltip-target="games-tooltip"
+								class="bg-white p-0.5 rounded-full hidden sm:flex hover:bg-red-500 hover:text-white hover:border-red-700 hover:shadow-md hover:scale-105 transition duration-200 ease-in-out">
+								<img
+									:src="gameIcon"
+									class="hidden sm:flex md:h-auto md:w-12 xl:w-10"
+									alt="Logo" />
+							</Link>
+							<div
+								id="games-tooltip"
+								role="tooltip"
+								class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-blue-500 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+								Games
+								<div
+									class="tooltip-arrow"
+									data-popper-arrow></div>
+							</div>
+
+							<!-- <Link
 							:href="route('chat.index')"
 							class="bg-white p-0.5 rounded-full hidden sm:flex">
 							<img
@@ -197,7 +222,7 @@ const leave = (el, done) => {
 								class="hidden sm:flex md:h-auto md:w-12 xl:w-10"
 								alt="Logo" />
 						</Link> -->
-						<!-- <Link
+							<!-- <Link
 							:href="route('kalakalkoto')"
 							class="rounded-full hidden sm:flex">
 							<img
@@ -224,7 +249,7 @@ const leave = (el, done) => {
 								alt="Logo" />
 						</Link> -->
 
-						<!-- <Link
+							<!-- <Link
 							:href="route('chat.index')"
 							class="rounded-full hidden sm:flex">
 							<img
@@ -233,32 +258,33 @@ const leave = (el, done) => {
 								alt="Logo" />
 						</Link> -->
 
-						<MessageIcon
-							data-tooltip-target="message-tooltip"
-							class="hidden sm:flex rounded-full" />
-						<div
-							id="message-tooltip"
-							role="tooltip"
-							class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-blue-500 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-							Message
+							<MessageIcon
+								data-tooltip-target="message-tooltip"
+								class="hidden sm:flex rounded-full" />
 							<div
-								class="tooltip-arrow"
-								data-popper-arrow></div>
-						</div>
+								id="message-tooltip"
+								role="tooltip"
+								class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-blue-500 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+								Message
+								<div
+									class="tooltip-arrow"
+									data-popper-arrow></div>
+							</div>
 
-						<!-- Notification Dropdown Component -->
-						<!-- <NotificationDropdown class="hidden sm:flex bg-white p-0.5 rounded-full" /> -->
-						<NotificationDropdown
-							data-tooltip-target="notifications-tooltip"
-							class="hidden sm:flex rounded-full border border-red-500" />
-						<div
-							id="notifications-tooltip"
-							role="tooltip"
-							class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-blue-500 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-							Notifications
+							<!-- Notification Dropdown Component -->
+							<!-- <NotificationDropdown class="hidden sm:flex bg-white p-0.5 rounded-full" /> -->
+							<NotificationDropdown
+								data-tooltip-target="notifications-tooltip"
+								class="hidden sm:flex rounded-full border border-red-500" />
 							<div
-								class="tooltip-arrow"
-								data-popper-arrow></div>
+								id="notifications-tooltip"
+								role="tooltip"
+								class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-blue-500 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+								Notifications
+								<div
+									class="tooltip-arrow"
+									data-popper-arrow></div>
+							</div>
 						</div>
 						<!-- <button @click="toggleDarkMode" class="dark:text-white">
                             <MoonIcon class="w-5 h-5" />
@@ -290,6 +316,12 @@ const leave = (el, done) => {
 												class="h-8 w-8 rounded-full object-cover"
 												:src="authUser.avatar_url"
 												:alt="authUser.name" />
+											<div class="absolute -bottom-1 xl:right-2 2xl:right-2 lg:block hidden">
+												<img
+													:src="Ribbon"
+													class="w-5 relative top-0 right-0 h-auto"
+													alt="Logo" />
+											</div>
 										</button>
 										<div
 											id="profile-tooltip"
@@ -328,6 +360,13 @@ const leave = (el, done) => {
 								</Link>
 							</div>
 						</div>
+					</div>
+
+					<div class="absolute -bottom-5 xl:right-1 2xl:right-2 lg:block hidden">
+						<img
+							:src="TeddyBear"
+							class="w-16 relative top-0 right-0 h-auto"
+							alt="Logo" />
 					</div>
 
 					<!-- Hamburger -->
