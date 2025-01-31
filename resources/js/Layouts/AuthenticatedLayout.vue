@@ -698,6 +698,7 @@ else if (url.startsWith("/games")) {
 							</div>
 
 							<div class="mt-3 space-y-1">
+								<ResponsiveNavLink :href="route('dashboard')"> Tribekoto </ResponsiveNavLink>
 								<ResponsiveNavLink :href="route('kalakalkoto')"> Kalakalkoto </ResponsiveNavLink>
 								<ResponsiveNavLink :href="route('adkoto')"> Adkoto </ResponsiveNavLink>
 								<ResponsiveNavLink :href="route('chat.index')"> Chat </ResponsiveNavLink>

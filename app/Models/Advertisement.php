@@ -16,6 +16,8 @@ class Advertisement extends Model
         'sub_category_id',
         'title',
         'description',
+        'featured',
+        'sponsored',
         'price',
         'location'
     ];

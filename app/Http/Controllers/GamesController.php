@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Advertisement;
 use App\Models\Game;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -114,8 +115,20 @@ class GamesController extends Controller
             return $game;
         });
 
+        $featuredAds = Advertisement::with(['attachments', 'user', 'category'])
+            ->where('featured', true)
+            ->orderByDesc('created_at')
+            ->get();
+
+        $featuredAds->each(function ($ad) {
+            $ad->attachments->each(function ($attachment) {
+                $attachment->image_path = asset('storage/' . $attachment->image_path);
+            });
+        });
+
         return Inertia::render('Games/Index', [
             'games' => $games,
+            'featuredAds' => $featuredAds,
         ]);
     }
 
@@ -204,8 +217,20 @@ class GamesController extends Controller
             $game->iframe_url = asset($game->iframe_url);
         }
 
+        $featuredAds = Advertisement::with(['attachments', 'user', 'category'])
+            ->where('featured', true)
+            ->orderByDesc('created_at')
+            ->get();
+
+        $featuredAds->each(function ($ad) {
+            $ad->attachments->each(function ($attachment) {
+                $attachment->image_path = asset('storage/' . $attachment->image_path);
+            });
+        });
+
         return Inertia::render('Games/Detail', [
             'game' => $game,
+            'featuredAds' => $featuredAds,
         ]);
     }
 }

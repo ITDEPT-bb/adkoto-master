@@ -22,6 +22,9 @@
 			<div v-else>
 				<p>Loading...</p>
 			</div>
+			<FeaturedAds
+				:featuredAds="featuredAds"
+				class="col-span-12 mt-12" />
 		</div>
 	</AuthenticatedLayout>
 	<UpdateProfileReminder />
@@ -32,10 +35,17 @@ import { ref, defineProps } from "vue";
 import { Head } from "@inertiajs/vue3";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
+import FeaturedAds from "@/Components/Adkoto/FeaturedAds.vue";
 
 const props = defineProps({
 	game: Object,
+	featuredAds: {
+		type: Array,
+		required: true,
+	},
 });
+
+const featuredAds = ref(props.featuredAds);
 
 const iframeError = ref(false);
 

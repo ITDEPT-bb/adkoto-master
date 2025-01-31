@@ -30,6 +30,28 @@ class AdkotoController extends Controller
             });
         });
 
+        $featuredAds = Advertisement::with(['attachments', 'user', 'category'])
+            ->where('featured', true)
+            ->orderByDesc('created_at')
+            ->get();
+
+        $featuredAds->each(function ($ad) {
+            $ad->attachments->each(function ($attachment) {
+                $attachment->image_path = asset('storage/' . $attachment->image_path);
+            });
+        });
+
+        $sponsoredAds = Advertisement::with(['attachments', 'user', 'category'])
+            ->where('sponsored', true)
+            ->orderByDesc('created_at')
+            ->get();
+
+        $sponsoredAds->each(function ($ad) {
+            $ad->attachments->each(function ($attachment) {
+                $attachment->image_path = asset('storage/' . $attachment->image_path);
+            });
+        });
+
         $categories = AdvertisementCategory::with([
             'subCategories' => function ($query) {
                 $query->withCount('advertisements');
@@ -40,6 +62,8 @@ class AdkotoController extends Controller
 
         return Inertia::render('Adkoto/Index', [
             'advertisements' => $advertisements,
+            'featuredAds' => $featuredAds,
+            'sponsoredAds' => $sponsoredAds,
             'categories' => $categories
         ]);
     }

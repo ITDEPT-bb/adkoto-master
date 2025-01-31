@@ -5,6 +5,10 @@
 		<div class="container mx-auto p-6 h-full overflow-y-auto scrollbar-thin">
 			<h1 class="text-3xl font-bold mb-6">Gameskoto</h1>
 
+			<FeaturedAds
+				:featuredAds="featuredAds"
+				class="col-span-12" />
+
 			<div
 				v-if="games.length"
 				class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -27,7 +31,9 @@
 				</div>
 			</div>
 
-			<div v-else>
+			<div
+				v-else
+				class="px-10 py-10">
 				<p>No games found.</p>
 			</div>
 		</div>
@@ -36,14 +42,21 @@
 </template>
 
 <script setup>
-import { defineProps } from "vue";
+import { defineProps, ref } from "vue";
 import { Head, Link } from "@inertiajs/vue3";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
+import FeaturedAds from "@/Components/Adkoto/FeaturedAds.vue";
 
 const props = defineProps({
 	games: Array,
+	featuredAds: {
+		type: Array,
+		required: true,
+	},
 });
+
+const featuredAds = ref(props.featuredAds);
 </script>
 
 <style scoped>
