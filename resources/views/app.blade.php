@@ -17,13 +17,20 @@
     <!-- Scripts -->
     @routes
     @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
-    {{-- <script src="https://download.agora.io/sdk/release/AgoraRTC_N-4.22.0.js"></script> --}}
+    {{--
+    <script src="https://download.agora.io/sdk/release/AgoraRTC_N-4.22.0.js"></script> --}}
     @inertiaHead
 </head>
-{{-- <body class="font-sans antialiased"> --}}
+{{--
 
-<body class="font-sans antialiased bg-gray-100 mt-10 sm:mt-0 dark:bg-slate-800 lg:overflow-hidden lg:h-full">
-    @inertia
-</body>
+<body class="font-sans antialiased"> --}}
+
+    {{--
+
+    <body class="font-sans antialiased bg-gray-100 mt-10 sm:mt-0 dark:bg-slate-800 lg:overflow-hidden lg:h-full" --}}
+        <body class="font-sans antialiased bg-cover bg-center mt-10 sm:mt-0 lg:overflow-hidden lg:h-full"
+        style="background-image: url('/img/admoto/VD BACKGROUND.jpg')">
+        @inertia
+    </body>
 
 </html>

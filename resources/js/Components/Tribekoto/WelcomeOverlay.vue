@@ -31,9 +31,13 @@ onMounted(() => {
 </script>
 
 <template>
+	<!-- <div
+		v-if="showOverlay"
+		class="fixed inset-0 bg-gradient-to-br from-white via-gray-100 to-gray-200 flex items-center justify-center z-50"> -->
 	<div
 		v-if="showOverlay"
-		class="fixed inset-0 bg-gradient-to-br from-white via-gray-100 to-gray-200 flex items-center justify-center z-50">
+		class="fixed inset-0 flex items-center bg-cover bg-no-repeat justify-center z-50"
+		style="background-image: url('/img/admoto/VD BACKGROUND.jpg')">
 		<div class="text-center relative">
 			<h1 class="text-gray-800 text-4xl lg:text-6xl font-bold tracking-wider animate-fade-in">
 				{{ text }}
