@@ -22,7 +22,7 @@ class AdkotoController extends Controller
     {
         $advertisements = Advertisement::with(['attachments', 'user', 'category'])
             ->orderByDesc('created_at')
-            ->paginate(5);
+            ->paginate(8);
 
         $advertisements->each(function ($ad) {
             $ad->attachments->each(function ($attachment) {
