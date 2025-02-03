@@ -75,35 +75,55 @@ const { url } = usePage();
 // Default logo
 let logoSrc = "/img/tribekoto.png";
 let logoClass =
-	"block h-6 sm:h-8 xl:h-10 2xl:h-12 w-auto ml-2 sm:ml-4 md:ml-6 lg:ml-2 xl:ml-7 2xl:ml-[70px] hover:scale-110 transition duration-200 ease-in-out";
+	"block h-6 sm:h-8 xl:h-10 2xl:h-12 w-auto ml-2 sm:ml-4 md:ml-6 lg:ml-2 xl:ml-7 2xl:ml-[70px] hover:scale-110 transition duration-200 ease-in-out scale-75";
 let tribekotoClass = "";
 let kalakalkotoClass = "";
 let adkotoClass = "";
 let gamesClass = "";
 let notificationClass = "";
+let logoText = "Where Connections and Communities Thrive!";
+let logoTextClass =
+	"absolute bottom-1.5 italic text-red-500 font-black ml-10 left-1/2 transform -translate-x-1/2 translate-y-full text-center text-xs my-1 pt-1";
 
 // Dynamically change logo based on the current URL
 // Tribekoto
 if (url.startsWith("/tribekoto")) {
 	logoSrc = "/img/tribekoto.png";
 	logoClass =
-		"block h-6 sm:h-8 xl:h-10 2xl:h-12 w-auto ml-2 sm:ml-4 md:ml-6 lg:ml-2 xl:ml-7 2xl:ml-[70px] hover:scale-110 transition duration-200 ease-in-out";
+		"block h-6 sm:h-8 xl:h-10 2xl:h-12 w-auto ml-2 sm:ml-4 md:ml-6 lg:ml-2 xl:ml-7 2xl:ml-[70px] hover:scale-110 transition duration-200 ease-in-out scale-75";
 	tribekotoClass = "border border-red-500";
+	logoText = "Where Connections and Communities Thrive!";
+	logoTextClass =
+		"absolute bottom-1.5 italic text-red-500 font-black ml-10 left-1/2 transform -translate-x-1/2 translate-y-full text-center text-xs my-1 pt-1";
 }
 // Kalakalkoto
 else if (url.startsWith("/kalakalkoto")) {
 	logoSrc = "/img/kalakalkoto.png";
 	logoClass =
-		"block h-8 sm:h-8 xl:h-10 2xl:h-12 w-auto ml-2 sm:ml-4 md:ml-6 lg:ml-2 xl:ml-7 2xl:ml-[70px] hover:scale-110 transition duration-200 ease-in-out";
+		"block h-8 sm:h-8 xl:h-10 2xl:h-12 w-auto ml-2 sm:ml-4 md:ml-6 lg:ml-2 xl:ml-7 2xl:ml-[70px] hover:scale-110 transition duration-200 ease-in-out scale-75";
 	kalakalkotoClass = "border border-red-500";
+	logoText = "Where Opportunity Meets Marketplace!";
+	logoTextClass =
+		"absolute bottom-1.5 italic text-blue-500 font-black ml-10 left-1/2 transform -translate-x-1/2 translate-y-full text-center text-xs my-1 pt-1";
 }
 // Adkoto
 else if (url.startsWith("/adkoto")) {
 	logoSrc = "/img/adkoto.png";
 	logoClass =
-		"block h-7 sm:h-10 xl:h-10 2xl:h-12 w-auto ml-2 sm:ml-4 md:ml-6 lg:ml-2 xl:ml-7 2xl:ml-[70px] hover:scale-110 transition duration-200 ease-in-out";
+		"block h-7 sm:h-10 xl:h-10 2xl:h-12 w-auto ml-2 sm:ml-4 md:ml-6 lg:ml-2 xl:ml-7 2xl:ml-[70px] hover:scale-110 transition duration-200 ease-in-out scale-75";
 	adkotoClass = "border border-red-500";
+	logoText = "Where Advertising Meets Opportunity!";
+	logoTextClass =
+		"absolute bottom-2 italic text-blue-500 font-black ml-10 left-1/2 transform -translate-x-1/2 translate-y-full text-center text-xs my-1 pt-1";
 }
+// Games
+else if (url.startsWith("/games")) {
+	gamesClass = "border border-red-500";
+	logoText = "Tribekoto Game Section";
+	logoTextClass =
+		"absolute bottom-1.5 italic text-red-500 font-black ml-10 left-1/2 transform -translate-x-1/2 translate-y-full text-center text-xs my-1 pt-1";
+}
+
 // Tribekoto other page
 else if (
 	url.startsWith("/") ||
@@ -115,10 +135,6 @@ else if (
 	url.startsWith("/post")
 ) {
 	tribekotoClass = "border border-red-500";
-}
-// Games
-else if (url.startsWith("/games")) {
-	gamesClass = "border border-red-500";
 }
 </script>
 
@@ -143,12 +159,28 @@ else if (url.startsWith("/games")) {
 					<div class="flex mr-2">
 						<!-- Logo -->
 						<!-- <div class="shrink-0 flex items-center bg-white bg-opacity-75 px-4 py-2 rounded-full"> -->
-						<div class="shrink-0 flex items-center">
+						<!-- <div class="shrink-0 flex items-center">
 							<Link :href="route('dashboard')">
 								<img
 									:src="logoSrc"
 									:class="logoClass"
 									alt="Logo" />
+							</Link>
+						</div> -->
+						<div class="shrink-0 flex items-center">
+							<Link :href="route('dashboard')">
+								<div class="relative group mb-0 md:mb-3">
+									<img
+										:src="logoSrc"
+										:class="logoClass"
+										alt="Logo"
+										class="transition-transform duration-200 ease-in-out transform group-hover:scale-75" />
+									<div
+										:class="logoTextClass"
+										style="white-space: nowrap">
+										{{ logoText }}
+									</div>
+								</div>
 							</Link>
 						</div>
 						<!-- <div

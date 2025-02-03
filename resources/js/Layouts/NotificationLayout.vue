@@ -65,6 +65,13 @@ const leave = (el, done) => {
 		done();
 	}, 300);
 };
+
+let logoSrc = "/img/tribekoto.png";
+let logoClass =
+	"block h-6 sm:h-8 xl:h-10 2xl:h-12 w-auto ml-2 sm:ml-4 md:ml-6 lg:ml-2 xl:ml-7 2xl:ml-[70px] hover:scale-110 transition duration-200 ease-in-out scale-75";
+let logoText = "Where Connections and Communities Thrive!";
+let logoTextClass =
+	"absolute bottom-1.5 italic text-red-500 font-black ml-10 left-1/2 transform -translate-x-1/2 translate-y-full text-center text-xs my-1 pt-1";
 </script>
 
 <template>
@@ -88,18 +95,32 @@ const leave = (el, done) => {
 					<div class="flex mr-2">
 						<!-- Logo -->
 						<!-- <div class="shrink-0 flex items-center bg-white bg-opacity-75 px-4 py-2 rounded-full"> -->
-						<div class="shrink-0 flex items-center">
+
+						<!-- <div class="shrink-0 flex items-center">
 							<Link :href="route('dashboard')">
 								<img
 									:src="logo"
 									class="block h-6 sm:h-8 xl:h-10 2xl:h-12 w-auto ml-2 sm:ml-4 md:ml-6 lg:ml-2 xl:ml-7 2xl:ml-[70px] hover:scale-110 transition duration-200 ease-in-out"
 									alt="Logo" />
-								<!-- <img
-									:src="logo"
-									class="block h-7 sm:h-10 w-auto ml-2 sm:ml-4 md:ml-6 lg:ml-2 xl:ml-7 2xl:ml-[70px] bg-white rounded-full px-2 py-1"
-									alt="Logo" /> -->
+							</Link>
+						</div> -->
+						<div class="shrink-0 flex items-center">
+							<Link :href="route('dashboard')">
+								<div class="relative group mb-0 md:mb-3">
+									<img
+										:src="logoSrc"
+										:class="logoClass"
+										alt="Logo"
+										class="transition-transform duration-200 ease-in-out transform group-hover:scale-75" />
+									<div
+										:class="logoTextClass"
+										style="white-space: nowrap">
+										{{ logoText }}
+									</div>
+								</div>
 							</Link>
 						</div>
+
 						<!-- <div
 							class="shrink-0 flex items-center bg-white bg-opacity-20 px-2 py-1 rounded-lg"
 							style="

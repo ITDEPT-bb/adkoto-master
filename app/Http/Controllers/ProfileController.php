@@ -130,7 +130,7 @@ class ProfileController extends Controller
             ->latest()
             ->get();
 
-        $isPrivate = auth()->user()->is_private;
+        // $isPrivate = auth()->user()->is_private;
         // dd($isPrivate);
 
         return Inertia::render('Profile/View', [
