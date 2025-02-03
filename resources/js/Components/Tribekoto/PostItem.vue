@@ -125,13 +125,21 @@ function openAttachment(ind) {
 
 const showReactions = ref(false);
 const isLoading = ref(false);
+// const reactions = [
+// 	{ name: "like", emoji: "👍", label: "Like" },
+// 	{ name: "love", emoji: "❤️", label: "Love" },
+// 	{ name: "haha", emoji: "😂", label: "Haha" },
+// 	{ name: "wow", emoji: "😮", label: "Wow" },
+// 	{ name: "sad", emoji: "😢", label: "Sad" },
+// 	{ name: "angry", emoji: "😡", label: "Angry" },
+// ];
 const reactions = [
-	{ name: "like", emoji: "👍", label: "Like" },
-	{ name: "love", emoji: "❤️", label: "Love" },
-	{ name: "haha", emoji: "😂", label: "Haha" },
-	{ name: "wow", emoji: "😮", label: "Wow" },
-	{ name: "sad", emoji: "😢", label: "Sad" },
-	{ name: "angry", emoji: "😡", label: "Angry" },
+	{ name: "like", image: "/img/Reactions/like.png", label: "Like" },
+	{ name: "love", image: "/img/Reactions/love.png", label: "Love" },
+	{ name: "haha", image: "/img/Reactions/haha.png", label: "Haha" },
+	{ name: "wow", image: "/img/Reactions/wow.png", label: "Wow" },
+	{ name: "sad", image: "/img/Reactions/sad.png", label: "Sad" },
+	{ name: "angry", image: "/img/Reactions/angry.png", label: "Angry" },
 ];
 
 // Long press detection for mobile
@@ -213,7 +221,7 @@ const sendReaction = (type = "like") => {
 		<Disclosure v-slot="{ open }">
 			<div class="flex gap-2 relative">
 				<!-- Reaction Picker -->
-				<div
+				<!-- <div
 					v-if="showReactions && !post.current_user_has_reaction"
 					@mouseleave="showReactions = false"
 					class="absolute z-10 top-10 bg-white shadow-lg rounded-lg p-2">
@@ -222,7 +230,31 @@ const sendReaction = (type = "like") => {
 						:key="reaction.name"
 						class="px-2 py-1 m-1 rounded bg-blue-200 hover:bg-blue-500 hover:text-white transition-all"
 						@click="() => sendReaction(reaction.name)">
-						{{ reaction.emoji }} {{ reaction.label }}
+						<img
+							:src="reaction.image"
+							:alt="reaction.label"
+							class="w-8 h-8" />
+					</button>
+				</div> -->
+				<div
+					v-if="showReactions && !post.current_user_has_reaction"
+					@mouseleave="showReactions = false"
+					class="absolute z-10 top-10 bg-white shadow-xl rounded-full px-3 py-2 flex items-center space-x-2 transition-opacity duration-200 animate-fadeIn">
+					<button
+						v-for="reaction in reactions"
+						:key="reaction.name"
+						:disabled="loading"
+						class="relative group transform transition-all duration-200 hover:scale-125"
+						@click="() => sendReaction(reaction.name)">
+						<img
+							:src="reaction.image"
+							:alt="reaction.label"
+							class="w-10 h-10 rounded-full shadow-md hover:shadow-lg transition-shadow" />
+
+						<span
+							class="absolute bottom-full mb-1 px-2 py-1 text-xs text-white bg-gray-800 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
+							{{ reaction.label }}
+						</span>
 					</button>
 				</div>
 
@@ -248,6 +280,42 @@ const sendReaction = (type = "like") => {
 					<span v-if="!isLoading">{{ post.current_user_has_reaction ? "Unlike" : "React" }}</span>
 					<span v-else>Loading...</span>
 				</button>
+				<!-- Like/React Button -->
+				<!-- <button
+					@click="sendReaction()"
+					@mouseenter="!post.current_user_has_reaction && (showReactions = true)"
+					@touchstart="startLongPress"
+					@touchend="cancelLongPress"
+					:class="[
+						post.current_user_has_reaction
+							? isLoading
+								? 'bg-gray-300 cursor-not-allowed'
+								: 'bg-red-300 dark:bg-sky-900 hover:bg-red-400 dark:hover:bg-sky-950'
+							: isLoading
+							? 'bg-gray-300 cursor-not-allowed'
+							: 'bg-red-100 dark:bg-slate-900 hover:bg-red-200 dark:hover:bg-slate-800',
+						'text-gray-800 dark:text-gray-100 flex gap-1 items-center justify-center rounded-lg py-2 px-4 flex-1',
+					]"
+					:disabled="isLoading">
+					<HandThumbUpIcon class="w-5 h-5" />
+					<span class="mr-2">{{ post.num_of_reactions }}</span>
+					<span v-if="!isLoading">{{ post.current_user_has_reaction ? "Unlike" : "React" }}</span>
+					<span v-else>Loading...</span>
+				</button>
+
+				<div
+					v-if="showReactions"
+					class="reaction-popup">
+					<div
+						v-for="reaction in reactions"
+						:key="reaction.name"
+						@click="sendReaction(reaction.name)">
+						<img
+							:src="reaction.image"
+							:alt="reaction.label"
+							class="w-8 h-8" />
+					</div>
+				</div> -->
 
 				<!-- Comment Button -->
 				<DisclosureButton
@@ -357,5 +425,17 @@ const sendReaction = (type = "like") => {
 	background: white;
 	padding: 5px;
 	border-radius: 5px;
+}
+
+.reaction-popup {
+	display: flex;
+	gap: 8px;
+	background: white;
+	border: 1px solid #ccc;
+	border-radius: 20px;
+	padding: 8px;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+	position: absolute;
+	z-index: 10;
 }
 </style>
