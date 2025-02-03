@@ -74,7 +74,7 @@ const leave = (el, done) => {
 			<!-- Primary Navigation Menu -->
 			<div
 				class="max-w-screen mx-auto px-4 py-0.5 sm:px-6 lg:px-16 bg-cover bg-center bg-white drop-shadow-lg relative z-50"
-				style="background-image: url('/img/admoto/VD BACKGROUND HEAD.jpg')">
+				style="background-image: url('/img/admoto/VD BACKGROUND HEAD 2.jpg')">
 				<!-- <div class="max-w-screen mx-auto px-4 sm:px-6 lg:px-16"> -->
 				<!-- <div class="flex items-center justify-between gap-4 h-16">
                     <div class="flex"> -->
