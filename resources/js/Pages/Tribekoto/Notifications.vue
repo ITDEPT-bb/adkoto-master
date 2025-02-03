@@ -2,7 +2,7 @@
 	<Head title="Notifications" />
 
 	<AuthenticatedLayout>
-		<div class="bg-gray-100 py-4 px-8">
+		<div class="pt-10 px-8">
 			<h1 class="text-2xl font-bold text-gray-800">All Notifications</h1>
 		</div>
 		<div

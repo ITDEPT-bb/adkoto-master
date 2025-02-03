@@ -104,7 +104,7 @@ else if (url.startsWith("/kalakalkoto")) {
 	kalakalkotoClass = "border border-red-500";
 	logoText = "Where Opportunity Meets Marketplace!";
 	logoTextClass =
-		"absolute bottom-1.5 italic text-blue-500 font-black ml-10 left-1/2 transform -translate-x-1/2 translate-y-full text-center text-xs my-1 pt-1";
+		"absolute bottom-1.5 italic text-blue-500 font-black ml-10 left-1/2 transform -translate-x-1/2 translate-y-full text-center text-xs my-1 pt-1 group-hover:pt-2";
 }
 // Adkoto
 else if (url.startsWith("/adkoto")) {
@@ -114,7 +114,7 @@ else if (url.startsWith("/adkoto")) {
 	adkotoClass = "border border-red-500";
 	logoText = "Where Advertising Meets Opportunity!";
 	logoTextClass =
-		"absolute bottom-2 italic text-blue-500 font-black ml-10 left-1/2 transform -translate-x-1/2 translate-y-full text-center text-xs my-1 pt-1";
+		"absolute bottom-2 italic text-blue-500 font-black ml-10 left-1/2 transform -translate-x-1/2 translate-y-full text-center text-xs my-1 pt-1 group-hover:pt-2";
 }
 // Games
 else if (url.startsWith("/games")) {
@@ -174,9 +174,10 @@ else if (
 										:src="logoSrc"
 										:class="logoClass"
 										alt="Logo"
-										class="transition-transform duration-200 ease-in-out transform group-hover:scale-75" />
+										class="transition-transform duration-200 ease-in-out transform group-hover:scale-90" />
 									<div
 										:class="logoTextClass"
+										class="transition-transform duration-200 ease-in-out transform group-hover:scale-110"
 										style="white-space: nowrap">
 										{{ logoText }}
 									</div>
