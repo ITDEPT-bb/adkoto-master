@@ -243,7 +243,8 @@ class PostController extends Controller
         //     $hasReaction = false;
         //     $reaction->delete();
         if ($reaction) {
-            if ($reaction->type === $data['reaction']) {
+            // if ($reaction->type === $data['reaction']) {
+            if ($data['reaction'] === 'like' || $reaction->type === $data['reaction']) {
                 $reaction->delete();
                 $hasReaction = false;
             } else {
