@@ -8,9 +8,9 @@
 						<Link
 							:href="route('kalakalkoto')"
 							:class="{
-								'text-gray-900 font-bold underline dark:text-white':
+								'text-gray-900 text-xs md:text-sm font-bold underline dark:text-white':
 									route().current() === 'kalakalkoto',
-								'text-gray-900 font-bold dark:text-white hover:underline':
+								'text-gray-900 font-bold text-xs md:text-sm dark:text-white hover:underline':
 									route().current() !== 'kalakalkoto',
 							}">
 							Home
@@ -22,9 +22,9 @@
 						<Link
 							:href="route('kalakalkoto.create')"
 							:class="{
-								'text-gray-900 font-bold underline dark:text-white':
+								'text-gray-900 text-xs md:text-sm font-bold underline dark:text-white':
 									route().current() === 'kalakalkoto.create',
-								'text-gray-900 font-bold dark:text-white hover:underline':
+								'text-gray-900 font-bold text-xs md:text-sm dark:text-white hover:underline':
 									route().current() !== 'kalakalkoto.create',
 							}">
 							Create Listing
@@ -36,9 +36,9 @@
 						<Link
 							:href="route('kalakalkoto.showUserItems')"
 							:class="{
-								'text-gray-900 font-bold underline dark:text-white':
+								'text-gray-900 text-xs md:text-sm font-bold underline dark:text-white':
 									route().current() === 'kalakalkoto.showUserItems',
-								'text-gray-900 font-bold dark:text-white hover:underline':
+								'text-gray-900 text-xs md:text-sm font-bold dark:text-white hover:underline':
 									route().current() !== 'kalakalkoto.showUserItems',
 							}">
 							View My Listings

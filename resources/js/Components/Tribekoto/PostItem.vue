@@ -239,7 +239,7 @@ const sendReaction = (type = "like") => {
 				<div
 					v-if="showReactions && !post.current_user_has_reaction"
 					@mouseleave="showReactions = false"
-					class="absolute z-10 top-10 bg-white shadow-xl rounded-full px-3 py-2 flex items-center space-x-2 transition-opacity duration-200 animate-fadeIn">
+					class="absolute z-10 top-10 bg-white shadow-xl rounded-full px-3 py-2 flex items-center space-x-4 transition-opacity duration-200 animate-fadeIn">
 					<button
 						v-for="reaction in reactions"
 						:key="reaction.name"

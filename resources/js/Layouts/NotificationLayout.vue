@@ -114,7 +114,7 @@ let logoTextClass =
 										class="transition-transform duration-200 ease-in-out transform group-hover:scale-90" />
 									<div
 										:class="logoTextClass"
-										class="transition-transform duration-200 ease-in-out transform group-hover:scale-110"
+										class="transition-transform duration-200 hidden md:block ease-in-out transform group-hover:scale-110"
 										style="white-space: nowrap">
 										{{ logoText }}
 									</div>
