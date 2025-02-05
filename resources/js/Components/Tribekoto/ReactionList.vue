@@ -137,6 +137,6 @@ const fetchReactions = async () => {
 };
 
 const getReactionIcon = (reactionType) => {
-	return `/img/reactions/${reactionType}.png`;
+	return `/img/Reactions/${reactionType}.png`;
 };
 </script>
