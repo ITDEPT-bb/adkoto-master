@@ -57,20 +57,26 @@ const submit = () => {
 
 		<div className="flex flex-col gap-6">
 			<div class="overflow-hidden rounded-xl bg-card text-card-foreground">
-				<div className="sm:hidden flex flex-col items-center justify-center w-full h-full gap-2">
+				<!-- <div className="sm:hidden flex flex-col items-center justify-center w-full h-full gap-2">
 					<img
 						src="img/Auth/adkoto_logo.png"
 						alt="Adkoto Logo"
 						className="h-auto max-w-[100%] object-contain px-6 pb-4 md:px-8" />
-				</div>
+				</div> -->
 				<div
 					class="grid md:grid-cols-2 bg-white border shadow-lg sm:rounded-none rounded-lg sm:py-0 py-2 sm:px-0 px-1">
 					<form
 						@submit.prevent="submit"
 						className="p-2 md:p-6 md:py-10">
 						<div className="flex flex-col gap-6">
+							<div class="flex flex-col items-center text-center">
+								<img
+									src="img/Auth/adkoto_logo.png"
+									alt="Adkoto Logo"
+									className="h-auto max-w-[70%] object-contain px-6 md:px-8" />
+							</div>
 							<div className="flex flex-col items-center text-center">
-								<h1 className="text-2xl font-bold text-blue-primary">Welcome back</h1>
+								<!-- <h1 className="text-2xl font-bold text-blue-primary">Welcome back</h1> -->
 								<p className="text-balance text-muted-foreground">Login to your Adkoto account</p>
 							</div>
 							<div class="grid gap-2">
@@ -185,15 +191,15 @@ const submit = () => {
 					</form>
 					<div className="relative hidden md:flex bg-blue-primary p-4">
 						<div className="flex flex-col items-center justify-center w-full h-full gap-2">
-							<img
+							<!-- <img
 								src="img/Auth/adkoto_logo.png"
 								alt="Adkoto Logo"
-								className="h-auto max-w-[60%] object-contain px-6 md:px-8" />
+								className="h-auto max-w-[60%] object-contain px-6 md:px-8" /> -->
 
 							<img
 								src="img/Auth/adkoto_vector.png"
 								alt="Adkoto Vector"
-								className="h-auto max-w-[100%] object-contain px-6 md:px-8" />
+								className="h-auto max-w-[115%] object-contain px-6 md:px-8" />
 						</div>
 					</div>
 				</div>
