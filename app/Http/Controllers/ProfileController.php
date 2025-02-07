@@ -280,14 +280,14 @@ class ProfileController extends Controller
         return back()->with('success', $success);
     }
 
-    // public function checkProfile()
-    // {
-    //     $user = Auth::user();
+    public function checkProfile()
+    {
+        $user = Auth::user();
 
-    //     $isProfileComplete = $user->surname && $user->username && $user->birthday && $user->gender;
+        $isProfileComplete = $user->surname && $user->username && $user->birthday && $user->gender;
 
-    //     return response()->json(['isProfileComplete' => $isProfileComplete]);
-    // }
+        return response()->json(['isProfileComplete' => $isProfileComplete]);
+    }
 
     public function fetchProfileNotif($userId)
     {
