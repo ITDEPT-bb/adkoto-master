@@ -9,7 +9,7 @@
 				class="md:h-auto md:w-12 xl:w-[58px]"
 				alt="Notifications" /> -->
 		<button
-			@click="showDropdown = !showDropdown"
+			@click="toggleDropdown"
 			class="relative block bg-white p-0.5 rounded-full hover:bg-red-500 hover:text-white hover:border-red-700 hover:shadow-md hover:scale-105 transition duration-200 ease-in-out">
 			<img
 				:src="notificationIcon"
@@ -31,7 +31,7 @@
 			leave-to-class="transform opacity-0 scale-95">
 			<div
 				v-if="showDropdown"
-				@click.away="showDropdown = false"
+				ref="dropdownRef"
 				class="origin-top-right absolute right-0 mt-12 w-[400px] rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
 				<div class="py-1">
 					<div class="sticky flex justify-between top-0 bg-white shadow-sm z-10 px-4 py-2">
@@ -125,7 +125,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 import { Link } from "@inertiajs/vue3";
 import axiosClient from "@/axiosClient.js";
 
@@ -135,6 +135,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
 
 const showDropdown = ref(false);
+const dropdownRef = ref(null);
 const notifications = ref([]);
 const loading = ref(true);
 const userProfile = ref({});
@@ -144,6 +145,19 @@ import notificationIcon from "/public/img/icons/notification-bk.png";
 const unreadCount = computed(() => {
 	return notifications.value.filter((notification) => !notification.read_at).length;
 });
+
+const handleClickOutside = (event) => {
+	if (dropdownRef.value && !dropdownRef.value.contains(event.target)) {
+		showDropdown.value = false;
+	}
+};
+
+const toggleDropdown = () => {
+	// If dropdown is open, don't toggle it again
+	if (!showDropdown.value) {
+		showDropdown.value = true;
+	}
+};
 
 const fetchNotifications = async () => {
 	try {
@@ -168,6 +182,11 @@ const fetchNotifications = async () => {
 
 onMounted(async () => {
 	await fetchNotifications();
+	document.addEventListener("mousedown", handleClickOutside);
+});
+
+onUnmounted(() => {
+	document.removeEventListener("mousedown", handleClickOutside);
 });
 
 // const markAsRead = (notification) => {

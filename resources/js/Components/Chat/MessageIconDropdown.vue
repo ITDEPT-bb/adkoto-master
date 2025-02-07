@@ -1,13 +1,8 @@
 <template>
-	<div class="relative">
+	<div
+		class="relative"
+		ref="dropdownRef">
 		<!-- Notification Bell Icon/Button -->
-		<!-- <button
-			@click="toggleModal"
-			class="relative block">
-			<img
-				:src="messageIcon"
-				class="md:h-auto md:w-12 xl:w-[58px]"
-				alt="Notifications" /> -->
 		<button
 			@click="toggleModal"
 			class="relative block bg-white p-0.5 rounded-full hover:bg-red-500 hover:text-white hover:border-red-700 hover:shadow-md hover:scale-105 transition duration-200 ease-in-out">
@@ -33,7 +28,6 @@
 			leave-to-class="transform opacity-0 scale-95">
 			<div
 				v-if="showModal"
-				@click.away="showModal = false"
 				class="origin-top-right absolute right-0 mt-12 w-[400px] rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
 				<div class="py-1">
 					<ChatListDropdown
@@ -53,7 +47,7 @@
 </template>
 
 <script setup>
-import { defineProps, ref, onMounted, onUnmounted } from "vue";
+import { defineProps, ref, onMounted, onUnmounted, onBeforeUnmount } from "vue";
 import { Head, Link } from "@inertiajs/vue3";
 import axiosClient from "@/axiosClient.js";
 import ChatListDropdown from "@/Components/Chat/ChatListDropdown.vue";
@@ -69,6 +63,7 @@ dayjs.extend(relativeTime);
 const showModal = ref(false);
 const unreadCount = ref(0);
 const loading = ref(true);
+const dropdownRef = ref(null);
 
 const props = defineProps({
 	messageUsers: {
@@ -107,9 +102,17 @@ const toggleModal = () => {
 	showModal.value = !showModal.value;
 };
 
+const handleClickOutside = (event) => {
+	if (dropdownRef.value && !dropdownRef.value.contains(event.target)) {
+		showModal.value = false;
+	}
+};
+
 onMounted(() => {
 	fetchLatestMessages();
 	const interval = setInterval(fetchLatestMessages, 1000);
+
+	document.addEventListener("click", handleClickOutside);
 
 	fetchUnreadCount();
 	const unreadInterval = setInterval(fetchUnreadCount, 1000);
@@ -118,5 +121,9 @@ onMounted(() => {
 		clearInterval(interval);
 		clearInterval(unreadInterval);
 	});
+});
+
+onBeforeUnmount(() => {
+	document.removeEventListener("click", handleClickOutside);
 });
 </script>
