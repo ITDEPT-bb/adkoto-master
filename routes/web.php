@@ -132,7 +132,7 @@ Route::middleware(['auth', 'verified'])->prefix('/group-chat')->group(function (
     Route::post('/create', [GroupChatController::class, 'create'])->name('group-chats.create');
     Route::post('/{groupChat}/update', [GroupChatController::class, 'update'])->name('group-chats.update');
     Route::post('/{groupChat}/add-participant', [GroupChatController::class, 'addParticipant']);
-    Route::post('/{groupChatId}/remove-user', [GroupChatController::class, 'removeUser'])->name('group.removeUser');
+    Route::post('/{groupChatId}/remove-user', [GroupChatController::class, 'removeUser'])->name('groupchat.removeUser');
     Route::get('/{groupChat}/messages', [GroupChatController::class, 'getGroupMessages']);
     Route::post('/{groupChat}/messages', [GroupChatController::class, 'sendMessage']);
 
