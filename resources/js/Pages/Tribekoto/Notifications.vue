@@ -70,25 +70,33 @@
 									class="text-sm text-gray-500">
 									Loading...
 								</span>
-								<div class="absolute">
+								<!-- <div class="absolute">
 									<template v-if="notification.data.reaction_image">
 										<img
 											:src="notification.data.reaction_image"
 											:alt="notification.data.reaction"
 											class="w-6 h-6 object-contain relative bottom-5 left-7" />
 									</template>
-								</div>
+								</div> -->
 							</div>
 							<div class="flex-1 min-w-0">
-								<p
-									:class="{
-										'text-base': true,
-										'font-semibold': notification.read_at === null,
-										'font-normal': notification.read_at !== null,
-										'text-gray-900': true,
-									}">
-									{{ notification.data.message }}
-								</p>
+								<div class="flex flex-row gap-2">
+									<p
+										:class="{
+											'text-base': true,
+											'font-semibold': notification.read_at === null,
+											'font-normal': notification.read_at !== null,
+											'text-gray-900': true,
+										}">
+										{{ notification.data.message }}
+									</p>
+									<template v-if="notification.data.reaction_image">
+										<img
+											:src="notification.data.reaction_image"
+											:alt="notification.data.reaction"
+											class="w-6 h-6 object-contain" />
+									</template>
+								</div>
 								<p class="text-sm text-gray-500">
 									{{ dayjs(notification.created_at).fromNow() }}
 								</p>
