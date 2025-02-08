@@ -15,14 +15,14 @@
 					'justify-start': message.sender_id !== authUser.id,
 				}">
 				<div
-					class="flex flex-col space-y-2 text-xs mx-2"
+					class="flex flex-col space-y-0.5 text-xs mx-2"
 					:class="{
 						'order-1 items-end': message.sender_id === authUser.id,
 						'order-2 items-start': message.sender_id !== authUser.id,
 					}">
 					<span
 						v-if="message.sender_id !== authUser.id"
-						class="text-xs text-gray-500 mx-1">
+						class="text-xs font-bold text-gray-500 mx-1">
 						{{ message.sender.name }} {{ message.sender.surname }}
 					</span>
 					<div
@@ -74,6 +74,11 @@
 							</div>
 						</div>
 					</div>
+					<small
+						v-if="showTime"
+						class="text-gray-400 pl-1.5"
+						>{{ formatTime(message.created_at) }}</small
+					>
 				</div>
 				<img
 					v-if="message.sender_id !== authUser.id"
@@ -95,11 +100,19 @@ import { ref, onMounted, onBeforeUnmount, nextTick, watch } from "vue";
 import axiosClient from "@/axiosClient.js";
 import { Link } from "@inertiajs/vue3";
 import ImageModal from "@/Components/Chat/ImageModal.vue";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+dayjs.extend(relativeTime);
 
 const props = defineProps({
 	messages: Array,
 	authUser: Object,
 	group: Object,
+	showTime: {
+		type: Boolean,
+		default: true,
+	},
 });
 const emit = defineEmits(["onScroll"]);
 
@@ -119,6 +132,21 @@ const messageContainer = ref(null);
 
 let intervalId = null;
 const isUserScrolling = ref(false);
+
+function formatTime(postDate) {
+	const now = dayjs();
+	const postTime = dayjs(postDate);
+
+	if (now.diff(postTime, "day") < 1) {
+		return postTime.fromNow();
+	} else if (now.diff(postTime, "day") === 1) {
+		return `Yesterday at ${postTime.format("h:mm A")}`;
+	} else if (now.diff(postTime, "day") < 7) {
+		return `${postTime.format("dddd [at] h:mm A")}`;
+	} else {
+		return postTime.format("MMMM D, YYYY [at] h:mm A");
+	}
+}
 
 const scrollToBottom = async () => {
 	await nextTick();

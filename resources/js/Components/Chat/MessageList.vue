@@ -69,6 +69,11 @@
 							</div>
 						</div>
 					</div>
+					<small
+						v-if="showTime"
+						class="text-gray-400 pl-1.5"
+						>{{ formatTime(message.created_at) }}</small
+					>
 				</div>
 				<img
 					v-if="message.sender_id !== authUser.id"
@@ -90,14 +95,37 @@ import { ref, onMounted, onBeforeUnmount, nextTick, watch } from "vue";
 import { Link } from "@inertiajs/vue3";
 import axiosClient from "@/axiosClient.js";
 import ImageModal from "@/Components/Chat/ImageModal.vue";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+dayjs.extend(relativeTime);
 
 const props = defineProps({
 	messages: Array,
 	authUser: Object,
 	user: Object,
 	conversation: Object,
+	showTime: {
+		type: Boolean,
+		default: true,
+	},
 });
 const emit = defineEmits(["onScroll"]);
+
+function formatTime(postDate) {
+	const now = dayjs();
+	const postTime = dayjs(postDate);
+
+	if (now.diff(postTime, "day") < 1) {
+		return postTime.fromNow();
+	} else if (now.diff(postTime, "day") === 1) {
+		return `Yesterday at ${postTime.format("h:mm A")}`;
+	} else if (now.diff(postTime, "day") < 7) {
+		return `${postTime.format("dddd [at] h:mm A")}`;
+	} else {
+		return postTime.format("MMMM D, YYYY [at] h:mm A");
+	}
+}
 
 const isImageModalVisible = ref(false);
 const currentImageSrc = ref("");
