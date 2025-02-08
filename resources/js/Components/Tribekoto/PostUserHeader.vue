@@ -16,14 +16,30 @@ defineProps({
 	},
 });
 
+// function formatTime(postDate) {
+// 	const now = dayjs();
+// 	const postTime = dayjs(postDate);
+
+// 	if (now.diff(postTime, "week") >= 1) {
+// 		return postTime.format("MMMM D, YYYY");
+// 	} else {
+// 		return postTime.fromNow();
+// 	}
+// }
 function formatTime(postDate) {
 	const now = dayjs();
 	const postTime = dayjs(postDate);
 
-	if (now.diff(postTime, "week") >= 1) {
-		return postTime.format("MMMM D, YYYY");
-	} else {
+	if (now.diff(postTime, "day") < 1) {
 		return postTime.fromNow();
+	} else if (now.diff(postTime, "day") === 1) {
+		return `Yesterday at ${postTime.format("h:mm A")}`;
+	}
+	// else if (now.diff(postTime, "day") < 7) {
+	// 	return `${postTime.fromNow(true)} ago at ${postTime.format("h:mm A")}`;
+	// }
+	else {
+		return postTime.format("MMMM D, YYYY [at] h:mm A");
 	}
 }
 </script>
