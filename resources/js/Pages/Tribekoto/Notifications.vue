@@ -70,6 +70,14 @@
 									class="text-sm text-gray-500">
 									Loading...
 								</span>
+								<div class="absolute">
+									<template v-if="notification.data.reaction_image">
+										<img
+											:src="notification.data.reaction_image"
+											:alt="notification.data.reaction"
+											class="w-6 h-6 object-contain relative bottom-5 left-7" />
+									</template>
+								</div>
 							</div>
 							<div class="flex-1 min-w-0">
 								<p

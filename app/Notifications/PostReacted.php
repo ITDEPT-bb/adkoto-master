@@ -68,7 +68,40 @@ class PostReacted extends Notification
             'post_title' => $this->post->title,
             'reaction' => $this->reaction,
             'route' => route('post.view', $this->post->id),
-            'message' => $this->user->name . ' ' . $this->user->surname . ' reacted to your post'
+            'message' => $this->user->name . ' ' . $this->user->surname . ' reacted to your post',
+            'reaction_image' => $this->getReaction()
         ];
+    }
+
+    /**
+     * Get the notification message based on reaction.
+     *
+     * @return string
+     */
+    private function getReaction(): string
+    {
+        // $emojis = [
+        //     'like' => '👍',
+        //     'love' => '❤️',
+        //     'haha' => '😂',
+        //     'wow' => '😮',
+        //     'sad' => '😢',
+        //     'angry' => '😡',
+        // ];
+
+        $emojis = [
+            'like' => asset('img/Reactions/like.png'),
+            'love' => asset('img/Reactions/love.png'),
+            'haha' => asset('img/Reactions/haha.png'),
+            'wow' => asset('img/Reactions/wow.png'),
+            'sad' => asset('img/Reactions/sad.png'),
+            'angry' => asset('img/Reactions/angry.png'),
+        ];
+
+        // $emoji = $emojis[$this->reaction] ?? '❓';
+        // $emoji = $emojis[$this->reaction] ?? asset('img/Reactions/like.png');
+
+        // return "{$this->user->name} {$this->user->surname} reacted {$emoji} to your post";
+        return $emojis[$this->reaction] ?? asset('images/reactions/default.png');
     }
 }

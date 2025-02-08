@@ -68,15 +68,23 @@
 											<img
 												v-if="notification.data.user_id && userProfile[notification.data.user_id]"
 												:src="userProfile[notification.data.user_id].avatar_url"
-												class="h-6 w-6 rounded-full"
+												class="h-10 w-10 rounded-full"
 												alt="User Avatar" />
 											<span
 												v-else
 												class="text-sm text-gray-500">
 												Loading profile...
 											</span>
+											<div class="absolute">
+												<template v-if="notification.data.reaction_image">
+													<img
+														:src="notification.data.reaction_image"
+														:alt="notification.data.reaction"
+														class="w-6 h-6 object-contain relative top-3 left-4" />
+												</template>
+											</div>
 										</div>
-										<div class="flex items-center space-x-2">
+										<div class="flex flex-col">
 											<!-- Notification Icon based on type -->
 											<template v-if="notification.type === 'App\Notifications\FollowUser'">
 												<svg
@@ -101,12 +109,12 @@
 												}">
 												{{ notification.data.message }}
 											</p>
+											<p
+												class="text-gray-400 hover:cursor-pointer text-xs flex items-center justify-between pl-1">
+												{{ dayjs(notification.created_at).fromNow() }}
+											</p>
 										</div>
 									</Link>
-									<p
-										class="text-gray-400 hover:cursor-pointer text-xs flex items-center justify-between px-4">
-										{{ dayjs(notification.created_at).fromNow() }}
-									</p>
 								</div>
 							</li>
 						</ul>
