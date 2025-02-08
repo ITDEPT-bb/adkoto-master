@@ -110,12 +110,12 @@ const handleClickOutside = (event) => {
 
 onMounted(() => {
 	fetchLatestMessages();
-	const interval = setInterval(fetchLatestMessages, 1000);
+	const interval = setInterval(fetchLatestMessages, 8000);
 
 	document.addEventListener("click", handleClickOutside);
 
 	fetchUnreadCount();
-	const unreadInterval = setInterval(fetchUnreadCount, 1000);
+	const unreadInterval = setInterval(fetchUnreadCount, 8000);
 
 	onUnmounted(() => {
 		clearInterval(interval);
