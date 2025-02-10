@@ -9,6 +9,15 @@
 			:key="message.id"
 			class="chat-message">
 			<div
+				v-if="message.type === 'system'"
+				class="flex items-center justify-center">
+				<div class="text-xs text-gray-500 italic">
+					{{ message.message }}
+				</div>
+			</div>
+
+			<div
+				v-else
 				class="flex items-end"
 				:class="{
 					'justify-end': message.sender_id === authUser.id,

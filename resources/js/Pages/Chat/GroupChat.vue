@@ -2,7 +2,7 @@
 	<Head title="Conversation" />
 	<AuthenticatedLayout>
 		<div
-			class="flex-1 p:2 sm:p-6 justify-between max-w-7xl mx-auto flex flex-col h-full scrollbar-thin">
+			class="flex-1 p:2 sm:p-6 justify-between max-w-7xl mx-auto bg-white rounded-lg border flex flex-col h-full scrollbar-thin">
 			<ChatHeader :group="groupChat" />
 			<MessageList
 				:messages="messages"
@@ -24,7 +24,7 @@ import MessageInput from "@/Components/GroupChat/MessageInput.vue";
 import AuthenticatedLayout from "@/Layouts/ChatLayout.vue";
 import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
 import { usePage, Head } from "@inertiajs/vue3";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import axiosClient from "@/axiosClient.js";
 
 const props = defineProps({
@@ -46,6 +46,13 @@ const fetchMessages = async () => {
 		console.error("Error fetching messages:", error);
 	}
 };
+
+watch(
+	() => props.notifications,
+	(newNotifications) => {
+		notifications.value = newNotifications;
+	}
+);
 
 onMounted(() => {
 	fetchMessages();

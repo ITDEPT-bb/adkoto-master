@@ -84,16 +84,15 @@ import { Link } from "@inertiajs/vue3";
 const open = ref(false);
 
 const checkProfile = async () => {
-	const response = await fetch("/api/check-profile");
-	const data = await response.json();
-
-	if (!data.isProfileComplete) {
-		open.value = true;
-	}
+	// const response = await fetch("/api/check-profile");
+	// const data = await response.json();
+	// if (!data.isProfileComplete) {
+	// 	open.value = true;
+	// }
 };
 
 onMounted(() => {
-	checkProfile();
+	// checkProfile();
 });
 </script>
 

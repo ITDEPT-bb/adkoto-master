@@ -10,6 +10,7 @@ use App\Models\Group;
 use App\Models\GroupChat;
 use App\Models\GroupChatParticipant;
 use App\Models\User;
+use App\Notifications\AddedToGroupChat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -62,27 +63,42 @@ class GroupChatController extends Controller
         ])
             ->findOrFail($groupChatId);
 
-        // Check if the user is a participant in the group chat
         $isParticipant = $groupChat->participants()->where('user_id', $user->id)->exists();
 
         if (!$isParticipant) {
             abort(403, 'Unauthorized');
         }
 
-        // Map messages for the response, excluding soft-deleted senders
-        $messages = $groupChat->messages->map(function ($message) {
-            // Check if the sender is soft-deleted
-            $sender = $message->sender()->withTrashed()->first(); // Include trashed users to check soft-deleted status
+        $groupChatMembers = $groupChat->participants;
+
+        $notifications = $groupChat->notifications()
+            ->where('data->group_id', $groupChatId)
+            ->get();
+
+        $notificationMessages = $notifications->map(function ($notification) {
+            return [
+                'id' => 'notification-' . $notification->id,
+                'type' => 'system',
+                'message' => $notification->data['message'],
+                'created_at' => $notification->created_at,
+            ];
+        });
+
+        $regularMessages = $groupChat->messages->map(function ($message) {
+            $sender = $message->sender()->withTrashed()->first();
 
             return [
                 'id' => $message->id,
+                'type' => 'user',
                 'message' => $message->message,
                 'attachments' => $message->attachments,
                 'sender_id' => $message->sender_id,
-                'sender' => $sender ? new UserResource($sender) : null,  // Handle soft-deleted sender
+                'sender' => $sender ? new UserResource($sender) : null,
                 'created_at' => $message->created_at,
             ];
         });
+
+        $messages = $notificationMessages->concat($regularMessages)->sortBy('created_at')->values();
 
         $conversation = $groupChat->conversation;
 
@@ -91,6 +107,8 @@ class GroupChatController extends Controller
             'messages' => $messages,
             'conversation' => $conversation,
             'authUser' => new UserResource($user),
+            'notifications' => $notifications,
+            'members' => $groupChatMembers,
         ]);
     }
 
@@ -162,12 +180,20 @@ class GroupChatController extends Controller
     public function addParticipant(Request $request, $groupChatId)
     {
         $groupChat = GroupChat::findOrFail($groupChatId);
+        $user = auth()->user();
 
         foreach ($request->users as $userId) {
+            // $user = User::findOrFail($userId);
+            $userToAdd = User::findOrFail($userId);
+
             GroupChatParticipant::firstOrCreate([
                 'group_chat_id' => $groupChat->id,
                 'user_id' => $userId,
             ]);
+
+            // $user->notify(new AddedToGroupChat($groupChat, $user));
+            // $userToAdd->notify(new AddedToGroupChat($groupChat, $user, $userToAdd));
+            $groupChat->notify(new AddedToGroupChat($groupChat, $user, $userToAdd));
         }
 
         return response()->json(['message' => 'Participants added successfully']);
@@ -177,20 +203,49 @@ class GroupChatController extends Controller
     {
         $groupChat = GroupChat::findOrFail($groupChatId);
 
-        $messages = $groupChat->messages()->with('sender', 'attachments')->get();
+        // $messages = $groupChat->messages()->with('sender', 'attachments')->get();
 
-        $transformedMessages = $messages->map(function ($message) {
+        $notifications = $groupChat->notifications()
+            ->where('data->group_id', $groupChatId)
+            ->get();
+
+        $notificationMessages = $notifications->map(function ($notification) {
             return [
-                'id' => $message->id,
-                'message' => $message->message,
-                'created_at' => $message->created_at,
-                'attachments' => $message->attachments,
-                'sender_id' => $message->sender_id,
-                'sender' => new UserResource($message->sender),
+                'id' => 'notification-' . $notification->id,
+                'type' => 'system',
+                'message' => $notification->data['message'],
+                'created_at' => $notification->created_at,
             ];
         });
 
-        return response()->json($transformedMessages);
+        $regularMessages = $groupChat->messages->map(function ($message) {
+            $sender = $message->sender()->withTrashed()->first();
+
+            return [
+                'id' => $message->id,
+                'type' => 'user',
+                'message' => $message->message,
+                'attachments' => $message->attachments,
+                'sender_id' => $message->sender_id,
+                'sender' => $sender ? new UserResource($sender) : null,
+                'created_at' => $message->created_at,
+            ];
+        });
+
+        $messages = $notificationMessages->concat($regularMessages)->sortBy('created_at')->values();
+
+        // $transformedMessages = $messages->map(function ($message) {
+        //     return [
+        //         'id' => $message->id,
+        //         'message' => $message->message,
+        //         'created_at' => $message->created_at,
+        //         'attachments' => $message->attachments,
+        //         'sender_id' => $message->sender_id,
+        //         'sender' => new UserResource($message->sender),
+        //     ];
+        // });
+
+        return response()->json($messages);
     }
 
     public function update(Request $request, GroupChat $groupChat)
