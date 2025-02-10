@@ -12,6 +12,7 @@ use App\Models\GroupChatParticipant;
 use App\Models\User;
 use App\Notifications\AddedToGroupChat;
 use App\Notifications\LeaveGroupChat;
+use App\Notifications\RemoveFromGroupChat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -308,6 +309,7 @@ class GroupChatController extends Controller
 
     public function removeUser(Request $request, $groupChatId)
     {
+        $groupChat = GroupChat::findOrFail($groupChatId);
         $admin = Auth::user();
         $userId = $request->input('userId');
 
@@ -329,6 +331,9 @@ class GroupChatController extends Controller
         }
 
         $participant->delete();
+
+        $removedUser = User::findOrFail($userId);
+        $groupChat->notify(new RemoveFromGroupChat($groupChat, $admin, $removedUser));
 
         // return response()->json(['message' => 'User removed from the group chat successfully.']);
         return response()->json([
