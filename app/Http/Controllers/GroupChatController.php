@@ -11,6 +11,7 @@ use App\Models\GroupChat;
 use App\Models\GroupChatParticipant;
 use App\Models\User;
 use App\Notifications\AddedToGroupChat;
+use App\Notifications\LeaveGroupChat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -275,6 +276,8 @@ class GroupChatController extends Controller
 
     public function leaveGroup(Request $request, $groupChatId)
     {
+        $groupChat = GroupChat::findOrFail($groupChatId);
+
         $user = Auth::user();
 
         $participant = GroupChatParticipant::where('group_chat_id', $groupChatId)
@@ -286,6 +289,8 @@ class GroupChatController extends Controller
         }
 
         $participant->delete();
+
+        $groupChat->notify(new LeaveGroupChat($groupChat, $user));
 
         $remainingParticipants = GroupChatParticipant::where('group_chat_id', $groupChatId)->count();
 
