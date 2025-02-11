@@ -29,4 +29,9 @@ class PostAttachment extends Model
             Storage::disk('public')->delete($model->path);
         });
     }
+
+    public function post()
+    {
+        return $this->belongsTo(Post::class);
+    }
 }

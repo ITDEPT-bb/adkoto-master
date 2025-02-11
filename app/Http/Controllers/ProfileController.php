@@ -124,9 +124,18 @@ class ProfileController extends Controller
             })
             ->get();
 
+        // $photos = PostAttachment::query()
+        //     ->where('mime', 'like', 'image/%')
+        //     ->where('created_by', $user->id)
+        //     ->latest()
+        //     ->get();
+
         $photos = PostAttachment::query()
             ->where('mime', 'like', 'image/%')
             ->where('created_by', $user->id)
+            ->whereHas('post', function ($query) {
+                $query->whereNull('deleted_at');
+            })
             ->latest()
             ->get();
 
