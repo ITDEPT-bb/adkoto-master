@@ -35,7 +35,7 @@ class FollowUser extends Notification
     {
         // Only send notifications if the user is followed or a follow request is sent
         if ($this->follow) {
-            return ['mail', 'database'];
+            return ['database'];
         }
 
         // Return an empty array to avoid sending notifications if unfollowed

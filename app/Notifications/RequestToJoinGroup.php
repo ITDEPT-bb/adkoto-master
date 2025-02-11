@@ -53,4 +53,16 @@ class RequestToJoinGroup extends Notification
             //
         ];
     }
+
+    public function toDatabase(object $notifiable): array
+    {
+        return [
+            'group_id' => $this->group->id,
+            'group_name' => $this->group->name,
+            'user_id' => $this->user->id,
+            'user_name' => $this->user->name,
+            'route' => route('group.profile', $this->group),
+            'message' => 'User "' . $this->user->name . '" requested to join the group "' . $this->group->name . '"',
+        ];
+    }
 }
