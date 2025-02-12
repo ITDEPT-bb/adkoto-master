@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\Notifiable;
 
 /**
  * Class Post
@@ -21,10 +22,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Post extends Model
 {
-    use HasFactory;
-    use SoftDeletes;
+    use SoftDeletes, HasFactory, Notifiable;
 
-    protected $fillable = ['user_id', 'body', 'group_id', 'preview', 'preview_url'];
+    protected $fillable = [
+        'user_id',
+        'body',
+        'group_id',
+        'shared_post_id',
+        'preview',
+        'preview_url'
+    ];
 
     // With casting
     protected $casts = [
@@ -43,7 +50,7 @@ class Post extends Model
 
     public function attachments(): HasMany
     {
-        return $this->hasMany(PostAttachment::class)->latest();
+        return $this->hasMany(PostAttachment::class, 'post_id')->latest();
     }
 
     // public function reactions(): HasMany
@@ -63,6 +70,15 @@ class Post extends Model
         return $this->hasMany(Comment::class);
     }
 
+    public function sharedPost()
+    {
+        return $this->belongsTo(Post::class, 'shared_post_id')->with('attachments')->withTrashed();
+    }
+    // public function sharedPost()
+    // {
+    //     return $this->belongsTo(Post::class, 'shared_post_id');
+    // }
+
     public static function postsForTimeline($userId, $getLatest = true): Builder
     {
         $query = Post::query() // SELECT * FROM posts
@@ -72,6 +88,9 @@ class Post extends Model
                 'group',
                 'group.currentUserGroup',
                 'attachments',
+                'sharedPost' => function ($query) {
+                    $query->with(['user', 'attachments', 'reactions']);
+                },
                 'comments' => function ($query) {
                     $query->withCount('reactions'); // SELECT * FROM comments WHERE post_id IN (1, 2, 3...)
                     // SELECT COUNT(*) from reactions

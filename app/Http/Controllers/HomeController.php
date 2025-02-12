@@ -83,6 +83,7 @@ class HomeController extends Controller
                             ->where('group_users.status', GroupUserStatus::APPROVED->value);
                     });
             })
+            ->with(['sharedPost.attachments', 'sharedPost.reactions', 'sharedPost.user'])
             ->withCount('reactions')
             ->latest()
             ->paginate(10);

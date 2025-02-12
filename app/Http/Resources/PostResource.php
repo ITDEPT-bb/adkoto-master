@@ -36,10 +36,24 @@ class PostResource extends JsonResource
             ] : new UserResource($user),
             'group' => new GroupResource($this->group),
             'attachments' => PostAttachmentResource::collection($this->attachments),
+            // 'attachments' => PostAttachmentResource::collection($this->attachments ?? []),
             'num_of_reactions' => $this->reactions_count,
             'num_of_comments' => count($comments),
             'current_user_has_reaction' => $this->reactions->count() > 0,
-            'comments' => self::convertCommentsIntoTree($comments)
+            'comments' => self::convertCommentsIntoTree($comments),
+            // 'shared_post' => $this->sharedPost ? new self($this->sharedPost) : null,
+            'shared_post' => $this->sharedPost ? [
+                'id' => $this->sharedPost->id,
+                'body' => $this->sharedPost->body,
+                'preview' => $this->sharedPost->preview,
+                'preview_url' => $this->sharedPost->preview_url,
+                'created_at' => $this->sharedPost->created_at->format('Y-m-d H:i:s'),
+                'updated_at' => $this->sharedPost->updated_at->format('Y-m-d H:i:s'),
+                'view' => route('post.view', ['post' => $this->sharedPost->id]),
+                'user' => new UserResource($this->sharedPost->user),
+                'group' => new GroupResource($this->sharedPost->group),
+                'attachments' => PostAttachmentResource::collection($this->sharedPost->attachments ?? [])
+            ] : null,
         ];
     }
 

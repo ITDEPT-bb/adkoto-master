@@ -18,9 +18,11 @@ use App\Notifications\CommentPosted;
 use App\Notifications\CommentReplied;
 use App\Notifications\PostDeleted;
 use App\Notifications\PostReacted;
+use App\Notifications\PostShared;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
@@ -122,6 +124,48 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         //
+    }
+
+    public function share(Request $request, $postId)
+    {
+        $request->validate([
+            'body' => 'nullable|string',
+        ]);
+
+        $originalPost = Post::findOrFail($postId);
+        $userId = Auth::id();
+
+        $sharedPost = Post::create([
+            'user_id' => $userId,
+            'body' => $request->body,
+            'shared_post_id' => $originalPost->id,
+        ]);
+
+        // Log post details for debugging
+        Log::info('Post shared:', [
+            'Shared Post ID' => $sharedPost->id,
+            'Original Post ID' => $originalPost->id,
+            'Sharer ID' => $userId,
+            'Original Post Owner ID' => $originalPost->user->id
+        ]);
+
+        // Check if the notification should be sent
+        if ($originalPost->user->id !== $userId) {
+            Log::info('Sending notification to user:', [
+                'Receiver ID' => $originalPost->user->id,
+                'Sharer ID' => $userId
+            ]);
+
+            // $originalPost->user->notify(new PostShared($originalPost, Auth::user()));
+
+            $originalPost->user->notify(new PostShared(Auth::user(), $originalPost));
+
+            Log::info('Notification sent successfully!');
+        } else {
+            Log::info('Notification not sent: User shared their own post.');
+        }
+
+        return response()->json(['message' => 'Post shared successfully!']);
     }
 
     /**

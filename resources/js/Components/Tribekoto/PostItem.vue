@@ -2,7 +2,7 @@
 import { ChatBubbleLeftRightIcon, HandThumbUpIcon } from "@heroicons/vue/24/outline";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import PostUserHeader from "@/Components/Tribekoto/PostUserHeader.vue";
-import { router, useForm, usePage } from "@inertiajs/vue3";
+import { router, useForm, usePage, Link } from "@inertiajs/vue3";
 import axiosClient from "@/axiosClient.js";
 import ReadMoreReadLess from "@/Components/Tribekoto/ReadMoreReadLess.vue";
 import EditDeleteDropdown from "@/Components/Tribekoto/EditDeleteDropdown.vue";
@@ -15,6 +15,8 @@ import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } fro
 import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline";
 import ReactionList from "./ReactionList.vue";
 import ShareIcon from "@/Components/Icons/ShareIcon.vue";
+import PostAttachmentShare from "@/Components/Tribekoto/PostAttachmentShare.vue";
+import BaseModal from "./BaseModal.vue";
 
 const open = ref(false);
 
@@ -100,6 +102,37 @@ function pinUnpinPost() {
 function openAttachment(ind) {
 	emit("attachmentClick", props.post, ind);
 }
+
+const shareModalVisible = ref(false);
+const sharePostId = ref(null);
+const shareBody = ref("");
+const isSharing = ref(false);
+
+const openShareModal = (postId) => {
+	sharePostId.value = postId;
+	shareBody.value = "";
+	shareModalVisible.value = true;
+};
+
+const submitShare = async () => {
+	if (isSharing.value) return;
+	isSharing.value = true;
+
+	try {
+		await axios.post(`/post/${sharePostId.value}/share`, {
+			body: shareBody.value,
+			preview: {},
+			preview_url: null,
+		});
+		// alert("Post shared successfully!");
+		window.location.reload();
+		shareModalVisible.value = false;
+	} catch (error) {
+		console.error(error);
+	} finally {
+		isSharing.value = false;
+	}
+};
 
 // const showReactions = ref(false);
 // const isLoading = ref(false);
@@ -206,6 +239,28 @@ const sendReaction = (type = "like") => {
 				:preview="post.preview"
 				:url="post.preview_url" />
 		</div>
+		<div
+			v-if="post.shared_post"
+			class="border p-3 mt-2 rounded-lg bg-gray-100">
+			<PostUserHeader :post="post.shared_post" />
+			<!-- <p class="text-gray-700">{{ post.shared_post.body }}</p> -->
+			<ReadMoreReadLess :content="post.shared_post.body" />
+
+			<!-- Shared Post Attachments -->
+			<div
+				v-if="post.shared_post.attachments && post.shared_post.attachments.length > 0"
+				class="grid gap-3 m-3"
+				:class="[post.shared_post.attachments.length === 1 ? 'grid-cols-1' : 'grid-cols-2']">
+				<!-- <Link :href="post.shared_post.view"> -->
+				<PostAttachmentShare
+					v-if="post.shared_post && post.shared_post.attachments"
+					:attachments="post.shared_post.attachments"
+					:view-url="post.shared_post.view"
+					@attachmentClick="openAttachment" />
+				<!-- </Link> -->
+			</div>
+		</div>
+
 		<div
 			class="grid gap-3 mb-3"
 			:class="[post.attachments.length === 1 ? 'grid-cols-1' : 'grid-cols-2']">
@@ -325,13 +380,47 @@ const sendReaction = (type = "like") => {
 					Comment
 				</DisclosureButton>
 
+				<!-- <button @click="sharePost(post.shared_post ? post.shared_post.id : post.id)">Share</button> -->
+				<!-- <button @click="openShareModal(post.shared_post ? post.shared_post.id : post.id)">
+					Share
+				</button> -->
+
+				<BaseModal
+					title="Share Post"
+					v-model="shareModalVisible">
+					<div class="p-4">
+						<textarea
+							v-model="shareBody"
+							placeholder="Add a message..."
+							class="w-full p-2 border rounded-md"></textarea>
+						<div class="mt-4 flex justify-end space-x-2">
+							<button
+								@click="shareModalVisible = false"
+								class="px-4 py-2 bg-gray-300 rounded-md">
+								Cancel
+							</button>
+							<button
+								@click="submitShare"
+								:disabled="isSharing"
+								class="px-4 py-2 bg-blue-600 text-white rounded-md flex items-center justify-center"
+								:class="{ 'opacity-50 cursor-not-allowed': isSharing }">
+								<span v-if="isSharing">Sharing...</span>
+								<span v-else>Share</span>
+							</button>
+						</div>
+					</div>
+				</BaseModal>
+
 				<!-- Share Button -->
-				<!-- <button
-                    class="text-gray-800 dark:text-gray-100 flex gap-1 items-center justify-center bg-gray-100 dark:bg-slate-900 dark:hover:bg-slate-800 rounded-lg hover:bg-gray-200 py-2 px-4 flex-1"
-                >
-                    <ShareIcon class="w-5 h-5" />
-                    Share
-                </button> -->
+				<button
+					@click="openShareModal(post.shared_post ? post.shared_post.id : post.id)"
+					:disabled="isSharing"
+					class="text-gray-800 dark:text-gray-100 flex gap-1 items-center justify-center bg-gray-100 dark:bg-slate-900 dark:hover:bg-slate-800 rounded-lg hover:bg-gray-200 py-2 px-4 flex-1"
+					:class="{ 'opacity-50 cursor-not-allowed': isSharing }">
+					<ShareIcon class="w-5 h-5" />
+					<span v-if="isSharing">Sharing...</span>
+					<span v-else>Share</span>
+				</button>
 			</div>
 
 			<DisclosurePanel class="comment-list mt-3 max-h-[400px] overflow-auto scrollbar-thin">

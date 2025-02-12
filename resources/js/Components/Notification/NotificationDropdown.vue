@@ -82,6 +82,13 @@
 														:alt="notification.data.reaction"
 														class="w-6 h-6 object-contain relative top-3 left-4" />
 												</template>
+
+												<template v-else-if="notification.data.icon">
+													<span
+														class="w-6 h-6 flex items-center justify-center text-md relative top-3 left-4">
+														{{ notification.data.icon }}
+													</span>
+												</template>
 											</div>
 										</div>
 										<div class="flex flex-col">

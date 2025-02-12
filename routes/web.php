@@ -270,6 +270,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/{post}', [PostController::class, 'update'])
             ->name('post.update');
 
+        Route::post('/{post}/share', [PostController::class, 'share'])
+            ->name('post.share');
+
         Route::delete('/{post}', [PostController::class, 'destroy'])
             ->name('post.destroy');
 
