@@ -188,6 +188,34 @@ const reactions = [
 	{ name: "angry", image: "/img/Reactions/angry.png", label: "Angry" },
 ];
 
+const getReactionIcon = (reaction) => {
+	const reactionIcons = {
+		like: "/img/Reactions/like.png",
+		love: "/img/Reactions/love.png",
+		haha: "/img/Reactions/haha.png",
+		wow: "/img/Reactions/wow.png",
+		sad: "/img/Reactions/sad.png",
+		angry: "/img/Reactions/angry.png",
+	};
+	return reactionIcons[reaction] || "/img/Reactions/like.png";
+};
+
+const getReactionColor = (reaction) => {
+	const reactionColors = {
+		like: "text-blue-500",
+		love: "text-red-500",
+		haha: "text-yellow-500",
+		wow: "text-green-500",
+		sad: "text-purple-500",
+		angry: "text-gray-500",
+	};
+	return reactionColors[reaction] || "text-blue-600 dark:text-gray-300";
+};
+
+const capitalizeReaction = (reaction) => {
+	return reaction ? reaction.charAt(0).toUpperCase() + reaction.slice(1) : "Like";
+};
+
 // Long press detection for mobile
 let pressTimer;
 const startLongPress = () => {
@@ -317,13 +345,67 @@ const sendReaction = (type = "like") => {
 					@mouseenter="!post.current_user_has_reaction && (showReactions = true)"
 					@touchstart="startLongPress"
 					@touchend="cancelLongPress"
-					class="w-full flex items-center justify-center gap-1 text-gray-600 dark:text-gray-300 px-1 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+					class="w-full flex items-center justify-center gap-1 px-1 py-2 rounded-md transition hover:bg-gray-100 dark:hover:bg-gray-800"
+					:class="[
+						post.current_user_has_reaction
+							? 'font-bold ' + getReactionColor(post.current_user_reaction)
+							: 'text-gray-600 dark:text-gray-300',
+					]"
 					:disabled="isLoading">
 					<HandThumbUpIcon class="w-5 h-5" />
 					<span>{{ post.num_of_reactions }}</span>
 					<span v-if="!isLoading">{{ post.current_user_has_reaction ? "Unlike" : "Like" }}</span>
 					<span v-else>Loading...</span>
 				</button>
+
+				<!-- <button
+					@click="sendReaction()"
+					@mouseenter="!post.current_user_has_reaction && (showReactions = true)"
+					@touchstart="startLongPress"
+					@touchend="cancelLongPress"
+					class="w-full flex items-center justify-center gap-1 text-gray-600 dark:text-gray-300 px-1 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+					:disabled="isLoading">
+					<HandThumbUpIcon class="w-5 h-5" />
+					<span>{{ post.num_of_reactions }}</span>
+					<span v-if="!isLoading">{{ post.current_user_has_reaction ? "Unlike" : "Like" }}</span>
+					<span v-else>Loading...</span>
+				</button> -->
+
+				<!-- <button
+					@click="sendReaction()"
+					@mouseenter="!post.current_user_has_reaction && (showReactions = true)"
+					@touchstart="startLongPress"
+					@touchend="cancelLongPress"
+					class="w-full flex items-center justify-center gap-1 px-1 py-2 rounded-md transition hover:bg-gray-100 dark:hover:bg-gray-800"
+					:class="{
+						'text-gray-600 dark:text-gray-300': !post.current_user_has_reaction,
+						'text-blue-500': post.current_user_reaction === 'like',
+						'text-red-500': post.current_user_reaction === 'love',
+						'text-yellow-500': post.current_user_reaction === 'haha',
+						'text-green-500': post.current_user_reaction === 'wow',
+						'text-purple-500': post.current_user_reaction === 'sad',
+						'text-gray-500': post.current_user_reaction === 'angry',
+					}"
+					:disabled="isLoading">
+					<img
+						v-if="post.current_user_has_reaction"
+						:src="getReactionIcon(post.current_user_reaction)"
+						:alt="post.current_user_reaction"
+						class="w-5 h-5" />
+					<HandThumbUpIcon
+						v-else
+						class="w-5 h-5" />
+
+					<span>{{ post.num_of_reactions }}</span>
+					<span v-if="!isLoading">
+						{{
+							post.current_user_has_reaction
+								? capitalizeReaction(post.current_user_reaction)
+								: "Like"
+						}}
+					</span>
+					<span v-else>Loading...</span>
+				</button> -->
 
 				<!-- Comment Button -->
 				<DisclosureButton
