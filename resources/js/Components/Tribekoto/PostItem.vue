@@ -1,5 +1,9 @@
 <script setup>
-import { ChatBubbleLeftRightIcon, HandThumbUpIcon } from "@heroicons/vue/24/outline";
+import {
+	ArrowPathRoundedSquareIcon,
+	ChatBubbleLeftRightIcon,
+	HandThumbUpIcon,
+} from "@heroicons/vue/24/outline";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import PostUserHeader from "@/Components/Tribekoto/PostUserHeader.vue";
 import { router, useForm, usePage, Link } from "@inertiajs/vue3";
@@ -283,23 +287,8 @@ const sendReaction = (type = "like") => {
 		</div>
 
 		<Disclosure v-slot="{ open }">
-			<div class="flex gap-2 relative">
+			<div class="flex gap-2 relative border-t border-b my-1">
 				<!-- Reaction Picker -->
-				<!-- <div
-					v-if="showReactions && !post.current_user_has_reaction"
-					@mouseleave="showReactions = false"
-					class="absolute z-10 top-10 bg-white shadow-lg rounded-lg p-2">
-					<button
-						v-for="reaction in reactions"
-						:key="reaction.name"
-						class="px-2 py-1 m-1 rounded bg-blue-200 hover:bg-blue-500 hover:text-white transition-all"
-						@click="() => sendReaction(reaction.name)">
-						<img
-							:src="reaction.image"
-							:alt="reaction.label"
-							class="w-8 h-8" />
-					</button>
-				</div> -->
 				<div
 					v-if="showReactions && !post.current_user_has_reaction"
 					@mouseleave="showReactions = false"
@@ -328,71 +317,35 @@ const sendReaction = (type = "like") => {
 					@mouseenter="!post.current_user_has_reaction && (showReactions = true)"
 					@touchstart="startLongPress"
 					@touchend="cancelLongPress"
-					:class="[
-						post.current_user_has_reaction
-							? isLoading
-								? 'bg-gray-300 cursor-not-allowed'
-								: 'bg-red-300 dark:bg-sky-900 hover:bg-red-400 dark:hover:bg-sky-950'
-							: isLoading
-							? 'bg-gray-300 cursor-not-allowed'
-							: 'bg-red-100 dark:bg-slate-900 hover:bg-red-200 dark:hover:bg-slate-800',
-						'text-gray-800 dark:text-gray-100 flex gap-1 items-center justify-center rounded-lg py-2 px-4 flex-1',
-					]"
+					class="w-full flex items-center justify-center gap-1 text-gray-600 dark:text-gray-300 px-1 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition"
 					:disabled="isLoading">
 					<HandThumbUpIcon class="w-5 h-5" />
-					<span class="mr-2">{{ post.num_of_reactions }}</span>
-					<span v-if="!isLoading">{{ post.current_user_has_reaction ? "Unlike" : "React" }}</span>
+					<span>{{ post.num_of_reactions }}</span>
+					<span v-if="!isLoading">{{ post.current_user_has_reaction ? "Unlike" : "Like" }}</span>
 					<span v-else>Loading...</span>
 				</button>
-				<!-- Like/React Button -->
-				<!-- <button
-					@click="sendReaction()"
-					@mouseenter="!post.current_user_has_reaction && (showReactions = true)"
-					@touchstart="startLongPress"
-					@touchend="cancelLongPress"
-					:class="[
-						post.current_user_has_reaction
-							? isLoading
-								? 'bg-gray-300 cursor-not-allowed'
-								: 'bg-red-300 dark:bg-sky-900 hover:bg-red-400 dark:hover:bg-sky-950'
-							: isLoading
-							? 'bg-gray-300 cursor-not-allowed'
-							: 'bg-red-100 dark:bg-slate-900 hover:bg-red-200 dark:hover:bg-slate-800',
-						'text-gray-800 dark:text-gray-100 flex gap-1 items-center justify-center rounded-lg py-2 px-4 flex-1',
-					]"
-					:disabled="isLoading">
-					<HandThumbUpIcon class="w-5 h-5" />
-					<span class="mr-2">{{ post.num_of_reactions }}</span>
-					<span v-if="!isLoading">{{ post.current_user_has_reaction ? "Unlike" : "React" }}</span>
-					<span v-else>Loading...</span>
-				</button>
-
-				<div
-					v-if="showReactions"
-					class="reaction-popup">
-					<div
-						v-for="reaction in reactions"
-						:key="reaction.name"
-						@click="sendReaction(reaction.name)">
-						<img
-							:src="reaction.image"
-							:alt="reaction.label"
-							class="w-8 h-8" />
-					</div>
-				</div> -->
 
 				<!-- Comment Button -->
 				<DisclosureButton
-					class="text-gray-800 dark:text-gray-100 flex gap-1 items-center justify-center bg-gray-100 dark:bg-slate-900 dark:hover:bg-slate-800 rounded-lg hover:bg-gray-200 py-2 px-4 flex-1">
+					class="w-full flex items-center justify-center gap-1 text-gray-600 dark:text-gray-300 px-1 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition">
 					<ChatBubbleLeftRightIcon class="w-5 h-5" />
-					<span class="mr-2">{{ post.num_of_comments }}</span>
+					<span>{{ post.num_of_comments }}</span>
 					Comment
 				</DisclosureButton>
 
-				<!-- <button @click="sharePost(post.shared_post ? post.shared_post.id : post.id)">Share</button> -->
-				<!-- <button @click="openShareModal(post.shared_post ? post.shared_post.id : post.id)">
-					Share
-				</button> -->
+				<!-- Share Button -->
+				<button
+					v-if="!(post.group && post.group.group_status === 'private')"
+					@click="openShareModal(post.shared_post ? post.shared_post.id : post.id)"
+					:disabled="isSharing"
+					class="w-full flex items-center justify-center gap-1 text-gray-600 dark:text-gray-300 px-1 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+					:class="{ 'opacity-50 cursor-not-allowed': isSharing }">
+					<!-- <ShareIcon class="w-5 h-5" /> -->
+					<ArrowPathRoundedSquareIcon class="w-5 h-5" />
+					<span>{{ post.num_of_shares }}</span>
+					<span v-if="isSharing">Sharing...</span>
+					<span v-else>Share</span>
+				</button>
 
 				<BaseModal
 					title="Share Post"
@@ -420,29 +373,6 @@ const sendReaction = (type = "like") => {
 						</div>
 					</div>
 				</BaseModal>
-
-				<!-- Share Button -->
-				<!-- <button
-					@click="openShareModal(post.shared_post ? post.shared_post.id : post.id)"
-					:disabled="isSharing"
-					class="text-gray-800 dark:text-gray-100 flex gap-1 items-center justify-center bg-gray-100 dark:bg-slate-900 dark:hover:bg-slate-800 rounded-lg hover:bg-gray-200 py-2 px-4 flex-1"
-					:class="{ 'opacity-50 cursor-not-allowed': isSharing }">
-					<ShareIcon class="w-5 h-5" />
-					<span v-if="isSharing">Sharing...</span>
-					<span v-else>Share</span>
-				</button> -->
-				<!-- Share Button -->
-				<button
-					v-if="!(post.group && post.group.group_status === 'private')"
-					@click="openShareModal(post.shared_post ? post.shared_post.id : post.id)"
-					:disabled="isSharing"
-					class="text-gray-800 dark:text-gray-100 flex gap-1 items-center justify-center bg-gray-100 dark:bg-slate-900 dark:hover:bg-slate-800 rounded-lg hover:bg-gray-200 py-2 px-4 flex-1"
-					:class="{ 'opacity-50 cursor-not-allowed': isSharing }">
-					<ShareIcon class="w-5 h-5" />
-					<span class="mr-2">{{ post.num_of_shares }}</span>
-					<span v-if="isSharing">Sharing...</span>
-					<span v-else>Share</span>
-				</button>
 			</div>
 
 			<DisclosurePanel class="comment-list mt-3 max-h-[400px] overflow-auto scrollbar-thin">
