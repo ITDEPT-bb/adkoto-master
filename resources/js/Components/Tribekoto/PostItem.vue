@@ -8,7 +8,7 @@ import ReadMoreReadLess from "@/Components/Tribekoto/ReadMoreReadLess.vue";
 import EditDeleteDropdown from "@/Components/Tribekoto/EditDeleteDropdown.vue";
 import PostAttachments from "@/Components/Tribekoto/PostAttachments.vue";
 import CommentList from "@/Components/Tribekoto/CommentList.vue";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import UrlPreview from "@/Components/Tribekoto/UrlPreview.vue";
 import { MapPinIcon } from "@heroicons/vue/24/outline/index.js";
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from "@headlessui/vue";
@@ -114,6 +114,14 @@ const openShareModal = (postId) => {
 	shareModalVisible.value = true;
 };
 
+const setDefaultShareBody = () => {
+	shareBody.value = "Check this out! 🔄";
+};
+
+watch(shareModalVisible, (newValue) => {
+	if (newValue) setDefaultShareBody();
+});
+
 const submitShare = async () => {
 	if (isSharing.value) return;
 	isSharing.value = true;
@@ -127,6 +135,7 @@ const submitShare = async () => {
 		// alert("Post shared successfully!");
 		window.location.reload();
 		shareModalVisible.value = false;
+		shareBody.value = "";
 	} catch (error) {
 		console.error(error);
 	} finally {
@@ -387,7 +396,8 @@ const sendReaction = (type = "like") => {
 
 				<BaseModal
 					title="Share Post"
-					v-model="shareModalVisible">
+					v-model="shareModalVisible"
+					@open="setDefaultShareBody">
 					<div class="p-4">
 						<textarea
 							v-model="shareBody"
