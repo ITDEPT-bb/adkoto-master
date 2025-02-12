@@ -37,7 +37,10 @@ class PostController extends Controller
             ])->toResponse($request)->setStatusCode(403);
         }
 
-        $post->loadCount('reactions');
+        $post->loadCount([
+            'reactions',
+            'shares',
+        ]);
         $post->load([
             'comments' => function ($query) {
                 $query->withCount('reactions'); // SELECT * FROM comments WHERE post_id IN (1, 2, 3...)

@@ -41,6 +41,7 @@ class PostResource extends JsonResource
             'num_of_comments' => count($comments),
             'current_user_has_reaction' => $this->reactions->count() > 0,
             'comments' => self::convertCommentsIntoTree($comments),
+            'num_of_shares' => $this->shares_count,
             // 'shared_post' => $this->sharedPost ? new self($this->sharedPost) : null,
             'shared_post' => $this->sharedPost ? [
                 'id' => $this->sharedPost->id,
@@ -63,7 +64,7 @@ class PostResource extends JsonResource
      * @param \App\Models\Comment[] $comments
      * @param                       $parentId
      * @return array
-     * @author Zura Sekhniashvili <zurasekhniashvili@gmail.com>
+     * @author Ahllaine Christian De Ocera <acdeocera.bb88@gmail.com>
      */
     private static function convertCommentsIntoTree($comments, $parentId = null): array
     {

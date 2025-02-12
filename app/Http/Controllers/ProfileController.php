@@ -90,6 +90,7 @@ class ProfileController extends Controller
             ->whereNull('group_id')
             ->orderBy('u.pinned_post_id', 'desc')
             ->orderBy('posts.created_at', 'desc')
+            ->withCount('shares')
             ->paginate(10);
 
         $posts = PostResource::collection($posts);

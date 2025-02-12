@@ -85,6 +85,7 @@ class HomeController extends Controller
             })
             ->with(['sharedPost.attachments', 'sharedPost.reactions', 'sharedPost.user'])
             ->withCount('reactions')
+            ->withCount('shares')
             ->latest()
             ->paginate(10);
 

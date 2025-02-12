@@ -79,10 +79,16 @@ class Post extends Model
     //     return $this->belongsTo(Post::class, 'shared_post_id');
     // }
 
+    public function shares()
+    {
+        return $this->hasMany(Post::class, 'shared_post_id');
+    }
+
     public static function postsForTimeline($userId, $getLatest = true): Builder
     {
         $query = Post::query() // SELECT * FROM posts
             ->withCount('reactions') // SELECT COUNT(*) from reactions
+            ->withCount('shares')
             ->with([
                 'user',
                 'group',
