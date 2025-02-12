@@ -22,6 +22,20 @@ import ShareIcon from "@/Components/Icons/ShareIcon.vue";
 import PostAttachmentShare from "@/Components/Tribekoto/PostAttachmentShare.vue";
 import BaseModal from "./BaseModal.vue";
 
+import "emoji-picker-element";
+import EmojiIcon from "@/Components/Icons/EmojiIcon.vue";
+const showEmojiPicker = ref(true);
+
+function toggleEmojiPicker() {
+	showEmojiPicker.value = !showEmojiPicker.value;
+}
+
+function addEmoji(event) {
+	const emoji = event.detail.unicode || event.detail.emoji;
+	shareBody.value += emoji;
+	showEmojiPicker.value = false;
+}
+
 const open = ref(false);
 
 const openDeleteModal = () => {
@@ -433,11 +447,27 @@ const sendReaction = (type = "like") => {
 					title="Share Post"
 					v-model="shareModalVisible"
 					@open="setDefaultShareBody">
-					<div class="p-4">
-						<textarea
-							v-model="shareBody"
-							placeholder="Add a message..."
-							class="w-full p-2 border rounded-md"></textarea>
+					<div class="p-4 h-[500px]">
+						<div class="relative">
+							<textarea
+								v-model="shareBody"
+								placeholder="Add a message..."
+								class="w-full p-2 border rounded-md"></textarea>
+							<!-- Emoji Button -->
+							<button
+								@click="toggleEmojiPicker"
+								class="absolute right-2 bottom-2 p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
+								<EmojiIcon class="w-6 h-6 text-gray-500" />
+							</button>
+						</div>
+
+						<!-- Emoji Picker -->
+						<emoji-picker
+							v-if="showEmojiPicker"
+							class="absolute z-10 mt-2 pe-10 me-4"
+							@emoji-click="addEmoji">
+						</emoji-picker>
+
 						<div class="mt-4 flex justify-end space-x-2">
 							<button
 								@click="shareModalVisible = false"
