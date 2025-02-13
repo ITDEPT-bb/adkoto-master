@@ -96,6 +96,12 @@
 											:alt="notification.data.reaction"
 											class="w-6 h-6 object-contain" />
 									</template>
+
+									<template v-else-if="notification.data.icon">
+										<span class="w-6 h-6 flex items-center justify-center text-md">
+											{{ notification.data.icon }}
+										</span>
+									</template>
 								</div>
 								<p class="text-sm text-gray-500">
 									{{ dayjs(notification.created_at).fromNow() }}
