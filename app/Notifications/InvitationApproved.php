@@ -63,6 +63,7 @@ class InvitationApproved extends Notification
             'user_id' => $this->user->id,
             'user_name' => $this->user->name,
             'route' => route('group.profile', $this->group),
+            'icon' => '✅',
             'message' => 'User "' . $this->user->name . '" has joined the group "' . $this->group->name . '"',
         ];
     }

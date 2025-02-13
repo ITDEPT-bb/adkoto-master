@@ -58,6 +58,7 @@ class RequestApproved extends Notification
             'approved' => $this->approved,
             'message' => 'Your request to join the group "' . $this->group->name . '" has been ' . ($this->approved ? 'approved' : 'rejected'),
             'route' => route('group.profile', $this->group),
+            'icon' => '✅',
             // 'action_url' => url(route('group.profile', $this->group)),
         ];
     }

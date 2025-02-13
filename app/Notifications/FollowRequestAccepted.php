@@ -63,6 +63,7 @@ class FollowRequestAccepted extends Notification
             'user_id' => $this->user->id, // The user who accepted the follow request
             'username' => $this->user->username,
             'route' => route('profile', $this->user->username), // Assuming a profile route exists
+            'icon' => '🎉',
             'message' => "{$this->user->name} {$this->user->surname} has accepted your follow request."
         ];
     }

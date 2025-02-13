@@ -62,6 +62,7 @@ class RequestToJoinGroup extends Notification
             'user_id' => $this->user->id,
             'user_name' => $this->user->name,
             'route' => route('group.profile', $this->group),
+            'icon' => '✉️',
             'message' => 'User "' . $this->user->name . '" requested to join the group "' . $this->group->name . '"',
         ];
     }

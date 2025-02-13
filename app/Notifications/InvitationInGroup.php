@@ -58,6 +58,7 @@ class InvitationInGroup extends Notification
             'hours' => $this->hours,
             'token' => $this->token,
             'route' => route('group.approveInvitation', $this->token),
+            'icon' => '✉️',
             'message' => 'You have been invited to join the group "' . $this->group->name . '".',
         ];
     }

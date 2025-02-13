@@ -62,7 +62,8 @@ class CommentPosted extends Notification
             'post_title' => $this->post->title,
             'comment' => $this->comment,
             'route' => route('post.view', $this->post->id),
-            'message' => $this->user->name . ' ' . $this->user->surname . ' commented on your post'
+            'message' => $this->user->name . ' ' . $this->user->surname . ' commented on your post',
+            'icon' => '💬',
         ];
     }
 }

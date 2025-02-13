@@ -69,6 +69,7 @@ class FollowUser extends Notification
             'follow' => $this->follow,
             // 'route' => route('profile', $this->user->username),
             'route' => $this->getRoute(),
+            'icon' => '🔔',
             'message' => $this->getNotificationMessage(),
         ];
     }

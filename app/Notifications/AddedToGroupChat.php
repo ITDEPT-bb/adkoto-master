@@ -70,6 +70,7 @@ class AddedToGroupChat extends Notification
             'route' => route('group-chats.index', $this->group->id),
             // 'message' => 'You have been invited to join the group chat "' . $this->group->name . '".',
             'message' => $this->user->name . ' added ' . $this->addedUser->name . ' to the group "' . $this->group->name . '".',
+            'icon' => '🎉',
         ];
     }
 }

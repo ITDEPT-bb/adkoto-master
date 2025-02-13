@@ -66,6 +66,7 @@ class CommentReplied extends Notification
             'comment' => $this->comment,
             'route' => route('post.view', $this->post->id),
             'message' => $this->commenter->name . ' replied to your comment: ' . $this->parentComment->comment,
+            'icon' => '💬',
         ];
     }
 }
