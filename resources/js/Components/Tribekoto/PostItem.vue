@@ -133,7 +133,7 @@ const openShareModal = (postId) => {
 };
 
 const setDefaultShareBody = () => {
-	shareBody.value = "Check this out! 🔄";
+	shareBody.value = "";
 };
 
 watch(shareModalVisible, (newValue) => {

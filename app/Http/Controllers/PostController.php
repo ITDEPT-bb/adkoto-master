@@ -138,9 +138,12 @@ class PostController extends Controller
         $originalPost = Post::findOrFail($postId);
         $userId = Auth::id();
 
+        $body = trim($request->body) !== '' ? $request->body : '';
+
         $sharedPost = Post::create([
             'user_id' => $userId,
-            'body' => $request->body,
+            // 'body' => $request->body,
+            'body' => $body,
             'shared_post_id' => $originalPost->id,
         ]);
 
