@@ -72,7 +72,7 @@ const fetchShowWindowData = async () => {
 onMounted(() => {
 	// if (!noActiveBidding.value) {
 	fetchShowWindowData();
-	interval = setInterval(fetchShowWindowData, 3000);
+	interval = setInterval(fetchShowWindowData, 20000);
 	// }
 });
 

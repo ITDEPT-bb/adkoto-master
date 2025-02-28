@@ -52,7 +52,7 @@ const fetchLatestBidsLive = async () => {
 onMounted(() => {
 	intervalId.value = setInterval(() => {
 		fetchLatestBidsLive();
-	}, 5000);
+	}, 20000);
 
 	fetchLatestBidsLive();
 });

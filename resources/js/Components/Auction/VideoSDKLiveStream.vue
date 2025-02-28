@@ -115,7 +115,7 @@ const pollStreamStatus = () => {
 		const status = await meeting.getHlsState();
 		isStreamLive.value = status === "HLS_PLAYABLE";
 		if (!isStreamLive.value) clearInterval(interval);
-	}, 5000);
+	}, 20000);
 };
 
 onMounted(() => {

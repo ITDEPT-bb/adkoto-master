@@ -108,7 +108,7 @@ const fetchLatestBidsList = async () => {
 onMounted(() => {
 	intervalId.value = setInterval(() => {
 		fetchLatestBidsList();
-	}, 5000);
+	}, 20000);
 
 	fetchLatestBidsList();
 });
