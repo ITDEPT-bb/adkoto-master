@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\GroupChatMessageSent;
 use App\Events\MessageSent;
 use App\Http\Resources\GroupChatResource;
 use App\Http\Resources\UserResource;
@@ -368,31 +369,58 @@ class ChatController extends Controller
 
     public function sendMessageToGroup(Request $request, GroupChat $group)
     {
-        $message = new Message();
-        $message->message = $request->message;
-        $message->sender_id = auth()->id();
-        $message->group_id = $group->id;
-        $message->save();
+        $request->validate([
+            'message' => 'nullable|string',
+            'files.*' => 'nullable|file|mimes:jpg,jpeg,png,gif,mp4,mov,avi|max:20480',
+        ]);
 
-        // Handle file attachments
-        if ($request->hasFile('files')) {
-            foreach ($request->file('files') as $file) {
-                // $path = $file->store('message_attachments');
-                $path = $file->store('message_attachments/' . $message->id, 'public');
-                $message->attachments()->create([
-                    'name' => $file->getClientOriginalName(),
-                    'path' => $path,
-                    'mime' => $file->getMimeType(),
-                    'size' => $file->getSize(),
-                ]);
-            }
+        if (empty($request->message) && !$request->hasFile('files')) {
+            return response()->json(['error' => 'Message or files are required'], 400);
         }
 
-        // Update last message in the group
-        $group->last_message_id = $message->id;
-        $group->save();
+        try {
+            // Create the message
+            $message = Message::create([
+                'sender_id' => auth()->id(),
+                'group_id' => $group->id,
+                'message' => $request->message,
+            ]);
 
-        return response()->json($message);
+            // Update last message in the group
+            $group->update(['last_message_id' => $message->id]);
+
+            // Handle file uploads if there are any
+            if ($request->hasFile('files')) {
+                $attachments = [];
+                foreach ($request->file('files') as $file) {
+                    // Store the file and get its path
+                    $path = $file->store('message_attachments/' . $message->id, 'public');
+
+                    // Prepare the attachment data for batch insert
+                    $attachments[] = [
+                        'message_id' => $message->id,
+                        'name' => $file->getClientOriginalName(),
+                        'path' => $path,
+                        'mime' => $file->getMimeType(),
+                        'size' => $file->getSize(),
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                }
+
+                // Batch insert the attachments
+                MessageAttachment::insert($attachments);
+            }
+
+            // Broadcast the message to the group
+            Log::info('Broadcasting message to group chat: ', ['message' => $message]);
+            broadcast(new GroupChatMessageSent($message))->toOthers();
+
+            return response()->json($message);
+        } catch (\Exception $e) {
+            Log::error('Failed to send message to group: ', ['error' => $e->getMessage()]);
+            return response()->json(['error' => 'Failed to send message'], 500);
+        }
     }
 
 }

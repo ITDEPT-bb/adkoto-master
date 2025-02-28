@@ -9,7 +9,7 @@
 			:key="message.id"
 			class="chat-message">
 			<div
-				class="flex items-end"
+				class="flex items-center"
 				:class="{
 					'justify-end': message.sender_id === authUser.id,
 					'justify-start': message.sender_id !== authUser.id,
@@ -146,6 +146,8 @@ const authUser = props.authUser;
 const user = props.user;
 const conversation = props.conversation;
 const messageContainer = ref(null);
+
+const isUserScrolling = ref(false);
 
 const scrollToBottom = async () => {
 	await nextTick();

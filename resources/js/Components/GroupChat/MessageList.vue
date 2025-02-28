@@ -18,7 +18,7 @@
 
 			<div
 				v-else
-				class="flex items-end"
+				class="flex items-center"
 				:class="{
 					'justify-end': message.sender_id === authUser.id,
 					'justify-start': message.sender_id !== authUser.id,
@@ -89,9 +89,14 @@
 						>{{ formatTime(message.created_at) }}</small
 					>
 				</div>
-				<img
+				<!-- <img
 					v-if="message.sender_id !== authUser.id"
 					:src="message.sender.avatar_url"
+					alt="Profile Picture"
+					class="w-6 h-6 rounded-full" /> -->
+				<img
+					v-if="message.sender_id !== authUser.id && message.sender"
+					:src="message.sender.avatar_url || '/img/default_avatar.png'"
 					alt="Profile Picture"
 					class="w-6 h-6 rounded-full" />
 			</div>
@@ -118,6 +123,7 @@ const props = defineProps({
 	messages: Array,
 	authUser: Object,
 	group: Object,
+	// conversation: Object,
 	showTime: {
 		type: Boolean,
 		default: true,
@@ -138,6 +144,9 @@ const authUser = props.authUser;
 const user = props.user;
 const group = props.group;
 const messageContainer = ref(null);
+// const conversation = props.conversation;
+
+// console.log("Messages: ", conversation.id);
 
 let intervalId = null;
 const isUserScrolling = ref(false);
@@ -195,7 +204,13 @@ const onScroll = () => {
 };
 
 onMounted(() => {
-	startPolling();
+	// startPolling();
+	window.Echo.private(`groupchat.groups.${group.id}`).listen("GroupChatMessageSent", (event) => {
+		console.log("Message received: ", event.message);
+		console.log("Sender data: ", event.message.sender);
+		messages.value.push(event.message);
+		scrollToBottom();
+	});
 	scrollToBottom();
 });
 
