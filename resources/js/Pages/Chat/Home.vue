@@ -13,7 +13,7 @@
 
 <script setup>
 import { defineProps, ref, onMounted, onUnmounted } from "vue";
-import { Head, Link } from "@inertiajs/vue3";
+import { Head, usePage } from "@inertiajs/vue3";
 import AuthenticatedLayout from "@/Layouts/ChatLayout.vue";
 import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
 import FollowingList from "@/Components/Chat/FollowingList.vue";
@@ -34,6 +34,8 @@ const props = defineProps({
 	},
 });
 
+const authUser = usePage().props.auth.user;
+
 const messageUsers = ref(props.messageUsers);
 const groupChats = ref(props.groupChats);
 
@@ -48,11 +50,15 @@ const fetchLatestMessages = async () => {
 };
 
 onMounted(() => {
-	fetchLatestMessages();
-	const interval = setInterval(fetchLatestMessages, 1000);
+	// fetchLatestMessages();
+	// const interval = setInterval(fetchLatestMessages, 1000);
+
+	window.Echo.private(`chat.home.${authUser.id}`).listen("RefreshChatHome", (event) => {
+		fetchLatestMessages();
+	});
 
 	onUnmounted(() => {
-		clearInterval(interval);
+		// clearInterval(interval);
 	});
 });
 </script>

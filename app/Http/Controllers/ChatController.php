@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\GroupChatMessageSent;
 use App\Events\MessageSent;
+use App\Events\RefreshChatHome;
 use App\Http\Resources\GroupChatResource;
 use App\Http\Resources\UserResource;
 use App\Models\Block;
@@ -346,6 +347,7 @@ class ChatController extends Controller
             // Broadcast the message to a channel
             Log::info('Broadcasting message: ', ['message' => $message]);
             broadcast(new MessageSent($message))->toOthers();
+            broadcast(new RefreshChatHome($message))->toOthers();
 
             return response()->json($message);
         } catch (\Exception $e) {

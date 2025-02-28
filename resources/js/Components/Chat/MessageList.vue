@@ -192,9 +192,9 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
-	if (intervalId) {
-		clearInterval(intervalId);
-	}
+	// if (intervalId) {
+	// 	clearInterval(intervalId);
+	// }
 });
 
 watch(
