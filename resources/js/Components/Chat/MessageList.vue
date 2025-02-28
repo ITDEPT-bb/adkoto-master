@@ -74,6 +74,12 @@
 						class="text-gray-400 pl-1.5"
 						>{{ formatTime(message.created_at) }}</small
 					>
+					<small
+						v-if="message.status"
+						class="text-gray-400 pl-1.5"
+						>{{ message.status }}</small
+					>
+					<!-- Show status -->
 				</div>
 				<img
 					v-if="message.sender_id !== authUser.id"
@@ -135,15 +141,11 @@ const openImageModal = (src) => {
 	isImageModalVisible.value = true;
 };
 
-// const messages = ref(props.messages);
 const messages = ref([...props.messages]);
 const authUser = props.authUser;
 const user = props.user;
 const conversation = props.conversation;
 const messageContainer = ref(null);
-
-let intervalId = null;
-const isUserScrolling = ref(false);
 
 const scrollToBottom = async () => {
 	await nextTick();
@@ -165,10 +167,6 @@ const fetchMessages = async () => {
 	}
 };
 
-const startPolling = () => {
-	intervalId = setInterval(fetchMessages, 1000);
-};
-
 const onScroll = () => {
 	if (messageContainer.value) {
 		const bottomThreshold = 50;
@@ -183,7 +181,11 @@ const onScroll = () => {
 };
 
 onMounted(() => {
-	startPolling();
+	window.Echo.private(`chat.conversations.${conversation.id}`).listen("MessageSent", (event) => {
+		console.log("Message received: ", event.message);
+		messages.value.push(event.message);
+		scrollToBottom();
+	});
 	scrollToBottom();
 });
 

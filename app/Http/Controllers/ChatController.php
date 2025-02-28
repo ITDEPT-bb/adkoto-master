@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MessageSent;
 use App\Http\Resources\GroupChatResource;
 use App\Http\Resources\UserResource;
 use App\Models\Block;
@@ -12,6 +13,7 @@ use App\Models\Conversation;
 use App\Models\GroupChat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
@@ -292,21 +294,16 @@ class ChatController extends Controller
 
     public function sendMessage(Request $request)
     {
-        // Validate the request
         $request->validate([
             'receiver_id' => 'required|integer|exists:users,id',
             'conversation_id' => 'required|integer|exists:conversations,id',
             'message' => 'nullable|string',
-            'files.*' => 'nullable|file|mimes:jpg,jpeg,png,gif,mp4,mov,avi|max:20480', // Adjust as needed
+            'files.*' => 'nullable|file|mimes:jpg,jpeg,png,gif,mp4,mov,avi|max:20480',
         ]);
 
-        // Check if there is neither a message nor files
         if (empty($request->message) && !$request->hasFile('files')) {
             return response()->json(['error' => 'Message or files are required'], 400);
         }
-
-        // Start a database transaction
-        DB::beginTransaction();
 
         try {
             // Create the message
@@ -317,41 +314,41 @@ class ChatController extends Controller
                 'message' => $request->message,
             ]);
 
-            // $message->conversation->update([
-            //     'last_message_id' => $message->id,
-            // ]);
-
+            // Update the conversation's last message
             Conversation::where('id', $request->conversation_id)->update([
                 'last_message_id' => $message->id,
             ]);
 
             // Handle file uploads if there are any
             if ($request->hasFile('files')) {
+                $attachments = [];
                 foreach ($request->file('files') as $file) {
                     // Store the file and get its path
                     $path = $file->store('message_attachments/' . $message->id, 'public');
 
-                    // Create an entry for each uploaded file
-                    MessageAttachment::create([
+                    // Prepare the attachment data for batch insert
+                    $attachments[] = [
                         'message_id' => $message->id,
                         'name' => $file->getClientOriginalName(),
                         'path' => $path,
                         'mime' => $file->getMimeType(),
                         'size' => $file->getSize(),
-                    ]);
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
                 }
+
+                // Batch insert the attachments
+                MessageAttachment::insert($attachments);
             }
 
-            // Commit the transaction
-            DB::commit();
-
-            // Optionally, broadcast the message to a channel
-            // broadcast(new MessageSent($message))->toOthers();
+            // Broadcast the message to a channel
+            Log::info('Broadcasting message: ', ['message' => $message]);
+            broadcast(new MessageSent($message))->toOthers();
 
             return response()->json($message);
         } catch (\Exception $e) {
-            // Rollback the transaction on failure
-            DB::rollBack();
+            Log::error('Failed to send message: ', ['error' => $e->getMessage()]);
             return response()->json(['error' => 'Failed to send message'], 500);
         }
     }

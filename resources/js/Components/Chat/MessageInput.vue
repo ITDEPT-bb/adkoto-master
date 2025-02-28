@@ -183,15 +183,15 @@ async function sendMessage() {
 		formData.append(`files[${index}]`, file);
 	});
 
-	const tempMessage = {
-		id: Date.now(),
-		message: newMessage.value,
-		sender_id: user.id,
-		conversation_id: conversation.id,
-		files: selectedFiles.value.map((file) => URL.createObjectURL(file)),
-	};
+	// const tempMessage = {
+	// 	id: Date.now(),
+	// 	message: newMessage.value,
+	// 	sender_id: user.id,
+	// 	conversation_id: conversation.id,
+	// 	files: selectedFiles.value.map((file) => URL.createObjectURL(file)),
+	// };
 
-	emit("message-sent", tempMessage);
+	// emit("message-sent", tempMessage);
 	newMessage.value = "";
 	selectedFiles.value = [];
 
