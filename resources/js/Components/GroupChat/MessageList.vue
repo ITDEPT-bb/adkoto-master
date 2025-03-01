@@ -206,8 +206,8 @@ const onScroll = () => {
 onMounted(() => {
 	// startPolling();
 	window.Echo.private(`groupchat.groups.${group.id}`).listen("GroupChatMessageSent", (event) => {
-		console.log("Message received: ", event.message);
-		console.log("Sender data: ", event.message.sender);
+		// console.log("Message received: ", event.message);
+		// console.log("Sender data: ", event.message.sender);
 		messages.value.push(event.message);
 		scrollToBottom();
 	});

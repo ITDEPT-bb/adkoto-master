@@ -184,7 +184,7 @@ const onScroll = () => {
 
 onMounted(() => {
 	window.Echo.private(`chat.conversations.${conversation.id}`).listen("MessageSent", (event) => {
-		console.log("Message received: ", event.message);
+		// console.log("Message received: ", event.message);
 		messages.value.push(event.message);
 		scrollToBottom();
 	});
