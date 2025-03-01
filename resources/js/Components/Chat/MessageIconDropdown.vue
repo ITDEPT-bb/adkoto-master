@@ -48,7 +48,7 @@
 
 <script setup>
 import { defineProps, ref, onMounted, onUnmounted, onBeforeUnmount } from "vue";
-import { Head, Link } from "@inertiajs/vue3";
+import { usePage, Link } from "@inertiajs/vue3";
 import axiosClient from "@/axiosClient.js";
 import ChatListDropdown from "@/Components/Chat/ChatListDropdown.vue";
 
@@ -75,6 +75,8 @@ const props = defineProps({
 		required: true,
 	},
 });
+
+const authUser = usePage().props.auth.user;
 
 const messageUsers = ref([]);
 const groupChats = ref([]);
@@ -109,12 +111,17 @@ const handleClickOutside = (event) => {
 };
 
 onMounted(() => {
-	fetchLatestMessages();
+	window.Echo.private(`chat.home.${authUser.id}`).listen("RefreshChatHome", (event) => {
+		fetchLatestMessages();
+		fetchUnreadCount();
+	});
+
+	// fetchLatestMessages();
 	// const interval = setInterval(fetchLatestMessages, 8000);
 
 	document.addEventListener("click", handleClickOutside);
 
-	fetchUnreadCount();
+	// fetchUnreadCount();
 	// const unreadInterval = setInterval(fetchUnreadCount, 8000);
 
 	onUnmounted(() => {
