@@ -25,11 +25,9 @@
 
 <body class="font-sans antialiased"> --}}
 
-    {{--
-
-    <body class="font-sans antialiased bg-gray-100 mt-10 sm:mt-0 dark:bg-slate-800 lg:overflow-hidden lg:h-full" --}}
+    <body class="font-sans antialiased bg-gray-100 mt-10 sm:mt-0 dark:bg-slate-800 lg:overflow-hidden lg:h-full" {{--
         <body class="font-sans antialiased bg-cover bg-center mt-10 sm:mt-0 lg:overflow-hidden lg:h-full"
-        style="background-image: url('/img/admoto/VD BACKGROUND.jpg')">
+        style="background-image: url('/img/admoto/VD BACKGROUND.jpg')"> --}}
         @inertia
     </body>
 
