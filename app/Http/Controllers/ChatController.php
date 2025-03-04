@@ -424,5 +424,4 @@ class ChatController extends Controller
             return response()->json(['error' => 'Failed to send message'], 500);
         }
     }
-
 }

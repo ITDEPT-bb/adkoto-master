@@ -46,6 +46,7 @@ class MessageSent implements ShouldBroadcast
     {
         return [
             'message' => $this->message->toArray(),
+            'temp_id' => request()->temp_id,
         ];
     }
 }

@@ -8,6 +8,7 @@ use App\Http\Controllers\KalakalkotoController;
 use App\Http\Controllers\AdkotoController;
 use App\Http\Controllers\AuctionController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\GroupChatController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemController;
@@ -121,9 +122,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('/chat/mark-as-read/{conversationId}', [ChatController::class, 'markAsRead']);
 
+    Route::get('/chat/{conversationId}/more-messages', [ChatController::class, 'fetchMoreMessages'])
+        ->name('chat.more-messages');
+
     // Route::get('/chat/call/{userId}', [ChatController::class, 'callPage'])->name('chat.callPage');
     // Route::post('/agora/token', [AgoraVideoController::class, 'token']);
     // Route::post('/agora/call-user', [AgoraVideoController::class, 'callUser']);
+
+    Route::get('/conversation/{user}', [ConversationController::class, 'index'])->name('conversation.index');
+    Route::post('/chat/{conversation}/message', [ConversationController::class, 'storeMessage'])
+        ->name('chat.message.store');
 });
 
 // Group Chat
