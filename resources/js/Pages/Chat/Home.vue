@@ -1,14 +1,17 @@
 <template>
-	<Head title="Chat" />
+    <Head title="Chat" />
 
-	<AuthenticatedLayout>
-		<div class="home-page flex h-full overflow-y-auto container p-4 mx-auto scrollbar-thin">
-			<FollowingList
-				:followings="messageUsers"
-				:groupChats="groupChats" />
-		</div>
-	</AuthenticatedLayout>
-	<UpdateProfileReminder />
+    <AuthenticatedLayout>
+        <div
+            class="home-page flex h-full overflow-y-auto container p-4 mx-auto scrollbar-thin"
+        >
+            <FollowingList
+                :followings="messageUsers"
+                :groupChats="groupChats"
+            />
+        </div>
+    </AuthenticatedLayout>
+    <UpdateProfileReminder />
 </template>
 
 <script setup>
@@ -20,18 +23,18 @@ import FollowingList from "@/Components/Chat/FollowingList.vue";
 import SearchModal from "@/Components/Chat/SearchModal.vue";
 
 const props = defineProps({
-	messageUsers: {
-		type: Array,
-		required: true,
-	},
-	// participants: {
-	// 	type: Array,
-	// 	required: true,
-	// },
-	groupChats: {
-		type: Array,
-		required: true,
-	},
+    messageUsers: {
+        type: Array,
+        required: true,
+    },
+    // participants: {
+    // 	type: Array,
+    // 	required: true,
+    // },
+    groupChats: {
+        type: Array,
+        required: true,
+    },
 });
 
 const authUser = usePage().props.auth.user;
@@ -40,25 +43,28 @@ const messageUsers = ref(props.messageUsers);
 const groupChats = ref(props.groupChats);
 
 const fetchLatestMessages = async () => {
-	try {
-		const response = await axios.get("/chat/latest-messages");
-		messageUsers.value = response.data.messageUsers;
-		groupChats.value = response.data.groupChats;
-	} catch (error) {
-		console.error("Error fetching latest messages", error);
-	}
+    try {
+        const response = await axios.get("/chat/latest-messages");
+        messageUsers.value = response.data.messageUsers;
+        groupChats.value = response.data.groupChats;
+    } catch (error) {
+        console.error("Error fetching latest messages", error);
+    }
 };
 
 onMounted(() => {
-	// fetchLatestMessages();
-	// const interval = setInterval(fetchLatestMessages, 1000);
+    fetchLatestMessages();
+    // const interval = setInterval(fetchLatestMessages, 1000);
 
-	window.Echo.private(`chat.home.${authUser.id}`).listen("RefreshChatHome", (event) => {
-		fetchLatestMessages();
-	});
+    window.Echo.private(`chat.home.${authUser.id}`).listen(
+        "RefreshChatHome",
+        (event) => {
+            fetchLatestMessages();
+        }
+    );
 
-	onUnmounted(() => {
-		// clearInterval(interval);
-	});
+    onUnmounted(() => {
+        // clearInterval(interval);
+    });
 });
 </script>
