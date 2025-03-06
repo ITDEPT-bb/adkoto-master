@@ -18,7 +18,7 @@ defineProps({
 </script>
 
 <template>
-    <!-- <WelcomeOverlay /> -->
+    <WelcomeOverlay />
 
     <Head title="Social Media Website" />
 
@@ -47,7 +47,7 @@ defineProps({
             </div>
         </div>
     </AuthenticatedLayout>
-    <!-- <UpdateProfileReminder /> -->
+    <UpdateProfileReminder />
 </template>
 
 <style></style>
