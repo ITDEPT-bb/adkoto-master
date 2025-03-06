@@ -128,10 +128,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Route::get('/chat/call/{userId}', [ChatController::class, 'callPage'])->name('chat.callPage');
     // Route::post('/agora/token', [AgoraVideoController::class, 'token']);
     // Route::post('/agora/call-user', [AgoraVideoController::class, 'callUser']);
-
-    Route::get('/conversation/{user}', [ConversationController::class, 'index'])->name('conversation.index');
-    Route::post('/chat/{conversation}/message', [ConversationController::class, 'storeMessage'])
-        ->name('chat.message.store');
 });
 
 // Group Chat
