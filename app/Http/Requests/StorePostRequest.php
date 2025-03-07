@@ -12,9 +12,20 @@ use Illuminate\Validation\Rules\File;
 class StorePostRequest extends FormRequest
 {
     public static array $extensions = [
-        'jpg', 'jpeg', 'png', 'gif', 'webp',
-        'mp3', 'wav', 'mp4',
-        "doc", "docx", "pdf", "csv", "xls", "xlsx",
+        'jpg',
+        'jpeg',
+        'png',
+        'gif',
+        'webp',
+        'mp3',
+        'wav',
+        'mp4',
+        "doc",
+        "docx",
+        "pdf",
+        "csv",
+        "xls",
+        "xlsx",
         "zip"
     ];
 
@@ -34,7 +45,8 @@ class StorePostRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'body' => ['nullable', 'string'],
+            // 'body' => ['nullable', 'string'],
+            'body' => ['required_without:attachments', 'nullable', 'string'],
             'preview' => ['nullable', 'array'],
             'preview_url' => ['nullable', 'string'],
             'attachments' => [
@@ -42,7 +54,7 @@ class StorePostRequest extends FormRequest
                 'max:50',
                 function ($attribute, $value, $fail) {
                     // Custom rule to check the total size of all files
-                    $totalSize = collect($value)->sum(fn (UploadedFile $file) => $file->getSize());
+                    $totalSize = collect($value)->sum(fn(UploadedFile $file) => $file->getSize());
 
                     if ($totalSize > 1 * 1024 * 1024 * 1024) {
                         $fail('The total size of all files must not exceed 1GB.');
@@ -90,6 +102,7 @@ class StorePostRequest extends FormRequest
         return [
             'attachments.*.file' => 'Each attachment must be a file.',
             'attachments.*.mimes' => 'Invalid file type for attachments.',
+            'body.required_without' => 'Please provide what is on your mind.',
         ];
     }
 }
