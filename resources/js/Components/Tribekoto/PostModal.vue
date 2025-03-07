@@ -176,7 +176,7 @@ function submit() {
 
     if (!form.body.trim() && attachmentFiles.value.length === 0) {
         isBlankMessage.value =
-            "The body field is required when no attachments are provided.";
+            "Please provide what is on your mind. You can also attach files.";
         isNotBlank.value = true;
 
         isLoading.value = false;
