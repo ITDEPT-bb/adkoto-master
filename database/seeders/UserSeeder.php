@@ -14,12 +14,21 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         // Create 9 random users
-        User::factory()->count(20)->create();
 
         User::factory()->create([
-            'name' => 'Admin User',
+            'name' => 'Admin',
+            'surname' => 'User',
             'email' => 'admin@example.com',
             'password' => Hash::make('password'),
         ]);
+
+        User::factory()->create([
+            'name' => 'Tian',
+            'surname' => 'Tian',
+            'email' => 'tian@example.com',
+            'password' => Hash::make('password'),
+        ]);
+
+        User::factory()->count(20)->create();
     }
 }
