@@ -12,7 +12,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class MakeAgoraCall implements ShouldBroadcastNow
+class MakeAgoraCall implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -46,5 +46,4 @@ class MakeAgoraCall implements ShouldBroadcastNow
     {
         return 'MakeAgoraCall';
     }
-
 }
