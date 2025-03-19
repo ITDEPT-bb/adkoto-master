@@ -91,7 +91,7 @@
                     <ProfileIcon />
                 </button>
             </Link>
-            <Link
+            <!-- <Link
                 :href="route('chat.callPage', { userId: user.id })"
                 aria-label="Call User"
             >
@@ -102,7 +102,7 @@
                 >
                     <PhoneIcon />
                 </button>
-            </Link>
+            </Link> -->
 
             <!-- <button
 				type="button"
