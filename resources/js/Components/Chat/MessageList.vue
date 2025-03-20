@@ -123,6 +123,9 @@ import ImageModal from "@/Components/Chat/ImageModal.vue";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 
+const notificationSound = new Audio("/audio/notification_sound.wav");
+notificationSound.loop = false;
+
 dayjs.extend(relativeTime);
 
 const props = defineProps({
@@ -202,6 +205,7 @@ onMounted(() => {
             }
             messages.value.push(event.message);
             scrollToBottom();
+            // notificationSound.play();
         }
     );
     scrollToBottom();

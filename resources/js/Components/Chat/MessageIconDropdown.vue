@@ -63,6 +63,9 @@ import relativeTime from "dayjs/plugin/relativeTime";
 // import messageIcon from "/public/img/icons/message-bk.png";
 import messageIcon from "/public/img/icons/message-bk.png";
 
+const notificationSound = new Audio("/audio/notification_sound.wav");
+notificationSound.loop = false;
+
 dayjs.extend(relativeTime);
 
 const showModal = ref(false);
@@ -121,6 +124,7 @@ onMounted(() => {
         (event) => {
             fetchLatestMessages();
             fetchUnreadCount();
+            notificationSound.play();
         }
     );
 
