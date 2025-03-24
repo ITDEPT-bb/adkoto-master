@@ -167,7 +167,9 @@ const getMessagePrefix = (chat) => {
             : `${chat.last_message_sender_name}: `;
     }
 
-    return chat.last_message_sender_id === authUser.id ? "You: " : "";
+    return chat.last_message_sender_id === authUser.id
+        ? "You: "
+        : `${chat.name}: `;
 };
 
 const isUnread = (chat) => {
