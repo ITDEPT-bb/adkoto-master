@@ -28,9 +28,14 @@ class GroupChatResource extends JsonResource
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
             // 'participants' => UserResource::collection($this->participants),
-            'participants' => UserResource::collection($participants),
-            'last_message' => $this->when(isset($this->last_message), $this->last_message),
-            'last_message_sender_name' => $this->when(isset($this->last_message_sender_name), $this->last_message_sender_name),
+            // 'participants' => UserResource::collection($participants),
+            // 'last_message' => $this->when(isset($this->last_message), $this->last_message),
+            // 'last_message_sender_name' => $this->when(isset($this->last_message_sender_name), $this->last_message_sender_name),
+            'last_message' => $this->last_message,
+            'last_message_created_at' => $this->last_message_created_at,
+            'last_message_sender_name' => $this->last_message_sender_name,
+            'last_message_sender_id' => $this->last_message_sender_id,
+            // 'unread_count' => $this->unread_count,
         ];
     }
 }

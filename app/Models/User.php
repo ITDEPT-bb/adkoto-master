@@ -21,8 +21,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable implements MustVerifyEmail, FilamentUser
-    // class User extends Authenticatable implements FilamentUser
-    // class User extends AuthUser implements MustVerifyEmail, FilamentUser
+// class User extends Authenticatable implements FilamentUser
+// class User extends AuthUser implements MustVerifyEmail, FilamentUser
 {
     use HasFactory, Notifiable;
 
@@ -129,6 +129,12 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
     {
         return $this->belongsToMany(GroupChat::class, 'group_chat_participants', 'user_id', 'group_chat_id')
             ->withTimestamps();
+    }
+
+    public function groupReads()
+    {
+        return $this->belongsToMany(GroupChat::class, 'group_reads')
+            ->withPivot('last_read_at');
     }
 
     // public function conversations()
