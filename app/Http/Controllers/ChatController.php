@@ -164,6 +164,7 @@ class ChatController extends Controller
             if ($contact) {
                 $contact->last_message = $message->message;
                 $contact->last_message_read_at = $message->read_at;
+                $contact->last_message_created_at = $message->created_at;
                 $contact->last_message_sender_name = $message->sender->name;
                 $contact->last_message_sender_id = $message->sender->id;
                 $contact->unread_count = Message::where('sender_id', $contact->id)
@@ -175,9 +176,36 @@ class ChatController extends Controller
             return $contact;
         })->filter();
 
+        // $groupChats = GroupChat::whereHas('participants', function ($query) use ($user) {
+        //     $query->where('user_id', $user->id);
+        // })->get();
+
         $groupChats = GroupChat::whereHas('participants', function ($query) use ($user) {
             $query->where('user_id', $user->id);
-        })->get();
+        })
+            ->with(['messages' => function ($query) {
+                $query->latest()->limit(1)->with('sender');
+            }])
+            ->get()
+            ->map(function ($group) use ($user) {
+                // Get last message details
+                $lastMessage = $group->messages->first();
+
+                // Add group chat metadata
+                $group->last_message = $lastMessage ? $lastMessage->message : null;
+                // $group->last_message_created_at = $lastMessage ? $lastMessage->created_at : null;
+                $group->last_message_created_at = optional($lastMessage)->created_at;
+                $group->last_message_sender_name = $lastMessage ? $lastMessage->sender->name : null;
+                $group->last_message_sender_id = $lastMessage ? $lastMessage->sender_id : null;
+                $group->timestamp = $lastMessage ? $lastMessage->created_at : null;
+
+                // Calculate unread messages for group (example implementation)
+                $group->unread_count = Message::where('group_id', $group->id)
+                    ->where('created_at', '>', $user->groupReadPivot->last_read_at ?? now()->subYears(10))
+                    ->count();
+
+                return $group;
+            });
 
         return response()->json([
             'messageUsers' => UserResource::collection($messageUsers),

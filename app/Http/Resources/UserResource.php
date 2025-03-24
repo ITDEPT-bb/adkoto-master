@@ -45,6 +45,7 @@ class UserResource extends JsonResource
             'last_message_sender_name' => $this->when(isset($this->last_message_sender_name), $this->last_message_sender_name),
             'last_message_sender_id' => $this->when(isset($this->last_message_sender_id), $this->last_message_sender_id),
             'last_message_read_at' => $this->when(isset($this->last_message_read_at), $this->last_message_read_at),
+            'last_message_created_at' => $this->last_message_created_at,
             'unread_count' => $this->when(isset($this->unread_count), $this->unread_count),
             'is_deactivated' => $isDeactivated,
             'deactivation_message' => $isDeactivated ? 'This user has been deactivated.' : null,
