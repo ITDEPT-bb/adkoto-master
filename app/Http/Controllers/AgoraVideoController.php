@@ -18,7 +18,7 @@ class AgoraVideoController extends Controller
         // $uid = Auth::id();
         // $uid = $request->uid;
         $uid = 0;
-        $role = RtcTokenBuilder::RoleAttendee;
+        $role = RtcTokenBuilder::RolePublisher;
         $expireTimeInSeconds = 3600;
         $currentTimestamp = now()->getTimestamp();
         $privilegeExpiredTs = $currentTimestamp + $expireTimeInSeconds;
@@ -50,5 +50,11 @@ class AgoraVideoController extends Controller
         broadcast(new MakeAgoraCall($data))->toOthers();
 
         return response()->json(['success' => true]);
+    }
+
+    public function index()
+    {
+        // return response()->json(['success' => true]);
+        return view('agora.index');
     }
 }
