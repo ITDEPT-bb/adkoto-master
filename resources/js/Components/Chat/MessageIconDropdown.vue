@@ -124,10 +124,10 @@ onMounted(() => {
         (event) => {
             fetchLatestMessages();
             fetchUnreadCount();
-            // notificationSound.play();
-            if (event.receiver_id === authUser.id) {
-                notificationSound.play();
-            }
+            notificationSound.play();
+            // if (event.receiver_id === authUser.id) {
+            //     notificationSound.play();
+            // }
         }
     );
 
