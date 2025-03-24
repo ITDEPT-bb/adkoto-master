@@ -46,6 +46,7 @@ class RefreshChatHome implements ShouldBroadcast
     {
         return [
             'message' => $this->message->toArray(),
+            'receiver_id' => $this->message->receiver_id,
         ];
     }
 }
