@@ -68,7 +68,7 @@
 
                                     <!-- Last Message Preview -->
                                     <p
-                                        class="text-sm text-gray-500 flex justify-between items-center truncate lg:pe-20"
+                                        class="text-sm text-gray-500 flex justify-between items-center truncate lg:pe-2"
                                         :class="{
                                             'font-bold text-black':
                                                 isUnread(chat),
