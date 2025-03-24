@@ -149,7 +149,7 @@ const getChatLink = (chat) => {
 
 const getChatAvatar = (chat) => {
     if (isGroupChat(chat)) {
-        return chat.avatar_url || "/img/no_image.png";
+        return chat.photo || "/img/no_image.png";
     }
     return chat.avatar_url || "/img/default-avatar.png";
 };
