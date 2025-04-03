@@ -33,7 +33,7 @@
                 <button
                     type="button"
                     class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded"
-                    @click="acceptCall()"
+                    @click="acceptCall"
                 >
                     Accept
                 </button>
@@ -197,19 +197,19 @@ const setupAgora = async () => {
                 user.audioTrack.play();
 
                 // Track audio state changes
-                user.audioTrack.on("track-ended", () => {
-                    const index = remoteUsers.findIndex(
-                        (u) => u.uid === user.uid
-                    );
-                    if (index > -1) remoteUsers[index].muted = true;
-                });
+                // user.audioTrack.on("track-ended", () => {
+                //     const index = remoteUsers.findIndex(
+                //         (u) => u.uid === user.uid
+                //     );
+                //     if (index > -1) remoteUsers[index].muted = true;
+                // });
 
-                user.audioTrack.on("track-playing", () => {
-                    const index = remoteUsers.findIndex(
-                        (u) => u.uid === user.uid
-                    );
-                    if (index > -1) remoteUsers[index].muted = false;
-                });
+                // user.audioTrack.on("track-playing", () => {
+                //     const index = remoteUsers.findIndex(
+                //         (u) => u.uid === user.uid
+                //     );
+                //     if (index > -1) remoteUsers[index].muted = false;
+                // });
             }
         } catch (error) {
             console.error("Error handling user-published:", error);
@@ -223,10 +223,10 @@ const setupAgora = async () => {
         }
     });
 
-    client.on("user-left", (user) => {
-        const index = remoteUsers.findIndex((u) => u.uid === user.uid);
-        if (index > -1) remoteUsers.splice(index, 1);
-    });
+    // client.on("user-left", (user) => {
+    //     const index = remoteUsers.findIndex((u) => u.uid === user.uid);
+    //     if (index > -1) remoteUsers.splice(index, 1);
+    // });
 };
 
 const startCall = async (user) => {
