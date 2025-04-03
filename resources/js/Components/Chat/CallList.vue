@@ -12,7 +12,7 @@
                 @click="startCall(user)"
                 :disabled="callInProgress"
             >
-                {{ callInProgress ? "In Call" : "Video Call" }}
+                {{ callInProgress ? "In Call" : "Call" }}
             </button>
         </div>
 
@@ -33,7 +33,7 @@
                 <button
                     type="button"
                     class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded"
-                    @click="acceptCall"
+                    @click="acceptCall()"
                 >
                     Accept
                 </button>
@@ -82,7 +82,7 @@
                         <MicrophoneIcon v-if="!mutedAudio" class="w-6 h-6" />
                         <SpeakerXMarkIcon v-else class="w-6 h-6" />
                     </button>
-                    <button
+                    <!-- <button
                         @click="toggleVideo"
                         class="p-3 rounded-full bg-white/10 hover:bg-white/20 text-white"
                     >
@@ -91,7 +91,7 @@
                             class="w-6 h-6"
                         />
                         <VideoCameraSlashIcon v-else class="w-6 h-6" />
-                    </button>
+                    </button> -->
                     <button
                         @click="endCall"
                         class="p-3 rounded-full bg-red-500 hover:bg-red-600 text-white"
@@ -113,8 +113,8 @@ import axios from "axios";
 import {
     MicrophoneIcon,
     SpeakerXMarkIcon,
-    VideoCameraIcon,
-    VideoCameraSlashIcon,
+    // VideoCameraIcon,
+    // VideoCameraSlashIcon,
     PhoneXMarkIcon,
 } from "@heroicons/vue/24/outline";
 
@@ -132,7 +132,7 @@ const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
 
 // State
 const localAudioTrack = ref(null);
-const localVideoTrack = ref(null);
+// const localVideoTrack = ref(null);
 const callInProgress = ref(false);
 const remoteUsers = reactive([]);
 const mutedAudio = ref(false);
@@ -140,40 +140,92 @@ const disabledVideo = ref(false);
 const onlineUsers = reactive([]);
 const channelName = ref("");
 
+const acceptedId = ref(null);
+const acceptedChannel = ref("");
+const acceptedToken = ref("");
+
 const incomingCall = ref(false);
 const incomingCaller = ref("");
 
 // Setup Agora
+// const setupAgora = async () => {
+//     client.on("user-published", async (user, mediaType) => {
+//         await client.subscribe(user, mediaType);
+
+//         if (mediaType === "video") {
+//             const remoteUser = {
+//                 uid: user.uid,
+//                 name: getUserName(user.uid),
+//                 videoTrack: user.videoTrack,
+//                 audioTrack: user.audioTrack,
+//             };
+
+//             remoteUsers.push(remoteUser);
+//             setTimeout(() => {
+//                 user.videoTrack.play(`remoteVideo_${user.uid}`);
+//             }, 100);
+//         }
+
+//         if (mediaType === "audio") {
+//             user.audioTrack.play();
+//         }
+//     });
+
+//     client.on("user-unpublished", (user, mediaType) => {
+//         if (mediaType === "video") {
+//             const index = remoteUsers.findIndex((u) => u.uid === user.uid);
+//             if (index > -1) {
+//                 remoteUsers.splice(index, 1);
+//             }
+//         }
+//     });
+// };
 const setupAgora = async () => {
     client.on("user-published", async (user, mediaType) => {
-        await client.subscribe(user, mediaType);
+        try {
+            await client.subscribe(user, mediaType);
 
-        if (mediaType === "video") {
-            const remoteUser = {
-                uid: user.uid,
-                name: getUserName(user.uid),
-                videoTrack: user.videoTrack,
-                audioTrack: user.audioTrack,
-            };
+            if (mediaType === "audio") {
+                const remoteUser = {
+                    uid: user.uid,
+                    name: getUserName(user.uid),
+                    muted: false,
+                    audioTrack: user.audioTrack,
+                };
 
-            remoteUsers.push(remoteUser);
-            setTimeout(() => {
-                user.videoTrack.play(`remoteVideo_${user.uid}`);
-            }, 100);
-        }
+                remoteUsers.push(remoteUser);
+                user.audioTrack.play();
 
-        if (mediaType === "audio") {
-            user.audioTrack.play();
+                // Track audio state changes
+                user.audioTrack.on("track-ended", () => {
+                    const index = remoteUsers.findIndex(
+                        (u) => u.uid === user.uid
+                    );
+                    if (index > -1) remoteUsers[index].muted = true;
+                });
+
+                user.audioTrack.on("track-playing", () => {
+                    const index = remoteUsers.findIndex(
+                        (u) => u.uid === user.uid
+                    );
+                    if (index > -1) remoteUsers[index].muted = false;
+                });
+            }
+        } catch (error) {
+            console.error("Error handling user-published:", error);
         }
     });
 
     client.on("user-unpublished", (user, mediaType) => {
-        if (mediaType === "video") {
+        if (mediaType === "audio") {
             const index = remoteUsers.findIndex((u) => u.uid === user.uid);
-            if (index > -1) {
-                remoteUsers.splice(index, 1);
-            }
+            if (index > -1) remoteUsers.splice(index, 1);
         }
+    });
+
+    client.on("user-left", (user) => {
+        const index = remoteUsers.findIndex((u) => u.uid === user.uid);
+        if (index > -1) remoteUsers.splice(index, 1);
     });
 };
 
@@ -194,19 +246,24 @@ const startCall = async (user) => {
             // props.authUser.id
             user.id
         );
-        [localAudioTrack.value, localVideoTrack.value] = await Promise.all([
-            AgoraRTC.createMicrophoneAudioTrack(),
-            AgoraRTC.createCameraVideoTrack(),
-        ]);
+        // [localAudioTrack.value, localVideoTrack.value] = await Promise.all([
+        //     AgoraRTC.createMicrophoneAudioTrack(),
+        //     AgoraRTC.createCameraVideoTrack(),
+        // ]);
 
-        await client.publish([localAudioTrack.value, localVideoTrack.value]);
-        localVideoTrack.value.play("localVideo");
+        // await client.publish([localAudioTrack.value, localVideoTrack.value]);
+        // localVideoTrack.value.play("localVideo");
+
+        localAudioTrack.value = await AgoraRTC.createMicrophoneAudioTrack();
+        await client.publish([localAudioTrack.value]);
         callInProgress.value = true;
 
         // Notify user about the call
         await axios.post("/agora/call-user", {
             calleeId: user.id,
+            callerId: props.authUser.id,
             channel: channelName.value,
+            token: token,
         });
     } catch (error) {
         console.error("Call failed:", error);
@@ -214,15 +271,48 @@ const startCall = async (user) => {
     }
 };
 
+const acceptCall = async () => {
+    // if (!accepterId.value) return;
+
+    try {
+        // channelName.value = generateChannelName(
+        //     props.authUser.id,
+        //     accepterId.value
+        // );
+        // const token = await fetchToken(channelName.value);
+
+        await client.join(
+            props.appId,
+            acceptedChannel.value,
+            acceptedToken.value,
+            acceptedId.value
+        );
+
+        localAudioTrack.value = await AgoraRTC.createMicrophoneAudioTrack();
+        await client.publish([localAudioTrack.value]);
+        callInProgress.value = true;
+
+        ringtone.pause();
+        incomingCall.value = false;
+    } catch (error) {
+        console.error("Error accepting call:", error);
+    }
+};
+
+const declineCall = () => {
+    incomingCall.value = false;
+    stopRingtone();
+};
+
 const endCall = async () => {
     if (localAudioTrack.value) {
         localAudioTrack.value.stop();
         localAudioTrack.value.close();
     }
-    if (localVideoTrack.value) {
-        localVideoTrack.value.stop();
-        localVideoTrack.value.close();
-    }
+    // if (localVideoTrack.value) {
+    //     localVideoTrack.value.stop();
+    //     localVideoTrack.value.close();
+    // }
 
     await client.leave();
     remoteUsers.splice(0, remoteUsers.length);
@@ -238,10 +328,10 @@ const toggleAudio = () => {
     localAudioTrack.value.setEnabled(!mutedAudio.value);
 };
 
-const toggleVideo = () => {
-    disabledVideo.value = !disabledVideo.value;
-    localVideoTrack.value.setEnabled(!disabledVideo.value);
-};
+// const toggleVideo = () => {
+//     disabledVideo.value = !disabledVideo.value;
+//     localVideoTrack.value.setEnabled(!disabledVideo.value);
+// };
 
 const generateChannelName = (callerId, calleeId) => {
     return `call-${Math.min(callerId, calleeId)}-${Math.max(
@@ -260,6 +350,11 @@ const getUserStatus = (userId) => (isUserOnline(userId) ? "Online" : "Offline");
 const getUserName = (uid) =>
     props.users.find((u) => u.id === uid)?.name || "Unknown";
 
+const stopRingtone = () => {
+    ringtone.pause();
+    ringtone.currentTime = 0;
+};
+
 // Presence Channel Setup
 onMounted(() => {
     setupAgora();
@@ -272,13 +367,18 @@ onMounted(() => {
         })
         .listen(".MakeAgoraCall", ({ data }) => {
             if (parseInt(data.userToCall) === parseInt(props.authUser.id)) {
+                console.log("Incoming call from", data.from);
                 const caller = onlineUsers.find(
                     (user) => user.id === data.from
                 );
                 incomingCaller.value = caller ? caller.name : "Unknown Caller";
-                agoraChannel.value = data.channelName;
                 incomingCall.value = true;
                 ringtone.play();
+
+                // Set the channel name and token for accepting the call
+                acceptedId.value = data.userToCall;
+                acceptedChannel.value = data.channelName;
+                acceptedToken.value = data.token;
             }
         });
 });
