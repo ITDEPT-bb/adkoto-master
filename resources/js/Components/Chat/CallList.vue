@@ -376,7 +376,7 @@ onMounted(() => {
                 ringtone.play();
 
                 // Set the channel name and token for accepting the call
-                acceptedId.value = data.userToCall;
+                acceptedId.value = data.from;
                 acceptedChannel.value = data.channelName;
                 acceptedToken.value = data.token;
             }
