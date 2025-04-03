@@ -298,11 +298,48 @@ class ChatController extends Controller
         ]);
     }
 
-    public function callPage($userId)
+    public function callPage(Request $request)
     {
-        $user = User::findOrFail($userId);
+        $appID = env('AGORA_APP_ID');
+
+        $user = auth()->user();
+
+        $latestMessages = Message::where(function ($query) use ($user) {
+            $query->where('sender_id', $user->id)
+                ->orWhere('receiver_id', $user->id);
+        })
+            ->latest('created_at')
+            ->get()
+            ->unique(function ($message) use ($user) {
+                return $message->sender_id === $user->id
+                    ? $message->receiver_id
+                    : $message->sender_id;
+            });
+
+        $messageUsers = $latestMessages->map(function ($message) use ($user) {
+            $contact = $message->sender_id === $user->id
+                ? $message->receiver
+                : $message->sender;
+
+            if ($contact) {
+                $contact->last_message = $message->message;
+                $contact->last_message_read_at = $message->read_at;
+                $contact->last_message_sender_name = $message->sender->name;
+                $contact->last_message_sender_id = $message->sender->id;
+                $contact->unread_count = Message::where('sender_id', $contact->id)
+                    ->where('receiver_id', $user->id)
+                    ->whereNull('read_at')
+                    ->count();
+            }
+
+            return $contact;
+        })->filter();
+
+        // $user = User::findOrFail($userId);
         return Inertia::render('Chat/Call', [
-            'user' => new UserResource($user),
+            // 'user' => new UserResource($user),
+            'users' => UserResource::collection($messageUsers),
+            'appID' => $appID,
         ]);
     }
 

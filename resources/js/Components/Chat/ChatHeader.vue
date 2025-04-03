@@ -103,6 +103,15 @@
                     <PhoneIcon />
                 </button>
             </Link> -->
+            <Link :href="route('chat.callPage')" aria-label="Call User">
+                <button
+                    type="button"
+                    class="inline-flex items-center justify-center rounded-lg border h-10 w-10 transition duration-500 ease-in-out text-white hover:bg-gray-300 hover:text-black focus:outline-none"
+                    @click="showCallModal = true"
+                >
+                    <PhoneIcon />
+                </button>
+            </Link>
 
             <!-- <button
 				type="button"

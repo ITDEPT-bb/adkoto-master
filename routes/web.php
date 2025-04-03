@@ -125,7 +125,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/chat/{conversationId}/more-messages', [ChatController::class, 'fetchMoreMessages'])
         ->name('chat.more-messages');
 
-    Route::get('/chat/call/{userId}', [ChatController::class, 'callPage'])->name('chat.callPage');
+    // Route::get('/chat/call/{userId}', [ChatController::class, 'callPage'])->name('chat.callPage');
+    Route::get('/chat/call/list', [ChatController::class, 'callPage'])->name('chat.callPage');
     Route::post('/agora/token', [AgoraVideoController::class, 'token']);
     Route::post('/agora/call-user', [AgoraVideoController::class, 'callUser']);
     Route::get('/agora/call-user/adkt', [AgoraVideoController::class, 'index'])->name('callPageUser');
