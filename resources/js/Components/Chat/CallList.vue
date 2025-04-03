@@ -191,7 +191,8 @@ const startCall = async (user) => {
             props.appId,
             channelName.value,
             token,
-            props.authUser.id
+            // props.authUser.id
+            user.id
         );
         [localAudioTrack.value, localVideoTrack.value] = await Promise.all([
             AgoraRTC.createMicrophoneAudioTrack(),
