@@ -103,7 +103,7 @@
                     <PhoneIcon />
                 </button>
             </Link> -->
-            <Link :href="route('chat.callPage')" aria-label="Call User">
+            <!-- <Link :href="route('chat.callPage')" aria-label="Call User">
                 <button
                     type="button"
                     class="inline-flex items-center justify-center rounded-lg border h-10 w-10 transition duration-500 ease-in-out text-white hover:bg-gray-300 hover:text-black focus:outline-none"
@@ -111,7 +111,7 @@
                 >
                     <PhoneIcon />
                 </button>
-            </Link>
+            </Link> -->
             <!-- <Link :href="route('chat.callPage')" aria-label="Call User">
                 <button
                     type="button"
@@ -149,14 +149,14 @@
                     <ProfileIcon class="mr-2" /> View Profile
                 </button>
             </Link>
-            <Link :href="route('chat.callPage')" aria-label="Call User">
+            <!-- <Link :href="route('chat.callPage')" aria-label="Call User">
                 <button
                     class="flex items-center w-full px-4 py-2 text-gray-800 hover:bg-gray-200"
                     @click="startVoiceCall"
                 >
                     <PhoneIcon class="mr-2" /> Voice Call
                 </button>
-            </Link>
+            </Link> -->
             <!-- <button
 				class="flex items-center w-full px-4 py-2 text-gray-800 hover:bg-gray-200"
 				@click="startVideoCall">
