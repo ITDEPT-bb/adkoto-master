@@ -32,7 +32,7 @@
         </div>
 
         <!-- Main Content -->
-        <div class="space-y-4 px-4 py-6">
+        <div class="max-h-[400px] overflow-y-auto space-y-4 px-4 py-6">
             <!-- User List -->
             <div
                 v-for="user in users"
