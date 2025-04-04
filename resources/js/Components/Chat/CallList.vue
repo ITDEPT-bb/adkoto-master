@@ -1,103 +1,147 @@
 <template>
-    <div class="space-y-2 px-10 py-4">
-        <!-- User List -->
+    <div>
+        <!-- Top Bar -->
         <div
-            v-for="user in users"
-            :key="user.id"
-            class="flex items-center justify-between p-2 border rounded-lg"
+            class="flex flex-col sm:flex-row sm:items-center py-3 px-4 rounded-lg border-b-2 border-gray-200"
+            style="background-color: #0076be"
         >
-            <span>{{ user.name }} - {{ getUserStatus(user.id) }}</span>
-            <button
-                class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
-                @click="startCall(user)"
-                :disabled="callInProgress"
-            >
-                {{ callInProgress ? "In Call" : "Call" }}
-            </button>
-        </div>
-
-        <!-- Incoming Call -->
-        <div class="my-8" v-if="incomingCall">
-            <p class="text-lg">
-                Incoming Call From
-                <strong>{{ incomingCaller }}</strong>
-            </p>
-            <div class="flex justify-center gap-4 mt-4">
-                <button
-                    type="button"
-                    class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded"
-                    @click="declineCall"
+            <div class="flex items-center space-x-4">
+                <Link
+                    :href="route('chat.index')"
+                    aria-label="Back to chat index"
                 >
-                    Decline
-                </button>
-                <button
-                    type="button"
-                    class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded"
-                    @click="acceptCall"
-                >
-                    Accept
-                </button>
+                    <button
+                        class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="w-6 h-6 text-gray-600"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </button>
+                </Link>
+                <h2 class="text-white font-semibold text-lg">Start a Call</h2>
             </div>
         </div>
 
-        <!-- Video Container -->
-        <div v-if="callInProgress" class="fixed inset-0 bg-black/90 z-50">
-            <div class="flex flex-col h-full">
-                <!-- Remote Video -->
-                <div class="flex-1 grid grid-cols-1 gap-4 p-4">
-                    <div
-                        v-for="remoteUser in remoteUsers"
-                        :key="remoteUser.uid"
-                        class="relative bg-gray-800 rounded-lg overflow-hidden"
+        <!-- Main Content -->
+        <div class="space-y-4 px-4 py-6">
+            <!-- User List -->
+            <div
+                v-for="user in users"
+                :key="user.id"
+                class="flex items-center justify-between p-3 bg-white border rounded-lg shadow-sm"
+            >
+                <!-- Left side: Avatar + Name/Status -->
+                <div class="flex items-center space-x-4">
+                    <img
+                        :src="user.avatar_url"
+                        alt="User avatar"
+                        class="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover"
+                    />
+                    <span
+                        class="text-sm sm:text-base font-medium text-gray-800"
                     >
-                        <video
-                            :id="'remoteVideo_' + remoteUser.uid"
-                            class="w-full h-full object-cover"
-                            autoplay
-                        ></video>
-                        <div class="absolute bottom-2 left-2 text-white">
-                            {{ remoteUser.name }}
+                        {{ user.name }} - {{ getUserStatus(user.id) }}
+                    </span>
+                </div>
+
+                <!-- Right side: Call Button -->
+                <button
+                    class="px-4 py-2 text-sm sm:text-base font-semibold text-white bg-blue-500 rounded hover:bg-blue-600 transition"
+                    @click="startCall(user)"
+                    :disabled="callInProgress"
+                >
+                    {{ callInProgress ? "In Call" : "Call" }}
+                </button>
+            </div>
+
+            <!-- Incoming Call -->
+            <div class="my-8" v-if="incomingCall">
+                <p class="text-lg text-center text-white">
+                    Incoming Call From <strong>{{ incomingCaller }}</strong>
+                </p>
+                <div class="flex justify-center gap-4 mt-4">
+                    <button
+                        type="button"
+                        class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded"
+                        @click="declineCall"
+                    >
+                        Decline
+                    </button>
+                    <button
+                        type="button"
+                        class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded"
+                        @click="acceptCall"
+                    >
+                        Accept
+                    </button>
+                </div>
+            </div>
+
+            <!-- Video Call View -->
+            <div v-if="callInProgress" class="fixed inset-0 bg-black/90 z-50">
+                <div class="flex flex-col h-full">
+                    <!-- Remote Video -->
+                    <div
+                        class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4 p-4"
+                    >
+                        <div
+                            v-for="remoteUser in remoteUsers"
+                            :key="remoteUser.uid"
+                            class="relative bg-gray-800 rounded-lg overflow-hidden"
+                        >
+                            <video
+                                :id="'remoteVideo_' + remoteUser.uid"
+                                class="w-full h-full object-cover"
+                                autoplay
+                            ></video>
+                            <div
+                                class="absolute bottom-2 left-2 text-white text-sm bg-black/50 px-2 py-1 rounded"
+                            >
+                                {{ remoteUser.name }}
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Local Video Preview -->
-                <div
-                    class="fixed bottom-4 right-4 w-48 h-32 rounded-lg overflow-hidden shadow-lg"
-                >
-                    <video
-                        id="localVideo"
-                        class="w-full h-full object-cover"
-                        autoplay
-                        muted
-                    ></video>
-                </div>
+                    <!-- Local Video -->
+                    <div
+                        class="fixed bottom-4 right-4 w-48 h-32 rounded-lg overflow-hidden shadow-lg"
+                    >
+                        <video
+                            id="localVideo"
+                            class="w-full h-full object-cover"
+                            autoplay
+                            muted
+                        ></video>
+                    </div>
 
-                <!-- Call Controls -->
-                <div class="flex justify-center gap-4 p-4 bg-gray-800/50">
-                    <button
-                        @click="toggleAudio"
-                        class="p-3 rounded-full bg-white/10 hover:bg-white/20 text-white"
-                    >
-                        <MicrophoneIcon v-if="!mutedAudio" class="w-6 h-6" />
-                        <SpeakerXMarkIcon v-else class="w-6 h-6" />
-                    </button>
-                    <!-- <button
-                        @click="toggleVideo"
-                        class="p-3 rounded-full bg-white/10 hover:bg-white/20 text-white"
-                    >
-                        <VideoCameraIcon
-                            v-if="!disabledVideo"
-                            class="w-6 h-6"
-                        />
-                        <VideoCameraSlashIcon v-else class="w-6 h-6" />
-                    </button> -->
-                    <button
-                        @click="endCall"
-                        class="p-3 rounded-full bg-red-500 hover:bg-red-600 text-white"
-                    >
-                        <PhoneXMarkIcon class="w-6 h-6" />
-                    </button>
+                    <!-- Controls -->
+                    <div class="flex justify-center gap-4 p-4 bg-gray-800/50">
+                        <button
+                            @click="toggleAudio"
+                            class="p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition"
+                        >
+                            <MicrophoneIcon
+                                v-if="!mutedAudio"
+                                class="w-6 h-6"
+                            />
+                            <SpeakerXMarkIcon v-else class="w-6 h-6" />
+                        </button>
+                        <button
+                            @click="endCall"
+                            class="p-3 rounded-full bg-red-500 hover:bg-red-600 text-white transition"
+                        >
+                            <PhoneXMarkIcon class="w-6 h-6" />
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -117,6 +161,7 @@ import {
     // VideoCameraSlashIcon,
     PhoneXMarkIcon,
 } from "@heroicons/vue/24/outline";
+import { Link } from "@inertiajs/vue3";
 
 const props = defineProps({
     users: Array,
