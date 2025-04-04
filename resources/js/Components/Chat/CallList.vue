@@ -32,7 +32,7 @@
         </div>
 
         <!-- Main Content -->
-        <div class="max-h-[400px] overflow-y-auto space-y-4 px-4 py-6">
+        <div class="max-h-[600px] overflow-y-auto space-y-4 px-4 py-6">
             <!-- User List -->
             <div
                 v-for="user in users"
@@ -61,29 +61,6 @@
                 >
                     {{ callInProgress ? "In Call" : "Call" }}
                 </button>
-            </div>
-
-            <!-- Incoming Call -->
-            <div class="my-8" v-if="incomingCall">
-                <p class="text-lg text-center text-white">
-                    Incoming Call From <strong>{{ incomingCaller }}</strong>
-                </p>
-                <div class="flex justify-center gap-4 mt-4">
-                    <button
-                        type="button"
-                        class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded"
-                        @click="declineCall"
-                    >
-                        Decline
-                    </button>
-                    <button
-                        type="button"
-                        class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded"
-                        @click="acceptCall"
-                    >
-                        Accept
-                    </button>
-                </div>
             </div>
 
             <!-- Video Call View -->
@@ -143,6 +120,29 @@
                         </button>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Incoming Call -->
+        <div class="my-8" v-if="incomingCall">
+            <p class="text-lg text-center text-dark">
+                Incoming Call From <strong>{{ incomingCaller }}</strong>
+            </p>
+            <div class="flex justify-center gap-4 mt-4">
+                <button
+                    type="button"
+                    class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded"
+                    @click="declineCall"
+                >
+                    Decline
+                </button>
+                <button
+                    type="button"
+                    class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded"
+                    @click="acceptCall"
+                >
+                    Accept
+                </button>
             </div>
         </div>
     </div>
