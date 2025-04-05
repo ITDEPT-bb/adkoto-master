@@ -27,6 +27,10 @@ import TeddyBear from "/public/img/admoto/TEDDYBEAR.png";
 import Ribbon from "/public/img/admoto/RIBBON.png";
 import HeartSearch from "/public/img/admoto/HEART HEART.png";
 
+// Day of Valor Specific
+import DayOfValorBg from "/public/img/Kagitingan/kagitingan_bg.jpg";
+import DayOfValorPeople from "/public/img/Kagitingan/kagitingan_people.png";
+
 import axiosClient from "@/axiosClient.js";
 
 const showingNavigationDropdown = ref(false);
@@ -84,21 +88,30 @@ let logoTextClass =
         >
             <!-- Primary Navigation Menu -->
             <!-- <div
-				class="max-w-screen mx-auto px-4 py-0.5 sm:px-6 lg:px-16 bg-cover bg-center bg-white drop-shadow-lg relative z-50"
-				style="background-image: url('/img/admoto/VD BACKGROUND HEAD 2.jpg')"> -->
-            <div class="max-w-screen mx-auto px-4 sm:px-6 lg:px-16">
+                class="max-w-screen mx-auto px-4 py-0.5 sm:px-6 lg:px-16 bg-cover bg-center bg-white drop-shadow-lg relative z-50"
+                style="
+                    background-image: url('/img/Kagitingan/kagitingan_bg.jpg.jpg');
+                "
+            > -->
+            <div
+                class="max-w-screen mx-auto px-4 py-0.5 sm:px-6 lg:px-16 bg-cover bg-center drop-shadow-lg relative z-50"
+                style="
+                    background-image: url('/img/Kagitingan/kagitingan_bg.jpg');
+                "
+            >
+                <!-- <div class="max-w-screen mx-auto px-4 sm:px-6 lg:px-16"> -->
                 <!-- <div class="flex items-center justify-between gap-4 h-16">
                     <div class="flex"> -->
                 <div class="flex items-center justify-between gap-2 h-16">
-                    <!-- <div
-                        class="absolute -bottom-5 xl:left-6 2xl:left-12 lg:block hidden"
+                    <div
+                        class="absolute -bottom-0.5 left-1 xl:left-6 2xl:left-12 lg:block hidden"
                     >
                         <img
-                            :src="Cupid"
-                            class="w-16 relative top-0 left-0 h-auto"
+                            :src="DayOfValorPeople"
+                            class="w-16 relative -top-0.5 left-0 h-auto"
                             alt="Logo"
                         />
-                    </div> -->
+                    </div>
                     <div class="flex mr-2">
                         <!-- Logo -->
                         <!-- <div class="shrink-0 flex items-center bg-white bg-opacity-75 px-4 py-2 rounded-full"> -->

@@ -32,6 +32,10 @@ import TeddyBear from "/public/img/admoto/TEDDYBEAR.png";
 import Ribbon from "/public/img/admoto/RIBBON.png";
 import HeartSearch from "/public/img/admoto/HEART HEART.png";
 
+// Day of Valor Specific
+import DayOfValorBg from "/public/img/Kagitingan/kagitingan_bg.jpg";
+import DayOfValorPeople from "/public/img/Kagitingan/kagitingan_people.png";
+
 import axiosClient from "@/axiosClient.js";
 
 const showingNavigationDropdown = ref(false);
@@ -147,19 +151,25 @@ else if (
             class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700"
         >
             <!-- Primary Navigation Menu -->
-            <!-- <div
-				class="max-w-screen mx-auto px-4 py-0.5 sm:px-6 lg:px-16 bg-cover bg-center drop-shadow-lg relative z-50"
-				style="background-image: url('/img/admoto/VD BACKGROUND HEAD 2.jpg')"> -->
-            <div class="max-w-screen mx-auto px-4 sm:px-6 lg:px-16">
+            <div
+                class="max-w-screen mx-auto px-4 py-0.5 sm:px-6 lg:px-16 bg-cover bg-center drop-shadow-lg relative z-50"
+                style="
+                    background-image: url('/img/Kagitingan/kagitingan_bg.jpg');
+                "
+            >
+                <!-- <div class="max-w-screen mx-auto px-4 sm:px-6 lg:px-16"> -->
                 <!-- <div class="flex items-center justify-between gap-4 h-16">
                     <div class="flex"> -->
                 <div class="flex items-center justify-between gap-2 h-16">
-                    <!-- <div class="absolute -bottom-5 left-1 xl:left-6 2xl:left-12 lg:block hidden">
-						<img
-							:src="Cupid"
-							class="w-16 relative top-0 left-0 h-auto"
-							alt="Logo" />
-					</div> -->
+                    <div
+                        class="absolute -bottom-0.5 left-1 xl:left-6 2xl:left-12 lg:block hidden"
+                    >
+                        <img
+                            :src="DayOfValorPeople"
+                            class="w-16 relative -top-0.5 left-0 h-auto"
+                            alt="Logo"
+                        />
+                    </div>
                     <div class="flex mr-2">
                         <!-- Logo -->
                         <!-- <div class="shrink-0 flex items-center bg-white bg-opacity-75 px-4 py-2 rounded-full"> -->
@@ -182,7 +192,7 @@ else if (
                                     />
                                     <div
                                         :class="logoTextClass"
-                                        class="transition-transform duration-200 hidden md:block ease-in-out transform group-hover:scale-110"
+                                        class="transition-transform duration-200 hidden md:block ease-in-out transform group-hover:scale-110 bg-white bg-opacity-10 p-0.5 rounded-full"
                                         style="white-space: nowrap"
                                     >
                                         {{ logoText }}
@@ -216,17 +226,20 @@ else if (
                             class="w-32 sm:w-1/3"
                             @keyup.enter="search"
                         /> -->
-                        <div class="relative w-48 sm:w-1/3 ps-16 sm:ps-0 -right-8">
-							<TextInput
-								v-model="keywords"
-								placeholder="Search..."
-								class="w-full pr-10 pl-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-								@keyup.enter="search" />
-							<!-- <img
+                        <div
+                            class="relative w-48 sm:w-1/3 ps-16 sm:ps-0 -right-8"
+                        >
+                            <TextInput
+                                v-model="keywords"
+                                placeholder="Search..."
+                                class="w-full pr-10 pl-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                @keyup.enter="search"
+                            />
+                            <!-- <img
 								:src="HeartSearch"
 								alt="Search"
 								class="absolute right-3 hidden sm:block top-1/2 transform -translate-y-1/2 w-20 h-auto text-gray-400" /> -->
-						</div>
+                        </div>
 
                         <!-- Backup of default layout Start -->
                         <!-- <Link
