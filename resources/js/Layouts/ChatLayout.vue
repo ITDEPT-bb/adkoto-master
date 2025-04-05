@@ -93,7 +93,7 @@ let logoTextClass =
                 "
             > -->
             <div
-                class="max-w-screen mx-auto px-4 py-0.5 sm:px-6 lg:px-16 bg-cover bg-center drop-shadow-lg relative z-50"
+                class="max-w-screen mx-auto px-4 py-0.5 sm:px-6 lg:px-16 bg-cover bg-center drop-shadow-lg relative sm:z-50 z-0"
                 style="
                     background-image: url('/img/Kagitingan/kagitingan_bg.jpg');
                 "
@@ -110,7 +110,7 @@ let logoTextClass =
                             alt="Logo"
                         />
                     </div>
-                    <div class="flex mr-2">
+                    <div class="flex sm:mr-2">
                         <!-- Logo -->
                         <!-- <div class="shrink-0 flex items-center">
 							<Link :href="route('chat.index')">
@@ -122,7 +122,9 @@ let logoTextClass =
 						</div> -->
                         <div class="shrink-0 flex items-center">
                             <Link :href="route('dashboard')">
-                                <div class="relative group mb-0 md:mb-3">
+                                <div
+                                    class="relative group mb-0 md:mb-3 bg-white bg-opacity-70 py-1 rounded-full sm:bg-none sm:bg-opacity-0 sm:px-0 sm:py-0"
+                                >
                                     <img
                                         :src="logoSrc"
                                         :class="logoClass"
