@@ -113,6 +113,16 @@
                             <SpeakerXMarkIcon v-else class="w-6 h-6" />
                         </button>
                         <button
+                            @click="toggleVideo"
+                            class="p-3 rounded-full bg-white/10 hover:bg-white/20 text-white"
+                        >
+                            <VideoCameraIcon
+                                v-if="!disabledVideo"
+                                class="w-6 h-6"
+                            />
+                            <VideoCameraSlashIcon v-else class="w-6 h-6" />
+                        </button>
+                        <button
                             @click="endCall"
                             class="p-3 rounded-full bg-red-500 hover:bg-red-600 text-white transition"
                         >
@@ -157,8 +167,8 @@ import axios from "axios";
 import {
     MicrophoneIcon,
     SpeakerXMarkIcon,
-    // VideoCameraIcon,
-    // VideoCameraSlashIcon,
+    VideoCameraIcon,
+    VideoCameraSlashIcon,
     PhoneXMarkIcon,
 } from "@heroicons/vue/24/outline";
 import { Link } from "@inertiajs/vue3";
@@ -177,7 +187,7 @@ const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
 
 // State
 const localAudioTrack = ref(null);
-// const localVideoTrack = ref(null);
+const localVideoTrack = ref(null);
 const callInProgress = ref(false);
 const remoteUsers = reactive([]);
 const mutedAudio = ref(false);
@@ -193,86 +203,87 @@ const incomingCall = ref(false);
 const incomingCaller = ref("");
 
 // Setup Agora
-// const setupAgora = async () => {
-//     client.on("user-published", async (user, mediaType) => {
-//         await client.subscribe(user, mediaType);
-
-//         if (mediaType === "video") {
-//             const remoteUser = {
-//                 uid: user.uid,
-//                 name: getUserName(user.uid),
-//                 videoTrack: user.videoTrack,
-//                 audioTrack: user.audioTrack,
-//             };
-
-//             remoteUsers.push(remoteUser);
-//             setTimeout(() => {
-//                 user.videoTrack.play(`remoteVideo_${user.uid}`);
-//             }, 100);
-//         }
-
-//         if (mediaType === "audio") {
-//             user.audioTrack.play();
-//         }
-//     });
-
-//     client.on("user-unpublished", (user, mediaType) => {
-//         if (mediaType === "video") {
-//             const index = remoteUsers.findIndex((u) => u.uid === user.uid);
-//             if (index > -1) {
-//                 remoteUsers.splice(index, 1);
-//             }
-//         }
-//     });
-// };
 const setupAgora = async () => {
     client.on("user-published", async (user, mediaType) => {
-        try {
-            await client.subscribe(user, mediaType);
+        await client.subscribe(user, mediaType);
 
-            if (mediaType === "audio") {
-                const remoteUser = {
-                    uid: user.uid,
-                    name: getUserName(user.uid),
-                    muted: false,
-                    audioTrack: user.audioTrack,
-                };
+        if (mediaType === "video") {
+            const remoteUser = {
+                uid: user.uid,
+                name: getUserName(user.uid),
+                videoTrack: user.videoTrack,
+                audioTrack: user.audioTrack,
+            };
 
-                remoteUsers.push(remoteUser);
-                user.audioTrack.play();
+            remoteUsers.push(remoteUser);
+            setTimeout(() => {
+                user.videoTrack.play(`remoteVideo_${user.uid}`);
+            }, 100);
+        }
 
-                // Track audio state changes
-                // user.audioTrack.on("track-ended", () => {
-                //     const index = remoteUsers.findIndex(
-                //         (u) => u.uid === user.uid
-                //     );
-                //     if (index > -1) remoteUsers[index].muted = true;
-                // });
-
-                // user.audioTrack.on("track-playing", () => {
-                //     const index = remoteUsers.findIndex(
-                //         (u) => u.uid === user.uid
-                //     );
-                //     if (index > -1) remoteUsers[index].muted = false;
-                // });
-            }
-        } catch (error) {
-            console.error("Error handling user-published:", error);
+        if (mediaType === "audio") {
+            user.audioTrack.play();
         }
     });
 
     client.on("user-unpublished", (user, mediaType) => {
-        if (mediaType === "audio") {
+        if (mediaType === "video") {
             const index = remoteUsers.findIndex((u) => u.uid === user.uid);
-            if (index > -1) remoteUsers.splice(index, 1);
+            if (index > -1) {
+                remoteUsers.splice(index, 1);
+            }
         }
     });
-
-    // client.on("user-left", (user) => {
-    //     const index = remoteUsers.findIndex((u) => u.uid === user.uid);
-    //     if (index > -1) remoteUsers.splice(index, 1);
-    // });
 };
+// const setupAgora = async () => {
+//     client.on("user-published", async (user, mediaType) => {
+//         try {
+//             await client.subscribe(user, mediaType);
+
+//             if (mediaType === "audio") {
+//                 const remoteUser = {
+//                     uid: user.uid,
+//                     name: getUserName(user.uid),
+//                     muted: false,
+//                     audioTrack: user.audioTrack,
+//                 };
+
+//                 remoteUsers.push(remoteUser);
+//                 user.audioTrack.play();
+
+// Track audio state changes
+// user.audioTrack.on("track-ended", () => {
+//     const index = remoteUsers.findIndex(
+//         (u) => u.uid === user.uid
+//     );
+//     if (index > -1) remoteUsers[index].muted = true;
+// });
+
+// user.audioTrack.on("track-playing", () => {
+//     const index = remoteUsers.findIndex(
+//         (u) => u.uid === user.uid
+//     );
+//     if (index > -1) remoteUsers[index].muted = false;
+// });
+
+//         }
+//     } catch (error) {
+//         console.error("Error handling user-published:", error);
+//     }
+// });
+
+// client.on("user-unpublished", (user, mediaType) => {
+//     if (mediaType === "audio") {
+//         const index = remoteUsers.findIndex((u) => u.uid === user.uid);
+//         if (index > -1) remoteUsers.splice(index, 1);
+//     }
+// });
+
+// client.on("user-left", (user) => {
+//     const index = remoteUsers.findIndex((u) => u.uid === user.uid);
+//     if (index > -1) remoteUsers.splice(index, 1);
+// });
+// };
 
 const startCall = async (user) => {
     if (!isUserOnline(user.id)) {
@@ -291,16 +302,16 @@ const startCall = async (user) => {
             // props.authUser.id
             user.id
         );
-        // [localAudioTrack.value, localVideoTrack.value] = await Promise.all([
-        //     AgoraRTC.createMicrophoneAudioTrack(),
-        //     AgoraRTC.createCameraVideoTrack(),
-        // ]);
+        [localAudioTrack.value, localVideoTrack.value] = await Promise.all([
+            AgoraRTC.createMicrophoneAudioTrack(),
+            AgoraRTC.createCameraVideoTrack(),
+        ]);
 
-        // await client.publish([localAudioTrack.value, localVideoTrack.value]);
-        // localVideoTrack.value.play("localVideo");
+        await client.publish([localAudioTrack.value, localVideoTrack.value]);
+        localVideoTrack.value.play("localVideo");
 
-        localAudioTrack.value = await AgoraRTC.createMicrophoneAudioTrack();
-        await client.publish([localAudioTrack.value]);
+        // localAudioTrack.value = await AgoraRTC.createMicrophoneAudioTrack();
+        // await client.publish([localAudioTrack.value]);
         callInProgress.value = true;
 
         // Notify user about the call
@@ -333,8 +344,15 @@ const acceptCall = async () => {
             acceptedId.value
         );
 
-        localAudioTrack.value = await AgoraRTC.createMicrophoneAudioTrack();
-        await client.publish([localAudioTrack.value]);
+        [localAudioTrack.value, localVideoTrack.value] = await Promise.all([
+            AgoraRTC.createMicrophoneAudioTrack(),
+            AgoraRTC.createCameraVideoTrack(),
+        ]);
+
+        await client.publish([localAudioTrack.value, localVideoTrack.value]);
+        localVideoTrack.value.play("localVideo");
+        // localAudioTrack.value = await AgoraRTC.createMicrophoneAudioTrack();
+        // await client.publish([localAudioTrack.value]);
         callInProgress.value = true;
 
         ringtone.pause();
@@ -354,10 +372,10 @@ const endCall = async () => {
         localAudioTrack.value.stop();
         localAudioTrack.value.close();
     }
-    // if (localVideoTrack.value) {
-    //     localVideoTrack.value.stop();
-    //     localVideoTrack.value.close();
-    // }
+    if (localVideoTrack.value) {
+        localVideoTrack.value.stop();
+        localVideoTrack.value.close();
+    }
 
     await client.leave();
     remoteUsers.splice(0, remoteUsers.length);
@@ -373,10 +391,10 @@ const toggleAudio = () => {
     localAudioTrack.value.setEnabled(!mutedAudio.value);
 };
 
-// const toggleVideo = () => {
-//     disabledVideo.value = !disabledVideo.value;
-//     localVideoTrack.value.setEnabled(!disabledVideo.value);
-// };
+const toggleVideo = () => {
+    disabledVideo.value = !disabledVideo.value;
+    localVideoTrack.value.setEnabled(!disabledVideo.value);
+};
 
 const generateChannelName = (callerId, calleeId) => {
     return `call-${Math.min(callerId, calleeId)}-${Math.max(
