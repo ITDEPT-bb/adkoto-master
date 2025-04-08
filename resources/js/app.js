@@ -1,6 +1,16 @@
 import "./bootstrap";
 import "flowbite";
 
+import {
+    Livewire,
+    Alpine,
+} from "../../vendor/livewire/livewire/dist/livewire.esm";
+// import Clipboard from "@ryangjchandler/alpine-clipboard";
+
+// Alpine.plugin(Clipboard);
+
+Livewire.start();
+
 import { createApp, h } from "vue";
 import { createInertiaApp } from "@inertiajs/vue3";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";

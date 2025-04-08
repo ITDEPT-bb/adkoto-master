@@ -22,13 +22,17 @@
     {{--
     <script src="https://download.agora.io/sdk/release/AgoraRTC_N-4.23.1.js"></script> --}}
     @inertiaHead
+
+    @livewireStyles
 </head>
 {{--
 
 <body class="font-sans antialiased"> --}}
 
-    <body class="font-sans antialiased bg-gray-100 mt-10 sm:mt-0 dark:bg-slate-800 lg:overflow-hidden lg:h-full">
-        @inertia
-    </body>
+<body class="font-sans antialiased bg-gray-100 mt-10 sm:mt-0 dark:bg-slate-800 lg:overflow-hidden lg:h-full">
+    @inertia
+
+    @livewireScriptConfig
+</body>
 
 </html>
