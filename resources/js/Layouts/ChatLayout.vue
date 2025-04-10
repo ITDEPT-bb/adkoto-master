@@ -82,26 +82,14 @@ let logoTextClass =
     >
         <!-- <div class="h-full mx-auto overflow-hidden flex flex-col"> -->
         <nav
-            class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700"
+            class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 fixed md:static top-0 z-10 pt-6 sm:pt-0"
         >
             <!-- Primary Navigation Menu -->
-            <!-- <div class="max-w-screen mx-auto px-4 sm:px-6 lg:px-16"> -->
-            <!-- <div
-                class="max-w-screen mx-auto px-4 py-0.5 sm:px-6 lg:px-16 bg-cover bg-center bg-white drop-shadow-lg relative z-50"
-                style="
-                    background-image: url('/img/Kagitingan/kagitingan_bg.jpg.jpg');
-                "
-            > -->
-            <div
-                class="max-w-screen mx-auto px-4 py-0.5 sm:px-6 lg:px-16 bg-cover bg-center drop-shadow-lg relative sm:z-50 z-0"
-                style="
-                    background-image: url('/img/Kagitingan/kagitingan_bg.jpg');
-                "
-            >
+            <div class="max-w-screen mx-auto px-4 sm:px-6 lg:px-16">
                 <!-- <div class="flex items-center justify-between gap-4 h-16">
                     <div class="flex"> -->
                 <div class="flex items-center justify-evenly gap-2 h-16">
-                    <div
+                    <!-- <div
                         class="absolute -bottom-0.5 left-1 xl:left-6 2xl:left-12 lg:block hidden"
                     >
                         <img
@@ -109,7 +97,7 @@ let logoTextClass =
                             class="w-16 relative -top-0.5 left-0 h-auto"
                             alt="Logo"
                         />
-                    </div>
+                    </div> -->
                     <div class="flex sm:mr-2">
                         <!-- Logo -->
                         <!-- <div class="shrink-0 flex items-center">
