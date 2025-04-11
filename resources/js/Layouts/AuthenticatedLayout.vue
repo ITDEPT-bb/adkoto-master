@@ -838,8 +838,10 @@ else if (
                                     <div
                                         class="font-semibold text-lg text-gray-800 dark:text-gray-200"
                                     >
-                                        {{ authUser.name }}
-                                        {{ authUser.surname }}
+                                        <p class="truncate w-3/4 mx-auto">
+                                            {{ authUser.name }}
+                                            {{ authUser.surname }}
+                                        </p>
                                     </div>
 
                                     <div
