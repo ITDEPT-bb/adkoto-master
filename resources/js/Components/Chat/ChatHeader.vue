@@ -55,7 +55,7 @@
                     <!-- Hamburger Button beside Name on Mobile -->
                     <button
                         @click="toggleMenu"
-                        class="sm:hidden inline-flex items-center justify-center rounded-lg ml-2 h-10 w-10 transition duration-500 ease-in-out text-white hover:bg-gray-300 hover:text-black focus:outline-none"
+                        class="sm:hidden inline-flex items-center justify-center rounded-lg ml-20 h-10 w-10 transition duration-500 ease-in-out text-white hover:bg-gray-300 hover:text-black focus:outline-none"
                         :aria-expanded="isMenuOpen"
                         aria-label="Toggle menu"
                     >
@@ -112,15 +112,14 @@
                     <PhoneIcon />
                 </button>
             </Link> -->
-            <!-- <Link :href="route('chat.callPage')" aria-label="Call User">
+            <Link :href="route('chat.callPage')" aria-label="Call User">
                 <button
                     type="button"
                     class="inline-flex items-center justify-center rounded-lg border h-10 w-10 transition duration-500 ease-in-out text-white hover:bg-gray-300 hover:text-black focus:outline-none"
-                    @click="showCallModal = true"
                 >
                     <PhoneIcon />
                 </button>
-            </Link> -->
+            </Link>
 
             <!-- <button
 				type="button"
@@ -157,6 +156,13 @@
                     <PhoneIcon class="mr-2" /> Voice Call
                 </button>
             </Link> -->
+            <Link :href="route('chat.callPage')" aria-label="Call User">
+                <button
+                    class="flex items-center w-full px-4 py-2 text-gray-800 hover:bg-gray-200"
+                >
+                    <PhoneIcon class="mr-2" /> Voice Call
+                </button>
+            </Link>
             <!-- <button
 				class="flex items-center w-full px-4 py-2 text-gray-800 hover:bg-gray-200"
 				@click="startVideoCall">
