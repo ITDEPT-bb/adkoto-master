@@ -112,7 +112,7 @@
                             />
                             <SpeakerXMarkIcon v-else class="w-6 h-6" />
                         </button>
-                        <button
+                        <!-- <button
                             @click="toggleVideo"
                             class="p-3 rounded-full bg-white/10 hover:bg-white/20 text-white"
                         >
@@ -121,7 +121,7 @@
                                 class="w-6 h-6"
                             />
                             <VideoCameraSlashIcon v-else class="w-6 h-6" />
-                        </button>
+                        </button> -->
                         <button
                             @click="endCall"
                             class="p-3 rounded-full bg-red-500 hover:bg-red-600 text-white transition"
@@ -203,87 +203,86 @@ const incomingCall = ref(false);
 const incomingCaller = ref("");
 
 // Setup Agora
+// const setupAgora = async () => {
+//     client.on("user-published", async (user, mediaType) => {
+//         await client.subscribe(user, mediaType);
+
+//         if (mediaType === "video") {
+//             const remoteUser = {
+//                 uid: user.uid,
+//                 name: getUserName(user.uid),
+//                 videoTrack: user.videoTrack,
+//                 audioTrack: user.audioTrack,
+//             };
+
+//             remoteUsers.push(remoteUser);
+//             setTimeout(() => {
+//                 user.videoTrack.play(`remoteVideo_${user.uid}`);
+//             }, 100);
+//         }
+
+//         if (mediaType === "audio") {
+//             user.audioTrack.play();
+//         }
+//     });
+
+//     client.on("user-unpublished", (user, mediaType) => {
+//         if (mediaType === "video") {
+//             const index = remoteUsers.findIndex((u) => u.uid === user.uid);
+//             if (index > -1) {
+//                 remoteUsers.splice(index, 1);
+//             }
+//         }
+//     });
+// };
 const setupAgora = async () => {
     client.on("user-published", async (user, mediaType) => {
-        await client.subscribe(user, mediaType);
+        try {
+            await client.subscribe(user, mediaType);
 
-        if (mediaType === "video") {
-            const remoteUser = {
-                uid: user.uid,
-                name: getUserName(user.uid),
-                videoTrack: user.videoTrack,
-                audioTrack: user.audioTrack,
-            };
+            if (mediaType === "audio") {
+                const remoteUser = {
+                    uid: user.uid,
+                    name: getUserName(user.uid),
+                    muted: false,
+                    audioTrack: user.audioTrack,
+                };
 
-            remoteUsers.push(remoteUser);
-            setTimeout(() => {
-                user.videoTrack.play(`remoteVideo_${user.uid}`);
-            }, 100);
-        }
+                remoteUsers.push(remoteUser);
+                user.audioTrack.play();
 
-        if (mediaType === "audio") {
-            user.audioTrack.play();
+                // Track audio state changes
+                user.audioTrack.on("track-ended", () => {
+                    const index = remoteUsers.findIndex(
+                        (u) => u.uid === user.uid
+                    );
+                    if (index > -1) remoteUsers[index].muted = true;
+                });
+
+                user.audioTrack.on("track-playing", () => {
+                    const index = remoteUsers.findIndex(
+                        (u) => u.uid === user.uid
+                    );
+                    if (index > -1) remoteUsers[index].muted = false;
+                });
+            }
+        } catch (error) {
+            console.error("Error handling user-published:", error);
         }
     });
 
     client.on("user-unpublished", (user, mediaType) => {
-        if (mediaType === "video") {
+        if (mediaType === "audio") {
             const index = remoteUsers.findIndex((u) => u.uid === user.uid);
-            if (index > -1) {
-                remoteUsers.splice(index, 1);
-            }
+            if (index > -1) remoteUsers.splice(index, 1);
         }
     });
+
+    client.on("user-left", (user) => {
+        const index = remoteUsers.findIndex((u) => u.uid === user.uid);
+        if (index > -1) remoteUsers.splice(index, 1);
+    });
 };
-// const setupAgora = async () => {
-//     client.on("user-published", async (user, mediaType) => {
-//         try {
-//             await client.subscribe(user, mediaType);
-
-//             if (mediaType === "audio") {
-//                 const remoteUser = {
-//                     uid: user.uid,
-//                     name: getUserName(user.uid),
-//                     muted: false,
-//                     audioTrack: user.audioTrack,
-//                 };
-
-//                 remoteUsers.push(remoteUser);
-//                 user.audioTrack.play();
-
-// Track audio state changes
-// user.audioTrack.on("track-ended", () => {
-//     const index = remoteUsers.findIndex(
-//         (u) => u.uid === user.uid
-//     );
-//     if (index > -1) remoteUsers[index].muted = true;
-// });
-
-// user.audioTrack.on("track-playing", () => {
-//     const index = remoteUsers.findIndex(
-//         (u) => u.uid === user.uid
-//     );
-//     if (index > -1) remoteUsers[index].muted = false;
-// });
-
-//         }
-//     } catch (error) {
-//         console.error("Error handling user-published:", error);
-//     }
-// });
-
-// client.on("user-unpublished", (user, mediaType) => {
-//     if (mediaType === "audio") {
-//         const index = remoteUsers.findIndex((u) => u.uid === user.uid);
-//         if (index > -1) remoteUsers.splice(index, 1);
-//     }
-// });
-
-// client.on("user-left", (user) => {
-//     const index = remoteUsers.findIndex((u) => u.uid === user.uid);
-//     if (index > -1) remoteUsers.splice(index, 1);
-// });
-// };
 
 const startCall = async (user) => {
     if (!isUserOnline(user.id)) {
@@ -302,16 +301,16 @@ const startCall = async (user) => {
             // props.authUser.id
             user.id
         );
-        [localAudioTrack.value, localVideoTrack.value] = await Promise.all([
-            AgoraRTC.createMicrophoneAudioTrack(),
-            AgoraRTC.createCameraVideoTrack(),
-        ]);
+        // [localAudioTrack.value, localVideoTrack.value] = await Promise.all([
+        //     AgoraRTC.createMicrophoneAudioTrack(),
+        //     AgoraRTC.createCameraVideoTrack(),
+        // ]);
 
-        await client.publish([localAudioTrack.value, localVideoTrack.value]);
-        localVideoTrack.value.play("localVideo");
+        // await client.publish([localAudioTrack.value, localVideoTrack.value]);
+        // localVideoTrack.value.play("localVideo");
 
-        // localAudioTrack.value = await AgoraRTC.createMicrophoneAudioTrack();
-        // await client.publish([localAudioTrack.value]);
+        localAudioTrack.value = await AgoraRTC.createMicrophoneAudioTrack();
+        await client.publish([localAudioTrack.value]);
         callInProgress.value = true;
 
         // Notify user about the call
@@ -344,15 +343,16 @@ const acceptCall = async () => {
             acceptedId.value
         );
 
-        [localAudioTrack.value, localVideoTrack.value] = await Promise.all([
-            AgoraRTC.createMicrophoneAudioTrack(),
-            AgoraRTC.createCameraVideoTrack(),
-        ]);
+        // [localAudioTrack.value, localVideoTrack.value] = await Promise.all([
+        //     AgoraRTC.createMicrophoneAudioTrack(),
+        //     AgoraRTC.createCameraVideoTrack(),
+        // ]);
 
-        await client.publish([localAudioTrack.value, localVideoTrack.value]);
-        localVideoTrack.value.play("localVideo");
-        // localAudioTrack.value = await AgoraRTC.createMicrophoneAudioTrack();
-        // await client.publish([localAudioTrack.value]);
+        // await client.publish([localAudioTrack.value, localVideoTrack.value]);
+        // localVideoTrack.value.play("localVideo");
+
+        localAudioTrack.value = await AgoraRTC.createMicrophoneAudioTrack();
+        await client.publish([localAudioTrack.value]);
         callInProgress.value = true;
 
         ringtone.pause();
