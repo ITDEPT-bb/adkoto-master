@@ -15,6 +15,10 @@ Broadcast::channel('agora-online-channel', function ($user) {
     return $user ? ['id' => $user->id, 'name' => $user->name] : false;
 });
 
+Broadcast::channel('calls.{userId}', function ($user, $userId) {
+    return (int) $user->id === (int) $userId;
+});
+
 Broadcast::channel('conversation.{conversationId}', function ($user, $conversationId) {
     // Check if the user is part of the conversation
     return $user->conversations->contains($conversationId);

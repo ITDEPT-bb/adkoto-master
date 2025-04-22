@@ -49,7 +49,8 @@
                     <span
                         class="text-sm sm:text-base font-medium text-gray-800"
                     >
-                        {{ user.name }} - {{ getUserStatus(user.id) }}
+                        {{ user.name }} {{ user.surname }} -
+                        {{ getUserStatus(user.id) }}
                     </span>
                 </div>
 
@@ -112,7 +113,7 @@
                             />
                             <SpeakerXMarkIcon v-else class="w-6 h-6" />
                         </button>
-                        <!-- <button
+                        <button
                             @click="toggleVideo"
                             class="p-3 rounded-full bg-white/10 hover:bg-white/20 text-white"
                         >
@@ -121,7 +122,7 @@
                                 class="w-6 h-6"
                             />
                             <VideoCameraSlashIcon v-else class="w-6 h-6" />
-                        </button> -->
+                        </button>
                         <button
                             @click="endCall"
                             class="p-3 rounded-full bg-red-500 hover:bg-red-600 text-white transition"
@@ -134,25 +135,41 @@
         </div>
 
         <!-- Incoming Call -->
-        <div class="my-8" v-if="incomingCall">
-            <p class="text-lg text-center text-dark">
-                Incoming Call From <strong>{{ incomingCaller }}</strong>
-            </p>
-            <div class="flex justify-center gap-4 mt-4">
-                <button
-                    type="button"
-                    class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded"
-                    @click="declineCall"
-                >
-                    Decline
-                </button>
-                <button
-                    type="button"
-                    class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded"
-                    @click="acceptCall"
-                >
-                    Accept
-                </button>
+        <!-- <div class="my-8" v-if="incomingCall"> -->
+        <div
+            class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center"
+            v-if="incomingCall"
+        >
+            <div class="text-center bg-white p-6 rounded shadow-md">
+                <p class="text-lg text-dark">
+                    Incoming Call From <strong>{{ incomingCaller }}</strong>
+                </p>
+                <div class="flex justify-center gap-4 mt-4">
+                    <button
+                        type="button"
+                        class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded"
+                        @click="declineCall"
+                    >
+                        Decline
+                    </button>
+                    <button
+                        type="button"
+                        class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded"
+                        @click="acceptCall"
+                    >
+                        Accept
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Declined Call -->
+        <div
+            class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center"
+            v-if="callStatus"
+        >
+            <div class="text-center bg-white p-6 rounded shadow-md">
+                <p class="text-lg text-dark">{{ callStatusText }}</p>
             </div>
         </div>
     </div>
@@ -201,88 +218,95 @@ const acceptedToken = ref("");
 
 const incomingCall = ref(false);
 const incomingCaller = ref("");
+const incomingCallerId = ref("");
+
+const callStatus = ref(false);
+const callStatusText = ref("");
+
+const otherUserId = ref(null);
 
 // Setup Agora
-// const setupAgora = async () => {
-//     client.on("user-published", async (user, mediaType) => {
-//         await client.subscribe(user, mediaType);
-
-//         if (mediaType === "video") {
-//             const remoteUser = {
-//                 uid: user.uid,
-//                 name: getUserName(user.uid),
-//                 videoTrack: user.videoTrack,
-//                 audioTrack: user.audioTrack,
-//             };
-
-//             remoteUsers.push(remoteUser);
-//             setTimeout(() => {
-//                 user.videoTrack.play(`remoteVideo_${user.uid}`);
-//             }, 100);
-//         }
-
-//         if (mediaType === "audio") {
-//             user.audioTrack.play();
-//         }
-//     });
-
-//     client.on("user-unpublished", (user, mediaType) => {
-//         if (mediaType === "video") {
-//             const index = remoteUsers.findIndex((u) => u.uid === user.uid);
-//             if (index > -1) {
-//                 remoteUsers.splice(index, 1);
-//             }
-//         }
-//     });
-// };
 const setupAgora = async () => {
     client.on("user-published", async (user, mediaType) => {
-        try {
-            await client.subscribe(user, mediaType);
+        await client.subscribe(user, mediaType);
 
-            if (mediaType === "audio") {
-                const remoteUser = {
-                    uid: user.uid,
-                    name: getUserName(user.uid),
-                    muted: false,
-                    audioTrack: user.audioTrack,
-                };
+        if (mediaType === "video") {
+            const remoteUser = {
+                uid: user.uid,
+                name: getUserName(user.uid),
+                videoTrack: user.videoTrack,
+                audioTrack: user.audioTrack,
+            };
 
-                remoteUsers.push(remoteUser);
-                user.audioTrack.play();
+            remoteUsers.push(remoteUser);
+            setTimeout(() => {
+                user.videoTrack.play(`remoteVideo_${user.uid}`);
+            }, 100);
+        }
 
-                // Track audio state changes
-                user.audioTrack.on("track-ended", () => {
-                    const index = remoteUsers.findIndex(
-                        (u) => u.uid === user.uid
-                    );
-                    if (index > -1) remoteUsers[index].muted = true;
-                });
-
-                user.audioTrack.on("track-playing", () => {
-                    const index = remoteUsers.findIndex(
-                        (u) => u.uid === user.uid
-                    );
-                    if (index > -1) remoteUsers[index].muted = false;
-                });
-            }
-        } catch (error) {
-            console.error("Error handling user-published:", error);
+        if (mediaType === "audio") {
+            user.audioTrack.play();
         }
     });
 
     client.on("user-unpublished", (user, mediaType) => {
-        if (mediaType === "audio") {
+        if (mediaType === "video") {
             const index = remoteUsers.findIndex((u) => u.uid === user.uid);
-            if (index > -1) remoteUsers.splice(index, 1);
+            if (index > -1) {
+                remoteUsers.splice(index, 1);
+            }
         }
     });
-
-    client.on("user-left", (user) => {
-        const index = remoteUsers.findIndex((u) => u.uid === user.uid);
-        if (index > -1) remoteUsers.splice(index, 1);
-    });
 };
+// const setupAgora = async () => {
+//     client.on("user-published", async (user, mediaType) => {
+//         try {
+//             await client.subscribe(user, mediaType);
+
+//             if (mediaType === "audio") {
+//                 const remoteUser = {
+//                     uid: user.uid,
+//                     name: getUserName(user.uid),
+//                     muted: false,
+//                     audioTrack: user.audioTrack,
+//                 };
+
+//                 remoteUsers.push(remoteUser);
+//                 user.audioTrack.play();
+
+// Track audio state changes
+// user.audioTrack.on("track-ended", () => {
+//     const index = remoteUsers.findIndex(
+//         (u) => u.uid === user.uid
+//     );
+//     if (index > -1) remoteUsers[index].muted = true;
+// });
+
+// user.audioTrack.on("track-playing", () => {
+//     const index = remoteUsers.findIndex(
+//         (u) => u.uid === user.uid
+//     );
+//     if (index > -1) remoteUsers[index].muted = false;
+// });
+
+//         }
+//     } catch (error) {
+//         console.error("Error handling user-published:", error);
+//     }
+// });
+
+// client.on("user-unpublished", (user, mediaType) => {
+//     if (mediaType === "audio") {
+//         const index = remoteUsers.findIndex((u) => u.uid === user.uid);
+//         if (index > -1) remoteUsers.splice(index, 1);
+//     }
+// });
+
+// client.on("user-left", (user) => {
+//     const index = remoteUsers.findIndex((u) => u.uid === user.uid);
+//     if (index > -1) remoteUsers.splice(index, 1);
+// });
+// };
 
 const startCall = async (user) => {
     if (!isUserOnline(user.id)) {
@@ -291,6 +315,8 @@ const startCall = async (user) => {
     }
 
     try {
+        otherUserId.value = user.id;
+
         channelName.value = generateChannelName(props.authUser.id, user.id);
         const token = await fetchToken(channelName.value);
 
@@ -301,16 +327,16 @@ const startCall = async (user) => {
             // props.authUser.id
             user.id
         );
-        // [localAudioTrack.value, localVideoTrack.value] = await Promise.all([
-        //     AgoraRTC.createMicrophoneAudioTrack(),
-        //     AgoraRTC.createCameraVideoTrack(),
-        // ]);
+        [localAudioTrack.value, localVideoTrack.value] = await Promise.all([
+            AgoraRTC.createMicrophoneAudioTrack(),
+            AgoraRTC.createCameraVideoTrack(),
+        ]);
 
-        // await client.publish([localAudioTrack.value, localVideoTrack.value]);
-        // localVideoTrack.value.play("localVideo");
+        await client.publish([localAudioTrack.value, localVideoTrack.value]);
+        localVideoTrack.value.play("localVideo");
 
-        localAudioTrack.value = await AgoraRTC.createMicrophoneAudioTrack();
-        await client.publish([localAudioTrack.value]);
+        // localAudioTrack.value = await AgoraRTC.createMicrophoneAudioTrack();
+        // await client.publish([localAudioTrack.value]);
         callInProgress.value = true;
 
         // Notify user about the call
@@ -336,6 +362,8 @@ const acceptCall = async () => {
         // );
         // const token = await fetchToken(channelName.value);
 
+        otherUserId.value = acceptedId.value;
+
         await client.join(
             props.appId,
             acceptedChannel.value,
@@ -343,16 +371,15 @@ const acceptCall = async () => {
             acceptedId.value
         );
 
-        // [localAudioTrack.value, localVideoTrack.value] = await Promise.all([
-        //     AgoraRTC.createMicrophoneAudioTrack(),
-        //     AgoraRTC.createCameraVideoTrack(),
-        // ]);
+        [localAudioTrack.value, localVideoTrack.value] = await Promise.all([
+            AgoraRTC.createMicrophoneAudioTrack(),
+            AgoraRTC.createCameraVideoTrack(),
+        ]);
 
-        // await client.publish([localAudioTrack.value, localVideoTrack.value]);
-        // localVideoTrack.value.play("localVideo");
-
-        localAudioTrack.value = await AgoraRTC.createMicrophoneAudioTrack();
-        await client.publish([localAudioTrack.value]);
+        await client.publish([localAudioTrack.value, localVideoTrack.value]);
+        localVideoTrack.value.play("localVideo");
+        // localAudioTrack.value = await AgoraRTC.createMicrophoneAudioTrack();
+        // await client.publish([localAudioTrack.value]);
         callInProgress.value = true;
 
         ringtone.pause();
@@ -362,9 +389,54 @@ const acceptCall = async () => {
     }
 };
 
-const declineCall = () => {
+// const declineCall = () => {
+//     incomingCall.value = false;
+//     stopRingtone();
+// };
+const declineCall = async () => {
     incomingCall.value = false;
     stopRingtone();
+
+    await axios.post("/agora/decline-call", {
+        to_user_id: incomingCallerId.value,
+    });
+};
+
+const removeCall = async () => {
+    if (localAudioTrack.value) {
+        localAudioTrack.value.stop();
+        localAudioTrack.value.close();
+        localAudioTrack.value = null;
+    }
+
+    if (localVideoTrack.value) {
+        localVideoTrack.value.stop();
+        localVideoTrack.value.close();
+        localVideoTrack.value = null;
+    }
+
+    // Leave Agora session if already joined just in case
+    try {
+        await client.leave();
+    } catch (error) {
+        // Ignore error if not yet joined
+    }
+
+    // Clear remote users list
+    remoteUsers.splice(0, remoteUsers.length);
+
+    // Reset any call state
+    callInProgress.value = false;
+    acceptedId.value = null;
+    acceptedChannel.value = null;
+    acceptedToken.value = null;
+
+    callStatus.value = true;
+    callStatusText.value = "Call has been declined";
+    setTimeout(() => {
+        callStatus.value = false;
+        callStatusText.value = "";
+    }, 3000);
 };
 
 const endCall = async () => {
@@ -384,6 +456,25 @@ const endCall = async () => {
     // await axios.post("/api/end-call", {
     //     channel: channelName.value,
     // });
+
+    if (otherUserId.value) {
+        await axios.post("/agora/end-call", {
+            to_user_id: otherUserId.value,
+        });
+    }
+};
+
+const endCallRemoved = () => {
+    acceptedId.value = null;
+    acceptedChannel.value = null;
+    acceptedToken.value = null;
+
+    callStatus.value = true;
+    callStatusText.value = "Call has ended";
+    setTimeout(() => {
+        callStatus.value = false;
+        callStatusText.value = "";
+    }, 3000);
 };
 
 const toggleAudio = () => {
@@ -439,10 +530,21 @@ onMounted(() => {
                 ringtone.play();
 
                 // Set the channel name and token for accepting the call
+                incomingCallerId.value = data.from;
                 acceptedId.value = data.from;
                 acceptedChannel.value = data.channelName;
                 acceptedToken.value = data.token;
             }
+        });
+
+    window.Echo.private(`calls.${props.authUser.id}`)
+        .listen("DeclineCall", (e) => {
+            console.log("Call declined:", e);
+            removeCall();
+        })
+        .listen("CallEnded", (e) => {
+            console.log("Call ended by:", e.fromUserId);
+            endCallRemoved();
         });
 });
 

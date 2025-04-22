@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\DeclineCall;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Classes\AgoraDynamicKey\RtcTokenBuilder;
+use App\Events\CallEnded;
 use App\Events\MakeAgoraCall;
 use Illuminate\Support\Facades\Log;
 
@@ -59,5 +61,17 @@ class AgoraVideoController extends Controller
     {
         // return response()->json(['success' => true]);
         return view('agora.index');
+    }
+
+    public function declineCall(Request $request)
+    {
+        broadcast(new DeclineCall(auth()->id(), $request->to_user_id));
+        return response()->json(['status' => 'declined']);
+    }
+
+    public function endCall(Request $request)
+    {
+        broadcast(new CallEnded(auth()->id(), $request->to_user_id));
+        return response()->json(['message' => 'Call ended']);
     }
 }

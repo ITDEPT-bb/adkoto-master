@@ -130,6 +130,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/agora/token', [AgoraVideoController::class, 'token']);
     Route::post('/agora/call-user', [AgoraVideoController::class, 'callUser']);
     Route::get('/agora/call-user/adkt', [AgoraVideoController::class, 'index'])->name('callPageUser');
+
+    Route::post('/agora/decline-call', [AgoraVideoController::class, 'declineCall'])->name('declineCall');
+    Route::post('/agora/end-call', [AgoraVideoController::class, 'endCall'])->name('endCall');
 });
 
 // Group Chat
