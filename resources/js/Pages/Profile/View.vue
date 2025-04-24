@@ -1,6 +1,10 @@
 <script setup>
 import { computed, ref } from "vue";
-import { XMarkIcon, CheckCircleIcon, CameraIcon } from "@heroicons/vue/24/solid";
+import {
+    XMarkIcon,
+    CheckCircleIcon,
+    CameraIcon,
+} from "@heroicons/vue/24/solid";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import { usePage, Link, Head } from "@inertiajs/vue3";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
@@ -28,7 +32,13 @@ import MessageIcon from "@/Components/Icons/MessageIcon.vue";
 import NoSymbol from "@/Components/Icons/NoSymbol.vue";
 import PlusCircle from "@/Components/Icons/PlusCircle.vue";
 
-import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from "@headlessui/vue";
+import {
+    Dialog,
+    DialogPanel,
+    DialogTitle,
+    TransitionChild,
+    TransitionRoot,
+} from "@headlessui/vue";
 
 // const imagesForm = useForm({
 //     avatar: null,
@@ -47,47 +57,47 @@ const isFollowersActive = ref(true);
 
 const isOpen = ref(false);
 const openModal = () => {
-	isOpen.value = true;
+    isOpen.value = true;
 };
 const closeModal = () => {
-	isOpen.value = false;
+    isOpen.value = false;
 };
 
 const isOpenAvatar = ref(false);
 const openModalAvatar = () => {
-	isOpenAvatar.value = true;
+    isOpenAvatar.value = true;
 };
 const closeModalAvatar = () => {
-	isOpenAvatar.value = false;
+    isOpenAvatar.value = false;
 };
 
 const props = defineProps({
-	errors: Object,
-	mustVerifyEmail: {
-		type: Boolean,
-	},
-	status: {
-		type: String,
-	},
-	success: {
-		type: String,
-	},
-	isCurrentUserFollower: Boolean,
-	isPrivate: Boolean,
-	followRequestSent: Boolean,
-	followRequestPending: Boolean,
-	followRequest: Boolean,
-	isBlockedByAuthUser: Boolean,
-	isBlockedByOtherUser: Boolean,
-	followerCount: Number,
-	user: {
-		type: Object,
-	},
-	posts: Object,
-	followers: Array,
-	PendingFollowers: Array,
-	followings: Array,
-	photos: Array,
+    errors: Object,
+    mustVerifyEmail: {
+        type: Boolean,
+    },
+    status: {
+        type: String,
+    },
+    success: {
+        type: String,
+    },
+    isCurrentUserFollower: Boolean,
+    isPrivate: Boolean,
+    followRequestSent: Boolean,
+    followRequestPending: Boolean,
+    followRequest: Boolean,
+    isBlockedByAuthUser: Boolean,
+    isBlockedByOtherUser: Boolean,
+    followerCount: Number,
+    user: {
+        type: Object,
+    },
+    posts: Object,
+    followers: Array,
+    PendingFollowers: Array,
+    followings: Array,
+    photos: Array,
 });
 
 // function onCoverChange(event) {
@@ -164,153 +174,160 @@ const isLoading = ref(false);
 // 	});
 // }
 function followUser() {
-	isLoading.value = true;
+    isLoading.value = true;
 
-	const form = useForm({
-		follow: true,
-	});
+    const form = useForm({
+        follow: true,
+    });
 
-	form.post(route("user.follow", props.user.id), {
-		preserveScroll: true,
-		onFinish: () => {
-			isLoading.value = false;
-		},
-	});
+    form.post(route("user.follow", props.user.id), {
+        preserveScroll: true,
+        onFinish: () => {
+            isLoading.value = false;
+        },
+    });
 }
 
 function unfollowUser() {
-	isLoading.value = true;
+    isLoading.value = true;
 
-	const form = useForm({
-		follow: false,
-	});
+    const form = useForm({
+        follow: false,
+    });
 
-	form.post(route("user.follow", props.user.id), {
-		preserveScroll: true,
-		onFinish: () => {
-			isLoading.value = false;
-		},
-	});
+    form.post(route("user.follow", props.user.id), {
+        preserveScroll: true,
+        onFinish: () => {
+            isLoading.value = false;
+        },
+    });
 }
 
 function acceptFollowRequest(userId) {
-	isLoading.value = true;
+    isLoading.value = true;
 
-	const form = useForm({
-		follow: false,
-	});
+    const form = useForm({
+        follow: false,
+    });
 
-	form.post(route("user.accept", userId), {
-		preserveScroll: true,
-		onFinish: () => {
-			isLoading.value = false;
-		},
-	});
+    form.post(route("user.accept", userId), {
+        preserveScroll: true,
+        onFinish: () => {
+            isLoading.value = false;
+        },
+    });
 }
 
 function rejectFollowRequest(userId) {
-	isLoading.value = true;
+    isLoading.value = true;
 
-	const form = useForm({
-		follow: false,
-	});
+    const form = useForm({
+        follow: false,
+    });
 
-	form.post(route("user.reject", userId), {
-		preserveScroll: true,
-		onFinish: () => {
-			isLoading.value = false;
-		},
-	});
+    form.post(route("user.reject", userId), {
+        preserveScroll: true,
+        onFinish: () => {
+            isLoading.value = false;
+        },
+    });
 }
 
 const isConfirmingBlock = ref(false);
 const isConfirmingUnblock = ref(false);
 
 function confirmBlock() {
-	isConfirmingBlock.value = true;
+    isConfirmingBlock.value = true;
 }
 
 function confirmUnblock() {
-	isConfirmingUnblock.value = true;
+    isConfirmingUnblock.value = true;
 }
 
 function blockUser() {
-	isLoading.value = true;
-	isConfirmingBlock.value = false;
+    isLoading.value = true;
+    isConfirmingBlock.value = false;
 
-	const form = useForm({});
-	form.post(route("user.block", props.user.id), {
-		preserveScroll: true,
-		onFinish: () => {
-			isLoading.value = false;
-		},
-	});
+    const form = useForm({});
+    form.post(route("user.block", props.user.id), {
+        preserveScroll: true,
+        onFinish: () => {
+            isLoading.value = false;
+        },
+    });
 }
 
 function unblockUser() {
-	isLoading.value = true;
-	isConfirmingUnblock.value = false;
+    isLoading.value = true;
+    isConfirmingUnblock.value = false;
 
-	const form = useForm({});
-	form.post(route("user.unblock", props.user.id), {
-		preserveScroll: true,
-		onFinish: () => {
-			isLoading.value = false;
-		},
-	});
+    const form = useForm({});
+    form.post(route("user.unblock", props.user.id), {
+        preserveScroll: true,
+        onFinish: () => {
+            isLoading.value = false;
+        },
+    });
 }
 
 function cancelFollowRequest() {
-	unfollowUser();
+    unfollowUser();
 }
 
 const showPosts = ref(false);
 
 function toggleShowPosts() {
-	showPosts.value = !showPosts.value;
+    showPosts.value = !showPosts.value;
 }
 </script>
 
 <template>
-	<Head title="Profile" />
+    <Head title="Profile" />
 
-	<AuthenticatedLayout>
-		<div class="mx-auto max-w-7xl bg-white h-full overflow-auto scrollbar-thin">
-			<div class="px-4">
-				<div
-					v-show="showNotification && success"
-					class="my-2 py-2 px-3 font-medium text-sm bg-emerald-500 text-white">
-					{{ success }}
-				</div>
-				<div
-					v-if="errors.cover"
-					class="my-2 py-2 px-3 font-medium text-sm bg-red-400 text-white">
-					{{ errors.cover }}
-				</div>
+    <AuthenticatedLayout>
+        <div class="mx-auto max-w-7xl h-full overflow-auto scrollbar-thin">
+            <div class="px-4">
+                <div
+                    v-show="showNotification && success"
+                    class="my-2 py-2 px-3 font-medium text-sm bg-emerald-500 text-white"
+                >
+                    {{ success }}
+                </div>
+                <div
+                    v-if="errors.cover"
+                    class="my-2 py-2 px-3 font-medium text-sm bg-red-400 text-white"
+                >
+                    {{ errors.cover }}
+                </div>
 
-				<div class="group relative bg-white dark:bg-slate-950 dark:text-gray-100">
-					<!-- <img
+                <div
+                    class="group relative bg-white dark:bg-slate-950 dark:text-gray-100"
+                >
+                    <!-- <img
                         :src="user.cover_url || '/img/default_cover.jpg'"
                         class="w-full h-56 sm:h-[400px] object-cover"
                     /> -->
-					<div v-if="isMyProfile">
-						<img
-							:src="user.cover_url || '/img/default_cover.jpg'"
-							class="w-full aspect-[3/1] min-h-[150px] max-h-[400px] object-cover hover:opacity-90 cursor-pointer"
-							@click="openModal" />
-					</div>
-					<div v-else>
-						<img
-							:src="user.cover_url || '/img/default_cover.jpg'"
-							class="w-full aspect-[3/1] min-h-[150px] max-h-[400px] object-cover hover:opacity-90 cursor-pointer" />
-					</div>
+                    <div v-if="isMyProfile">
+                        <img
+                            :src="user.cover_url || '/img/default_cover.jpg'"
+                            class="w-full aspect-[3/1] min-h-[150px] max-h-[400px] object-cover hover:opacity-90 cursor-pointer"
+                            @click="openModal"
+                        />
+                    </div>
+                    <div v-else>
+                        <img
+                            :src="user.cover_url || '/img/default_cover.jpg'"
+                            class="w-full aspect-[3/1] min-h-[150px] max-h-[400px] object-cover hover:opacity-90 cursor-pointer"
+                        />
+                    </div>
 
-					<!-- Modal Component -->
-					<ProfileCoverModal
-						:imageSrc="user.cover_url || '/img/default_cover.jpg'"
-						:isOpen="isOpen"
-						@close="closeModal" />
-					<!-- <div v-if="isMyProfile" class="absolute top-2 right-2">
+                    <!-- Modal Component -->
+                    <ProfileCoverModal
+                        :imageSrc="user.cover_url || '/img/default_cover.jpg'"
+                        :isOpen="isOpen"
+                        @close="closeModal"
+                    />
+                    <!-- <div v-if="isMyProfile" class="absolute top-2 right-2">
                         <button
                             v-if="!coverImageSrc"
                             class="bg-gray-50 hover:bg-gray-100 text-gray-800 py-1 px-2 text-xs flex items-center opacity-0 group-hover:opacity-100"
@@ -363,28 +380,40 @@ function toggleShowPosts() {
                         </div>
                     </div> -->
 
-					<!-- <div class="flex flex-col md:flex-row"> -->
-					<div class="flex flex-row md:flex-row">
-						<div
-							class="flex items-center justify-center relative group/avatar mt-[-32px] md:-mt-[64px] ml-[10px] w-[96px] h-[96px] md:w-[128px] md:h-[128px] rounded-full">
-							<div v-if="isMyProfile">
-								<img
-									:src="user.avatar_url || '/img/default_avatar.png'"
-									class="w-24 h-24 sm:w-full sm:h-full object-cover rounded-full hover:opacity-95 hover:cursor-pointer"
-									@click="openModalAvatar" />
-							</div>
-							<div v-else>
-								<img
-									:src="user.avatar_url || '/img/default_avatar.png'"
-									class="w-24 h-24 sm:w-full sm:h-full object-cover rounded-full hover:opacity-95 hover:cursor-pointer" />
-							</div>
+                    <!-- <div class="flex flex-col md:flex-row"> -->
+                    <div class="flex flex-row md:flex-row">
+                        <div
+                            class="flex items-center justify-center relative group/avatar mt-[-32px] md:-mt-[64px] ml-[10px] w-[96px] h-[96px] md:w-[128px] md:h-[128px] rounded-full"
+                        >
+                            <div v-if="isMyProfile">
+                                <img
+                                    :src="
+                                        user.avatar_url ||
+                                        '/img/default_avatar.png'
+                                    "
+                                    class="w-24 h-24 sm:w-full sm:h-full object-cover rounded-full hover:opacity-95 hover:cursor-pointer"
+                                    @click="openModalAvatar"
+                                />
+                            </div>
+                            <div v-else>
+                                <img
+                                    :src="
+                                        user.avatar_url ||
+                                        '/img/default_avatar.png'
+                                    "
+                                    class="w-24 h-24 sm:w-full sm:h-full object-cover rounded-full hover:opacity-95 hover:cursor-pointer"
+                                />
+                            </div>
 
-							<ProfileAvatarModal
-								:imageSrc="user.avatar_url || '/img/default_avatar.jpg'"
-								:isOpenAvatar="isOpenAvatar"
-								@close="closeModalAvatar" />
+                            <ProfileAvatarModal
+                                :imageSrc="
+                                    user.avatar_url || '/img/default_avatar.jpg'
+                                "
+                                :isOpenAvatar="isOpenAvatar"
+                                @close="closeModalAvatar"
+                            />
 
-							<!-- <button
+                            <!-- <button
                                 v-if="!avatarImageSrc"
                                 class="absolute left-0 top-0 right-0 bottom-0 bg-black/50 text-gray-200 rounded-full opacity-0 flex items-center justify-center group-hover/avatar:opacity-100"
                             >
@@ -414,14 +443,22 @@ function toggleShowPosts() {
                                     <CheckCircleIcon class="h-5 w-5" />
                                 </button>
                             </div> -->
-						</div>
-						<div class="flex justify-between items-center flex-1 px-2 py-1 sm:px-4 sm:py-2">
-							<div>
-								<h2 class="font-bold text-lg text-nowrap">{{ user.name }} {{ user.surname }}</h2>
-								<p class="text-sm text-gray-500 mb-1">@{{ user.username }}</p>
-								<p class="text-xs text-gray-500 ps-1">{{ followerCount }} follower(s)</p>
-							</div>
-							<!-- <div>
+                        </div>
+                        <div
+                            class="flex justify-between items-center flex-1 px-2 py-1 sm:px-4 sm:py-2"
+                        >
+                            <div>
+                                <h2 class="font-bold text-lg text-nowrap">
+                                    {{ user.name }} {{ user.surname }}
+                                </h2>
+                                <p class="text-sm text-gray-500 mb-1">
+                                    @{{ user.username }}
+                                </p>
+                                <p class="text-xs text-gray-500 ps-1">
+                                    {{ followerCount }} follower(s)
+                                </p>
+                            </div>
+                            <!-- <div>
 								<button
 									type="button"
 									v-if="!isBlockedByAuthUser"
@@ -455,20 +492,29 @@ function toggleShowPosts() {
 								</button>
 							</div> -->
 
-							<div
-								v-if="!isMyProfile"
-								class="flex mt-6 me-1 gap-3 sm:me-0 sm:mt-0">
-								<template v-if="!isBlockedByOtherUser && !isBlockedByAuthUser">
-									<Link :href="`/chat/conversation/adktu/${user.id}`">
-										<button
-											type="button"
-											class="inline-flex items-center justify-center rounded-lg p-2 h-8 w-auto transition duration-500 ease-in-out text-gray-500 hover:bg-gray-300 focus:outline-none">
-											<MessageIcon />
-										</button>
-									</Link>
-								</template>
+                            <div
+                                v-if="!isMyProfile"
+                                class="flex mt-6 me-1 gap-3 sm:me-0 sm:mt-0"
+                            >
+                                <template
+                                    v-if="
+                                        !isBlockedByOtherUser &&
+                                        !isBlockedByAuthUser
+                                    "
+                                >
+                                    <Link
+                                        :href="`/chat/conversation/adktu/${user.id}`"
+                                    >
+                                        <button
+                                            type="button"
+                                            class="inline-flex items-center justify-center rounded-lg p-2 h-8 w-auto transition duration-500 ease-in-out text-gray-500 hover:bg-gray-300 focus:outline-none"
+                                        >
+                                            <MessageIcon />
+                                        </button>
+                                    </Link>
+                                </template>
 
-								<!-- <PrimaryButton
+                                <!-- <PrimaryButton
 									v-if="!isCurrentUserFollower && !followRequestSent && isPrivate"
 									@click="followUser"
 									:disabled="isLoading"
@@ -531,242 +577,306 @@ function toggleShowPosts() {
 										Loading...
 									</p>
 								</DangerButton> -->
-								<template v-if="!isBlockedByAuthUser">
-									<PrimaryButton
-										v-if="!isCurrentUserFollower && !followRequestSent"
-										@click="followUser"
-										:disabled="isLoading"
-										:class="{
-											'bg-gray-300 cursor-not-allowed': isLoading,
-											'bg-blue-500': !isLoading,
-										}">
-										<template v-if="!isLoading">
-											<p class="hidden sm:flex">Follow</p>
-										</template>
-										<p
-											v-else
-											class="hidden sm:flex">
-											Loading...
-										</p>
-									</PrimaryButton>
+                                <template v-if="!isBlockedByAuthUser">
+                                    <PrimaryButton
+                                        v-if="
+                                            !isCurrentUserFollower &&
+                                            !followRequestSent
+                                        "
+                                        @click="followUser"
+                                        :disabled="isLoading"
+                                        :class="{
+                                            'bg-gray-300 cursor-not-allowed':
+                                                isLoading,
+                                            'bg-blue-500': !isLoading,
+                                        }"
+                                    >
+                                        <template v-if="!isLoading">
+                                            <p class="hidden sm:flex">Follow</p>
+                                        </template>
+                                        <p v-else class="hidden sm:flex">
+                                            Loading...
+                                        </p>
+                                    </PrimaryButton>
 
-									<SecondaryButton
-										v-else-if="followRequestSent"
-										@click="cancelFollowRequest"
-										:disabled="isLoading"
-										:class="{
-											'bg-gray-300 cursor-not-allowed': isLoading,
-											'bg-red-500': !isLoading,
-										}">
-										<template v-if="!isLoading">
-											<p class="hidden sm:flex">Request Pending</p>
-										</template>
-										<p
-											v-else
-											class="hidden sm:flex">
-											Loading...
-										</p>
-									</SecondaryButton>
+                                    <SecondaryButton
+                                        v-else-if="followRequestSent"
+                                        @click="cancelFollowRequest"
+                                        :disabled="isLoading"
+                                        :class="{
+                                            'bg-gray-300 cursor-not-allowed':
+                                                isLoading,
+                                            'bg-red-500': !isLoading,
+                                        }"
+                                    >
+                                        <template v-if="!isLoading">
+                                            <p class="hidden sm:flex">
+                                                Request Pending
+                                            </p>
+                                        </template>
+                                        <p v-else class="hidden sm:flex">
+                                            Loading...
+                                        </p>
+                                    </SecondaryButton>
 
-									<DangerButton
-										v-else-if="isCurrentUserFollower"
-										@click="unfollowUser"
-										:disabled="isLoading"
-										:class="{
-											'bg-gray-300 cursor-not-allowed': isLoading,
-											'bg-red-500': !isLoading,
-										}">
-										<template v-if="!isLoading">
-											<p class="hidden sm:flex">Unfollow</p>
-										</template>
-										<p
-											v-else
-											class="hidden sm:flex">
-											Loading...
-										</p>
-									</DangerButton>
-								</template>
+                                    <DangerButton
+                                        v-else-if="isCurrentUserFollower"
+                                        @click="unfollowUser"
+                                        :disabled="isLoading"
+                                        :class="{
+                                            'bg-gray-300 cursor-not-allowed':
+                                                isLoading,
+                                            'bg-red-500': !isLoading,
+                                        }"
+                                    >
+                                        <template v-if="!isLoading">
+                                            <p class="hidden sm:flex">
+                                                Unfollow
+                                            </p>
+                                        </template>
+                                        <p v-else class="hidden sm:flex">
+                                            Loading...
+                                        </p>
+                                    </DangerButton>
+                                </template>
 
-								<template v-if="!isBlockedByOtherUser">
-									<!-- Block Button -->
-									<!-- Block Button -->
-									<button
-										v-if="!isBlockedByAuthUser"
-										@click="confirmBlock"
-										:disabled="isLoading"
-										title="Block User"
-										class="flex items-center gap-2 px-4 py-2 text-white font-medium rounded-lg transition-all duration-300"
-										:class="{
-											'bg-gray-300 cursor-not-allowed': isLoading,
-											'bg-red-500 hover:bg-red-600': !isLoading,
-										}">
-										<template v-if="!isLoading">
-											<NoSymbol class="w-5 h-5" />
-											<!-- <span>Block</span> -->
-										</template>
-										<p v-else>Loading...</p>
-									</button>
+                                <template v-if="!isBlockedByOtherUser">
+                                    <!-- Block Button -->
+                                    <!-- Block Button -->
+                                    <button
+                                        v-if="!isBlockedByAuthUser"
+                                        @click="confirmBlock"
+                                        :disabled="isLoading"
+                                        title="Block User"
+                                        class="flex items-center gap-2 px-4 py-2 text-white font-medium rounded-lg transition-all duration-300"
+                                        :class="{
+                                            'bg-gray-300 cursor-not-allowed':
+                                                isLoading,
+                                            'bg-red-500 hover:bg-red-600':
+                                                !isLoading,
+                                        }"
+                                    >
+                                        <template v-if="!isLoading">
+                                            <NoSymbol class="w-5 h-5" />
+                                            <!-- <span>Block</span> -->
+                                        </template>
+                                        <p v-else>Loading...</p>
+                                    </button>
 
-									<!-- Unblock Button -->
-									<button
-										v-else
-										@click="confirmUnblock"
-										:disabled="isLoading"
-										title="Unblock User"
-										class="flex items-center gap-2 px-4 py-2 text-white font-medium rounded-lg transition-all duration-300"
-										:class="{
-											'bg-gray-300 cursor-not-allowed': isLoading,
-											'bg-blue-500 hover:bg-blue-600': !isLoading,
-										}">
-										<template v-if="!isLoading">
-											<PlusCircle class="w-5 h-5" />
-											<!-- <span>Unblock</span> -->
-										</template>
-										<p v-else>Loading...</p>
-									</button>
+                                    <!-- Unblock Button -->
+                                    <button
+                                        v-else
+                                        @click="confirmUnblock"
+                                        :disabled="isLoading"
+                                        title="Unblock User"
+                                        class="flex items-center gap-2 px-4 py-2 text-white font-medium rounded-lg transition-all duration-300"
+                                        :class="{
+                                            'bg-gray-300 cursor-not-allowed':
+                                                isLoading,
+                                            'bg-blue-500 hover:bg-blue-600':
+                                                !isLoading,
+                                        }"
+                                    >
+                                        <template v-if="!isLoading">
+                                            <PlusCircle class="w-5 h-5" />
+                                            <!-- <span>Unblock</span> -->
+                                        </template>
+                                        <p v-else>Loading...</p>
+                                    </button>
 
-									<!-- Block Confirmation Modal -->
-									<TransitionRoot
-										as="template"
-										:show="isConfirmingBlock">
-										<Dialog
-											as="div"
-											class="relative z-50"
-											@close="isConfirmingBlock = false">
-											<div
-												class="fixed inset-0 bg-black bg-opacity-30"
-												aria-hidden="true" />
-											<div class="fixed inset-0 flex items-center justify-center p-4">
-												<DialogPanel class="bg-white rounded-lg shadow-xl p-6 max-w-sm w-full">
-													<DialogTitle class="text-lg font-medium text-gray-900"
-														>Confirm Block</DialogTitle
-													>
-													<p class="mt-2 text-sm text-gray-600">
-														Are you sure you want to block this user?
-													</p>
-													<div class="mt-4 flex justify-end space-x-2">
-														<button
-															@click="isConfirmingBlock = false"
-															class="px-4 py-2 text-gray-600 bg-gray-200 rounded-md">
-															Cancel
-														</button>
-														<button
-															@click="blockUser"
-															class="px-4 py-2 text-white bg-red-500 hover:bg-red-600 rounded-md">
-															Block
-														</button>
-													</div>
-												</DialogPanel>
-											</div>
-										</Dialog>
-									</TransitionRoot>
+                                    <!-- Block Confirmation Modal -->
+                                    <TransitionRoot
+                                        as="template"
+                                        :show="isConfirmingBlock"
+                                    >
+                                        <Dialog
+                                            as="div"
+                                            class="relative z-50"
+                                            @close="isConfirmingBlock = false"
+                                        >
+                                            <div
+                                                class="fixed inset-0 bg-black bg-opacity-30"
+                                                aria-hidden="true"
+                                            />
+                                            <div
+                                                class="fixed inset-0 flex items-center justify-center p-4"
+                                            >
+                                                <DialogPanel
+                                                    class="bg-white rounded-lg shadow-xl p-6 max-w-sm w-full"
+                                                >
+                                                    <DialogTitle
+                                                        class="text-lg font-medium text-gray-900"
+                                                        >Confirm
+                                                        Block</DialogTitle
+                                                    >
+                                                    <p
+                                                        class="mt-2 text-sm text-gray-600"
+                                                    >
+                                                        Are you sure you want to
+                                                        block this user?
+                                                    </p>
+                                                    <div
+                                                        class="mt-4 flex justify-end space-x-2"
+                                                    >
+                                                        <button
+                                                            @click="
+                                                                isConfirmingBlock = false
+                                                            "
+                                                            class="px-4 py-2 text-gray-600 bg-gray-200 rounded-md"
+                                                        >
+                                                            Cancel
+                                                        </button>
+                                                        <button
+                                                            @click="blockUser"
+                                                            class="px-4 py-2 text-white bg-red-500 hover:bg-red-600 rounded-md"
+                                                        >
+                                                            Block
+                                                        </button>
+                                                    </div>
+                                                </DialogPanel>
+                                            </div>
+                                        </Dialog>
+                                    </TransitionRoot>
 
-									<!-- Unblock Confirmation Modal -->
-									<TransitionRoot
-										as="template"
-										:show="isConfirmingUnblock">
-										<Dialog
-											as="div"
-											class="relative z-50"
-											@close="isConfirmingUnblock = false">
-											<div
-												class="fixed inset-0 bg-black bg-opacity-30"
-												aria-hidden="true" />
-											<div class="fixed inset-0 flex items-center justify-center p-4">
-												<DialogPanel class="bg-white rounded-lg shadow-xl p-6 max-w-sm w-full">
-													<DialogTitle class="text-lg font-medium text-gray-900"
-														>Confirm Unblock</DialogTitle
-													>
-													<p class="mt-2 text-sm text-gray-600">
-														Are you sure you want to unblock this user?
-													</p>
-													<div class="mt-4 flex justify-end space-x-2">
-														<button
-															@click="isConfirmingUnblock = false"
-															class="px-4 py-2 text-gray-600 bg-gray-200 rounded-md">
-															Cancel
-														</button>
-														<button
-															@click="unblockUser"
-															class="px-4 py-2 text-white bg-blue-500 hover:bg-blue-600 rounded-md">
-															Unblock
-														</button>
-													</div>
-												</DialogPanel>
-											</div>
-										</Dialog>
-									</TransitionRoot>
-								</template>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+                                    <!-- Unblock Confirmation Modal -->
+                                    <TransitionRoot
+                                        as="template"
+                                        :show="isConfirmingUnblock"
+                                    >
+                                        <Dialog
+                                            as="div"
+                                            class="relative z-50"
+                                            @close="isConfirmingUnblock = false"
+                                        >
+                                            <div
+                                                class="fixed inset-0 bg-black bg-opacity-30"
+                                                aria-hidden="true"
+                                            />
+                                            <div
+                                                class="fixed inset-0 flex items-center justify-center p-4"
+                                            >
+                                                <DialogPanel
+                                                    class="bg-white rounded-lg shadow-xl p-6 max-w-sm w-full"
+                                                >
+                                                    <DialogTitle
+                                                        class="text-lg font-medium text-gray-900"
+                                                        >Confirm
+                                                        Unblock</DialogTitle
+                                                    >
+                                                    <p
+                                                        class="mt-2 text-sm text-gray-600"
+                                                    >
+                                                        Are you sure you want to
+                                                        unblock this user?
+                                                    </p>
+                                                    <div
+                                                        class="mt-4 flex justify-end space-x-2"
+                                                    >
+                                                        <button
+                                                            @click="
+                                                                isConfirmingUnblock = false
+                                                            "
+                                                            class="px-4 py-2 text-gray-600 bg-gray-200 rounded-md"
+                                                        >
+                                                            Cancel
+                                                        </button>
+                                                        <button
+                                                            @click="unblockUser"
+                                                            class="px-4 py-2 text-white bg-blue-500 hover:bg-blue-600 rounded-md"
+                                                        >
+                                                            Unblock
+                                                        </button>
+                                                    </div>
+                                                </DialogPanel>
+                                            </div>
+                                        </Dialog>
+                                    </TransitionRoot>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-			<div
-				v-if="isBlockedByAuthUser"
-				class="bg-red-100 text-red-600 p-4 rounded-lg mb-4">
-				You have blocked this user.
-				<SecondaryButton
-					class="ml-4 bg-blue-500 text-dark px-4 py-2 rounded hover:bg-blue-600"
-					@click="toggleShowPosts">
-					{{ showPosts ? "Hide Profile Details" : "Show Profile Details" }}
-				</SecondaryButton>
-			</div>
-			<!-- <div class="border-t p-4 pt-0"> -->
-			<template v-if="!isBlockedByOtherUser">
-				<template v-if="!isBlockedByOtherUser && (!isBlockedByAuthUser || showPosts)">
-					<div class="border-t m-4 mt-0">
-						<TabGroup>
-							<TabList class="flex bg-white dark:bg-slate-950 dark:text-white">
-								<Tab
-									v-slot="{ selected }"
-									as="template">
-									<TabItem
-										text="Posts"
-										:selected="selected" />
-								</Tab>
-								<Tab
-									v-slot="{ selected }"
-									as="template">
-									<TabItem
-										text="Followers"
-										:selected="selected" />
-								</Tab>
-								<Tab
-									v-slot="{ selected }"
-									as="template">
-									<TabItem
-										text="Followings"
-										:selected="selected" />
-								</Tab>
-								<Tab
-									v-slot="{ selected }"
-									as="template">
-									<TabItem
-										text="Photos"
-										:selected="selected" />
-								</Tab>
-								<Tab
-									v-if="isMyProfile"
-									v-slot="{ selected }"
-									as="template">
-									<TabItem
-										text="My Profile"
-										:selected="selected" />
-								</Tab>
-							</TabList>
+            <div
+                v-if="isBlockedByAuthUser"
+                class="bg-red-100 text-red-600 p-4 rounded-lg mb-4"
+            >
+                You have blocked this user.
+                <SecondaryButton
+                    class="ml-4 bg-blue-500 text-dark px-4 py-2 rounded hover:bg-blue-600"
+                    @click="toggleShowPosts"
+                >
+                    {{
+                        showPosts
+                            ? "Hide Profile Details"
+                            : "Show Profile Details"
+                    }}
+                </SecondaryButton>
+            </div>
+            <!-- <div class="border-t p-4 pt-0"> -->
+            <template v-if="!isBlockedByOtherUser">
+                <template
+                    v-if="
+                        !isBlockedByOtherUser &&
+                        (!isBlockedByAuthUser || showPosts)
+                    "
+                >
+                    <div class="border-t m-4 mt-0">
+                        <TabGroup>
+                            <TabList
+                                class="flex bg-white dark:bg-slate-950 dark:text-white"
+                            >
+                                <Tab v-slot="{ selected }" as="template">
+                                    <TabItem
+                                        text="Posts"
+                                        :selected="selected"
+                                    />
+                                </Tab>
+                                <Tab v-slot="{ selected }" as="template">
+                                    <TabItem
+                                        text="Followers"
+                                        :selected="selected"
+                                    />
+                                </Tab>
+                                <Tab v-slot="{ selected }" as="template">
+                                    <TabItem
+                                        text="Followings"
+                                        :selected="selected"
+                                    />
+                                </Tab>
+                                <Tab v-slot="{ selected }" as="template">
+                                    <TabItem
+                                        text="Photos"
+                                        :selected="selected"
+                                    />
+                                </Tab>
+                                <Tab
+                                    v-if="isMyProfile"
+                                    v-slot="{ selected }"
+                                    as="template"
+                                >
+                                    <TabItem
+                                        text="My Profile"
+                                        :selected="selected"
+                                    />
+                                </Tab>
+                            </TabList>
 
-							<TabPanels class="mt-2">
-								<TabPanel>
-									<div class="bg-gray-100">
-										<div class="grid max-w-7xl mx-auto lg:grid-cols-12 gap-3 p-4 h-auto">
-											<!-- <div
+                            <TabPanels class="mt-2">
+                                <TabPanel>
+                                    <div
+                                        class="bg-gray-100 dark:bg-slate-600 dark:text-white"
+                                    >
+                                        <div
+                                            class="grid max-w-7xl mx-auto lg:grid-cols-12 gap-3 p-4 h-auto"
+                                        >
+                                            <!-- <div
 													class="lg:col-span-4 lg:order-1 h-full overflow-hidden"
 												>
 													<FollowingList :users="followings" />
 												</div> -->
-											<!-- <div
+                                            <!-- <div
 													class="lg:col-span-12 lg:order-2 h-auto w-full mx-auto overflow-hidden lg:px-10 flex flex-col">
 													<template v-if="posts">
 														<template v-if="isMyProfile">
@@ -782,37 +892,50 @@ function toggleShowPosts() {
 														You don't have permission to view these posts.
 													</div>
 												</div> -->
-											<div
-												class="lg:col-span-12 lg:order-2 h-auto w-full mx-auto overflow-hidden lg:px-10 flex flex-col">
-												<template v-if="!isPrivate || isMyProfile || isCurrentUserFollower">
-													<!-- Check if posts exist -->
-													<template v-if="posts">
-														<template v-if="isMyProfile">
-															<CreatePost />
-														</template>
-														<PostList
-															:posts="posts.data"
-															class="flex-1" />
-													</template>
-													<!-- No posts available -->
-													<div
-														v-else
-														class="py-8 text-center dark:text-gray-100">
-														No posts available.
-													</div>
-												</template>
+                                            <div
+                                                class="lg:col-span-12 lg:order-2 h-auto w-full mx-auto overflow-hidden lg:px-10 flex flex-col"
+                                            >
+                                                <template
+                                                    v-if="
+                                                        !isPrivate ||
+                                                        isMyProfile ||
+                                                        isCurrentUserFollower
+                                                    "
+                                                >
+                                                    <!-- Check if posts exist -->
+                                                    <template v-if="posts">
+                                                        <template
+                                                            v-if="isMyProfile"
+                                                        >
+                                                            <CreatePost />
+                                                        </template>
+                                                        <PostList
+                                                            :posts="posts.data"
+                                                            class="flex-1"
+                                                        />
+                                                    </template>
+                                                    <!-- No posts available -->
+                                                    <div
+                                                        v-else
+                                                        class="py-8 text-center dark:text-gray-100"
+                                                    >
+                                                        No posts available.
+                                                    </div>
+                                                </template>
 
-												<!-- If the profile is private and the user doesn't have access -->
-												<div
-													v-else
-													class="py-8 text-center dark:text-gray-100">
-													You don't have permission to view these posts.
-												</div>
-											</div>
-										</div>
-									</div>
-								</TabPanel>
-								<!-- <TabPanel>
+                                                <!-- If the profile is private and the user doesn't have access -->
+                                                <div
+                                                    v-else
+                                                    class="py-8 text-center dark:text-gray-100"
+                                                >
+                                                    You don't have permission to
+                                                    view these posts.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </TabPanel>
+                                <!-- <TabPanel>
 										<template v-if="!isPrivate || isMyProfile || isCurrentUserFollower">
 											<div class="mb-3">
 												<TextInput
@@ -841,128 +964,198 @@ function toggleShowPosts() {
 											You don't have permission to view this user's followers.
 										</div>
 									</TabPanel> -->
-								<TabPanel>
-									<template
-										v-if="!isPrivate || isMyProfile || isCurrentUserFollower"
-										class="px-10">
-										<div
-											v-if="isMyProfile"
-											class="flex mb-6 pt-5">
-											<!-- Followers Tab Button -->
-											<button
-												:class="{
-													'bg-blue-500 text-white': isFollowersActive,
-													'bg-gray-300 text-gray-800': !isFollowersActive,
-												}"
-												@click="isFollowersActive = true"
-												class="px-4 py-2 rounded-l-lg focus:outline-none">
-												Followers
-											</button>
+                                <TabPanel>
+                                    <template
+                                        v-if="
+                                            !isPrivate ||
+                                            isMyProfile ||
+                                            isCurrentUserFollower
+                                        "
+                                        class="px-10"
+                                    >
+                                        <div
+                                            v-if="isMyProfile"
+                                            class="flex mb-6 pt-5"
+                                        >
+                                            <!-- Followers Tab Button -->
+                                            <button
+                                                :class="{
+                                                    'bg-blue-500 text-white':
+                                                        isFollowersActive,
+                                                    'bg-gray-300 text-gray-800':
+                                                        !isFollowersActive,
+                                                }"
+                                                @click="
+                                                    isFollowersActive = true
+                                                "
+                                                class="px-4 py-2 rounded-l-lg focus:outline-none"
+                                            >
+                                                Followers
+                                            </button>
 
-											<!-- Pending Followers Tab Button -->
-											<button
-												:class="{
-													'bg-blue-500 text-white': !isFollowersActive,
-													'bg-gray-300 text-gray-800': isFollowersActive,
-												}"
-												@click="isFollowersActive = false"
-												class="px-4 py-2 rounded-r-lg focus:outline-none">
-												Pending Followers
-											</button>
-										</div>
+                                            <!-- Pending Followers Tab Button -->
+                                            <button
+                                                :class="{
+                                                    'bg-blue-500 text-white':
+                                                        !isFollowersActive,
+                                                    'bg-gray-300 text-gray-800':
+                                                        isFollowersActive,
+                                                }"
+                                                @click="
+                                                    isFollowersActive = false
+                                                "
+                                                class="px-4 py-2 rounded-r-lg focus:outline-none"
+                                            >
+                                                Pending Followers
+                                            </button>
+                                        </div>
 
-										<div class="mb-3">
-											<TextInput
-												:model-value="searchFollowersKeyword"
-												placeholder="Type to search"
-												class="w-full" />
-										</div>
+                                        <div class="mb-3">
+                                            <TextInput
+                                                :model-value="
+                                                    searchFollowersKeyword
+                                                "
+                                                placeholder="Type to search"
+                                                class="w-full"
+                                            />
+                                        </div>
 
-										<div
-											v-if="isFollowersActive"
-											class="flex-1 px-1">
-											<div
-												v-if="followers.length"
-												class="grid grid-cols-2 gap-3">
-												<UserListItem
-													v-for="user of followers"
-													:user="user"
-													:key="user.id"
-													class="shadow rounded-lg" />
-											</div>
-											<div
-												v-else
-												class="text-center py-8">
-												User does not have followers.
-											</div>
-										</div>
+                                        <div
+                                            v-if="isFollowersActive"
+                                            class="flex-1 px-1"
+                                        >
+                                            <div
+                                                v-if="followers.length"
+                                                class="grid grid-cols-2 gap-3"
+                                            >
+                                                <UserListItem
+                                                    v-for="user of followers"
+                                                    :user="user"
+                                                    :key="user.id"
+                                                    class="shadow rounded-lg"
+                                                />
+                                            </div>
+                                            <div
+                                                v-else
+                                                class="text-center py-8"
+                                            >
+                                                User does not have followers.
+                                            </div>
+                                        </div>
 
-										<div
-											v-else
-											class="flex-1 px-1">
-											<div
-												v-if="PendingFollowers.length"
-												class="mb-6">
-												<!-- <h3 class="text-lg font-medium mb-2">Pending Follow Requests</h3> -->
-												<div class="grid grid-cols-2 gap-3">
-													<UserListItem
-														v-for="user of PendingFollowers"
-														:key="user.id"
-														:user="user"
-														class="shadow rounded-lg">
-														<template v-slot:actions>
-															<div class="flex gap-6">
-																<!-- Accept Follow Request Button -->
-																<PrimaryButton
-																	@click="acceptFollowRequest(user.id)"
-																	:disabled="isLoading || user.isAccepted"
-																	:class="{
-																		'bg-gray-300 cursor-not-allowed': isLoading || user.isAccepted,
-																		'bg-green-500': !isLoading && !user.isAccepted,
-																	}">
-																	<template v-if="!isLoading && !user.isAccepted">Accept</template>
-																	<p
-																		v-else
-																		class="hidden sm:flex">
-																		Loading...
-																	</p>
-																</PrimaryButton>
+                                        <div v-else class="flex-1 px-1">
+                                            <div
+                                                v-if="PendingFollowers.length"
+                                                class="mb-6"
+                                            >
+                                                <!-- <h3 class="text-lg font-medium mb-2">Pending Follow Requests</h3> -->
+                                                <div
+                                                    class="grid grid-cols-2 gap-3"
+                                                >
+                                                    <UserListItem
+                                                        v-for="user of PendingFollowers"
+                                                        :key="user.id"
+                                                        :user="user"
+                                                        class="shadow rounded-lg"
+                                                    >
+                                                        <template
+                                                            v-slot:actions
+                                                        >
+                                                            <div
+                                                                class="flex gap-6"
+                                                            >
+                                                                <!-- Accept Follow Request Button -->
+                                                                <PrimaryButton
+                                                                    @click="
+                                                                        acceptFollowRequest(
+                                                                            user.id
+                                                                        )
+                                                                    "
+                                                                    :disabled="
+                                                                        isLoading ||
+                                                                        user.isAccepted
+                                                                    "
+                                                                    :class="{
+                                                                        'bg-gray-300 cursor-not-allowed':
+                                                                            isLoading ||
+                                                                            user.isAccepted,
+                                                                        'bg-green-500':
+                                                                            !isLoading &&
+                                                                            !user.isAccepted,
+                                                                    }"
+                                                                >
+                                                                    <template
+                                                                        v-if="
+                                                                            !isLoading &&
+                                                                            !user.isAccepted
+                                                                        "
+                                                                        >Accept</template
+                                                                    >
+                                                                    <p
+                                                                        v-else
+                                                                        class="hidden sm:flex"
+                                                                    >
+                                                                        Loading...
+                                                                    </p>
+                                                                </PrimaryButton>
 
-																<!-- Reject Follow Request Button -->
-																<PrimaryButton
-																	@click="rejectFollowRequest(user.id)"
-																	:disabled="isLoading || user.isAccepted"
-																	:class="{
-																		'bg-gray-300 cursor-not-allowed': isLoading || user.isAccepted,
-																		'bg-red-500': !isLoading && !user.isAccepted,
-																	}">
-																	<template v-if="!isLoading && !user.isAccepted">Reject</template>
-																	<p
-																		v-else
-																		class="hidden sm:flex">
-																		Loading...
-																	</p>
-																</PrimaryButton>
-															</div>
-														</template>
-													</UserListItem>
-												</div>
-											</div>
-											<div
-												v-else
-												class="text-center py-8">
-												No pending follow requests.
-											</div>
-										</div>
-									</template>
-									<div
-										v-else
-										class="py-8 text-center dark:text-gray-100">
-										You don't have permission to view this user's followers.
-									</div>
+                                                                <!-- Reject Follow Request Button -->
+                                                                <PrimaryButton
+                                                                    @click="
+                                                                        rejectFollowRequest(
+                                                                            user.id
+                                                                        )
+                                                                    "
+                                                                    :disabled="
+                                                                        isLoading ||
+                                                                        user.isAccepted
+                                                                    "
+                                                                    :class="{
+                                                                        'bg-gray-300 cursor-not-allowed':
+                                                                            isLoading ||
+                                                                            user.isAccepted,
+                                                                        'bg-red-500':
+                                                                            !isLoading &&
+                                                                            !user.isAccepted,
+                                                                    }"
+                                                                >
+                                                                    <template
+                                                                        v-if="
+                                                                            !isLoading &&
+                                                                            !user.isAccepted
+                                                                        "
+                                                                        >Reject</template
+                                                                    >
+                                                                    <p
+                                                                        v-else
+                                                                        class="hidden sm:flex"
+                                                                    >
+                                                                        Loading...
+                                                                    </p>
+                                                                </PrimaryButton>
+                                                            </div>
+                                                        </template>
+                                                    </UserListItem>
+                                                </div>
+                                            </div>
+                                            <div
+                                                v-else
+                                                class="text-center py-8"
+                                            >
+                                                No pending follow requests.
+                                            </div>
+                                        </div>
+                                    </template>
+                                    <div
+                                        v-else
+                                        class="py-8 text-center dark:text-gray-100"
+                                    >
+                                        You don't have permission to view this
+                                        user's followers.
+                                    </div>
 
-									<!-- Pending Follow Requests List -->
-									<!-- <div
+                                    <!-- Pending Follow Requests List -->
+                                    <!-- <div
 											v-if="PendingFollowers.length"
 											class="mb-6">
 											<h3 class="text-lg font-medium mb-2">Pending Follow Requests</h3>
@@ -996,64 +1189,85 @@ function toggleShowPosts() {
 											class="text-center py-8">
 											No pending follow requests.
 										</div> -->
-								</TabPanel>
-								<TabPanel>
-									<template v-if="!isPrivate || isMyProfile || isCurrentUserFollower">
-										<div class="mb-3">
-											<TextInput
-												:model-value="searchFollowingsKeyword"
-												placeholder="Type to search"
-												class="w-full" />
-										</div>
-										<div
-											v-if="followings.length"
-											class="grid grid-cols-2 gap-3">
-											<UserListItem
-												v-for="user of followings"
-												:user="user"
-												:key="user.id"
-												class="shadow rounded-lg" />
-										</div>
-										<div
-											v-else
-											class="text-center py-8">
-											The user is not following to anybody
-										</div>
-									</template>
-									<div
-										v-else
-										class="py-8 text-center dark:text-gray-100">
-										You don't have permission to view this user's followings.
-									</div>
-								</TabPanel>
-								<TabPanel>
-									<template v-if="!isPrivate || isMyProfile || isCurrentUserFollower">
-										<TabPhotos :photos="photos" />
-									</template>
-									<div
-										v-else
-										class="py-8 text-center dark:text-gray-100">
-										You don't have permission to view this user's photos.
-									</div>
-								</TabPanel>
-								<TabPanel v-if="isMyProfile">
-									<Edit
-										:must-verify-email="mustVerifyEmail"
-										:status="status" />
-								</TabPanel>
-							</TabPanels>
-						</TabGroup>
-					</div>
-				</template>
-			</template>
-			<div
-				v-else-if="isBlockedByOtherUser"
-				class="bg-yellow-100 text-yellow-600 p-4 rounded-lg mb-4 my-10">
-				This User's Post are not currently available.
-			</div>
-		</div>
-	</AuthenticatedLayout>
-	<UpdateProfileReminder />
+                                </TabPanel>
+                                <TabPanel>
+                                    <template
+                                        v-if="
+                                            !isPrivate ||
+                                            isMyProfile ||
+                                            isCurrentUserFollower
+                                        "
+                                    >
+                                        <div class="mb-3">
+                                            <TextInput
+                                                :model-value="
+                                                    searchFollowingsKeyword
+                                                "
+                                                placeholder="Type to search"
+                                                class="w-full"
+                                            />
+                                        </div>
+                                        <div
+                                            v-if="followings.length"
+                                            class="grid grid-cols-2 gap-3"
+                                        >
+                                            <UserListItem
+                                                v-for="user of followings"
+                                                :user="user"
+                                                :key="user.id"
+                                                class="shadow rounded-lg"
+                                            />
+                                        </div>
+                                        <div v-else class="text-center py-8">
+                                            The user is not following to anybody
+                                        </div>
+                                    </template>
+                                    <div
+                                        v-else
+                                        class="py-8 text-center dark:text-gray-100"
+                                    >
+                                        You don't have permission to view this
+                                        user's followings.
+                                    </div>
+                                </TabPanel>
+                                <TabPanel>
+                                    <template
+                                        v-if="
+                                            !isPrivate ||
+                                            isMyProfile ||
+                                            isCurrentUserFollower
+                                        "
+                                    >
+                                        <TabPhotos :photos="photos" />
+                                    </template>
+                                    <div
+                                        v-else
+                                        class="py-8 text-center dark:text-gray-100"
+                                    >
+                                        You don't have permission to view this
+                                        user's photos.
+                                    </div>
+                                </TabPanel>
+                                <TabPanel v-if="isMyProfile">
+                                    <Edit
+                                        :must-verify-email="mustVerifyEmail"
+                                        :status="status"
+                                    />
+                                </TabPanel>
+                            </TabPanels>
+                        </TabGroup>
+                    </div>
+                </template>
+            </template>
+            <div
+                v-else-if="isBlockedByOtherUser"
+                class="bg-yellow-100 text-yellow-600 p-4 rounded-lg mb-4 my-10"
+            >
+                This User's Post are not currently available.
+            </div>
+        </div>
+    </AuthenticatedLayout>
+    <UpdateProfileReminder />
 </template>
 
 <style scoped></style>
