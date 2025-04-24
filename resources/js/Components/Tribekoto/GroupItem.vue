@@ -9,7 +9,7 @@ defineProps({
 <template>
     <!-- <div class="cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-800"> -->
     <div
-        class="dark:bg-slate-900 cursor-pointer rounded dark:text-gray-100 transition-all border-2 border-transparent hover:bg-white hover:shadow-xl hover:border-red-500"
+        class="cursor-pointer rounded dark:text-gray-100 transition-all border-2 border-transparent hover:bg-gray-800 hover:shadow-xl hover:border-red-500"
     >
         <Link
             :href="route('group.profile', group.slug)"
