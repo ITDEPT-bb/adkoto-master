@@ -24,9 +24,11 @@ defineProps({
 
     <AuthenticatedLayout>
         <div
-            class="grid max-w-7xl mx-auto lg:grid-cols-12 gap-3 p-4 h-full scrollbar-thin"
+            class="grid 3xl:max-w-7xl mx-auto lg:grid-cols-12 gap-3 px-4 h-full scrollbar-thin"
         >
-            <div class="lg:col-span-3 lg:order-3 h-full overflow-hidden">
+            <div
+                class="lg:col-span-3 min-w-2xl lg:order-3 h-full overflow-hidden"
+            >
                 <GroupList
                     :groups="groups"
                     :suggestedGroups="suggestedGroups"
@@ -39,10 +41,9 @@ defineProps({
                 />
             </div>
             <div
-                class="lg:col-span-6 lg:order-2 h-full overflow-hidden flex flex-col"
+                class="lg:col-span-6 max-w-3xl mx-auto lg:order-2 h-full overflow-hidden flex flex-col"
             >
                 <CreatePost />
-                <!-- <PostList class="flex-1" /> -->
                 <PostList :posts="posts.data" class="flex-1" />
             </div>
         </div>
