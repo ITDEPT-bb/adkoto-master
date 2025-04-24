@@ -67,6 +67,11 @@
             <!-- Video Call View -->
             <div v-if="callInProgress" class="fixed inset-0 bg-black/90 z-50">
                 <div class="flex flex-col h-full">
+                    <!-- Timer Display -->
+                    <div class="absolute top-4 left-4 text-white text-lg z-50">
+                        Time remaining: {{ formattedTime }}
+                    </div>
+
                     <!-- Remote Video -->
                     <div
                         class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4 p-4"
@@ -197,7 +202,9 @@ const props = defineProps({
 });
 
 const ringtone = new Audio("/audio/ringtone_sound.mp3");
+const time_limit_sound = new Audio("/audio/call_time_limit_sound.wav");
 ringtone.loop = true;
+time_limit_sound.loop = false;
 
 // Agora Client
 const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
@@ -224,6 +231,11 @@ const callStatus = ref(false);
 const callStatusText = ref("");
 
 const otherUserId = ref(null);
+
+// Timer-related variables
+const callTimer = ref(null);
+const callStartTime = ref(null);
+const timeLeft = ref(25);
 
 // Setup Agora
 const setupAgora = async () => {
@@ -339,12 +351,16 @@ const startCall = async (user) => {
         // await client.publish([localAudioTrack.value]);
         callInProgress.value = true;
 
+        // Start timer
+        startCallTimer();
+
         // Notify user about the call
         await axios.post("/agora/call-user", {
             calleeId: user.id,
             callerId: props.authUser.id,
             channel: channelName.value,
             token: token,
+            start_time: Date.now(),
         });
     } catch (error) {
         console.error("Call failed:", error);
@@ -363,6 +379,15 @@ const acceptCall = async () => {
         // const token = await fetchToken(channelName.value);
 
         otherUserId.value = acceptedId.value;
+
+        // Start timer
+        startCallTimer();
+
+        // Notify server about call acceptance
+        await axios.post("/agora/accept-call", {
+            channel: acceptedChannel.value,
+            start_time: Date.now(),
+        });
 
         await client.join(
             props.appId,
@@ -440,6 +465,16 @@ const removeCall = async () => {
 };
 
 const endCall = async () => {
+    // Clear timer
+    if (callTimer.value) {
+        clearInterval(callTimer.value);
+        callTimer.value = null;
+    }
+
+    // Reset timer variables
+    timeLeft.value = 15;
+    callStartTime.value = null;
+
     if (localAudioTrack.value) {
         localAudioTrack.value.stop();
         localAudioTrack.value.close();
@@ -462,6 +497,27 @@ const endCall = async () => {
             to_user_id: otherUserId.value,
         });
     }
+};
+
+// Timer management functions
+const startCallTimer = () => {
+    timeLeft.value = 25;
+    callStartTime.value = Date.now();
+
+    callTimer.value = setInterval(async () => {
+        timeLeft.value =
+            25 - Math.floor((Date.now() - callStartTime.value) / 1000);
+
+        if (timeLeft.value <= 0) {
+            await endCall();
+            callStatusText.value = "Call time limit reached";
+            callStatus.value = true;
+            time_limit_sound.play();
+            setTimeout(() => {
+                callStatus.value = false;
+            }, 3000);
+        }
+    }, 1000);
 };
 
 const endCallRemoved = () => {
@@ -545,6 +601,19 @@ onMounted(() => {
         .listen("CallEnded", (e) => {
             console.log("Call ended by:", e.fromUserId);
             endCallRemoved();
+        })
+        .listen("CallTimeEnded", async (e) => {
+            if (
+                e.channel === channelName.value ||
+                e.channel === acceptedChannel.value
+            ) {
+                await endCall();
+                callStatusText.value = "Call time limit reached";
+                callStatus.value = true;
+                setTimeout(() => {
+                    callStatus.value = false;
+                }, 3000);
+            }
         });
 });
 

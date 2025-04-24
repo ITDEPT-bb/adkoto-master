@@ -131,6 +131,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/agora/call-user', [AgoraVideoController::class, 'callUser']);
     Route::get('/agora/call-user/adkt', [AgoraVideoController::class, 'index'])->name('callPageUser');
 
+    Route::post('/agora/accept-call', [AgoraVideoController::class, 'acceptCall'])->name('acceptCall');
     Route::post('/agora/decline-call', [AgoraVideoController::class, 'declineCall'])->name('declineCall');
     Route::post('/agora/end-call', [AgoraVideoController::class, 'endCall'])->name('endCall');
 });

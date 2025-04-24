@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Classes\AgoraDynamicKey\RtcTokenBuilder;
 use App\Events\CallEnded;
 use App\Events\MakeAgoraCall;
+use App\Jobs\ScheduleCallEnd;
 use Illuminate\Support\Facades\Log;
 
 class AgoraVideoController extends Controller
@@ -61,6 +62,14 @@ class AgoraVideoController extends Controller
     {
         // return response()->json(['success' => true]);
         return view('agora.index');
+    }
+
+    public function acceptCall(Request $request)
+    {
+        ScheduleCallEnd::dispatch($request->channel)
+            ->delay(now()->addSeconds(30));
+
+        return response()->json(['status' => 'success']);
     }
 
     public function declineCall(Request $request)
