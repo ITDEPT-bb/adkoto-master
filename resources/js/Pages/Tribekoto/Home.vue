@@ -41,7 +41,7 @@ defineProps({
                 />
             </div>
             <div
-                class="lg:col-span-6 max-w-3xl mx-auto lg:order-2 h-full overflow-hidden flex flex-col"
+                class="lg:col-span-6 max-w-3xl mx-auto lg:order-2 h-full overflow-hidden flex flex-col py-4"
             >
                 <CreatePost />
                 <PostList :posts="posts.data" class="flex-1" />
