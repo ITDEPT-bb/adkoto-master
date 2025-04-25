@@ -208,6 +208,7 @@ time_limit_sound.loop = false;
 
 // Agora Client
 const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
+AgoraRTC.setLogLevel(3);
 
 // State
 const localAudioTrack = ref(null);
