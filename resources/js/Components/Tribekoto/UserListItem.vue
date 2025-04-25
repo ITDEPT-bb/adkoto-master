@@ -24,7 +24,7 @@ defineEmits(["approve", "reject", "roleChange", "delete"]);
     <!-- <div
 		class="bg-white dark:bg-slate-900 dark:text-gray-100 transition-all border-2 border-transparent hover:border-red-500"> -->
     <div
-        class="dark:text-gray-100 transition-all border-2 border-transparent hover:bg-gray-800 hover:shadow-xl hover:border-red-500"
+        class="dark:text-gray-100 transition-all border-2 border-transparent dark:hover:bg-gray-800 hover:shadow-xl hover:border-red-500"
     >
         <div class="flex items-center gap-2 py-2 px-2">
             <Link :href="route('profile', user.username)">
