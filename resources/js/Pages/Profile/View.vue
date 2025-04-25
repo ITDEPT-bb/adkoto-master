@@ -863,10 +863,10 @@ function toggleShowPosts() {
                                 </Tab>
                             </TabList>
 
-                            <TabPanels class="mt-2">
+                            <TabPanels class="mt-0">
                                 <TabPanel>
                                     <div
-                                        class="bg-gray-100 dark:bg-slate-600 dark:text-white"
+                                        class="bg-gray-300 border dark:border-none dark:bg-slate-600 dark:text-white"
                                     >
                                         <div
                                             class="grid max-w-7xl mx-auto lg:grid-cols-12 gap-3 p-4 h-auto"
