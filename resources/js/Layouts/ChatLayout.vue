@@ -30,6 +30,7 @@ import HeartSearch from "/public/img/admoto/HEART HEART.png";
 // Day of Valor Specific
 import DayOfValorBg from "/public/img/Kagitingan/kagitingan_bg.jpg";
 import DayOfValorPeople from "/public/img/Kagitingan/kagitingan_people.png";
+import DarkModeToggle from "@/Components/DarkModeToggle.vue";
 
 const showingNavigationDropdown = ref(false);
 const keywords = ref(usePage().props.search || "");
@@ -310,6 +311,7 @@ let logoTextClass =
                         <!-- <button @click="toggleDarkMode" class="dark:text-white">
                             <MoonIcon class="w-5 h-5" />
                         </button> -->
+                        <DarkModeToggle />
                     </div>
 
                     <div class="hidden sm:flex sm:items-center">

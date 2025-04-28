@@ -37,6 +37,7 @@ import DayOfValorBg from "/public/img/Kagitingan/kagitingan_bg.jpg";
 import DayOfValorPeople from "/public/img/Kagitingan/kagitingan_people.png";
 
 import axiosClient from "@/axiosClient.js";
+import DarkModeToggle from "@/Components/DarkModeToggle.vue";
 
 const showingNavigationDropdown = ref(false);
 const keywords = ref(usePage().props.search || "");
@@ -563,9 +564,13 @@ else if (
                                 ></div>
                             </div>
 
-                            <!-- <button @click="toggleDarkMode" class="dark:text-white">
-                            <MoonIcon class="w-5 h-5" />
-                        </button> -->
+                            <!-- <button
+                                @click="toggleDarkMode"
+                                class="dark:text-white"
+                            >
+                                <MoonIcon class="w-5 h-5" />
+                            </button> -->
+                            <DarkModeToggle />
                         </div>
                     </div>
 
