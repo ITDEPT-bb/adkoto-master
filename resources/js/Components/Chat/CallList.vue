@@ -2,7 +2,7 @@
     <div>
         <!-- Top Bar -->
         <div
-            class="flex flex-col sm:flex-row sm:items-center py-3 px-4 rounded-lg border-b-2 border-gray-200"
+            class="flex flex-col sm:flex-row sm:items-center py-3 px-4 rounded-lg border-b-2 border-gray-200 dark:border-none"
             style="background-color: #0076be"
         >
             <div class="flex items-center space-x-4">
@@ -37,7 +37,7 @@
             <div
                 v-for="user in users"
                 :key="user.id"
-                class="flex items-center justify-between p-3 bg-white border rounded-lg shadow-sm"
+                class="flex items-center justify-between p-3 bg-white dark:bg-slate-500 dark:border-none border rounded-lg shadow-sm"
             >
                 <!-- Left side: Avatar + Name/Status -->
                 <div class="flex items-center space-x-4">
@@ -47,7 +47,7 @@
                         class="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover"
                     />
                     <span
-                        class="text-sm sm:text-base font-medium text-gray-800"
+                        class="text-sm sm:text-base font-medium text-gray-800 dark:text-white"
                     >
                         {{ user.name }} {{ user.surname }} -
                         {{ getUserStatus(user.id) }}

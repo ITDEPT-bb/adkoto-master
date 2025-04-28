@@ -1,6 +1,7 @@
 <template>
     <div
-        class="flex sm:items-center justify-between py-3 border-b-2 border-gray-200"
+        class="flex flex-col sm:flex-row sm:items-center justify-between py-3 px-4 rounded-lg border-b-2 border-gray-200 dark:border-none"
+        style="background-color: #0076be"
     >
         <div class="relative flex items-center space-x-4">
             <Link :href="route('chat.index')">
@@ -30,7 +31,9 @@
             </div>
             <div class="flex flex-col leading-tight">
                 <div class="text-1xl font-semibold mt-1 flex items-center">
-                    <span class="text-gray-700 mr-3">{{ group.name }}</span>
+                    <span class="text-white mr-3 dark:text-white">{{
+                        group.name
+                    }}</span>
                 </div>
                 <!-- <span class="text-sm text-gray-600">{{
                     group.description
@@ -43,7 +46,7 @@
                 <button
                     @click="showUpdateModal = true"
                     type="button"
-                    class="inline-flex items-center justify-center rounded-lg border h-10 w-10 transition duration-500 ease-in-out text-gray-500 hover:bg-gray-300 focus:outline-none"
+                    class="inline-flex items-center justify-center rounded-lg border h-10 w-10 transition duration-500 ease-in-out text-white hover:text-black dark:text-white hover:bg-gray-300 focus:outline-none"
                 >
                     <SettingsIcon />
                 </button>
@@ -54,7 +57,7 @@
                 />
 
                 <button
-                    class="inline-flex items-center justify-center rounded-lg border h-10 w-10 transition duration-500 ease-in-out text-gray-500 hover:bg-gray-300 focus:outline-none"
+                    class="inline-flex items-center justify-center rounded-lg border h-10 w-10 transition duration-500 ease-in-out text-white hover:text-black dark:text-white hover:bg-gray-300 focus:outline-none"
                     type="button"
                     @click="GroupMemberModal = true"
                 >
@@ -68,7 +71,7 @@
 
                 <!-- Leave Button -->
                 <button
-                    class="inline-flex items-center justify-center rounded-lg border h-10 w-10 transition duration-500 ease-in-out text-gray-500 hover:bg-gray-300 focus:outline-none"
+                    class="inline-flex items-center justify-center rounded-lg border h-10 w-10 transition duration-500 ease-in-out text-white hover:text-black dark:text-white hover:bg-gray-300 focus:outline-none"
                     type="button"
                     @click="confirmLeaveGroup"
                 >

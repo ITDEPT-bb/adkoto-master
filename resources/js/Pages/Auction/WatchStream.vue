@@ -1,33 +1,36 @@
 <template>
-	<Head title="Live Auction" />
+    <Head title="Live Auction" />
 
-	<AuthenticatedLayout>
-		<div class="max-w-7xl mx-auto h-full overflow-y-auto p-4 scrollbar-thin">
-			<PageSelector />
-			<AuctionMenu />
+    <AuthenticatedLayout>
+        <div
+            class="max-w-7xl mx-auto h-full overflow-y-auto p-4 scrollbar-thin"
+        >
+            <PageSelector />
+            <AuctionMenu />
 
-			<div class="bg-white flex flex-col gap-4 p-6 rounded-lg shadow-sm">
-				<!-- <YouTubeLiveStream :channelId="youtubeChannelId" /> -->
-				<VideoSDKLiveStream />
+            <div
+                class="bg-white dark:bg-slate-950 flex flex-col gap-4 p-6 rounded-lg shadow-sm"
+            >
+                <!-- <YouTubeLiveStream :channelId="youtubeChannelId" /> -->
+                <VideoSDKLiveStream />
 
-				<ShowWindow
-					v-if="!noActiveBidding"
-					:item="item"
-					:highBid="highBid"
-					:bids="bids"
-					:user="user"
-					:walletBalance="walletBalance" />
+                <ShowWindow
+                    v-if="!noActiveBidding"
+                    :item="item"
+                    :highBid="highBid"
+                    :bids="bids"
+                    :user="user"
+                    :walletBalance="walletBalance"
+                />
 
-				<div
-					v-else
-					class="text-center text-gray-500">
-					<p>No active bidding yet.</p>
-				</div>
-			</div>
-		</div>
-	</AuthenticatedLayout>
+                <div v-else class="text-center text-gray-500">
+                    <p>No active bidding yet.</p>
+                </div>
+            </div>
+        </div>
+    </AuthenticatedLayout>
 
-	<UpdateProfileReminder />
+    <UpdateProfileReminder />
 </template>
 
 <script setup>
@@ -54,30 +57,30 @@ const youtubeChannelId = ref(props.youtubeChannelId);
 let interval = null;
 
 const fetchShowWindowData = async () => {
-	try {
-		const response = await axios.get("/auction/stream/bidlist");
-		const data = response.data;
+    try {
+        const response = await axios.get("/auction/stream/bidlist");
+        const data = response.data;
 
-		updatedItem.value = data.item;
-		updatedHighBid.value = data.highBid;
-		updatedBids.value = data.bids;
-		updatedUser.value = data.user;
-		updatedWalletBalance.value = data.walletBalance;
-		noActiveBidding.value = data.noActiveBidding;
-	} catch (error) {
-		console.error("Error fetching auction data:", error);
-	}
+        updatedItem.value = data.item;
+        updatedHighBid.value = data.highBid;
+        updatedBids.value = data.bids;
+        updatedUser.value = data.user;
+        updatedWalletBalance.value = data.walletBalance;
+        noActiveBidding.value = data.noActiveBidding;
+    } catch (error) {
+        console.error("Error fetching auction data:", error);
+    }
 };
 
 onMounted(() => {
-	// if (!noActiveBidding.value) {
-	fetchShowWindowData();
-	interval = setInterval(fetchShowWindowData, 20000);
-	// }
+    // if (!noActiveBidding.value) {
+    fetchShowWindowData();
+    interval = setInterval(fetchShowWindowData, 20000);
+    // }
 });
 
 onUnmounted(() => {
-	clearInterval(interval);
+    clearInterval(interval);
 });
 </script>
 

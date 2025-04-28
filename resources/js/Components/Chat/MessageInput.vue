@@ -7,7 +7,7 @@
                 type="button"
                 class="inline-flex justify-center p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
             >
-                <MicIcon />
+                <MicIcon class="dark:text-gray-200" />
                 <span class="sr-only">Record audio</span>
             </button>
             <button
@@ -15,7 +15,7 @@
                 class="p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
                 @click="triggerFileInput"
             >
-                <PaperClipIcon />
+                <PaperClipIcon class="dark:text-gray-200" />
                 <span class="sr-only">Attach file</span>
             </button>
             <input
@@ -31,7 +31,7 @@
                 class="p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
                 @click="triggerFileInput"
             >
-                <CameraIcon />
+                <CameraIcon class="dark:text-gray-200" />
                 <span class="sr-only">Upload image</span>
             </button>
             <!-- Emoji Picker Trigger -->
@@ -40,7 +40,7 @@
                 class="p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
                 @click="toggleEmojiPicker"
             >
-                <EmojiIcon />
+                <EmojiIcon class="dark:text-gray-200" />
                 <span class="sr-only">Add emoji</span>
             </button>
 

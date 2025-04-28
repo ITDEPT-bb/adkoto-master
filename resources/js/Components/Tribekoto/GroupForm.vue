@@ -38,7 +38,7 @@ const editorConfig = {
             >
             <TextInput
                 type="text"
-                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                class="mt-1 block w-full border-gray-300 dark:bg-slate-950 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                 v-model="form.name"
                 required
                 autofocus
@@ -67,7 +67,7 @@ const editorConfig = {
             <select
                 id="group_status"
                 v-model="form.group_status"
-                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-slate-950 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
             >
                 <option value="public">Public</option>
                 <option value="private">Private</option>
@@ -83,7 +83,7 @@ const editorConfig = {
                 :editor="editor"
                 v-model="form.about"
                 :config="editorConfig"
-                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                class="mt-1 w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
             ></ckeditor>
         </div>
     </div>

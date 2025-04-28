@@ -1,8 +1,8 @@
 <template>
-    <main class="bg-white p-4 shadow rounded-lg">
+    <main class="bg-white dark:bg-slate-950 p-4 shadow rounded-lg">
         <section>
             <div class="flex space-x-4 mb-4">
-                <h1 class="text-lg font-semibold">
+                <h1 class="text-lg font-semibold dark:text-white">
                     <!-- Check if category and subCategory exist -->
                     {{
                         subCategory
