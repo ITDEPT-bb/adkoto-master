@@ -1,7 +1,7 @@
 <template>
-    <div class="p-4 rounded-lg dark:border-gray-700">
+    <div class="p-4 rounded-lg dark:border-gray-700 dark:bg-slate-950 my-2">
         <div class="flex space-x-4 mb-2">
-            <h1 class="text-lg font-semibold">
+            <h1 class="text-lg font-semibold dark:text-white">
                 <!-- {{ category ? category.name : "Listings" }} -->
                 {{
                     authId

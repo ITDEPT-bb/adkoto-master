@@ -1,10 +1,12 @@
 <template>
-    <div class="h-full overflow-hidden w-full p-2 bg-white rounded-lg shadow">
+    <div
+        class="h-full overflow-hidden w-full p-2 bg-white rounded-lg shadow dark:bg-slate-950 dark:border-slate-900 dark:text-gray-100"
+    >
         <div class="flex h-full gap-4 lg:gap-0 flex-col sm:flex-row">
             <!-- Merged Chats Column -->
             <div class="flex-1 overflow-y-auto scrollbar-thin">
                 <div
-                    class="sticky flex justify-between top-0 bg-white shadow-sm z-10 p-2"
+                    class="sticky flex justify-between top-0 bg-white dark:bg-slate-950 dark:border-slate-900 dark:text-gray-100 shadow-sm z-10 p-2"
                 >
                     <h2 class="text-xl font-bold">Recent Chats</h2>
                 </div>
@@ -16,7 +18,7 @@
                     >
                         <Link :href="getChatLink(chat)">
                             <div
-                                class="flex items-center space-x-4 transition-transform duration-300 ease-in-out transform hover:scale-105 hover:bg-gray-100 p-2 rounded-lg"
+                                class="flex items-center group space-x-4 transition-transform duration-300 ease-in-out transform hover:scale-105 hover:bg-gray-100 dark:hover:bg-slate-500 dark:hover:text-white p-2 rounded-lg"
                             >
                                 <!-- Avatar/Group Icon -->
                                 <div class="relative">
@@ -68,9 +70,9 @@
 
                                     <!-- Last Message Preview -->
                                     <p
-                                        class="text-sm text-gray-500 flex justify-between items-center truncate lg:pe-2"
+                                        class="text-sm text-gray-500 flex justify-between items-center truncate lg:pe-2 group-hover:dark:text-white"
                                         :class="{
-                                            'font-bold text-black':
+                                            'font-black text-black text-lg':
                                                 isUnread(chat),
                                         }"
                                     >

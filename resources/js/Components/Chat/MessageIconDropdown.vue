@@ -30,7 +30,7 @@
         >
             <div
                 v-if="showModal"
-                class="origin-top-right absolute right-0 mt-12 w-[400px] rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50"
+                class="origin-top-right absolute right-0 mt-12 w-[400px] rounded-md shadow-lg bg-white dark:bg-slate-950 dark:border-slate-900 dark:text-gray-100 ring-1 ring-black ring-opacity-5 focus:outline-none z-50"
             >
                 <div class="py-1">
                     <ChatListDropdown
@@ -40,7 +40,7 @@
                     <div class="py-2 px-4 text-center">
                         <Link
                             :href="route('chat.index')"
-                            class="text-sm font-medium w-full text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-md px-4 py-2 hover:bg-gray-200 transition-colors block text-center"
+                            class="text-sm font-medium w-full text-blue-600 hover:text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-md px-4 py-2 hover:bg-gray-200 dark:hover:bg-slate-700 dark:hover:text-white transition-colors block text-center"
                         >
                             View all Messages
                         </Link>

@@ -1,17 +1,19 @@
 <template>
-	<Head title="Kalakalkoto" />
+    <Head title="Kalakalkoto" />
 
-	<AuthenticatedLayout>
-		<div class="max-w-7xl mx-auto h-full overflow-y-auto p-4 scrollbar-thin">
-			<!-- <PageSelector /> -->
-			<AuctionMenu />
-			<div class="bg-white p-6 rounded-lg shadow-sm">
-				<NormalItemList :items="items" />
-			</div>
-		</div>
-	</AuthenticatedLayout>
+    <AuthenticatedLayout>
+        <div
+            class="max-w-7xl mx-auto h-full overflow-y-auto p-4 scrollbar-thin"
+        >
+            <!-- <PageSelector /> -->
+            <AuctionMenu />
+            <div class="bg-white dark:bg-slate-950 p-6 rounded-lg shadow-sm">
+                <NormalItemList :items="items" />
+            </div>
+        </div>
+    </AuthenticatedLayout>
 
-	<UpdateProfileReminder />
+    <UpdateProfileReminder />
 </template>
 
 <script setup>

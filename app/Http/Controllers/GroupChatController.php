@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\GroupChatResource;
 use App\Http\Resources\GroupResource;
+use App\Http\Resources\GroupUserResource;
 use App\Http\Resources\UserResource;
 use App\Models\Conversation;
 use App\Models\Group;
@@ -341,5 +342,4 @@ class GroupChatController extends Controller
             'redirect' => route('group-chats.index', ['groupChat' => $groupChatId])
         ]);
     }
-
 }

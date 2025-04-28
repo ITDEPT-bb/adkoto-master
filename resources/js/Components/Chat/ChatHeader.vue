@@ -1,6 +1,6 @@
 <template>
     <div
-        class="flex flex-col sm:flex-row sm:items-center justify-between py-3 px-4 rounded-lg border-b-2 border-gray-200"
+        class="flex flex-col sm:flex-row sm:items-center justify-between py-3 px-4 rounded-lg border-b-2 border-gray-200 dark:border-none"
         style="background-color: #0076be"
     >
         <div class="flex items-center space-x-4 sm:mb-0">
