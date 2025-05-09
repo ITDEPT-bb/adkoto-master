@@ -38,6 +38,10 @@ use Inertia\Inertia;
 Route::get('/', [HomeController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/download-mobile-app', function () {
+    return view('download-mobile-app');
+});
+
 Route::get('/terms', [HomeController::class, 'terms'])
     ->name('terms.show');
 
