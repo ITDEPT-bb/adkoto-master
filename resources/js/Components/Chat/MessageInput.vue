@@ -109,6 +109,7 @@
                 v-model="newMessage"
                 @keydown.enter.exact.prevent="sendMessage"
                 @keydown.enter.shift.exact="addNewLine"
+                @focus="handleTextareaFocus"
                 id="chat"
                 rows="1"
                 class="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -158,7 +159,7 @@
 </template>
 
 <script setup>
-import { ref, defineEmits } from "vue";
+import { ref, defineEmits, onMounted, onUnmounted } from "vue";
 import { usePage } from "@inertiajs/vue3";
 import axiosClient from "@/axiosClient.js";
 import MicIcon from "@/Components/Icons/MicIcon.vue";
@@ -191,6 +192,33 @@ const user = props.user;
 const conversation = props.conversation;
 const selectedFiles = ref([]);
 const fileInput = ref(null);
+
+const textareaRef = ref(null);
+let previousWindowHeight = window.innerHeight;
+
+// Handle textarea focus (keyboard opening)
+const handleTextareaFocus = () => {
+    setTimeout(() => {
+        // Scroll to the textarea with smooth animation
+        textareaRef.value?.scrollIntoView({
+            behavior: "smooth",
+            block: "end",
+        });
+    }, 300);
+};
+
+// Handle window resize (keyboard show/hide)
+const handleResize = () => {
+    const currentHeight = window.innerHeight;
+    if (currentHeight < previousWindowHeight) {
+        // Keyboard opened
+        textareaRef.value?.scrollIntoView({
+            block: "end",
+            behavior: "smooth",
+        });
+    }
+    previousWindowHeight = currentHeight;
+};
 
 const addNewLine = (event) => {
     event.preventDefault();
@@ -272,6 +300,10 @@ async function sendMessage() {
     newMessage.value = "";
     selectedFiles.value = [];
 
+    // Blur and reset scroll
+    textareaRef.value?.blur();
+    window.scrollTo(0, 0);
+
     try {
         await axiosClient.post(
             `/chat/conversations/${conversation.id}/messages`,
@@ -281,4 +313,24 @@ async function sendMessage() {
         console.error("Error sending message:", error);
     }
 }
+
+onMounted(() => {
+    window.addEventListener("resize", handleResize);
+});
+
+onUnmounted(() => {
+    window.removeEventListener("resize", handleResize);
+});
 </script>
+
+<style>
+/* Optional: Fix for mobile viewport */
+@media (max-width: 640px) {
+    .chat-input-container {
+        position: sticky;
+        bottom: 0;
+        background: white;
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+}
+</style>
