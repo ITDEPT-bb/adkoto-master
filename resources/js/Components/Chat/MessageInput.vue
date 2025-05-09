@@ -1,16 +1,26 @@
 <template>
-    <div class="border-t-2 border-gray-200 px-4 pt-4 mb-2 sm:mb-0">
+    <div class="border-t-2 border-gray-200 px-4">
         <div
             class="flex items-center px-3 py-2 rounded-lg bg-gray-50 dark:bg-gray-700 relative"
         >
-            <button
+            <!-- <button
                 type="button"
                 class="inline-flex justify-center p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
             >
                 <MicIcon class="dark:text-gray-200" />
                 <span class="sr-only">Record audio</span>
-            </button>
+            </button> -->
+            <!-- Mobile: Toggle More Options -->
             <button
+                type="button"
+                class="p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 block sm:hidden"
+                @click="showMobileActions = !showMobileActions"
+            >
+                <DotsVerticalIcon class="dark:text-gray-200" />
+                <span class="sr-only">More options</span>
+            </button>
+
+            <!-- <button
                 type="button"
                 class="p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
                 @click="triggerFileInput"
@@ -27,22 +37,58 @@
                 accept="image/*, video/*"
             />
             <button
-                type="button"
-                class="p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
-                @click="triggerFileInput"
+            type="button"
+            class="p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
+            @click="toggleEmojiPicker"
             >
-                <CameraIcon class="dark:text-gray-200" />
-                <span class="sr-only">Upload image</span>
-            </button>
+            <EmojiIcon class="dark:text-gray-200" />
+            <span class="sr-only">Add emoji</span>
+        </button> -->
+            <!-- File and Emoji Buttons (visible on sm+ or toggled on mobile) -->
+            <div
+                :class="[
+                    'flex items-center gap-1',
+                    showMobileActions ? 'block' : 'hidden',
+                    'sm:flex',
+                ]"
+            >
+                <!-- File Upload Button -->
+                <button
+                    type="button"
+                    class="p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
+                    @click="triggerFileInput"
+                >
+                    <PaperClipIcon class="dark:text-gray-200" />
+                    <span class="sr-only">Attach file</span>
+                </button>
+                <input
+                    type="file"
+                    ref="fileInput"
+                    @change="handleFileChange"
+                    class="hidden"
+                    multiple
+                    accept="image/*, video/*"
+                />
+
+                <!-- Emoji Picker Button -->
+                <button
+                    type="button"
+                    class="p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
+                    @click="toggleEmojiPicker"
+                >
+                    <EmojiIcon class="dark:text-gray-200" />
+                    <span class="sr-only">Add emoji</span>
+                </button>
+            </div>
+            <!-- <button
+            type="button"
+            class="p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
+            @click="triggerFileInput"
+        >
+            <CameraIcon class="dark:text-gray-200" />
+            <span class="sr-only">Upload image</span>
+        </button> -->
             <!-- Emoji Picker Trigger -->
-            <button
-                type="button"
-                class="p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
-                @click="toggleEmojiPicker"
-            >
-                <EmojiIcon class="dark:text-gray-200" />
-                <span class="sr-only">Add emoji</span>
-            </button>
 
             <!-- Emoji Picker Component -->
             <emoji-picker
@@ -121,6 +167,7 @@ import CameraIcon from "@/Components/Icons/CameraIcon.vue";
 import EmojiIcon from "@/Components/Icons/EmojiIcon.vue";
 import SendIcon from "@/Components/Icons/SendIcon.vue";
 import "emoji-picker-element";
+import DotsVerticalIcon from "../Icons/DotsVerticalIcon.vue";
 
 const props = defineProps({
     user: {
@@ -132,6 +179,8 @@ const props = defineProps({
         required: true,
     },
 });
+
+const showMobileActions = ref(false);
 
 const authUser = usePage().props.auth.user;
 

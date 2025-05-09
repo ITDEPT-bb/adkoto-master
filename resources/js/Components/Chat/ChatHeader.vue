@@ -3,10 +3,11 @@
         class="flex flex-col sm:flex-row sm:items-center justify-between py-3 px-4 rounded-lg border-b-2 border-gray-200 dark:border-none"
         style="background-color: #0076be"
     >
-        <div class="flex items-center space-x-4 sm:mb-0">
+        <div class="flex items-center justify-between sm:mb-0 w-full">
+            <!-- Back Button -->
             <Link :href="route('chat.index')" aria-label="Back to chat index">
                 <button
-                    class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300"
+                    class="flex items-center justify-center w-6 h-6 p-1 rounded-full bg-gray-200 hover:bg-gray-300"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -22,7 +23,9 @@
                     </svg>
                 </button>
             </Link>
-            <div class="relative">
+
+            <!-- User Avatar -->
+            <div class="relative mx-2">
                 <span class="absolute text-green-500 right-0 bottom-0">
                     <svg width="20" height="20">
                         <circle
@@ -39,42 +42,43 @@
                     class="w-10 sm:w-12 h-10 sm:h-12 rounded-full"
                 />
             </div>
-            <div
-                class="flex flex-col sm:flex-row sm:items-center leading-tight"
-            >
-                <div class="flex items-center gap-10">
+
+            <!-- User Info & Hamburger -->
+            <div class="flex-1 flex items-center justify-between px-2">
+                <!-- Name & Username -->
+                <div class="flex flex-col">
                     <div
-                        class="sm:text-lg text-md font-semibold text-center sm:text-left text-white"
+                        class="sm:text-lg text-sm font-semibold text-white truncate"
                     >
                         {{ user.name }} {{ user.surname }}
-                        <span
-                            class="text-sm font-light text-white sm:block hidden"
-                            >@{{ user.username }}</span
-                        >
                     </div>
-                    <!-- Hamburger Button beside Name on Mobile -->
-                    <button
-                        @click="toggleMenu"
-                        class="sm:hidden inline-flex items-center justify-center rounded-lg ml-20 h-10 w-10 transition duration-500 ease-in-out text-white hover:bg-gray-300 hover:text-black focus:outline-none"
-                        :aria-expanded="isMenuOpen"
-                        aria-label="Toggle menu"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="w-6 h-6"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M4 6h16M4 12h16M4 18h16"
-                            />
-                        </svg>
-                    </button>
+                    <span class="text-sm font-light text-white hidden sm:block">
+                        @{{ user.username }}
+                    </span>
                 </div>
+
+                <!-- Hamburger (Mobile Only) -->
+                <button
+                    @click="toggleMenu"
+                    class="sm:hidden ml-auto inline-flex items-center justify-center rounded-lg h-10 w-10 transition duration-500 ease-in-out text-white hover:bg-gray-300 hover:text-black focus:outline-none"
+                    :aria-expanded="isMenuOpen"
+                    aria-label="Toggle menu"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-6 h-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16"
+                        />
+                    </svg>
+                </button>
             </div>
         </div>
 

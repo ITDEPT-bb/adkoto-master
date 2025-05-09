@@ -6,7 +6,7 @@
             <!-- Followings Column -->
             <div class="flex-1 overflow-y-auto scrollbar-thin pr-4">
                 <div
-                    class="sticky flex justify-between top-0 bg-white dark:bg-slate-900 shadow-sm z-10 p-2"
+                    class="sticky flex justify-between top-0 bg-white dark:bg-slate-900 shadow-sm p-2"
                 >
                     <h2 class="text-xl font-bold dark:text-white">
                         Conversations
