@@ -10,7 +10,7 @@
                 >
                     <h2 class="text-xl font-bold">Recent Chats</h2>
                 </div>
-                <ul>
+                <ul class="h-full overflow-hidden overflow-y-scroll">
                     <li
                         v-for="chat in mergedChats.slice(0, 5)"
                         :key="chat.id"

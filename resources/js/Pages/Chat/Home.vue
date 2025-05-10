@@ -3,7 +3,7 @@
 
     <AuthenticatedLayout>
         <div
-            class="home-page flex h-full overflow-y-auto container p-4 mx-auto scrollbar-thin"
+            class="home-page flex h-full overflow-y-auto container p-4 py-16 md:py-4 mx-auto scrollbar-thin"
         >
             <FollowingList
                 :followings="messageUsers"

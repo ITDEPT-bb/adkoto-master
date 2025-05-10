@@ -27,9 +27,12 @@ import TeddyBear from "/public/img/admoto/TEDDYBEAR.png";
 import Ribbon from "/public/img/admoto/RIBBON.png";
 import HeartSearch from "/public/img/admoto/HEART HEART.png";
 
-// Day of Valor Specific
-import DayOfValorBg from "/public/img/Kagitingan/kagitingan_bg.jpg";
-import DayOfValorPeople from "/public/img/Kagitingan/kagitingan_people.png";
+// Mother's Day Specific
+import MothersDayIcon from "/public/img/mothers_day/2.png";
+import IconBackground from "/public/img/mothers_day/icon_bg.png";
+import AwardIcon from "/public/img/mothers_day/best_mom.png";
+import SearchBarIcon from "/public/img/mothers_day/icon.png";
+import ProfileSmallIcon from "/public/img/mothers_day/p1.png";
 
 import axiosClient from "@/axiosClient.js";
 import DarkModeToggle from "@/Components/DarkModeToggle.vue";
@@ -89,10 +92,14 @@ let logoTextClass =
         >
             <!-- Primary Navigation Menu -->
 
-            <div class="max-w-screen mx-auto px-4 sm:px-6 lg:px-16">
+            <div
+                class="max-w-screen mx-auto px-4 py-0.5 sm:px-6 lg:px-20 bg-cover bg-center drop-shadow-lg relative sm:z-50 z-0"
+                style="background-image: url('/img/mothers_day/Bg.png')"
+            >
+                <!-- <div class="max-w-screen mx-auto px-4 sm:px-6 lg:px-16"> -->
                 <!-- <div class="flex items-center justify-between gap-4 h-16">
                     <div class="flex"> -->
-                <div class="flex items-center justify-between gap-2 h-16">
+                <div class="flex items-center justify-evenly gap-2 h-16">
                     <!-- <div
                         class="absolute -bottom-0.5 left-1 xl:left-6 2xl:left-12 lg:block hidden"
                     >
@@ -162,7 +169,7 @@ let logoTextClass =
 							class="w-32 sm:w-1/2"
 							@keyup.enter="search" /> -->
                         <div
-                            class="relative w-48 sm:w-1/3 ps-16 sm:ps-0 -right-8"
+                            class="relative w-48 sm:w-1/3 ps-10 pe-4 sm:ps-0 -right-8"
                         >
                             <TextInput
                                 v-model="keywords"
@@ -170,15 +177,19 @@ let logoTextClass =
                                 class="w-full pr-10 pl-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 @keyup.enter="search"
                             />
-                            <!-- <img
-                                :src="HeartSearch"
+                            <img
+                                :src="SearchBarIcon"
                                 alt="Search"
-                                class="absolute right-3 hidden sm:block top-1/2 transform -translate-y-1/2 w-20 h-auto text-gray-400"
-                            /> -->
+                                class="absolute right-6 hidden lg:block top-1/2 transform -translate-y-1/2 w-20 h-auto text-gray-400"
+                            />
+                        </div>
+
+                        <div class="hidden lg:flex">
+                            <img :src="MothersDayIcon" alt="MothersDayIcon" />
                         </div>
 
                         <div
-                            class="justify-end items-center flex flex-row sm:gap-9 p-4 flex-1"
+                            class="justify-start items-center flex flex-row sm:gap-5 md:gap-9 lg:gap-9 lg:flex-1 lg:p-4"
                         >
                             <Link
                                 :href="route('dashboard')"
@@ -353,7 +364,11 @@ let logoTextClass =
                         <!-- <button @click="toggleDarkMode" class="dark:text-white">
                             <MoonIcon class="w-5 h-5" />
                         </button> -->
-                        <DarkModeToggle />
+                        <div
+                            class="relative left-10 top-1 sm:left-0 md:top-1 sm:position-none"
+                        >
+                            <DarkModeToggle />
+                        </div>
                     </div>
 
                     <div class="hidden sm:flex sm:items-center">
@@ -380,15 +395,15 @@ let logoTextClass =
                                                 :src="authUser.avatar_url"
                                                 :alt="authUser.name"
                                             />
-                                            <!-- <div
+                                            <div
                                                 class="absolute -bottom-1 xl:right-2 2xl:right-2 lg:block hidden"
                                             >
                                                 <img
-                                                    :src="Ribbon"
-                                                    class="w-5 relative top-0 right-0 h-auto"
+                                                    :src="ProfileSmallIcon"
+                                                    class="w-3 relative bottom-9 left-2 h-auto"
                                                     alt="Logo"
                                                 />
-                                            </div> -->
+                                            </div>
                                         </button>
                                         <div
                                             id="profile-tooltip"
@@ -434,15 +449,15 @@ let logoTextClass =
                         </div>
                     </div>
 
-                    <!-- <div
-                        class="absolute -bottom-5 xl:right-1 2xl:right-2 lg:block hidden"
+                    <div
+                        class="absolute -bottom-5 right-2 xl:right-2 2xl:right-5 lg:block hidden"
                     >
                         <img
-                            :src="TeddyBear"
-                            class="w-16 relative top-0 right-0 h-auto"
+                            :src="AwardIcon"
+                            class="w-12 relative top-0 right-0 h-auto"
                             alt="Logo"
                         />
-                    </div> -->
+                    </div>
 
                     <!-- Hamburger -->
                     <!-- <div class="-me-2 flex items-center sm:hidden">
