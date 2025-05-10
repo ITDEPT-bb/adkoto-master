@@ -26,10 +26,17 @@ defineEmits(["attachmentClick"]);
             </div>
 
             <!-- Download-->
-            <a
+            <!-- <a
                 @click.stop
                 :href="route('post.download', attachment)"
                 class="md:z-20 opacity-0 group-hover:opacity-100 transition-all w-8 h-8 flex items-center justify-center text-gray-100 bg-gray-700 rounded absolute right-2 top-2 cursor-pointer hover:bg-gray-800"
+            >
+                <ArrowDownTrayIcon class="w-4 h-4" />
+            </a> -->
+            <a
+                @click.stop
+                :href="route('post.download', attachment)"
+                class="opacity-0 group-hover:opacity-100 transition-all w-8 h-8 flex items-center justify-center text-gray-100 bg-gray-700 rounded absolute right-2 top-2 cursor-pointer hover:bg-gray-800"
             >
                 <ArrowDownTrayIcon class="w-4 h-4" />
             </a>
@@ -64,8 +71,11 @@ defineEmits(["attachmentClick"]);
                     />
                 </svg>
 
-                <div
+                <!-- <div
                     class="absolute left-0 top-0 w-full h-full bg-black/50 md:z-10"
+                ></div> -->
+                <div
+                    class="absolute left-0 top-0 w-full h-full bg-black/50"
                 ></div>
                 <video :src="attachment.url"></video>
             </div>
