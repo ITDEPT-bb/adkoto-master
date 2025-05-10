@@ -669,7 +669,7 @@ else if (
                     >
                         <img
                             :src="AwardIcon"
-                            class="w-12 relative top-0 right-0 h-auto"
+                            class="w-[3.3rem] relative top-0 right-0 h-auto"
                             alt="Logo"
                         />
                     </div>
