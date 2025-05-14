@@ -155,16 +155,17 @@ else if (
             class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 fixed md:static top-0 z-10 pt-6 sm:pt-0"
         >
             <!-- Primary Navigation Menu -->
-            <div
+            <!-- <div
                 class="max-w-screen mx-auto px-4 py-0.5 sm:px-6 lg:px-20 bg-cover bg-center drop-shadow-lg relative sm:z-50 z-0"
                 style="background-image: url('/img/mothers_day/Bg.png')"
-            >
-                <!-- <div class="max-w-screen mx-auto px-4 sm:px-6 lg:px-16"> -->
+            > -->
+            <div class="max-w-screen mx-auto px-4 sm:px-6 lg:px-16">
                 <!-- <div class="flex items-center justify-between gap-4 h-16">
                     <div class="flex"> -->
-                <div
+                <!-- <div
                     class="flex items-center justify-between gap-4 md:gap-2 h-16"
-                >
+                > -->
+                <div class="flex items-center justify-between gap-2 h-16">
                     <!-- <div
                         class="absolute -bottom-0.5 left-1 xl:left-6 2xl:left-12 lg:block hidden"
                     >
@@ -239,19 +240,19 @@ else if (
                             <TextInput
                                 v-model="keywords"
                                 placeholder="Search..."
-                                class="w-full pr-10 pl-4 py-2 border border-pink-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                class="w-full pr-10 pl-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 @keyup.enter="search"
                             />
-                            <img
+                            <!-- <img
                                 :src="SearchBarIcon"
                                 alt="Search"
                                 class="absolute right-6 hidden lg:block top-1/2 transform -translate-y-1/2 w-20 h-auto text-gray-400"
-                            />
+                            /> -->
                         </div>
 
-                        <div class="hidden lg:flex">
+                        <!-- <div class="hidden lg:flex">
                             <img :src="MothersDayIcon" alt="MothersDayIcon" />
-                        </div>
+                        </div> -->
 
                         <!-- Backup of default layout Start -->
                         <!-- <Link
@@ -343,7 +344,7 @@ else if (
 								alt="Logo" />
 						</Link> -->
                         <div
-                            class="justify-start items-center flex flex-row sm:gap-5 md:gap-9 lg:gap-9 lg:flex-1 lg:p-4"
+                            class="justify-end items-center flex flex-row sm:gap-5 md:gap-9 lg:gap-9 lg:flex-1 lg:p-4"
                         >
                             <Link
                                 :href="route('dashboard')"
@@ -579,7 +580,7 @@ else if (
                                 <MoonIcon class="w-5 h-5" />
                             </button> -->
                             <div
-                                class="relative left-8 top-1 sm:left-0 md:top-1 sm:position-none"
+                                class="relative left-7 top-1 sm:left-0 md:top-1 sm:position-none"
                             >
                                 <DarkModeToggle />
                             </div>
@@ -610,7 +611,7 @@ else if (
                                                 :src="authUser.avatar_url"
                                                 :alt="authUser.name"
                                             />
-                                            <div
+                                            <!-- <div
                                                 class="absolute -bottom-1 xl:right-2 2xl:right-2 lg:block hidden"
                                             >
                                                 <img
@@ -618,7 +619,7 @@ else if (
                                                     class="w-3 relative bottom-9 left-2 h-auto"
                                                     alt="Logo"
                                                 />
-                                            </div>
+                                            </div> -->
                                         </button>
                                         <div
                                             id="profile-tooltip"
@@ -664,7 +665,7 @@ else if (
                         </div>
                     </div>
 
-                    <div
+                    <!-- <div
                         class="absolute -bottom-5 right-2 xl:right-2 2xl:right-5 lg:block hidden"
                     >
                         <img
@@ -672,7 +673,7 @@ else if (
                             class="w-[3.3rem] relative top-0 right-0 h-auto"
                             alt="Logo"
                         />
-                    </div>
+                    </div> -->
 
                     <!-- Hamburger -->
                     <!-- <div class="-me-2 flex items-center sm:hidden">

@@ -89,11 +89,11 @@ let logoTextClass =
             class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 fixed md:static top-0 z-10 pt-6 sm:pt-0"
         >
             <!-- Primary Navigation Menu -->
-            <div
+            <!-- <div
                 class="max-w-screen mx-auto px-4 py-0.5 sm:px-6 lg:px-20 bg-cover bg-center drop-shadow-lg relative sm:z-50 z-0"
                 style="background-image: url('/img/mothers_day/Bg.png')"
-            >
-                <!-- <div class="max-w-screen mx-auto px-4 sm:px-6 lg:px-16"> -->
+            > -->
+            <div class="max-w-screen mx-auto px-4 sm:px-6 lg:px-16">
                 <!-- <div class="flex items-center justify-between gap-4 h-16">
                     <div class="flex"> -->
                 <div class="flex items-center justify-evenly gap-2 h-16">
@@ -171,19 +171,19 @@ let logoTextClass =
                                 class="w-full pr-10 pl-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 @keyup.enter="search"
                             />
-                            <img
+                            <!-- <img
                                 :src="SearchBarIcon"
                                 alt="Search"
                                 class="absolute right-6 hidden lg:block top-1/2 transform -translate-y-1/2 w-20 h-auto text-gray-400"
-                            />
+                            /> -->
                         </div>
 
-                        <div class="hidden lg:flex">
+                        <!-- <div class="hidden lg:flex">
                             <img :src="MothersDayIcon" alt="MothersDayIcon" />
-                        </div>
+                        </div> -->
 
                         <div
-                            class="justify-start items-center flex flex-row sm:gap-5 md:gap-9 lg:gap-9 lg:flex-1 lg:p-4"
+                            class="justify-end items-center flex flex-row sm:gap-5 md:gap-9 lg:gap-9 lg:flex-1 lg:p-4"
                         >
                             <Link
                                 :href="route('dashboard')"
@@ -353,7 +353,7 @@ let logoTextClass =
                                                 :src="authUser.avatar_url"
                                                 :alt="authUser.name"
                                             />
-                                            <div
+                                            <!-- <div
                                                 class="absolute -bottom-1 xl:right-2 2xl:right-2 lg:block hidden"
                                             >
                                                 <img
@@ -361,7 +361,7 @@ let logoTextClass =
                                                     class="w-3 relative bottom-9 left-2 h-auto"
                                                     alt="Logo"
                                                 />
-                                            </div>
+                                            </div> -->
                                         </button>
                                         <div
                                             id="profile-tooltip"
@@ -407,7 +407,7 @@ let logoTextClass =
                         </div>
                     </div>
 
-                    <div
+                    <!-- <div
                         class="absolute -bottom-5 right-2 xl:right-2 2xl:right-5 lg:block hidden"
                     >
                         <img
@@ -415,7 +415,7 @@ let logoTextClass =
                             class="w-12 relative top-0 right-0 h-auto"
                             alt="Logo"
                         />
-                    </div>
+                    </div> -->
 
                     <!-- Hamburger -->
                     <div class="-me-2 flex items-center sm:hidden">
