@@ -86,7 +86,7 @@ let logoTextClass =
     >
         <!-- <div class="h-full mx-auto overflow-hidden flex flex-col"> -->
         <nav
-            class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 fixed md:static top-0 z-10 pt-6 sm:pt-0"
+            class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 fixed md:static top-0 z-10 pt-6 sm:pt-0 shadow"
         >
             <!-- Primary Navigation Menu -->
             <!-- <div
@@ -119,7 +119,7 @@ let logoTextClass =
                         <div class="shrink-0 flex items-center">
                             <Link :href="route('dashboard')">
                                 <div
-                                    class="relative group mb-0 md:mb-3 bg-white bg-opacity-70 py-1 rounded-full sm:bg-none sm:bg-opacity-0 sm:px-0 sm:py-0"
+                                    class="relative group bg-white bg-opacity-70 py-1 rounded-full sm:bg-none sm:bg-opacity-0 sm:px-0 sm:py-0"
                                 >
                                     <img
                                         :src="logoSrc"
@@ -127,13 +127,13 @@ let logoTextClass =
                                         alt="Logo"
                                         class="transition-transform duration-200 ease-in-out transform group-hover:scale-90"
                                     />
-                                    <div
+                                    <!-- <div
                                         :class="logoTextClass"
                                         class="transition-transform duration-200 hidden md:block ease-in-out transform group-hover:scale-110"
                                         style="white-space: nowrap"
                                     >
                                         {{ logoText }}
-                                    </div>
+                                    </div> -->
                                 </div>
                             </Link>
                         </div>
