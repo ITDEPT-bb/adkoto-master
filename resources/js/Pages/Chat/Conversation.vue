@@ -10,7 +10,7 @@
             <!-- <div
             class="flex-1 my-2 pb-6 justify-between max-w-7xl mx-auto bg-white dark:bg-slate-950 dark:border-none rounded-lg border flex flex-col h-full scrollbar-thin"
         > -->
-            <ChatHeader :user="user" agora_id="{{ env('AGORA_APP_ID') }}" />
+            <ChatHeader :user="user" appId="appId" />
             <template v-if="!isBlockedByAuthUser && !isBlockedByOtherUser">
                 <MessageList
                     :messages="messages"
@@ -65,9 +65,11 @@ const props = defineProps({
     conversation: Object,
     isBlockedByAuthUser: Boolean,
     isBlockedByOtherUser: Boolean,
+    appId: String,
 });
 
 const user = props.user;
+const appId = props.appId;
 const messages = ref(props.messages);
 const conversation = props.conversation;
 const authUser = usePage().props.auth.user;

@@ -41,6 +41,7 @@ import ProfileSmallIcon from "/public/img/mothers_day/p1.png";
 
 import axiosClient from "@/axiosClient.js";
 import DarkModeToggle from "@/Components/DarkModeToggle.vue";
+import IncomingCallModal from "@/Components/Call/IncomingCallModal.vue";
 
 const showingNavigationDropdown = ref(false);
 const keywords = ref(usePage().props.search || "");
@@ -144,6 +145,31 @@ else if (
 ) {
     tribekotoClass = "border border-red-500";
 }
+
+// Incoming Call Modal
+const incomingCall = ref(false);
+const incomingCaller = ref("");
+const userToCall = ref(null);
+
+const showModal = ref(false);
+
+onMounted(() => {
+    window.Echo.join("agora-online-channel").listen(
+        ".MakeAgoraCall",
+        ({ data }) => {
+            if (parseInt(data.userToCall) === parseInt(authUser.id)) {
+                // console.log("Incoming call from", data.from);
+                // console.log("Incoming call from", data.callerName);
+                // console.log("User to call:", data.userToCall);
+                userToCall.value = data.userToCall;
+                incomingCaller.value = data.from;
+                // incomingCaller.value = caller ? caller.name : "Unknown Caller";
+                // incomingCall.value = true;
+                showModal.value = true;
+            }
+        }
+    );
+});
 </script>
 
 <template>
@@ -931,6 +957,8 @@ else if (
             <slot />
         </main>
     </div>
+
+    <IncomingCallModal v-model="showModal" :user="incomingCaller" />
 </template>
 
 <style scoped>

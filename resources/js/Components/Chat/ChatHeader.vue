@@ -95,6 +95,22 @@
                     <ProfileIcon />
                 </button>
             </Link>
+            <Link
+                :href="
+                    route('callPage.index', {
+                        user: user.id,
+                        caller: authUser.id,
+                    })
+                "
+                aria-label="Call User"
+            >
+                <button
+                    type="button"
+                    class="inline-flex items-center justify-center rounded-lg border h-10 w-10 transition duration-500 ease-in-out text-white hover:bg-gray-300 hover:text-black focus:outline-none"
+                >
+                    <PhoneIcon />
+                </button>
+            </Link>
             <!-- <Link
                 :href="route('chat.callPage', { userId: user.id })"
                 aria-label="Call User"
@@ -116,14 +132,14 @@
                     <PhoneIcon />
                 </button>
             </Link> -->
-            <Link :href="route('chat.callPage')" aria-label="Call User">
+            <!-- <Link :href="route('chat.callPage')" aria-label="Call User">
                 <button
                     type="button"
                     class="inline-flex items-center justify-center rounded-lg border h-10 w-10 transition duration-500 ease-in-out text-white hover:bg-gray-300 hover:text-black focus:outline-none"
                 >
                     <PhoneIcon />
                 </button>
-            </Link>
+            </Link> -->
 
             <!-- <button
 				type="button"
@@ -132,11 +148,12 @@
 				<PhoneIcon />
 			</button> -->
             <!-- <button
-				type="button"
-				class="inline-flex items-center justify-center rounded-lg border h-10 w-10 transition duration-500 ease-in-out text-white hover:bg-gray-300 hover:text-black focus:outline-none"
-				@click="startVideoCall">
-				<VideoCamera />
-			</button> -->
+                type="button"
+                class="inline-flex items-center justify-center rounded-lg border h-10 w-10 transition duration-500 ease-in-out text-white hover:bg-gray-300 hover:text-black focus:outline-none"
+                @click="startVideoCall"
+            >
+                <VideoCamera />
+            </button> -->
         </div>
 
         <!-- Dropdown Menu -->
@@ -160,7 +177,15 @@
                     <PhoneIcon class="mr-2" /> Voice Call
                 </button>
             </Link> -->
-            <Link :href="route('chat.callPage')" aria-label="Call User">
+            <Link
+                :href="
+                    route('callPage.index', {
+                        user: user.id,
+                        caller: authUser.id,
+                    })
+                "
+                aria-label="Call User"
+            >
                 <button
                     class="flex items-center w-full px-4 py-2 text-gray-800 hover:bg-gray-200"
                 >
@@ -174,21 +199,33 @@
 			</button> -->
         </div>
     </div>
+
+    <!-- <CallModalDialog
+        :isOpen="isModalOpen"
+        @close="closeModal"
+        :user="user"
+        :authUser="authUser"
+        :appId="appId"
+    /> -->
 </template>
 
 <script setup>
 import { ref } from "vue";
-import { Link } from "@inertiajs/vue3";
+import { Link, usePage } from "@inertiajs/vue3";
 import ProfileIcon from "@/Components/Icons/ProfileIcon.vue";
 import PhoneIcon from "@/Components/Icons/PhoneIcon.vue";
 import VideoCamera from "@/Components/Icons/VideoCamera.vue";
+import CallModalDialog from "@/Components/Chat/CallModalDialog.vue";
+import BankNoteIcon from "../Icons/BankNoteIcon.vue";
 
 const props = defineProps({
     user: Object,
-    agora_id: String,
+    appId: String,
 });
 
 const user = props.user;
+const appId = props.appId;
+const authUser = usePage().props.auth.user;
 const isMenuOpen = ref(false);
 const showCallModal = ref(false);
 
@@ -196,11 +233,20 @@ function toggleMenu() {
     isMenuOpen.value = !isMenuOpen.value;
 }
 
-function startVoiceCall() {
-    console.log("Starting voice call with", user.username);
+const isModalOpen = ref(false);
+function startVideoCall() {
+    isModalOpen.value = true;
 }
 
-function startVideoCall() {
-    console.log("Starting video call with", user.username);
+function closeModal() {
+    isModalOpen.value = false;
 }
+
+// function startVoiceCall() {
+//     console.log("Starting voice call with", user.username);
+// }
+
+// function startVideoCall() {
+//     console.log("Starting video call with", user.username);
+// }
 </script>

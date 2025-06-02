@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AgoraVideoController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\CallController;
 use App\Http\Controllers\GamesController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\KalakalkotoController;
@@ -138,6 +139,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/agora/accept-call', [AgoraVideoController::class, 'acceptCall'])->name('acceptCall');
     Route::post('/agora/decline-call', [AgoraVideoController::class, 'declineCall'])->name('declineCall');
     Route::post('/agora/end-call', [AgoraVideoController::class, 'endCall'])->name('endCall');
+
+    Route::get('/chat/call/{user}', [CallController::class, 'index'])->name('callPage.index');
 });
 
 // Group Chat
