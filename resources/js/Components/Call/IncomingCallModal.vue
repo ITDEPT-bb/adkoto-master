@@ -10,7 +10,7 @@
                 leave-from="opacity-100"
                 leave-to="opacity-0"
             >
-                <div class="fixed inset-0 bg-black/25" />
+                <div class="fixed inset-0 bg-black/95" />
             </TransitionChild>
 
             <div class="fixed inset-0 overflow-y-auto">
@@ -30,9 +30,28 @@
                             class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
                         >
                             <p class="text-gray-700 text-sm">
-                                This is a fixed modal message with no slots or
-                                customization.
+                                You Have an Incoming Call from
                             </p>
+                            <div
+                                class="flex items-center gap-3 mt-4 p-3 bg-blue-50 rounded-lg shadow"
+                            >
+                                <img
+                                    :src="
+                                        user.avatar_url ||
+                                        '/images/default-avatar.png'
+                                    "
+                                    alt="User Avatar"
+                                    class="w-12 h-12 rounded-full object-cover border border-blue-200"
+                                />
+                                <div class="flex flex-col items-start">
+                                    <span class="font-semibold text-blue-900">{{
+                                        user.name
+                                    }}</span>
+                                    <span class="text-xs text-gray-500"
+                                        >is calling you...</span
+                                    >
+                                </div>
+                            </div>
                             <Link
                                 :href="
                                     route('callPage.index', {
@@ -41,19 +60,17 @@
                                     })
                                 "
                                 aria-label="Accept Call"
+                                class="mt-4 inline-flex items-center justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                             >
                                 Answer Call
                             </Link>
-                            <!-- <button @click="answerCall">Answer Call</button> -->
-                            <div class="mt-4">
-                                <button
-                                    type="button"
-                                    class="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                                    @click="emitClose"
-                                >
-                                    Close
-                                </button>
-                            </div>
+                            <button
+                                class="mt-4 ml-2 inline-flex items-center justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
+                                @click="declineCall"
+                                aria-label="Decline Call"
+                            >
+                                Decline
+                            </button>
                         </DialogPanel>
                     </TransitionChild>
                 </div>
@@ -71,6 +88,7 @@ import {
     Dialog,
     DialogPanel,
 } from "@headlessui/vue";
+import axios from "axios";
 
 const props = defineProps({
     modelValue: Boolean,
@@ -80,22 +98,18 @@ const props = defineProps({
     },
 });
 
-// const ringtone = new Audio("/audio/ringtone_sound.mp3");
-// const time_limit_sound = new Audio("/audio/call_time_limit_sound.wav");
-// ringtone.loop = true;
-// time_limit_sound.loop = false;
-
-// ringtone.play();
-
 const emit = defineEmits(["update:modelValue"]);
 
 function emitClose() {
     emit("update:modelValue", false);
 }
 
-const answerCall = () => {
-    // Stop the ringtone
-    ringtone.pause();
-    ringtone.currentTime = 0;
+const declineCall = async () => {
+    const userId = props.user.id;
+
+    await axios.post("/agora/decline-call", {
+        to_user_id: userId,
+    });
+    emitClose();
 };
 </script>

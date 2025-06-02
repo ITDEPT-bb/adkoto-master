@@ -33,4 +33,17 @@ class CallController extends Controller
 
         
     }
+
+    public function fetchCallUser ($userId)
+    {
+        $user = User::find($userId);
+
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
+
+        return response()->json([
+            'user' => new UserResource($user),
+        ]);
+    }
 }

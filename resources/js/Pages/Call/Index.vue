@@ -81,6 +81,15 @@
                     </div>
                 </div>
             </div>
+            <!-- Declined Call -->
+            <div
+                class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center"
+                v-if="callStatus"
+            >
+                <div class="text-center bg-white p-6 rounded shadow-md">
+                    <p class="text-lg text-dark">{{ callStatusText }}</p>
+                </div>
+            </div>
         </div>
     </AuthenticatedLayout>
 </template>
@@ -113,6 +122,9 @@ const authUser = usePage().props.auth.user;
 const channelName = ref("");
 const mutedAudio = ref(false);
 const disabledVideo = ref(false);
+
+const callStatus = ref(false);
+const callStatusText = ref("");
 
 // Agora client and tracks
 const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
@@ -203,7 +215,37 @@ const endCall = async () => {
     if (localAudioTrack.value) localAudioTrack.value.close();
     if (localVideoTrack.value) localVideoTrack.value.close();
     await client.leave();
-    window.location.href = "/chat";
+
+    const userId = props.user.id;
+    try {
+        await axios.post("/agora/end-call", {
+            to_user_id: userId,
+        });
+
+        callStatus.value = true;
+        callStatusText.value = "Call has ended";
+        setTimeout(() => {
+            callStatus.value = false;
+            callStatusText.value = "";
+            window.location.href = "/chat";
+        }, 3000);
+    } catch (error) {
+        console.error("Error ending call:", error);
+    }
+};
+
+const removeCall = async () => {
+    if (localAudioTrack.value) localAudioTrack.value.close();
+    if (localVideoTrack.value) localVideoTrack.value.close();
+    await client.leave();
+
+    callStatus.value = true;
+    callStatusText.value = "Call has been declined";
+    setTimeout(() => {
+        callStatus.value = false;
+        callStatusText.value = "";
+        window.location.href = "/chat";
+    }, 3000);
 };
 
 onMounted(() => {
@@ -213,7 +255,7 @@ onMounted(() => {
     window.Echo.private(`calls.${authUser.id}`)
         .listen("DeclineCall", () => {
             console.log("Call declined");
-            endCall();
+            removeCall();
         })
         .listen("CallEnded", (e) => {
             console.log("Call ended by user:", e.fromUserId);

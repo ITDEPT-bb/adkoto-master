@@ -141,6 +141,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/agora/end-call', [AgoraVideoController::class, 'endCall'])->name('endCall');
 
     Route::get('/chat/call/{user}', [CallController::class, 'index'])->name('callPage.index');
+    Route::get('/fetch-call/{userId}', [CallController::class, 'fetchCallUser'])->name('callPage.fetchCallUser');
 });
 
 // Group Chat

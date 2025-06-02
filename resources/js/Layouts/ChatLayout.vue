@@ -8,6 +8,7 @@ import { Link, router, usePage } from "@inertiajs/vue3";
 import TextInput from "@/Components/TextInput.vue";
 import { MoonIcon } from "@heroicons/vue/24/solid";
 import logo from "/public/img/tribekoto.png";
+import axiosClient from "@/axiosClient.js";
 
 // import tribekotoIcon from '/public/img/icons/tribekotoicon.png';
 // import adkotoIcon from '/public/img/icons/adkotoicon.png';
@@ -82,24 +83,25 @@ let logoTextClass =
 
 // Incoming Call Modal
 const incomingCall = ref(false);
-const incomingCaller = ref("");
+const incomingCaller = ref(null);
 const userToCall = ref(null);
-
 const showModal = ref(false);
 
 onMounted(() => {
     window.Echo.join("agora-online-channel").listen(
         ".MakeAgoraCall",
-        ({ data }) => {
+        async ({ data }) => {
             if (parseInt(data.userToCall) === parseInt(authUser.id)) {
-                console.log("Incoming call from", data.from);
-                console.log("Incoming call from", data.callerName);
-                console.log("User to call:", data.userToCall);
-                userToCall.value = data.userToCall;
-                incomingCaller.value = data.from;
-                // incomingCaller.value = caller ? caller.name : "Unknown Caller";
-                // incomingCall.value = true;
-                showModal.value = true;
+                try {
+                    const response = await axiosClient.get(
+                        `/fetch-call/${data.from}`
+                    );
+                    incomingCaller.value = response.data.user;
+                    userToCall.value = data.userToCall;
+                    showModal.value = true;
+                } catch (error) {
+                    console.error("Failed to fetch caller info", error);
+                }
             }
         }
     );
