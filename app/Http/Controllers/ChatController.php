@@ -262,6 +262,8 @@ class ChatController extends Controller
 
     public function getConversation(User $user)
     {
+        $appId = env('AGORA_APP_ID');
+
         $isBlockedByAuthUser = Block::query()
             ->where('user_id', auth()->id()) // Authenticated user blocked the other user
             ->where('blocked_user_id', $user->id)
@@ -295,6 +297,7 @@ class ChatController extends Controller
             'user' => new UserResource($user),
             'isBlockedByAuthUser' => $isBlockedByAuthUser,
             'isBlockedByOtherUser' => $isBlockedByOtherUser,
+            'appId' => $appId,
         ]);
     }
 

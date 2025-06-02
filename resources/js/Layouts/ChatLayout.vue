@@ -8,6 +8,7 @@ import { Link, router, usePage } from "@inertiajs/vue3";
 import TextInput from "@/Components/TextInput.vue";
 import { MoonIcon } from "@heroicons/vue/24/solid";
 import logo from "/public/img/tribekoto.png";
+import axiosClient from "@/axiosClient.js";
 
 // import tribekotoIcon from '/public/img/icons/tribekotoicon.png';
 // import adkotoIcon from '/public/img/icons/adkotoicon.png';
@@ -34,6 +35,7 @@ import AwardIcon from "/public/img/mothers_day/best_mom.png";
 import SearchBarIcon from "/public/img/mothers_day/icon.png";
 import ProfileSmallIcon from "/public/img/mothers_day/p1.png";
 import DarkModeToggle from "@/Components/DarkModeToggle.vue";
+import IncomingCallModal from "@/Components/Call/IncomingCallModal.vue";
 
 const showingNavigationDropdown = ref(false);
 const keywords = ref(usePage().props.search || "");
@@ -78,6 +80,32 @@ let logoClass =
 let logoText = "Where Connections and Communities Thrive!";
 let logoTextClass =
     "absolute bottom-1.5 italic text-red-500 font-black ml-10 left-1/2 transform -translate-x-1/2 translate-y-full text-center text-xs my-1 pt-1";
+
+// Incoming Call Modal
+const incomingCall = ref(false);
+const incomingCaller = ref(null);
+const userToCall = ref(null);
+const showModal = ref(false);
+
+onMounted(() => {
+    window.Echo.join("agora-online-channel").listen(
+        ".MakeAgoraCall",
+        async ({ data }) => {
+            if (parseInt(data.userToCall) === parseInt(authUser.id)) {
+                try {
+                    const response = await axiosClient.get(
+                        `/fetch-call/${data.from}`
+                    );
+                    incomingCaller.value = response.data.user;
+                    userToCall.value = data.userToCall;
+                    showModal.value = true;
+                } catch (error) {
+                    console.error("Failed to fetch caller info", error);
+                }
+            }
+        }
+    );
+});
 </script>
 
 <template>
@@ -593,6 +621,8 @@ let logoTextClass =
             <slot />
         </main>
     </div>
+
+    <IncomingCallModal v-model="showModal" :user="incomingCaller" />
 </template>
 
 <style scoped>

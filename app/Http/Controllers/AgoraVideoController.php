@@ -10,6 +10,7 @@ use App\Events\CallEnded;
 use App\Events\MakeAgoraCall;
 use App\Jobs\ScheduleCallEnd;
 use Illuminate\Support\Facades\Log;
+use App\Models\User;
 
 class AgoraVideoController extends Controller
 {
@@ -52,6 +53,14 @@ class AgoraVideoController extends Controller
             // 'channelName' => $request->input('channel_name'),
             'channelName' => $request->channel,
         ];
+
+        // Log::info('Agora call data:', $data);
+        $caller = User::find($data['from']);
+        if (!$caller) {
+            return response()->json(['error' => 'Caller not found'], 404);
+        }
+        $data['callerName'] = $caller->name;
+        $data['callerAvatar'] = $caller->avatar;
 
         broadcast(new MakeAgoraCall($data))->toOthers();
 
