@@ -36,7 +36,7 @@
 
                         <!-- Local Video -->
                         <div
-                            class="fixed bottom-4 right-4 w-48 h-32 rounded-lg overflow-hidden shadow-lg"
+                            class="fixed bottom-36 lg:bottom-4 right-4 w-48 h-32 rounded-lg overflow-hidden shadow-lg"
                         >
                             <video
                                 id="localVideo"
