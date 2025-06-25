@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdkotoChatController;
 use App\Http\Controllers\AgoraVideoController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CallController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\GroupChatController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\KalakalkotoChatController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PostController;
@@ -60,6 +62,9 @@ Route::post('/profanity-check', [TextController::class, 'checkProfanity']);
 // Kalakalkoto
 Route::middleware(['auth', 'verified'])->prefix('/kalakalkoto')->group(function () {
     Route::get('/', [KalakalkotoController::class, 'index'])->name('kalakalkoto');
+
+    // Chat
+    Route::get('/chat/conversation/klklktu/{user}', [KalakalkotoChatController::class, 'getKalakalConversation'])->name('chat.kalakalkoto');
 
     // Create
     Route::get('/create', [KalakalkotoController::class, 'create'])->name('kalakalkoto.create');
@@ -184,6 +189,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/adkoto/category/{category_name}', [AdkotoController::class, 'showCategory'])->name('adkoto.showCategory');
     Route::get('/adkoto/category/{category_name}/{subcategory_name}', [AdkotoController::class, 'showSubcategory'])->name('adkoto.showSubcategory');
     Route::get('/adkoto/u/et/', [AdkotoController::class, 'showUserAds'])->name('adkoto.showUserAds');
+
+    // Chat
+    Route::get('adkoto/chat/conversation/adkto/{user}', [AdkotoChatController::class, 'getAdkotoConversation'])->name('chat.adkoto');
 });
 
 Route::get('/u/{user:username}', [ProfileController::class, 'index'])
