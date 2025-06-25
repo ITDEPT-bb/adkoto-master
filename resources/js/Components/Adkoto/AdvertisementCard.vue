@@ -61,6 +61,20 @@
                     <TagIcon class="w-4 h-4 mr-1 dark:text-white" />
                     {{ advertisement.price }}
                 </span>
+                <Link
+                    :href="
+                        route('chat.adkoto', {
+                            user: advertisement.user.id,
+                        })
+                    "
+                >
+                    <span
+                        class="flex items-center text-gray-500 dark:text-white"
+                    >
+                        <MessageIcon class="w-4 h-4 mr-1 dark:text-white" />
+                        <p class="font-bold">Contact Seller</p>
+                    </span>
+                </Link>
             </div>
         </div>
 
@@ -205,6 +219,7 @@ import {
     TransitionRoot,
 } from "@headlessui/vue";
 import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline";
+import MessageIcon from "../Icons/MessageIcon.vue";
 
 const open = ref(false);
 const openDeleteModal = () => {

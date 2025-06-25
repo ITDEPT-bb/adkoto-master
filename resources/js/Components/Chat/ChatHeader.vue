@@ -96,6 +96,7 @@
                 </button>
             </Link>
             <Link
+            v-if="conversation.type == 'tribekoto'"
                 :href="
                     route('callPage.index', {
                         user: user.id,
@@ -178,6 +179,7 @@
                 </button>
             </Link> -->
             <Link
+                v-if="conversation.type == 'tribekoto'"
                 :href="
                     route('callPage.index', {
                         user: user.id,
@@ -220,14 +222,18 @@ import BankNoteIcon from "../Icons/BankNoteIcon.vue";
 
 const props = defineProps({
     user: Object,
+    conversation: Object,
     appId: String,
 });
 
 const user = props.user;
+const conversation = props.conversation;
 const appId = props.appId;
 const authUser = usePage().props.auth.user;
 const isMenuOpen = ref(false);
 const showCallModal = ref(false);
+
+console.log(conversation);
 
 function toggleMenu() {
     isMenuOpen.value = !isMenuOpen.value;

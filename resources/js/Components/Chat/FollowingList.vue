@@ -2,7 +2,7 @@
     <div
         class="h-full overflow-hidden w-full p-4 bg-white dark:bg-slate-900 rounded-lg shadow"
     >
-        <div class="flex h-full gap-4 lg:gap-0 flex-col sm:flex-row">
+        <div class="flex h-full gap-4 lg:gap-8 flex-col sm:flex-row">
             <!-- Followings Column -->
             <div class="flex-1 overflow-y-auto scrollbar-thin pr-4">
                 <div
@@ -19,7 +19,7 @@
                         <MagnifyingGlassIcon class="h-7 w-7" />
                     </button>
                 </div>
-                <ul>
+                <ul v-if="followings.length">
                     <li
                         v-for="following in followings"
                         :key="following.id"
@@ -29,7 +29,7 @@
                             :href="`/chat/conversation/adktu/${following.id}`"
                         >
                             <div
-                                class="flex items-center space-x-4 transition-transform duration-300 ease-in-out transform hover:scale-105 hover:bg-slate-500 p-2 rounded-lg"
+                                class="flex items-center space-x-4 transition-transform duration-300 ease-in-out transform hover:scale-105 hover:bg-gray-100 dark:hover:bg-slate-500 p-2 rounded-lg"
                             >
                                 <!-- Avatar -->
                                 <img
@@ -49,7 +49,7 @@
                                     <h3
                                         class="text-lg flex items-start justify-between truncate dark:text-white"
                                     >
-                                        <span
+                                        <!-- <span
                                             class="truncate"
                                             :class="{
                                                 'font-bold':
@@ -59,7 +59,18 @@
                                             }"
                                         >
                                             {{ following.name }}
-                                            {{ following.surname }}
+                                                {{ following.surname }}
+                                        </span> -->
+                                        <span
+                                            class="truncate"
+                                            :class="{
+                                                'font-bold':
+                                                    !following.last_message_read_at &&
+                                                    following.last_message_sender_id !==
+                                                        authUser.id,
+                                            }"
+                                        >
+                                            {{ getFullName(following) }}
                                         </span>
 
                                         <span
@@ -118,12 +129,19 @@
                         </Link>
                     </li>
                 </ul>
+                <!-- If there are no users -->
+                <div
+                    v-else
+                    class="text-center text-gray-500 mt-8 dark:text-slate-400"
+                >
+                    No conversations found.
+                </div>
             </div>
 
             <!-- Group Column -->
             <div class="flex-1 overflow-y-auto scrollbar-thin pr-4">
                 <div
-                    class="sticky flex justify-between top-0 bg-white dark:bg-slate-900 shadow-sm p-2"
+                    class="sticky flex justify-between top-0 bg-white dark:bg-slate-900 shadow-sm p-2 py-3"
                 >
                     <h2 class="text-xl font-bold dark:text-white">
                         Group Chats
@@ -136,7 +154,7 @@
                         <PlusIcon class="h-7 w-7" />
                     </button>
                 </div>
-                <ul>
+                <ul v-if="groupChats.length">
                     <li
                         v-for="group in groupChats"
                         :key="group.id"
@@ -162,6 +180,215 @@
                         </Link>
                     </li>
                 </ul>
+                <!-- If there are no users -->
+                <div
+                    v-else
+                    class="text-center text-gray-500 mt-8 dark:text-slate-400"
+                >
+                    No conversations found.
+                </div>
+            </div>
+
+            <!-- Kalakal Column -->
+            <div class="flex-1 overflow-y-auto scrollbar-thin pr-4">
+                <div
+                    class="sticky flex justify-between top-0 bg-white dark:bg-slate-900 shadow-sm p-2 py-3"
+                >
+                    <h2 class="text-xl font-bold dark:text-white">
+                        Kalakalkoto Conversations
+                    </h2>
+                </div>
+                <ul v-if="kalakalUsers.length">
+                    <li
+                        v-for="kalakalUser in kalakalUsers"
+                        :key="kalakalUser.id"
+                        class="mb-1 px-3 py-1 border-b border-gray-200"
+                    >
+                        <Link
+                            :href="
+                                route('chat.kalakalkoto', {
+                                    user: kalakalUser.id,
+                                })
+                            "
+                        >
+                            <div
+                                class="flex items-center space-x-4 transition-transform duration-300 ease-in-out transform hover:scale-105 hover:bg-gray-100 dark:hover:bg-slate-500 p-2 rounded-lg"
+                            >
+                                <img
+                                    :src="kalakalUser.avatar_url"
+                                    alt="Avatar"
+                                    class="w-10 h-10 rounded-full object-cover"
+                                />
+                                <!-- Text Content -->
+                                <div class="flex-1 overflow-hidden">
+                                    <!-- Name -->
+                                    <h3
+                                        class="text-lg flex items-start justify-between truncate dark:text-white"
+                                    >
+                                        <span
+                                            class="truncate"
+                                            :class="{
+                                                'font-bold':
+                                                    !kalakalUser.last_message_read_at &&
+                                                    kalakalUser.last_message_sender_id !==
+                                                        authUser.id,
+                                            }"
+                                        >
+                                            {{ kalakalUser.name }}
+                                            {{ kalakalUser.surname }}
+                                        </span>
+
+                                        <span
+                                            v-if="kalakalUser.unread_count > 0"
+                                            class="ml-2 bg-red-500 text-white text-xs font-bold rounded-full px-2 py-1 flex-shrink-0"
+                                        >
+                                            {{
+                                                kalakalUser.unread_count > 99
+                                                    ? "99+"
+                                                    : kalakalUser.unread_count
+                                            }}
+                                        </span>
+                                    </h3>
+
+                                    <!-- Message and Unread Count -->
+                                    <p
+                                        class="text-sm text-gray-500 dark:text-slate-500 flex justify-between items-center truncate lg:pe-20"
+                                        :class="{
+                                            'font-bold text-black':
+                                                !kalakalUser.last_message_read_at &&
+                                                kalakalUser.last_message_sender_id !==
+                                                    authUser.id,
+                                        }"
+                                    >
+                                        <span class="truncate dark:text-white">
+                                            <span class="font-medium">
+                                                {{
+                                                    kalakalUser.last_message_sender_id ===
+                                                    authUser.id
+                                                        ? "You"
+                                                        : kalakalUser.last_message_sender_name
+                                                }}:
+                                            </span>
+                                            {{
+                                                kalakalUser.last_message
+                                                    ? kalakalUser.last_message
+                                                    : "No messages yet"
+                                            }}
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                        </Link>
+                    </li>
+                </ul>
+                <!-- If there are no users -->
+                <div
+                    v-else
+                    class="text-center text-gray-500 mt-8 dark:text-slate-400"
+                >
+                    No conversations found.
+                </div>
+            </div>
+
+            <!-- Adkoto Column -->
+            <div class="flex-1 overflow-y-auto scrollbar-thin pr-4">
+                <div
+                    class="sticky flex justify-between top-0 bg-white dark:bg-slate-900 shadow-sm p-2 py-3"
+                >
+                    <h2 class="text-xl font-bold dark:text-white">
+                        Adkoto Conversations
+                    </h2>
+                </div>
+                <ul v-if="adkotoUsers.length">
+                    <li
+                        v-for="adkotoUser in adkotoUsers"
+                        :key="adkotoUser.id"
+                        class="mb-1 px-3 py-1 border-b border-gray-200"
+                    >
+                        <Link
+                            :href="
+                                route('chat.adkoto', {
+                                    user: adkotoUser.id,
+                                })
+                            "
+                        >
+                            <div
+                                class="flex items-center space-x-4 transition-transform duration-300 ease-in-out transform hover:scale-105 hover:bg-gray-100 dark:hover:bg-slate-500 p-2 rounded-lg"
+                            >
+                                <img
+                                    :src="adkotoUser.avatar_url"
+                                    alt="Avatar"
+                                    class="w-10 h-10 rounded-full object-cover"
+                                />
+                                <!-- Text Content -->
+                                <div class="flex-1 overflow-hidden">
+                                    <!-- Name -->
+                                    <h3
+                                        class="text-lg flex items-start justify-between truncate dark:text-white"
+                                    >
+                                        <span
+                                            class="truncate"
+                                            :class="{
+                                                'font-bold':
+                                                    !adkotoUser.last_message_read_at &&
+                                                    adkotoUser.last_message_sender_id !==
+                                                        authUser.id,
+                                            }"
+                                        >
+                                            {{ adkotoUser.name }}
+                                            {{ adkotoUser.surname }}
+                                        </span>
+
+                                        <span
+                                            v-if="adkotoUser.unread_count > 0"
+                                            class="ml-2 bg-red-500 text-white text-xs font-bold rounded-full px-2 py-1 flex-shrink-0"
+                                        >
+                                            {{
+                                                adkotoUser.unread_count > 99
+                                                    ? "99+"
+                                                    : adkotoUser.unread_count
+                                            }}
+                                        </span>
+                                    </h3>
+
+                                    <!-- Message and Unread Count -->
+                                    <p
+                                        class="text-sm text-gray-500 dark:text-slate-500 flex justify-between items-center truncate lg:pe-20"
+                                        :class="{
+                                            'font-bold text-black':
+                                                !adkotoUser.last_message_read_at &&
+                                                adkotoUser.last_message_sender_id !==
+                                                    authUser.id,
+                                        }"
+                                    >
+                                        <span class="truncate dark:text-white">
+                                            <span class="font-medium">
+                                                {{
+                                                    adkotoUser.last_message_sender_id ===
+                                                    authUser.id
+                                                        ? "You"
+                                                        : adkotoUser.last_message_sender_name
+                                                }}:
+                                            </span>
+                                            {{
+                                                adkotoUser.last_message
+                                                    ? adkotoUser.last_message
+                                                    : "No messages yet"
+                                            }}
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                        </Link>
+                    </li>
+                </ul>
+                <!-- If there are no users -->
+                <div
+                    v-else
+                    class="text-center text-gray-500 mt-8 dark:text-slate-400"
+                >
+                    No conversations found.
+                </div>
             </div>
 
             <!-- Others Column -->
@@ -223,6 +450,12 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    kalakalUsers: {
+        type: Array,
+    },
+    adkotoUsers: {
+        type: Array,
+    },
 });
 
 const showNewGroupModal = ref(false);
@@ -240,4 +473,8 @@ const closeSearchModal = () => {
 // function onGroupCreate(group) {
 // 	props.groups.unshift(group);
 // }
+
+function getFullName(user) {
+    return user.surname ? `${user.name} ${user.surname}` : user.name;
+}
 </script>

@@ -6,6 +6,7 @@ use App\Events\GroupChatMessageSent;
 use App\Events\MessageSent;
 use App\Events\RefreshChatHome;
 use App\Http\Resources\GroupChatResource;
+use App\Http\Resources\KalakalContactResource;
 use App\Http\Resources\UserResource;
 use App\Models\Block;
 use App\Models\MessageAttachment;
@@ -99,57 +100,18 @@ class ChatController extends Controller
     {
         $user = auth()->user();
 
-        $latestMessages = Message::where(function ($query) use ($user) {
-            $query->where('sender_id', $user->id)
-                ->orWhere('receiver_id', $user->id);
-        })
+        $latestMessages = Message::with(['sender', 'receiver', 'conversation'])
+            ->where(function ($query) use ($user) {
+                $query->where('sender_id', $user->id)
+                    ->orWhere('receiver_id', $user->id);
+            })
             ->latest('created_at')
             ->get()
-            ->unique(function ($message) use ($user) {
-                return $message->sender_id === $user->id
-                    ? $message->receiver_id
-                    : $message->sender_id;
-            });
-
-        $messageUsers = $latestMessages->map(function ($message) use ($user) {
-            $contact = $message->sender_id === $user->id
-                ? $message->receiver
-                : $message->sender;
-
-            if ($contact) {
-                $contact->last_message = $message->message;
-                $contact->last_message_read_at = $message->read_at;
-                $contact->last_message_sender_name = $message->sender->name;
-                $contact->last_message_sender_id = $message->sender->id;
-                $contact->unread_count = Message::where('sender_id', $contact->id)
-                    ->where('receiver_id', $user->id)
-                    ->whereNull('read_at')
-                    ->count();
-            }
-
-            return $contact;
-        })->filter();
-
-        $groupChats = GroupChat::whereHas('participants', function ($query) use ($user) {
-            $query->where('user_id', $user->id);
-        })->get();
-
-        return Inertia::render('Chat/Home', [
-            'messageUsers' => UserResource::collection($messageUsers),
-            'groupChats' => GroupChatResource::collection($groupChats),
-        ]);
-    }
-
-    public function getLatestMessages(Request $request)
-    {
-        $user = auth()->user();
-
-        $latestMessages = Message::where(function ($query) use ($user) {
-            $query->where('sender_id', $user->id)
-                ->orWhere('receiver_id', $user->id);
-        })
-            ->latest('created_at')
-            ->get()
+            // Only keep messages whose conversation is 'tribekoto'
+            ->filter(function ($message) {
+                return $message->conversation && $message->conversation->type === 'tribekoto';
+            })
+            // Get only the latest per contact
             ->unique(function ($message) use ($user) {
                 return $message->sender_id === $user->id
                     ? $message->receiver_id
@@ -167,14 +129,256 @@ class ChatController extends Controller
                 $contact->last_message_created_at = $message->created_at;
                 $contact->last_message_sender_name = $message->sender->name;
                 $contact->last_message_sender_id = $message->sender->id;
+
                 $contact->unread_count = Message::where('sender_id', $contact->id)
                     ->where('receiver_id', $user->id)
+                    ->whereHas('conversation', fn($q) => $q->where('type', 'tribekoto'))
                     ->whereNull('read_at')
                     ->count();
             }
 
             return $contact;
         })->filter();
+
+        // $latestMessages = Message::where(function ($query) use ($user) {
+        //     $query->where('sender_id', $user->id)
+        //         ->orWhere('receiver_id', $user->id);
+        // })
+        //     ->latest('created_at')
+        //     ->get()
+        //     ->unique(function ($message) use ($user) {
+        //         return $message->sender_id === $user->id
+        //             ? $message->receiver_id
+        //             : $message->sender_id;
+        //     });
+
+        // $messageUsers = $latestMessages->map(function ($message) use ($user) {
+        //     $contact = $message->sender_id === $user->id
+        //         ? $message->receiver
+        //         : $message->sender;
+
+        //     if ($contact) {
+        //         $contact->last_message = $message->message;
+        //         $contact->last_message_read_at = $message->read_at;
+        //         $contact->last_message_sender_name = $message->sender->name;
+        //         $contact->last_message_sender_id = $message->sender->id;
+        //         $contact->unread_count = Message::where('sender_id', $contact->id)
+        //             ->where('receiver_id', $user->id)
+        //             ->whereNull('read_at')
+        //             ->count();
+        //     }
+
+        //     return $contact;
+        // })->filter();
+
+        $groupChats = GroupChat::whereHas('participants', function ($query) use ($user) {
+            $query->where('user_id', $user->id);
+        })->get();
+
+        $conversations = Conversation::where('type', 'kalakalkoto')
+            ->where(function ($query) use ($user) {
+                $query->where('user_id1', $user->id)
+                    ->orWhere('user_id2', $user->id);
+            })
+            ->with(['user1', 'user2'])
+            ->get();
+
+        // $kalakalUsers = $conversations->map(function ($conversation) use ($user) {
+        //     // Identify the other user
+        //     $contact = $conversation->user_id1 === $user->id
+        //         ? $conversation->user2
+        //         : $conversation->user1;
+
+        //     if (!$contact)
+        //         return null;
+
+        //     // Get latest message for this conversation
+        //     $latestMessage = $conversation->messages()
+        //         ->latest()
+        //         ->first();
+
+        //     // Attach message info to the user object
+        //     $contact->last_message = $latestMessage?->message;
+        //     $contact->last_message_read_at = $latestMessage?->read_at;
+        //     $contact->last_message_sender_name = $latestMessage?->sender?->name;
+        //     $contact->last_message_sender_id = $latestMessage?->sender_id;
+
+        //     // Count unread messages from this contact to the current user
+        //     $contact->unread_count = $conversation->messages()
+        //         ->where('sender_id', $contact->id)
+        //         ->where('receiver_id', $user->id)
+        //         ->whereNull('read_at')
+        //         ->count();
+
+        //     return $contact;
+        // })->filter();
+
+        // Kalakal
+        $kalakalMessages = Message::with(['sender', 'receiver', 'conversation'])
+            ->where(function ($query) use ($user) {
+                $query->where('sender_id', $user->id)
+                    ->orWhere('receiver_id', $user->id);
+            })
+            ->latest('created_at')
+            ->get()
+            // Only keep messages whose conversation is 'kalakalkoto'
+            ->filter(function ($message) {
+                return $message->conversation && $message->conversation->type === 'kalakalkoto';
+            })
+            // Get only the latest per contact
+            ->unique(function ($message) use ($user) {
+                return $message->sender_id === $user->id
+                    ? $message->receiver_id
+                    : $message->sender_id;
+            });
+
+        $kalakalUsers = $kalakalMessages->map(function ($message) use ($user) {
+            $contact = $message->sender_id === $user->id
+                ? $message->receiver
+                : $message->sender;
+
+            if ($contact) {
+                $contact->last_message = $message->message;
+                $contact->last_message_read_at = $message->read_at;
+                $contact->last_message_created_at = $message->created_at;
+                $contact->last_message_sender_name = $message->sender->name;
+                $contact->last_message_sender_id = $message->sender->id;
+
+                $contact->unread_count = Message::where('sender_id', $contact->id)
+                    ->where('receiver_id', $user->id)
+                    ->whereHas('conversation', fn($q) => $q->where('type', 'kalakalkoto'))
+                    ->whereNull('read_at')
+                    ->count();
+            }
+
+            return $contact;
+        })->filter();
+
+        // Adkoto
+        $adkotoMessages = Message::with(['sender', 'receiver', 'conversation'])
+            ->where(function ($query) use ($user) {
+                $query->where('sender_id', $user->id)
+                    ->orWhere('receiver_id', $user->id);
+            })
+            ->latest('created_at')
+            ->get()
+            // Only keep messages whose conversation is 'Adkoto'
+            ->filter(function ($message) {
+                return $message->conversation && $message->conversation->type === 'adkoto';
+            })
+            // Get only the latest per contact
+            ->unique(function ($message) use ($user) {
+                return $message->sender_id === $user->id
+                    ? $message->receiver_id
+                    : $message->sender_id;
+            });
+
+        $adkotoUsers = $adkotoMessages->map(function ($message) use ($user) {
+            $contact = $message->sender_id === $user->id
+                ? $message->receiver
+                : $message->sender;
+
+            if ($contact) {
+                $contact->last_message = $message->message;
+                $contact->last_message_read_at = $message->read_at;
+                $contact->last_message_created_at = $message->created_at;
+                $contact->last_message_sender_name = $message->sender->name;
+                $contact->last_message_sender_id = $message->sender->id;
+
+                $contact->unread_count = Message::where('sender_id', $contact->id)
+                    ->where('receiver_id', $user->id)
+                    ->whereHas('conversation', fn($q) => $q->where('type', 'adkoto'))
+                    ->whereNull('read_at')
+                    ->count();
+            }
+
+            return $contact;
+        })->filter();
+
+        return Inertia::render('Chat/Home', [
+            'messageUsers' => UserResource::collection($messageUsers),
+            'groupChats' => GroupChatResource::collection($groupChats),
+            'kalakalUsers' => UserResource::collection($kalakalUsers),
+            'adkotoUsers' => UserResource::collection($adkotoUsers),
+        ]);
+    }
+
+    public function getLatestMessages(Request $request)
+    {
+        $user = auth()->user();
+
+        $latestMessages = Message::with(['sender', 'receiver', 'conversation'])
+            ->where(function ($query) use ($user) {
+                $query->where('sender_id', $user->id)
+                    ->orWhere('receiver_id', $user->id);
+            })
+            ->latest('created_at')
+            ->get()
+            // Only keep messages whose conversation is 'tribekoto'
+            ->filter(function ($message) {
+                return $message->conversation && $message->conversation->type === 'tribekoto';
+            })
+            // Get only the latest per contact
+            ->unique(function ($message) use ($user) {
+                return $message->sender_id === $user->id
+                    ? $message->receiver_id
+                    : $message->sender_id;
+            });
+
+        $messageUsers = $latestMessages->map(function ($message) use ($user) {
+            $contact = $message->sender_id === $user->id
+                ? $message->receiver
+                : $message->sender;
+
+            if ($contact) {
+                $contact->last_message = $message->message;
+                $contact->last_message_read_at = $message->read_at;
+                $contact->last_message_created_at = $message->created_at;
+                $contact->last_message_sender_name = $message->sender->name;
+                $contact->last_message_sender_id = $message->sender->id;
+
+                $contact->unread_count = Message::where('sender_id', $contact->id)
+                    ->where('receiver_id', $user->id)
+                    ->whereHas('conversation', fn($q) => $q->where('type', 'tribekoto'))
+                    ->whereNull('read_at')
+                    ->count();
+            }
+
+            return $contact;
+        })->filter();
+
+
+        // $latestMessages = Message::where(function ($query) use ($user) {
+        //     $query->where('sender_id', $user->id)
+        //         ->orWhere('receiver_id', $user->id);
+        // })
+        //     ->latest('created_at')
+        //     ->get()
+        //     ->unique(function ($message) use ($user) {
+        //         return $message->sender_id === $user->id
+        //             ? $message->receiver_id
+        //             : $message->sender_id;
+        //     });
+
+        // $messageUsers = $latestMessages->map(function ($message) use ($user) {
+        //     $contact = $message->sender_id === $user->id
+        //         ? $message->receiver
+        //         : $message->sender;
+
+        //     if ($contact) {
+        //         $contact->last_message = $message->message;
+        //         $contact->last_message_read_at = $message->read_at;
+        //         $contact->last_message_created_at = $message->created_at;
+        //         $contact->last_message_sender_name = $message->sender->name;
+        //         $contact->last_message_sender_id = $message->sender->id;
+        //         $contact->unread_count = Message::where('sender_id', $contact->id)
+        //             ->where('receiver_id', $user->id)
+        //             ->whereNull('read_at')
+        //             ->count();
+        //     }
+
+        //     return $contact;
+        // })->filter();
 
         // $groupChats = GroupChat::whereHas('participants', function ($query) use ($user) {
         //     $query->where('user_id', $user->id);
@@ -183,9 +387,11 @@ class ChatController extends Controller
         $groupChats = GroupChat::whereHas('participants', function ($query) use ($user) {
             $query->where('user_id', $user->id);
         })
-            ->with(['messages' => function ($query) {
-                $query->latest()->limit(1)->with('sender');
-            }])
+            ->with([
+                'messages' => function ($query) {
+                    $query->latest()->limit(1)->with('sender');
+                }
+            ])
             ->get()
             ->map(function ($group) use ($user) {
                 // Get last message details
@@ -207,9 +413,98 @@ class ChatController extends Controller
                 return $group;
             });
 
+        // Kalakal
+        $kalakalMessages = Message::with(['sender', 'receiver', 'conversation'])
+            ->where(function ($query) use ($user) {
+                $query->where('sender_id', $user->id)
+                    ->orWhere('receiver_id', $user->id);
+            })
+            ->latest('created_at')
+            ->get()
+            // Only keep messages whose conversation is 'kalakalkoto'
+            ->filter(function ($message) {
+                return $message->conversation && $message->conversation->type === 'kalakalkoto';
+            })
+            // Get only the latest per contact
+            ->unique(function ($message) use ($user) {
+                return $message->sender_id === $user->id
+                    ? $message->receiver_id
+                    : $message->sender_id;
+            });
+
+        $kalakalUsers = $kalakalMessages->map(function ($message) use ($user) {
+            $contact = $message->sender_id === $user->id
+                ? $message->receiver
+                : $message->sender;
+
+            if ($contact) {
+                $contact->last_message = $message->message;
+                $contact->last_message_read_at = $message->read_at;
+                $contact->last_message_created_at = $message->created_at;
+                $contact->last_message_sender_name = $message->sender->name;
+                $contact->last_message_sender_id = $message->sender->id;
+
+                $contact->unread_count = Message::where('sender_id', $contact->id)
+                    ->where('receiver_id', $user->id)
+                    ->whereHas('conversation', fn($q) => $q->where('type', 'kalakalkoto'))
+                    ->whereNull('read_at')
+                    ->count();
+            }
+
+            return $contact;
+        })->filter();
+
+        // $kalakalUsers = Conversation::where('user_id2', $user->id)
+        //     ->where('type', 'kalakalkoto')
+        //     ->with('user1')
+        //     ->get();
+
+        // Adkoto
+        $adkotoMessages = Message::with(['sender', 'receiver', 'conversation'])
+            ->where(function ($query) use ($user) {
+                $query->where('sender_id', $user->id)
+                    ->orWhere('receiver_id', $user->id);
+            })
+            ->latest('created_at')
+            ->get()
+            // Only keep messages whose conversation is 'Adkoto'
+            ->filter(function ($message) {
+                return $message->conversation && $message->conversation->type === 'adkoto';
+            })
+            // Get only the latest per contact
+            ->unique(function ($message) use ($user) {
+                return $message->sender_id === $user->id
+                    ? $message->receiver_id
+                    : $message->sender_id;
+            });
+
+        $adkotoUsers = $adkotoMessages->map(function ($message) use ($user) {
+            $contact = $message->sender_id === $user->id
+                ? $message->receiver
+                : $message->sender;
+
+            if ($contact) {
+                $contact->last_message = $message->message;
+                $contact->last_message_read_at = $message->read_at;
+                $contact->last_message_created_at = $message->created_at;
+                $contact->last_message_sender_name = $message->sender->name;
+                $contact->last_message_sender_id = $message->sender->id;
+
+                $contact->unread_count = Message::where('sender_id', $contact->id)
+                    ->where('receiver_id', $user->id)
+                    ->whereHas('conversation', fn($q) => $q->where('type', 'adkoto'))
+                    ->whereNull('read_at')
+                    ->count();
+            }
+
+            return $contact;
+        })->filter();
+
         return response()->json([
             'messageUsers' => UserResource::collection($messageUsers),
             'groupChats' => GroupChatResource::collection($groupChats),
+            'kalakalUsers' => UserResource::collection($kalakalUsers),
+            'adkotoUsers' => UserResource::collection($adkotoUsers),
         ]);
     }
 
@@ -276,10 +571,12 @@ class ChatController extends Controller
 
         $conversation = Conversation::where(function ($query) use ($user) {
             $query->where('user_id1', auth()->id())
-                ->where('user_id2', $user->id);
+                ->where('user_id2', $user->id)
+                ->where('type', 'tribekoto');
         })->orWhere(function ($query) use ($user) {
             $query->where('user_id1', $user->id)
-                ->where('user_id2', auth()->id());
+                ->where('user_id2', auth()->id())
+                ->where('type', 'tribekoto');
         })->with('messages.attachments')->first();
 
         if (!$conversation) {

@@ -10,7 +10,7 @@
             <!-- <div
             class="flex-1 my-2 pb-6 justify-between max-w-7xl mx-auto bg-white dark:bg-slate-950 dark:border-none rounded-lg border flex flex-col h-full scrollbar-thin"
         > -->
-            <ChatHeader :user="user" appId="appId" />
+            <ChatHeader :user="user" appId="appId" :conversation="conversation" />
             <template v-if="!isBlockedByAuthUser && !isBlockedByOtherUser">
                 <MessageList
                     :messages="messages"

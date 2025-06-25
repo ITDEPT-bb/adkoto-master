@@ -8,6 +8,8 @@
             <FollowingList
                 :followings="messageUsers"
                 :groupChats="groupChats"
+                :kalakalUsers="kalakalUsers"
+                :adkotoUsers="adkotoUsers"
             />
         </div>
     </AuthenticatedLayout>
@@ -34,6 +36,12 @@ const props = defineProps({
     groupChats: {
         type: Array,
         required: true,
+    },
+    kalakalUsers: {
+        type: Array,
+    },
+    adkotoUsers: {
+        type: Array,
     },
 });
 
