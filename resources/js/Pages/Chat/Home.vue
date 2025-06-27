@@ -3,14 +3,18 @@
 
     <AuthenticatedLayout>
         <div
-            class="home-page flex h-full overflow-y-auto container p-4 py-16 md:py-4 mx-auto scrollbar-thin"
+            class="home-page flex flex-col md:flex-row h-full max-h-[650px] lg:max-h-[850px] container mx-auto bg-slate-100 dark:bg-slate-900 p-4 py-6 md:py-4 overflow-y-hidden"
         >
-            <FollowingList
-                :followings="messageUsers"
-                :groupChats="groupChats"
-                :kalakalUsers="kalakalUsers"
-                :adkotoUsers="adkotoUsers"
-            />
+            <div
+                class="w-full md:pr-4 overflow-y-auto scrollbar-thin mb-4 md:mb-0 bg-white dark:bg-slate-700"
+            >
+                <FollowingList
+                    :followings="messageUsers"
+                    :groupChats="groupChats"
+                    :kalakalUsers="kalakalUsers"
+                    :adkotoUsers="adkotoUsers"
+                />
+            </div>
         </div>
     </AuthenticatedLayout>
     <UpdateProfileReminder />
