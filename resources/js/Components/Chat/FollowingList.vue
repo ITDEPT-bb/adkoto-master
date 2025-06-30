@@ -1,7 +1,9 @@
 <template>
     <div class="border-t mx-4 pt-4 overflow-hidden max-h-full flex flex-col">
         <TabGroup>
-            <TabList class="flex bg-slate-200 dark:bg-slate-900 dark:text-white flex-wrap mb-10 p-2">
+            <TabList
+                class="flex bg-slate-200 dark:bg-slate-900 dark:text-white flex-wrap mb-10 p-2"
+            >
                 <Tab v-slot="{ selected }" as="template">
                     <TabItem text="Conversations" :selected="selected" />
                 </Tab>
@@ -18,6 +20,20 @@
 
             <TabPanels class="flex-1 overflow-y-auto scrollbar-thin">
                 <TabPanel>
+                    <div
+                        class="sticky flex justify-between top-0 bg-white dark:bg-slate-900 shadow-sm p-2"
+                    >
+                        <h2 class="text-xl font-bold dark:text-white">
+                            Conversations
+                        </h2>
+                        <button
+                            @click="openSearchModal"
+                            class="text-center items-center bg-red-500 hover:bg-red-600 text-white rounded py-1 px-2"
+                        >
+                            <!-- new group -->
+                            <MagnifyingGlassIcon class="h-7 w-7" />
+                        </button>
+                    </div>
                     <ul v-if="followings.length">
                         <li
                             v-for="following in followings"
@@ -125,6 +141,20 @@
 
                 <!-- Group Chats -->
                 <TabPanel>
+                    <div
+                        class="sticky flex justify-between top-0 bg-white dark:bg-slate-900 shadow-sm p-2 py-3"
+                    >
+                        <h2 class="text-xl font-bold dark:text-white">
+                            Group Chats
+                        </h2>
+                        <button
+                            @click="showNewGroupModal = true"
+                            class="text-center items-center bg-red-500 hover:bg-red-600 text-white rounded py-1 px-2"
+                        >
+                            <!-- new group -->
+                            <PlusIcon class="h-7 w-7" />
+                        </button>
+                    </div>
                     <ul v-if="groupChats.length">
                         <li
                             v-for="group in groupChats"
