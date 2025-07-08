@@ -2,7 +2,7 @@
     <Head title="Conversation" />
     <AuthenticatedLayout>
         <div
-            class="flex-1 my-2 pb-6 justify-between max-w-7xl mx-auto bg-white dark:bg-slate-950 dark:border-none rounded-lg border flex flex-col h-full scrollbar-thin"
+            class="flex-1 justify-between max-w-7xl mx-auto bg-white dark:bg-slate-950 dark:border-none rounded-lg border flex flex-col min-[360px]:h-[630px] max-[359px]:h-[620px] min-[400px]:h-[790px] min-[810px]:h-[1080px] md:h-[800px] lg:h-[1100px] xl:h-full scrollbar-thin"
         >
             <ChatHeader :group="groupChat" />
             <MessageList

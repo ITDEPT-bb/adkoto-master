@@ -1,12 +1,16 @@
 <template>
-    <div
+    <!-- <div
         class="flex flex-col sm:flex-row sm:items-center justify-between py-3 px-4 rounded-lg border-b-2 border-gray-200 dark:border-none"
+        style="background-color: #0076be"
+    > -->
+    <div
+        class="flex sm:flex-row sm:items-center justify-between py-3 px-4 rounded-lg border-b-2 border-gray-200 dark:border-none"
         style="background-color: #0076be"
     >
         <div class="relative flex items-center space-x-4">
             <Link :href="route('chat.index')">
                 <button
-                    class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300"
+                    class="flex items-center justify-center w-6 h-6 p-1 rounded-full bg-gray-200 hover:bg-gray-300"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -46,7 +50,7 @@
                 <button
                     @click="showUpdateModal = true"
                     type="button"
-                    class="inline-flex items-center justify-center rounded-lg border h-10 w-10 transition duration-500 ease-in-out text-white hover:text-black dark:text-white hover:bg-gray-300 focus:outline-none"
+                    class="inline-flex items-center justify-center rounded-lg border h-6 w-6 sm:h-10 sm:w-10 transition duration-500 ease-in-out text-white hover:text-black dark:text-white hover:bg-gray-300 focus:outline-none"
                 >
                     <SettingsIcon />
                 </button>
@@ -57,7 +61,7 @@
                 />
 
                 <button
-                    class="inline-flex items-center justify-center rounded-lg border h-10 w-10 transition duration-500 ease-in-out text-white hover:text-black dark:text-white hover:bg-gray-300 focus:outline-none"
+                    class="inline-flex items-center justify-center rounded-lg border h-6 w-6 sm:h-10 sm:w-10 transition duration-500 ease-in-out text-white hover:text-black dark:text-white hover:bg-gray-300 focus:outline-none"
                     type="button"
                     @click="GroupMemberModal = true"
                 >
@@ -71,7 +75,7 @@
 
                 <!-- Leave Button -->
                 <button
-                    class="inline-flex items-center justify-center rounded-lg border h-10 w-10 transition duration-500 ease-in-out text-white hover:text-black dark:text-white hover:bg-gray-300 focus:outline-none"
+                    class="inline-flex items-center justify-center rounded-lg border h-6 w-6 sm:h-10 sm:w-10 transition duration-500 ease-in-out text-white hover:text-black dark:text-white hover:bg-gray-300 focus:outline-none"
                     type="button"
                     @click="confirmLeaveGroup"
                 >
