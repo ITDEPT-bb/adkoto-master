@@ -30,9 +30,15 @@
                                 message.sender_id !== authUser.id,
                         }"
                     >
-                        <span
+                        <!-- <span
                             v-if="message.message"
                             class="block break-words whitespace-pre-wrap"
+                        >
+                            {{ message.message }}
+                        </span> -->
+                        <span
+                            v-if="message.message"
+                            class="block break-words whitespace-pre-wrap overflow-hidden break-all"
                         >
                             {{ message.message }}
                         </span>
