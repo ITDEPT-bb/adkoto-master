@@ -2,7 +2,7 @@
     <div class="border-t mx-4 pt-4 overflow-hidden max-h-full flex flex-col">
         <TabGroup>
             <TabList
-                class="flex bg-slate-200 dark:bg-slate-900 dark:text-white flex-wrap mb-10 p-2"
+                class="flex bg-slate-200 dark:bg-slate-900 dark:text-white flex-wrap mb-10 p-2 items-center"
             >
                 <Tab v-slot="{ selected }" as="template">
                     <TabItem text="Conversations" :selected="selected" />
@@ -21,7 +21,7 @@
             <TabPanels class="flex-1 overflow-y-auto scrollbar-thin">
                 <TabPanel>
                     <div
-                        class="sticky flex justify-between top-0 bg-white dark:bg-slate-900 shadow-sm p-2"
+                        class="sticky flex justify-between top-0 bg-white dark:bg-slate-900 shadow-sm py-2 px-4 items-center"
                     >
                         <h2 class="text-xl font-bold dark:text-white">
                             Conversations
@@ -43,8 +43,11 @@
                             <Link
                                 :href="`/chat/conversation/adktu/${following.id}`"
                             >
+                                <!-- <div
+                                    class="flex items-center space-x-4 transition-transform duration-300 ease-in-out transform hover:scale-95 hover:bg-gray-100 dark:hover:bg-slate-500 p-2 rounded-lg"
+                                > -->
                                 <div
-                                    class="flex items-center space-x-4 transition-transform duration-300 ease-in-out transform hover:scale-105 hover:bg-gray-100 dark:hover:bg-slate-500 p-2 rounded-lg"
+                                    class="flex items-center space-x-4 hover:bg-gray-100 dark:hover:bg-slate-600 p-2 rounded-lg"
                                 >
                                     <!-- Avatar -->
                                     <img
@@ -142,7 +145,7 @@
                 <!-- Group Chats -->
                 <TabPanel>
                     <div
-                        class="sticky flex justify-between top-0 bg-white dark:bg-slate-900 shadow-sm p-2 py-3"
+                        class="sticky flex justify-between top-0 bg-white dark:bg-slate-900 shadow-sm py-2 px-4 items-center"
                     >
                         <h2 class="text-xl font-bold dark:text-white">
                             Group Chats
@@ -162,8 +165,11 @@
                             class="mb-1 px-3 py-1 border-b border-gray-200"
                         >
                             <Link :href="`/group-chat/${group.id}`">
-                                <div
+                                <!-- <div
                                     class="flex items-center space-x-4 transition-transform duration-300 ease-in-out transform hover:scale-105 hover:bg-gray-100 dark:hover:bg-slate-500 p-2 rounded-lg"
+                                > -->
+                                <div
+                                    class="flex items-center space-x-4 hover:bg-gray-100 dark:hover:bg-slate-600 p-2 rounded-lg"
                                 >
                                     <img
                                         :src="group.photo"
@@ -192,6 +198,13 @@
 
                 <!-- Kalakalkoto -->
                 <TabPanel>
+                    <div
+                        class="sticky flex justify-between top-0 bg-white dark:bg-slate-900 shadow-sm py-3 px-4 items-center"
+                    >
+                        <h2 class="text-xl font-bold dark:text-white">
+                            Kalakalkoto Conversations
+                        </h2>
+                    </div>
                     <ul v-if="kalakalUsers.length">
                         <li
                             v-for="kalakalUser in kalakalUsers"
@@ -205,8 +218,11 @@
                                     })
                                 "
                             >
-                                <div
+                                <!-- <div
                                     class="flex items-center space-x-4 transition-transform duration-300 ease-in-out transform hover:scale-105 hover:bg-gray-100 dark:hover:bg-slate-500 p-2 rounded-lg"
+                                > -->
+                                <div
+                                    class="flex items-center space-x-4 hover:bg-gray-100 dark:hover:bg-slate-600 p-2 rounded-lg"
                                 >
                                     <img
                                         :src="kalakalUser.avatar_url"
@@ -291,6 +307,13 @@
 
                 <!-- Adkoto -->
                 <TabPanel>
+                    <div
+                        class="sticky flex justify-between top-0 bg-white dark:bg-slate-900 shadow-sm py-3 px-4 items-center"
+                    >
+                        <h2 class="text-xl font-bold dark:text-white">
+                            Adkoto Conversations
+                        </h2>
+                    </div>
                     <ul v-if="adkotoUsers.length">
                         <li
                             v-for="adkotoUser in adkotoUsers"
@@ -304,8 +327,11 @@
                                     })
                                 "
                             >
-                                <div
+                                <!-- <div
                                     class="flex items-center space-x-4 transition-transform duration-300 ease-in-out transform hover:scale-105 hover:bg-gray-100 dark:hover:bg-slate-500 p-2 rounded-lg"
+                                > -->
+                                <div
+                                    class="flex items-center space-x-4 hover:bg-gray-100 dark:hover:bg-slate-600 p-2 rounded-lg"
                                 >
                                     <img
                                         :src="adkotoUser.avatar_url"
