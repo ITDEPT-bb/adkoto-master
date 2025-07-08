@@ -100,7 +100,7 @@
                                                             {{
                                                                 user.surname
                                                             }}</span
-                                                        >
+                                                        > -->
                                                         <span
                                                             v-if="
                                                                 selectedUsers.includes(
@@ -108,7 +108,7 @@
                                                                 )
                                                             "
                                                             >✔</span
-                                                        > -->
+                                                        >
                                                     </li>
                                                 </ul>
                                             </div>
@@ -202,6 +202,7 @@ const addSelectedUsers = async () => {
             users: selectedUsers.value,
         });
         emit("closeBoth");
+        location.reload();
     } catch (error) {
         console.error("Error adding users:", error);
     }
