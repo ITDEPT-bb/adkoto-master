@@ -113,13 +113,14 @@ onMounted(() => {
         class="h-full mx-auto overflow-hidden flex flex-col bg-gray-100 dark:bg-gray-800"
     >
         <nav
-            class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 shadow"
+            class="bg-white w-full dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 fixed md:static top-0 z-10 pt-6 sm:pt-0 shadow"
         >
             <!-- Primary Navigation Menu -->
 
-            <div
-                class="max-w-7xl mx-auto px-4 flex items-center justify-between h-16"
-            >
+            <!-- <div
+                class="max-w-screen mx-auto px-4 flex items-center justify-between h-16"
+            > -->
+            <div class="max-w-screen mx-auto px-4 flex items-center justify-between h-16">
                 <!-- Logo and Title -->
                 <div class="flex items-center space-x-4">
                     <img
@@ -156,68 +157,6 @@ onMounted(() => {
                             class="h-6 w-6 text-gray-700 dark:text-gray-200"
                         />
                     </button>
-                    <!-- <Dropdown align="right" width="48">
-                        <template #trigger>
-                            <button
-                                class="flex items-center text-sm focus:outline-none"
-                            >
-                                <img
-                                    v-if="authUser"
-                                    :src="authUser.avatar_url"
-                                    :alt="`${authUser.name} ${authUser.surname}`"
-                                    class="h-8 w-8 rounded-full object-cover"
-                                />
-                            </button>
-                        </template>
-                        <template #content>
-                            <DropdownLink
-                                :href="
-                                    route('profile', {
-                                        username: authUser.username,
-                                    })
-                                "
-                            >
-                                Profile
-                            </DropdownLink>
-                            <DropdownLink
-                                :href="route('logout')"
-                                method="post"
-                                as="button"
-                            >
-                                Log Out
-                            </DropdownLink>
-                        </template>
-                    </Dropdown> -->
-                    <!-- Hamburger for mobile -->
-                    <!-- <button
-                        @click="
-                            showingNavigationDropdown =
-                                !showingNavigationDropdown
-                        "
-                        class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none md:hidden"
-                    >
-                        <svg
-                            class="h-6 w-6"
-                            stroke="currentColor"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                v-if="!showingNavigationDropdown"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M4 6h16M4 12h16M4 18h16"
-                            />
-                            <path
-                                v-else
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M6 18L18 6M6 6l12 12"
-                            />
-                        </svg>
-                    </button> -->
                 </div>
             </div>
 
