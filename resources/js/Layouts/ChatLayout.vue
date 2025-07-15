@@ -145,7 +145,7 @@ onMounted(() => {
                         <!-- Tribekoto -->
                         <img
                             :src="tribekotoIcon"
-                            class="hidden 2xl:flex h-auto md:w-12 xl:w-10"
+                            class="hidden lg:flex h-auto md:w-8 xl:w-10"
                             alt="Logo"
                         />
                     </Link>
