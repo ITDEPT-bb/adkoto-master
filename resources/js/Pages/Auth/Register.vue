@@ -24,7 +24,7 @@ const config = ref({
 
 const form = useForm({
     name: "",
-    // surname: "",
+    surname: "",
     email: "",
     // contact: "",
     phone: "",
@@ -111,7 +111,7 @@ const submit = () => {
                                     </p>
                                 </div>
 
-                                <div class="grid gap-1 sm:gap-2">
+                                <!-- <div class="grid gap-1 sm:gap-2">
                                     <InputLabel
                                         for="name"
                                         value="Name"
@@ -131,6 +131,50 @@ const submit = () => {
                                         class="mt-2"
                                         :message="form.errors.name"
                                     />
+                                </div> -->
+
+                                <div class="grid gap-4 sm:grid-cols-2">
+                                    <!-- Name -->
+                                    <div class="grid gap-1 sm:gap-2">
+                                        <InputLabel
+                                            for="name"
+                                            value="Name"
+                                            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                        />
+                                        <TextInput
+                                            id="name"
+                                            type="text"
+                                            class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+                                            v-model="form.name"
+                                            required
+                                            autocomplete="given-name"
+                                        />
+                                        <InputError
+                                            class="mt-2"
+                                            :message="form.errors.name"
+                                        />
+                                    </div>
+
+                                    <!-- Surname -->
+                                    <div class="grid gap-1 sm:gap-2">
+                                        <InputLabel
+                                            for="surname"
+                                            value="Surname"
+                                            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                        />
+                                        <TextInput
+                                            id="surname"
+                                            type="text"
+                                            class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+                                            v-model="form.surname"
+                                            required
+                                            autocomplete="family-name"
+                                        />
+                                        <InputError
+                                            class="mt-2"
+                                            :message="form.errors.surname"
+                                        />
+                                    </div>
                                 </div>
 
                                 <div class="grid gap-1 sm:gap-2">
