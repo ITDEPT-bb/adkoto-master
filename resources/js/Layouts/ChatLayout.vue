@@ -74,7 +74,7 @@ const leave = (el, done) => {
     }, 300);
 };
 
-let logoSrc = "/img/chatkoto.png";
+let logoSrc = "/img/tribekoto.png";
 let logoClass =
     "block h-6 sm:h-8 xl:h-10 2xl:h-12 w-auto ml-2 sm:ml-4 md:ml-6 lg:ml-2 xl:ml-7 2xl:ml-[70px] hover:scale-110 transition duration-200 ease-in-out scale-75";
 let logoText = "Where Connections and Communities Thrive!";
