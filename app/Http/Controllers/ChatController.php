@@ -665,7 +665,18 @@ class ChatController extends Controller
             'receiver_id' => 'required|integer|exists:users,id',
             'conversation_id' => 'required|integer|exists:conversations,id',
             'message' => 'nullable|string',
-            'files.*' => 'nullable|file|mimes:jpg,jpeg,png,gif,mp4,mov,avi|max:20480',
+            // 'files.*' => 'nullable|file|mimes:jpg,jpeg,png,gif,mp4,mov,avi,webm,pdf,doc,docx,zip,cdr|max:20480',
+            'files.*' => [
+                'nullable',
+                'file',
+                'max:20480',
+                function ($attribute, $value, $fail) {
+                    $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'mp4', 'mov', 'avi', 'webm', 'pdf', 'doc', 'docx', 'zip', 'cdr'];
+                    if (!in_array($value->getClientOriginalExtension(), $allowedExtensions)) {
+                        $fail("The $attribute must be a file of type: " . implode(', ', $allowedExtensions));
+                    }
+                },
+            ]
         ]);
 
         if (empty($request->message) && !$request->hasFile('files')) {
@@ -738,7 +749,18 @@ class ChatController extends Controller
     {
         $request->validate([
             'message' => 'nullable|string',
-            'files.*' => 'nullable|file|mimes:jpg,jpeg,png,gif,mp4,mov,avi|max:20480',
+            // 'files.*' => 'nullable|file|mimes:jpg,jpeg,png,gif,mp4,mov,avi|max:20480',
+            'files.*' => [
+                'nullable',
+                'file',
+                'max:20480',
+                function ($attribute, $value, $fail) {
+                    $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'mp4', 'mov', 'avi', 'webm', 'pdf', 'doc', 'docx', 'zip', 'cdr'];
+                    if (!in_array($value->getClientOriginalExtension(), $allowedExtensions)) {
+                        $fail("The $attribute must be a file of type: " . implode(', ', $allowedExtensions));
+                    }
+                },
+            ]
         ]);
 
         if (empty($request->message) && !$request->hasFile('files')) {
