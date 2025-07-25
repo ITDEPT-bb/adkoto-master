@@ -105,16 +105,48 @@
 				rows="1"
 				class="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 				placeholder="Message..."></textarea> -->
-            <textarea
+            <!-- <textarea
                 v-model="newMessage"
                 @keydown.enter.exact.prevent="sendMessage"
                 @keydown.enter.shift.exact="addNewLine"
                 @paste="handlePaste"
+                @dragenter.prevent="isDragging = true"
+                @dragover.prevent
+                @dragleave.prevent="isDragging = false"
+                @drop.prevent="handleDrop"
                 id="chat"
                 rows="1"
                 class="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Message..."
-            ></textarea>
+            ></textarea> -->
+
+            <div
+                class="relative"
+                @dragenter="handleDragEnter"
+                @dragover.prevent
+                @dragleave="handleDragLeave"
+                @drop="handleDrop"
+            >
+                <!-- Textarea -->
+                <textarea
+                    v-model="newMessage"
+                    @keydown.enter.exact.prevent="sendMessage"
+                    @keydown.enter.shift.exact="addNewLine"
+                    @paste="handlePaste"
+                    id="chat"
+                    rows="1"
+                    class="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Message..."
+                ></textarea>
+
+                <!-- Overlay -->
+                <div
+                    v-if="isDragging"
+                    class="absolute inset-0 bg-blue-100 bg-opacity-50 z-20 flex items-center justify-center rounded-lg text-blue-700 font-semibold text-sm pointer-events-none"
+                >
+                    Drop files to upload
+                </div>
+            </div>
 
             <!-- Send Button -->
             <button
@@ -258,6 +290,55 @@ function handlePaste(event) {
     }
 }
 
+// const isDragging = ref(false);
+
+// function handleDrop(event) {
+//     isDragging.value = false;
+
+//     const maxSize = 20 * 1024 * 1024;
+//     const droppedFiles = Array.from(event.dataTransfer.files);
+//     const validFiles = droppedFiles.filter((file) => file.size <= maxSize);
+
+//     if (validFiles.length < droppedFiles.length) {
+//         alert("Some files exceeded the 20MB limit and were skipped.");
+//     }
+
+//     selectedFiles.value.push(...validFiles);
+// }
+
+const isDragging = ref(false);
+let dragCounter = 0;
+
+function handleDragEnter(e) {
+    e.preventDefault();
+    dragCounter++;
+    isDragging.value = true;
+}
+
+function handleDragLeave(e) {
+    e.preventDefault();
+    dragCounter--;
+    if (dragCounter <= 0) {
+        isDragging.value = false;
+    }
+}
+
+function handleDrop(e) {
+    e.preventDefault();
+    dragCounter = 0;
+    isDragging.value = false;
+
+    const maxSize = 20 * 1024 * 1024;
+    const droppedFiles = Array.from(e.dataTransfer.files);
+    const validFiles = droppedFiles.filter((file) => file.size <= maxSize);
+
+    if (validFiles.length < droppedFiles.length) {
+        alert("Some files exceeded the 20MB limit and were skipped.");
+    }
+
+    selectedFiles.value.push(...validFiles);
+}
+
 function removeFile(index) {
     selectedFiles.value.splice(index, 1);
 }
@@ -338,3 +419,15 @@ async function sendMessage() {
     }
 }
 </script>
+
+<style>
+.transition-opacity {
+    transition: opacity 0.2s;
+}
+.opacity-0 {
+    opacity: 0;
+}
+.opacity-100 {
+    opacity: 1;
+}
+</style>
