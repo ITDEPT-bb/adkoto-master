@@ -91,7 +91,7 @@
                     @change="handleFileChange"
                     class="hidden"
                     multiple
-                    accept="image/*, video/*"
+                    accept="*"
                 />
 
                 <button
@@ -142,7 +142,7 @@
                 :key="index"
                 class="relative"
             >
-                <img
+                <!-- <img
                     v-if="isImage(file)"
                     :src="filePreview(file)"
                     class="h-32 w-32 object-cover rounded-lg"
@@ -152,7 +152,33 @@
                     :src="filePreview(file)"
                     class="h-32 w-32 object-cover rounded-lg"
                     controls
+                /> -->
+                <img
+                    v-if="isImage(file)"
+                    :src="filePreview(file)"
+                    class="h-32 w-32 object-cover rounded-lg"
                 />
+                <video
+                    v-else-if="isVideo(file)"
+                    :src="filePreview(file)"
+                    class="h-32 w-32 object-cover rounded-lg"
+                    controls
+                />
+                <div
+                    v-else-if="isCDR(file)"
+                    class="h-32 w-32 flex flex-col items-center justify-center bg-gray-200 rounded-lg p-2 text-sm text-gray-600"
+                >
+                    <span>📄</span>
+                    <span class="text-xs text-center truncate w-full">{{
+                        file.name
+                    }}</span>
+                </div>
+                <div
+                    v-else
+                    class="h-32 w-32 flex items-center justify-center bg-gray-200 rounded-lg p-2 text-sm text-gray-600"
+                >
+                    <span>{{ file.name }}</span>
+                </div>
                 <button
                     @click="removeFile(index)"
                     class="absolute top-1 right-1 bg-gray-600 text-white p-1 rounded-full"
@@ -206,8 +232,17 @@ function triggerFileInput() {
 }
 
 function handleFileChange(event) {
+    const maxSize = 20 * 1024 * 1024;
     const files = Array.from(event.target.files);
-    selectedFiles.value.push(...files);
+    // selectedFiles.value.push(...files);
+
+    const validFiles = files.filter((file) => file.size <= maxSize);
+
+    if (validFiles.length < files.length) {
+        alert("Some files exceeded the 10MB limit and were skipped.");
+    }
+
+    selectedFiles.value.push(...validFiles);
 }
 
 function removeFile(index) {
@@ -220,6 +255,10 @@ function isImage(file) {
 
 function isVideo(file) {
     return file && file.type.startsWith("video/");
+}
+
+function isCDR(file) {
+    return file.name.endsWith(".cdr");
 }
 
 function filePreview(file) {
