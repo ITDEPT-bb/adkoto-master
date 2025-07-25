@@ -116,6 +116,7 @@
                 v-model="newMessage"
                 @keydown.enter.exact.prevent="sendMessage"
                 @keydown.enter.shift.exact="addNewLine"
+                @paste="handlePaste"
                 id="chat"
                 rows="1"
                 class="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -243,6 +244,24 @@ function handleFileChange(event) {
     }
 
     selectedFiles.value.push(...validFiles);
+}
+
+function handlePaste(event) {
+    const clipboardItems = event.clipboardData?.items;
+    if (!clipboardItems) return;
+
+    const maxSize = 20 * 1024 * 1024;
+
+    for (const item of clipboardItems) {
+        if (item.kind === "file") {
+            const file = item.getAsFile();
+            if (file && file.size <= maxSize) {
+                selectedFiles.value.push(file);
+            } else if (file) {
+                alert(`"${file.name}" exceeds the 20MB limit and was skipped.`);
+            }
+        }
+    }
 }
 
 function removeFile(index) {
