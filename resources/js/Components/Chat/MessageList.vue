@@ -93,6 +93,7 @@
                                     <!-- File name -->
                                     <a
                                         :href="`/storage/${attachment.path}`"
+                                        :download="attachment.name"
                                         target="_blank"
                                         class="text-sm text-gray-800 dark:text-gray-200 hover:underline truncate max-w-[70%]"
                                     >
