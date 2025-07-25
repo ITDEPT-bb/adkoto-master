@@ -121,7 +121,7 @@
             ></textarea> -->
 
             <div
-                class="relative"
+                class="relative w-full"
                 @dragenter="handleDragEnter"
                 @dragover.prevent
                 @dragleave="handleDragLeave"
