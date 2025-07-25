@@ -94,6 +94,7 @@
                                     <a
                                         :href="`/storage/${attachment.path}`"
                                         :download="attachment.name"
+                                        :title="attachment.name"
                                         target="_blank"
                                         class="text-sm text-gray-800 dark:text-gray-200 hover:underline truncate max-w-[70%]"
                                     >
@@ -104,8 +105,8 @@
                                     <a
                                         :href="`/storage/${attachment.path}`"
                                         :download="attachment.name"
+                                        :title="attachment.name"
                                         class="text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white transition"
-                                        title="Download"
                                     >
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
