@@ -124,7 +124,7 @@
                                                 {{
                                                     following.last_message
                                                         ? following.last_message
-                                                        : "No messages yet"
+                                                        : "Send an Attachment"
                                                 }}
                                             </span>
                                         </p>
@@ -287,7 +287,7 @@
                                                 {{
                                                     kalakalUser.last_message
                                                         ? kalakalUser.last_message
-                                                        : "No messages yet"
+                                                        : "Send an Attachment"
                                                 }}
                                             </span>
                                         </p>
@@ -395,7 +395,7 @@
                                                 {{
                                                     adkotoUser.last_message
                                                         ? adkotoUser.last_message
-                                                        : "No messages yet"
+                                                        : "Send an Attachment"
                                                 }}
                                             </span>
                                         </p>

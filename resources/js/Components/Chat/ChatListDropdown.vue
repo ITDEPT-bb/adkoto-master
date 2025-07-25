@@ -80,9 +80,13 @@
                                             <span class="font-medium">
                                                 {{ getMessagePrefix(chat) }}
                                             </span>
-                                            {{
+                                            <!-- {{
                                                 chat.last_message ||
                                                 "Start a conversation"
+                                            }} -->
+                                            {{
+                                                chat.last_message ||
+                                                "Sent an attachment."
                                             }}
                                         </span>
                                         <span
