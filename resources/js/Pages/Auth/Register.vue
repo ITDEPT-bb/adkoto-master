@@ -72,15 +72,15 @@ const submit = () => {
                             class="relative hidden md:flex bg-blue-primary p-4"
                         >
                             <div
-                                class="flex flex-col items-center justify-center w-full h-full gap-2"
+                                class="flex flex-col items-center justify-center w-full h-full gap-12"
                             >
-                                <!-- <img
+                                <img
 								src="img/Auth/adkoto_logo.png"
 								alt="Adkoto Logo"
-								className="h-auto max-w-[60%] object-contain px-6 md:px-8" /> -->
+								className="h-auto max-w-[60%] object-contain px-6 md:px-8" />
 
                                 <img
-                                    src="img/Auth/adkoto_reg.png"
+                                    src="img/Auth/sign_up.png"
                                     alt="Adkoto Vector"
                                     class="h-auto max-w-[115%] object-contain px-6 md:px-8"
                                 />
@@ -91,7 +91,7 @@ const submit = () => {
                             class="p-2 md:p-6 md:py-10"
                         >
                             <div class="flex flex-col gap-4">
-                                <div
+                                <!-- <div
                                     class="flex flex-col items-center text-center"
                                 >
                                     <img
@@ -99,7 +99,7 @@ const submit = () => {
                                         alt="Adkoto Logo"
                                         class="h-auto max-w-[70%] object-contain px-6 md:px-8"
                                     />
-                                </div>
+                                </div> -->
                                 <div
                                     class="flex flex-col items-center text-center"
                                 >
