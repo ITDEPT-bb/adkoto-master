@@ -296,7 +296,7 @@ const sendReaction = (type = "like") => {
 		</div>
 		<div
 			v-if="post.shared_post"
-			class="border p-3 mt-2 rounded-lg bg-gray-100">
+			class="border p-3 mt-2 rounded-lg bg-gray-100 dark:bg-slate-950 dark:border-slate-900 dark:text-gray-100">
 			<PostUserHeader :post="post.shared_post" />
 			<!-- <p class="text-gray-700">{{ post.shared_post.body }}</p> -->
 			<ReadMoreReadLess :content="post.shared_post.body" />
