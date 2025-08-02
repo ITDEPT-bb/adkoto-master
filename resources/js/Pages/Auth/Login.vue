@@ -241,7 +241,7 @@ const submit = () => {
                                 <img
                                     src="img/Auth/log_in.png"
                                     alt="Adkoto Vector"
-                                    className="h-auto max-w-[115%] object-contain px-6 md:px-8"
+                                    className="h-auto max-w-[110%] object-contain px-6 md:px-8"
                                 />
                             </div>
                         </div>
