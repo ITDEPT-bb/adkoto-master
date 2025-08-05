@@ -15,6 +15,7 @@ use App\Http\Controllers\GroupChatController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\KalakalkotoChatController;
+use App\Http\Controllers\LiveAuctionController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PostController;
@@ -116,6 +117,8 @@ Route::middleware(['auth', 'verified'])->prefix('/auction')->group(function () {
     Route::post('/create-recharge-session', [RechargeWalletController::class, 'createRechargeSession'])->name('recharge.createRechargeSession');
     Route::get('/recharge/success/{userId}', [RechargeWalletController::class, 'rechargeSuccess'])->name('recharge.success');
     Route::get('/recharge/cancel', [RechargeWalletController::class, 'rechargeCancel'])->name('recharge.cancel');
+
+    Route::get('/stream', [LiveAuctionController::class, 'index'])->name('auction.live-stream');
 });
 
 // Chatkoto
