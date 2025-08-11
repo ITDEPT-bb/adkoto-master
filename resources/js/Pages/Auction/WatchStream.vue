@@ -11,10 +11,30 @@
             <div
                 class="bg-white dark:bg-slate-950 flex flex-col gap-4 p-6 rounded-lg shadow-sm"
             >
+                <div
+                    v-if="authUser.is_filament_admin"
+                    class="bg-white p-4 rounded mb-4"
+                >
+                    <h3 class="font-semibold mb-2">Host Controls</h3>
+                    <div class="flex gap-2">
+                        <input
+                            type="number"
+                            v-model="duration"
+                            placeholder="Duration (seconds)"
+                            class="border rounded px-2 py-1 w-28"
+                        />
+                        <button
+                            @click="startAuction"
+                            class="px-4 py-2 bg-green-600 text-white rounded"
+                        >
+                            Start Auction
+                        </button>
+                    </div>
+                </div>
                 <!-- <YouTubeLiveStream :channelId="youtubeChannelId" /> -->
-                <VideoSDKLiveStream />
+                <AgoraAuctionLive :appId="props.appId" />
 
-                <ShowWindow
+                <ShowWindowLive
                     v-if="!noActiveBidding"
                     :item="item"
                     :highBid="highBid"
@@ -37,15 +57,17 @@
 import YouTubeLiveStream from "@/Components/Auction/YouTubeLiveStream.vue";
 import { Head, usePage } from "@inertiajs/vue3";
 import { ref, defineProps, onMounted, onUnmounted } from "vue";
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import AuthenticatedLayout from "@/Layouts/AuctionLayout.vue";
 import UpdateProfileReminder from "@/Components/UpdateProfileReminder.vue";
 import AuctionMenu from "@/Components/Auction/AuctionMenu.vue";
 import PageSelector from "@/Components/Kalakalkoto/PageSelector.vue";
-import ShowWindow from "@/Components/Auction/ShowWindow.vue";
+import ShowWindowLive from "@/Components/Auction/ShowWindowLive.vue";
 import axios from "axios";
-import VideoSDKLiveStream from "@/Components/Auction/VideoSDKLiveStream.vue";
+import AgoraAuctionLive from "@/Components/Auction/AgoraAuctionLive.vue";
 
 const { props } = usePage();
+
+const authUser = usePage().props.auth.user;
 
 const updatedItem = ref(props.item);
 const updatedHighBid = ref(props.highBid);
@@ -70,6 +92,19 @@ const fetchShowWindowData = async () => {
     } catch (error) {
         console.error("Error fetching auction data:", error);
     }
+};
+
+const duration = ref(60);
+
+const startAuction = () => {
+    if (!updatedItem.value?.id) {
+        console.error("No item ID found to start auction");
+        return;
+    }
+
+    axios.post(route("auction.start", { item: updatedItem.value.id }), {
+        duration: duration.value,
+    });
 };
 
 onMounted(() => {

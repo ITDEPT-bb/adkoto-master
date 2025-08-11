@@ -120,7 +120,9 @@ Route::middleware(['auth', 'verified'])->prefix('/auction')->group(function () {
     Route::get('/recharge/success/{userId}', [RechargeWalletController::class, 'rechargeSuccess'])->name('recharge.success');
     Route::get('/recharge/cancel', [RechargeWalletController::class, 'rechargeCancel'])->name('recharge.cancel');
 
-    Route::get('/stream', [LiveAuctionController::class, 'index'])->name('auction.live-stream');
+    // Route::get('/stream', [LiveAuctionController::class, 'index'])->name('auction.live-stream');
+    Route::post('/auction/{item}/start', [AuctionController::class, 'start'])
+        ->name('auction.start');
     // Host actions
     Route::post('/{item}/set-active', [AuctionHostController::class, 'setActive'])->name('auction.set-active');
     Route::post('/{item}/set-next', [AuctionHostController::class, 'setNext'])->name('auction.set-next');

@@ -11,6 +11,14 @@ Broadcast::channel('auction-room', function ($user) {
     return ['id' => $user->id, 'name' => $user->name];
 });
 
+Broadcast::channel('auction', function ($user) {
+    return ['id' => $user->id, 'name' => $user->name];
+});
+
+Broadcast::channel('auction{id}', function ($user) {
+    return ['id' => $user->id, 'name' => $user->name];
+});
+
 Broadcast::channel('chat.home.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
