@@ -19,7 +19,7 @@ class AuctionItemResource extends JsonResource
             'name' => $this->name,
             'is_active' => $this->is_active,
             'attachment_url' => $this->attachments->first()
-                ? asset('storage/' . $this->attachments->first()->file_path)
+                ? asset('storage/' . $this->attachments->first()->image_path)
                 : null,
         ];
     }
