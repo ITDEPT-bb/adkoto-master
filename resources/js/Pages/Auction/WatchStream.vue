@@ -110,10 +110,12 @@ const startAuction = () => {
 };
 
 onMounted(() => {
-    // if (!noActiveBidding.value) {
     fetchShowWindowData();
-    interval = setInterval(fetchShowWindowData, 20000);
-    // }
+    // interval = setInterval(fetchShowWindowData, 20000);
+
+    window.Echo.channel("auction-items").listen(".AuctionItemToggled", (e) => {
+        fetchShowWindowData();
+    });
 });
 
 onUnmounted(() => {

@@ -19,6 +19,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\KalakalkotoChatController;
 use App\Http\Controllers\LiveAuctionController;
+use App\Http\Controllers\LiveAuctionItemController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PostController;
@@ -132,8 +133,8 @@ Route::middleware(['auth', 'verified'])->prefix('/auction')->group(function () {
     Route::post('/end', [AuctionHostController::class, 'endAuction'])->name('auction.end');
 
     // web.php
-    Route::get('/host/items', [AuctionItemController::class, 'index']);
-    Route::patch('/host/items/{item}/toggle-active', [AuctionItemController::class, 'toggleActive']);
+    Route::get('/host/items', [LiveAuctionItemController::class, 'index']);
+    Route::patch('/host/items/{item}/toggle-active', [LiveAuctionItemController::class, 'toggleActive']);
 
 
     // Bids
