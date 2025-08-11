@@ -84,7 +84,11 @@
                                                         item.attachments &&
                                                         item.attachments.length
                                                     "
-                                                    :src="`/storage/${item.attachments[0].file_path}`"
+                                                    :src="
+                                                        item.attachments[0]
+                                                            ?.image_path ||
+                                                        'https://placehold.co/400'
+                                                    "
                                                     alt="Item Image"
                                                     class="w-12 h-12 object-cover rounded"
                                                 />
