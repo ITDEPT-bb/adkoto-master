@@ -77,24 +77,20 @@
                                                 {{ item.name }}
                                             </td>
                                             <td
-                                                class="border px-4 py-2 flex items-center gap-2"
+                                                class="border px-4 py-2 flex items-center"
                                             >
                                                 <img
                                                     v-if="
                                                         item.attachments &&
                                                         item.attachments.length
                                                     "
-                                                    :src="
-                                                        item.attachments[0]
-                                                            ?.image_path ||
-                                                        'https://placehold.co/400'
-                                                    "
+                                                    :src="item.attachment_url"
                                                     alt="Item Image"
                                                     class="w-12 h-12 object-cover rounded"
                                                 />
                                                 <img
                                                     v-else
-                                                    src="/images/placeholder.png"
+                                                    src="https://placehold.co/400"
                                                     alt="No Image"
                                                     class="w-12 h-12 object-cover rounded"
                                                 />
