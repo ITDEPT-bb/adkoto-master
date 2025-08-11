@@ -9,6 +9,8 @@ use App\Http\Controllers\GroupController;
 use App\Http\Controllers\KalakalkotoController;
 use App\Http\Controllers\AdkotoController;
 use App\Http\Controllers\AuctionController;
+use App\Http\Controllers\AuctionHostController;
+use App\Http\Controllers\BidController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\GroupChatController;
@@ -118,7 +120,17 @@ Route::middleware(['auth', 'verified'])->prefix('/auction')->group(function () {
     Route::get('/recharge/success/{userId}', [RechargeWalletController::class, 'rechargeSuccess'])->name('recharge.success');
     Route::get('/recharge/cancel', [RechargeWalletController::class, 'rechargeCancel'])->name('recharge.cancel');
 
-    Route::get('/stream', [LiveAuctionController::class, 'index'])->name('auction.live-stream');
+    // Route::get('/stream', [LiveAuctionController::class, 'index'])->name('auction.live-stream');
+    Route::post('/auction/{item}/start', [AuctionController::class, 'start'])
+        ->name('auction.start');
+    // Host actions
+    Route::post('/{item}/set-active', [AuctionHostController::class, 'setActive'])->name('auction.set-active');
+    Route::post('/{item}/set-next', [AuctionHostController::class, 'setNext'])->name('auction.set-next');
+    Route::post('/next', [AuctionHostController::class, 'nextItem'])->name('auction.next');
+    Route::post('/end', [AuctionHostController::class, 'endAuction'])->name('auction.end');
+
+    // Bids
+    Route::post('/bids', [BidController::class, 'store'])->name('bids.store');
 });
 
 // Chatkoto

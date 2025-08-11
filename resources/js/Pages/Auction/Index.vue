@@ -42,11 +42,11 @@
 								class="mt-4 lg:mt-6 w-full text-center font-bold bg-blue-300 hover:bg-blue-500 hover:text-white p-3 rounded-md transition-all duration-300 ease-in-out">
 								View All Live Bidding
 							</a> -->
-                            <!-- <a
+                            <Link
 								:href="route('auction.watchStream')"
 								class="mt-4 lg:mt-6 w-full text-center font-bold bg-blue-300 hover:bg-blue-500 hover:text-white p-3 rounded-md transition-all duration-300 ease-in-out">
 								View Live Bidding
-							</a> -->
+							</Link>
                         </div>
                     </DisclosurePanel>
                 </Disclosure>
@@ -73,11 +73,11 @@
 						class="font-bold w-full sm:gap-4 sm:items-center justify-center sm:flex sm:my-4 rounded-md p-2 bg-blue-300 hover:bg-blue-500 hover:text-white">
 						View All Live Bidding
 					</a> -->
-                    <!-- <a
+                    <Link
 						:href="route('auction.watchStream')"
-						class="font-bold w-full sm:gap-4 sm:items-center justify-center sm:flex sm:my-4 rounded-md p-2 bg-blue-300 hover:bg-blue-500 hover:text-white">
+						class="font-bold w-full sm:gap-4 sm:items-center justify-center sm:flex sm:my-4 rounded-md p-2 bg-blue-300 hover:bg-blue-500 hover:text-white transition-all">
 						View Live Bidding
-					</a> -->
+					</Link>
                 </div>
             </div>
         </div>
@@ -88,7 +88,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
-import { usePage, Head } from "@inertiajs/vue3";
+import { usePage, Head, Link } from "@inertiajs/vue3";
 import axiosClient from "@/axiosClient.js";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AuctionStarted;
 use App\Models\AuctionItem;
 use App\Models\Bid;
 use App\Models\KalakalkotoCategory;
@@ -171,7 +172,39 @@ class AuctionController extends Controller
         ]);
     }
 
-    public function placeBid($id)
+    // public function placeBid($id)
+    // {
+    //     $auctionItem = AuctionItem::find($id);
+
+    //     if (!$auctionItem) {
+    //         return response()->json(['error' => 'Auction item not found'], 404);
+    //     }
+
+    //     $bidIncrement = $auctionItem->bid_increment;
+
+    //     $highestBid = $auctionItem->bids()->orderBy('bid_amount', 'desc')->first();
+    //     $currentHighestBidAmount = $highestBid ? $highestBid->bid_amount : 0;
+
+    //     $newBidAmount = $currentHighestBidAmount + $bidIncrement;
+
+    //     $userId = auth()->id();
+    //     $user = User::find($userId);
+    //     $walletBalance = $user->wallet ? $user->wallet->balance : 0;
+
+    //     if ($walletBalance < $newBidAmount) {
+    //         return response()->json(['error' => 'Insufficient wallet balance to place this bid'], 403);
+    //     }
+
+    //     // Create and save the new bid
+    //     $bid = new Bid();
+    //     $bid->auction_item_id = $auctionItem->id;
+    //     $bid->user_id = $userId;
+    //     $bid->bid_amount = $newBidAmount;
+    //     $bid->save();
+
+    //     return response()->json(['success' => 'Bid placed successfully', 'new_bid_amount' => $newBidAmount], 200);
+    // }
+    public function placeBid(Request $request, $id)
     {
         $auctionItem = AuctionItem::find($id);
 
@@ -179,19 +212,33 @@ class AuctionController extends Controller
             return response()->json(['error' => 'Auction item not found'], 404);
         }
 
-        $bidIncrement = $auctionItem->bid_increment;
+        // Validate bid amount from the request
+        $request->validate([
+            'bid_amount' => 'required|numeric|min:1',
+        ]);
 
+        $newBidAmount = $request->bid_amount;
+
+        // Get highest bid for this item
         $highestBid = $auctionItem->bids()->orderBy('bid_amount', 'desc')->first();
-        $currentHighestBidAmount = $highestBid ? $highestBid->bid_amount : 0;
+        $currentHighestBidAmount = $highestBid ? $highestBid->bid_amount : $auctionItem->starting_price;
 
-        $newBidAmount = $currentHighestBidAmount + $bidIncrement;
+        // Ensure new bid is greater than the highest
+        if ($newBidAmount <= $currentHighestBidAmount) {
+            return response()->json([
+                'error' => 'Your bid must be higher than the current highest bid (' . number_format($currentHighestBidAmount, 2) . ')'
+            ], 422);
+        }
 
         $userId = auth()->id();
         $user = User::find($userId);
         $walletBalance = $user->wallet ? $user->wallet->balance : 0;
 
+        // Ensure wallet balance is enough
         if ($walletBalance < $newBidAmount) {
-            return response()->json(['error' => 'Insufficient wallet balance to place this bid'], 403);
+            return response()->json([
+                'error' => 'Insufficient wallet balance to place this bid'
+            ], 403);
         }
 
         // Create and save the new bid
@@ -201,7 +248,24 @@ class AuctionController extends Controller
         $bid->bid_amount = $newBidAmount;
         $bid->save();
 
-        return response()->json(['success' => 'Bid placed successfully', 'new_bid_amount' => $newBidAmount], 200);
+        event(new \App\Events\BidPlaced($auctionItem->id, $bid));
+
+
+        return response()->json([
+            'success' => 'Bid placed successfully',
+            'new_bid_amount' => $newBidAmount
+        ], 200);
+    }
+
+    public function start(Request $request, AuctionItem $item)
+    {
+        $request->validate([
+            'duration' => 'required|integer|min:10'
+        ]);
+
+        broadcast(new AuctionStarted($item->id, $request->duration));
+
+        return response()->json(['message' => 'Auction started']);
     }
 
     public function getLatestBids($id)
@@ -325,6 +389,11 @@ class AuctionController extends Controller
 
     public function watchStream(Request $request)
     {
+        $appID = env('AGORA_APP_ID');
+        if (!$appID) {
+            return response()->json(['error' => 'Agora App ID is not configured'], 500);
+        }
+
         $auctionItem = AuctionItem::with([
             'attachments',
             'user',
@@ -343,6 +412,7 @@ class AuctionController extends Controller
 
             return Inertia::render('Auction/WatchStream', [
                 'noActiveBidding' => true,
+                'appId' => $appID,
                 'message' => 'No active bidding yet.',
                 'user' => $user,
                 'walletBalance' => $walletBalance,
@@ -370,6 +440,7 @@ class AuctionController extends Controller
             'highBid' => $highBid,
             'bids' => $auctionItem->bids,
             'user' => $user,
+            'appId' => $appID,
             'walletBalance' => $walletBalance,
             'noActiveBidding' => false,
             'youtubeChannelId' => $youtubeChannelId ? $youtubeChannelId->channel_id : null,

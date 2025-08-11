@@ -1,145 +1,246 @@
-<script setup>
-import { Head, usePage } from "@inertiajs/vue3";
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import AgoraRTC from "agora-rtc-sdk-ng";
-import axios from "axios";
-import { onMounted, ref, defineProps } from "vue";
-
-// Props
-const props = defineProps({
-    appId: String,
-});
-
-const authUser = usePage().props.auth.user;
-
-// Agora client and tracks
-const client = AgoraRTC.createClient({
-    mode: "live",
-    codec: "vp8",
-    role: "host",
-});
-const channel = ref("");
-const localAudioTrack = ref(null);
-const localVideoTrack = ref(null);
-
-// Listen for remote user publishing
-const setupEventListeners = () => {
-    client.on("user-published", async (user, mediaType) => {
-        await client.subscribe(user, mediaType);
-        console.log("subscribe success");
-        if (mediaType === "video") {
-            const remoteVideoTrack = user.videoTrack;
-            remoteVideoTrack.play("remoteVideo");
-        }
-        if (mediaType === "audio") {
-            user.audioTrack.play();
-        }
-    });
-
-    client.on("user-unpublished", (user, mediaType) => {
-        if (mediaType === "video" || mediaType === "audio") {
-            console.log("Remote user unpublished:", user.uid);
-        }
-    });
-};
-
-// Create local tracks
-const createLocalTracks = async () => {
-    localAudioTrack.value = await AgoraRTC.createMicrophoneAudioTrack();
-    localVideoTrack.value = await AgoraRTC.createCameraVideoTrack();
-};
-
-// Publish Local Tracks
-const publishLocalTracks = async () => {
-    await client.publish([localAudioTrack.value, localVideoTrack.value]);
-};
-
-const joinAsHost = async () => {
-    channel.value = generateChannelName();
-    const token = await fetchToken(channel.value);
-
-    await client.join(props.appId, channel.value, token, authUser.id);
-
-    // Play local video
-    client.setClientRole("host");
-    await createLocalTracks();
-    localVideoTrack.value.play("localVideo");
-    await publishLocalTracks();
-};
-
-const leaveChannel = async () => {
-    if (localAudioTrack.value) {
-        localAudioTrack.value.close();
-        localAudioTrack.value = null;
-    }
-    if (localVideoTrack.value) {
-        localVideoTrack.value.close();
-        localVideoTrack.value = null;
-    }
-    await client.leave();
-};
-
-const generateChannelName = () => {
-    return `channel-auction`;
-};
-
-const fetchToken = async (channelName) => {
-    const response = await axios.post("/agora/token", { channelName });
-    return response.data.token;
-};
-
-onMounted(() => {
-    setupEventListeners();
-});
-</script>
-
 <template>
     <Head title="Live Auction" />
     <AuthenticatedLayout>
-        <div class="fixed inset-0 bg-black/95 flex items-center justify-center">
-            <div
-                class="flex flex-col justify-between w-full max-w-6xl mx-auto bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-gray-700 min-h-[300px] p-6 shadow-md"
-            >
-                <h1 class="text-white">Test Content HERE</h1>
-                <div class="flex gap-3">
-                    <button class="p-4 rounder bg-blue-400" @click="joinAsHost">
-                        Join as Host
-                    </button>
-                    <button
-                        class="p-4 rounder bg-blue-400"
-                        @click="leaveChannel()"
-                    >
-                        Leave
-                    </button>
-                </div>
+        <div class="p-4">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+                <VideoPanel
+                    :app-id="appId"
+                    :auth-user="authUser"
+                    @joined="onAgoraJoined"
+                    @left="onAgoraLeft"
+                />
 
-                <!-- Remote Video -->
-                <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
-                    <div
-                        class="relative bg-gray-800 rounded-lg overflow-hidden"
-                    >
-                        <video
-                            id="remoteVideo"
-                            class="w-full h-full object-cover"
-                            autoplay
-                            playsinline
-                        ></video>
-                    </div>
+                <div>
+                    <TimerPanel
+                        :timeRemaining="timeRemaining"
+                        :running="timerActive"
+                    />
+                    <BiddersPanel :bidders="bidders" :highest="highestBidder" />
                 </div>
+            </div>
 
-                <!-- Local Video -->
-                <div
-                    class="fixed bottom-36 lg:bottom-4 right-4 w-48 h-32 rounded-lg overflow-hidden shadow-lg"
-                >
-                    <video
-                        id="localVideo"
-                        class="w-full h-full object-cover"
-                        autoplay
-                        muted
-                        playsinline
-                    ></video>
-                </div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4">
+                <BiddingPanel
+                    :auth-user="authUser"
+                    :timer-active="timerActive"
+                    :current-bid="currentBid"
+                    @place-bid="placeBid"
+                    @start-auction="startAuction"
+                    @end-bidding="endBidding"
+                    @next-item="nextItem"
+                    @end-auction="endAuction"
+                />
+
+                <ItemsList
+                    :items="items"
+                    :current-index="currentItemIndex"
+                    @select-index="(i) => (currentItemIndex = i)"
+                    @set-active="setActive"
+                    @set-next="setNext"
+                />
+
+                <CurrentItemPanel
+                    :item="currentItem"
+                    :current-bid="currentBid"
+                />
             </div>
         </div>
     </AuthenticatedLayout>
 </template>
+
+<script setup>
+import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+import { usePage } from "@inertiajs/vue3";
+import axios from "axios";
+import AuthenticatedLayout from "@/Layouts/AuctionLayout.vue";
+
+import VideoPanel from "@/Components/Auction/VideoPanel.vue";
+import TimerPanel from "@/Components/Auction/TimerPanel.vue";
+import BiddersPanel from "@/Components/Auction/BiddersPanel.vue";
+import BiddingPanel from "@/Components/Auction/BiddingPanel.vue";
+import ItemsList from "@/Components/Auction/ItemsList.vue";
+import CurrentItemPanel from "@/Components/Auction/CurrentItemPanel.vue";
+
+const props = defineProps({ appId: String, initialItems: Array });
+const authUser = usePage().props.auth.user;
+
+const items = ref(props.initialItems || []);
+const currentItemIndex = ref(
+    items.value.findIndex((i) => i.status === "active")
+);
+if (currentItemIndex.value === -1) currentItemIndex.value = 0;
+
+const bidders = ref([]);
+const currentBid = ref(
+    items.value[currentItemIndex.value]?.current_price ??
+        items.value[currentItemIndex.value]?.starting_price ??
+        0
+);
+const bidError = ref("");
+
+const timeRemaining = ref(60);
+const timerActive = ref(false);
+let timerInterval = null;
+
+const currentItem = computed(() => items.value[currentItemIndex.value] || null);
+const highestBidder = computed(() =>
+    bidders.value.length
+        ? [...bidders.value].sort((a, b) => b.amount - a.amount)[0]
+        : null
+);
+
+function startTimer(duration) {
+    stopTimer();
+    timeRemaining.value = duration;
+    timerActive.value = true;
+    timerInterval = setInterval(() => {
+        timeRemaining.value--;
+        if (timeRemaining.value <= 0) {
+            stopTimer();
+            if (authUser.is_filament_admin) endBidding();
+        }
+    }, 1000);
+}
+
+function stopTimer() {
+    if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+    }
+    timerActive.value = false;
+}
+
+function onAgoraJoined() {
+    /* optional hook */
+}
+function onAgoraLeft() {
+    /* optional hook */
+}
+
+async function setActive(itemId) {
+    await axios.post(`/auction/${itemId}/set-active`);
+}
+
+async function setNext(itemId) {
+    await axios.post(`/auction/${itemId}/set-next`);
+}
+
+async function startAuction() {
+    if (!currentItem.value) return;
+    currentItemIndex.value = items.value.findIndex(
+        (i) => i.id === currentItem.value.id
+    );
+    currentBid.value =
+        currentItem.value.current_price ??
+        currentItem.value.starting_price ??
+        0;
+    bidders.value = [];
+    startTimer(60);
+    await axios.post(`/auction/${currentItem.value.id}/set-active`);
+}
+
+async function endBidding() {
+    stopTimer();
+    // you can implement a dedicated endpoint to mark end-bidding if desired
+    await axios
+        .post(`/auction/${currentItem.value.id}/set-next`)
+        .catch(() => {});
+}
+
+async function nextItem() {
+    if (currentItemIndex.value < items.value.length - 1) {
+        currentItemIndex.value++;
+        currentBid.value =
+            items.value[currentItemIndex.value].current_price ??
+            items.value[currentItemIndex.value].starting_price ??
+            0;
+        bidders.value = [];
+        startTimer(60);
+        await axios.post(`/auction/next`);
+    } else {
+        endAuction();
+    }
+}
+
+async function endAuction() {
+    stopTimer();
+    currentItemIndex.value = -1;
+    await axios.post(`/auction/end`).catch(() => {});
+}
+
+async function placeBid(amount) {
+    if (!amount || amount <= currentBid.value) {
+        bidError.value = "Bid must be higher";
+        return;
+    }
+    await axios
+        .post("/bids", { item_id: currentItem.value.id, amount })
+        .then(() => {
+            bidError.value = "";
+        })
+        .catch((e) => {
+            bidError.value = e.response?.data?.message || "Failed";
+        });
+}
+
+// Realtime listeners
+onMounted(() => {
+    window.Echo.join("auction-room")
+        .here((users) => {
+            console.log(users);
+        })
+        .joining((user) => {
+            console.log(user);
+        })
+        .leaving((user) => {
+            console.log(user);
+        })
+        .listen(".AuctionUpdated", (e) => {
+            console.log("Event handled", e.type, {
+                items: [...items.value],
+                bidders: [...bidders.value],
+                currentBid: currentBid.value,
+                currentIndex: currentItemIndex.value,
+            });
+            switch (e.type) {
+                case "active-item":
+                    items.value = items.value.map((i) =>
+                        i.id === e.payload.id ? e.payload : i
+                    );
+                    currentItemIndex.value = items.value.findIndex(
+                        (i) => i.status === "active"
+                    );
+                    currentBid.value =
+                        items.value[currentItemIndex.value]?.current_price ??
+                        items.value[currentItemIndex.value]?.starting_price ??
+                        0;
+                    break;
+                case "next-item":
+                    items.value = items.value.map((i) =>
+                        i.id === e.payload.id ? e.payload : i
+                    );
+                    break;
+                case "bid":
+                    bidders.value.unshift({
+                        id: e.payload.userId,
+                        name: e.payload.name,
+                        amount: e.payload.amount,
+                        time: e.payload.time,
+                    });
+                    currentBid.value = e.payload.amount;
+                    break;
+                case "end":
+                    stopTimer();
+                    currentItemIndex.value = -1;
+                    break;
+            }
+        });
+});
+
+onBeforeUnmount(() => {
+    try {
+        window.Echo.leave("auction-room");
+    } catch (err) {}
+    stopTimer();
+});
+</script>
