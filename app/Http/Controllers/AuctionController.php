@@ -457,7 +457,7 @@ class AuctionController extends Controller
                 $query->orderBy('created_at', 'desc')->limit(1);
             },
             'bids.user'
-        ])->where('is_active', true)->first();
+        ])->where('is_active', true)->get();
 
         if (!$auctionItem) {
             return response()->json([
