@@ -10,6 +10,7 @@ use App\Http\Controllers\KalakalkotoController;
 use App\Http\Controllers\AdkotoController;
 use App\Http\Controllers\AuctionController;
 use App\Http\Controllers\AuctionHostController;
+use App\Http\Controllers\AuctionItemController;
 use App\Http\Controllers\BidController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ConversationController;
@@ -26,6 +27,7 @@ use App\Http\Controllers\RechargeWalletController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\TextController;
 use App\Http\Controllers\UserController;
+use App\Models\AuctionItem;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -128,6 +130,11 @@ Route::middleware(['auth', 'verified'])->prefix('/auction')->group(function () {
     Route::post('/{item}/set-next', [AuctionHostController::class, 'setNext'])->name('auction.set-next');
     Route::post('/next', [AuctionHostController::class, 'nextItem'])->name('auction.next');
     Route::post('/end', [AuctionHostController::class, 'endAuction'])->name('auction.end');
+
+    // web.php
+    Route::get('/host/items', [AuctionItemController::class, 'index']);
+    Route::patch('/host/items/{item}/toggle-active', [AuctionItemController::class, 'toggleActive']);
+
 
     // Bids
     Route::post('/bids', [BidController::class, 'store'])->name('bids.store');

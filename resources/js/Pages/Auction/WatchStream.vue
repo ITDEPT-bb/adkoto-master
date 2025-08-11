@@ -29,6 +29,7 @@
                         >
                             Start Auction
                         </button>
+                        <ItemControllerPanel />
                     </div>
                 </div>
                 <!-- <YouTubeLiveStream :channelId="youtubeChannelId" /> -->
@@ -64,6 +65,7 @@ import PageSelector from "@/Components/Kalakalkoto/PageSelector.vue";
 import ShowWindowLive from "@/Components/Auction/ShowWindowLive.vue";
 import axios from "axios";
 import AgoraAuctionLive from "@/Components/Auction/AgoraAuctionLive.vue";
+import ItemControllerPanel from "@/Components/Auction/ItemControllerPanel.vue";
 
 const { props } = usePage();
 
