@@ -15,7 +15,7 @@ Broadcast::channel('auction', function ($user) {
     return ['id' => $user->id, 'name' => $user->name];
 });
 
-Broadcast::channel('auction{id}', function ($user) {
+Broadcast::channel('auction.{id}', function ($user) {
     return ['id' => $user->id, 'name' => $user->name];
 });
 

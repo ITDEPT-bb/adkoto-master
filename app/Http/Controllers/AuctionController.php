@@ -260,10 +260,26 @@ class AuctionController extends Controller
     public function start(Request $request, AuctionItem $item)
     {
         $request->validate([
-            'duration' => 'required|integer|min:10'
+            'duration' => 'required|integer|min:10',
+            'increment' => 'required|numeric|min:1',
         ]);
 
-        broadcast(new AuctionStarted($item->id, $request->duration));
+        $startingPrice = $item->starting_price;
+        // $requiredMinIncrement = $startingPrice * 0.1;
+        $requiredMinIncrement = ceil($startingPrice * 0.10);
+
+        if ($request['increment'] < $requiredMinIncrement) {
+            return response()->json([
+                // 'message' => 'Bid increment must be at least 10% of the starting price (' . number_format($requiredMinIncrement, 2) . ').',
+                'message' => 'Bid increment must be at least 10% of the starting price (' . number_format($requiredMinIncrement, 0) . ').',
+            ], 422);
+        }
+
+        // Save increment
+        $item->bid_increment = $request['increment'];
+        $item->save();
+
+        broadcast(new AuctionStarted($item->id, $request->duration, $item->bid_increment));
 
         return response()->json(['message' => 'Auction started']);
     }
@@ -457,7 +473,10 @@ class AuctionController extends Controller
                 $query->orderBy('created_at', 'desc')->limit(1);
             },
             'bids.user'
-        ])->where('is_active', true)->get();
+        ])
+            ->where('is_active', true)
+            ->latest('updated_at')
+            ->first();
 
         if (!$auctionItem) {
             return response()->json([

@@ -45,8 +45,9 @@ class AuctionSeeder extends Seeder
                 'name' => $faker->word . ' ' . $faker->word,
                 'description' => $faker->sentence,
                 'location' => $faker->city,
-                'starting_price' => $faker->randomFloat(2, 100, 5000),
-                'bid_increment' => $faker->randomFloat(2, 1, 100),
+                // 'starting_price' => $faker->randomFloat(2, 100, 5000),
+                'starting_price' => $faker->numberBetween(1000, 10000),
+                // 'bid_increment' => $faker->randomFloat(2, 1, 100),
                 'bidding_type' => $faker->randomElement(['live', 'normal']),
                 'auction_ends_at' => Carbon::now()->addDays(rand(1, 14)),
                 'created_at' => Carbon::now(),
@@ -66,15 +67,15 @@ class AuctionSeeder extends Seeder
             }
 
             // Generate bids for the auction items
-            for ($k = 1; $k <= 5; $k++) {
-                DB::table('bids')->insert([
-                    'user_id' => $faker->numberBetween(1, 10),
-                    'auction_item_id' => $itemId,
-                    'bid_amount' => $item['starting_price'] + ($k * $item['bid_increment']),
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now(),
-                ]);
-            }
+            // for ($k = 1; $k <= 5; $k++) {
+            //     DB::table('bids')->insert([
+            //         'user_id' => $faker->numberBetween(1, 10),
+            //         'auction_item_id' => $itemId,
+            //         'bid_amount' => $item['starting_price'] + ($k * $item['bid_increment']),
+            //         'created_at' => Carbon::now(),
+            //         'updated_at' => Carbon::now(),
+            //     ]);
+            // }
         }
     }
 }

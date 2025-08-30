@@ -11,6 +11,7 @@
             <div
                 class="bg-white dark:bg-slate-950 flex flex-col gap-4 p-6 rounded-lg shadow-sm"
             >
+                <!-- Host Controls -->
                 <div
                     v-if="authUser.is_filament_admin"
                     class="bg-white p-4 rounded mb-4"
@@ -23,20 +24,43 @@
                             placeholder="Duration (seconds)"
                             class="border rounded px-2 py-1 w-28"
                         />
+                        <!-- Increment Input -->
+                        <input
+                            type="number"
+                            v-model.number="increment"
+                            placeholder="Bid Increment (min is 10% of the item price)"
+                            class="border rounded px-2 py-1 w-28"
+                        />
+
+                        <!-- Display formatted value -->
+                        <p class="text-sm text-gray-500 mt-1">
+                            Current Increment:
+                            {{ formatPrice(Math.round(increment)) }}
+                        </p>
                         <button
                             @click="startAuction"
-                            class="px-4 py-2 bg-green-600 text-white rounded"
+                            :disabled="isLoading"
+                            :class="[
+                                'px-4 py-2 text-white rounded transition-all duration-300',
+                                {
+                                    'bg-green-200 cursor-not-allowed':
+                                        isLoading,
+                                    'bg-green-600 hover:bg-green-700':
+                                        !isLoading,
+                                },
+                            ]"
                         >
                             Start Auction
                         </button>
                         <ItemControllerPanel />
                     </div>
                 </div>
-                <!-- <YouTubeLiveStream :channelId="youtubeChannelId" /> -->
+
                 <AgoraAuctionLive :appId="props.appId" />
 
+                <!-- Show active item -->
                 <ShowWindowLive
-                    v-if="!noActiveBidding"
+                    v-if="item && !noActiveBidding"
                     :item="item"
                     :highBid="highBid"
                     :bids="bids"
@@ -55,7 +79,6 @@
 </template>
 
 <script setup>
-import YouTubeLiveStream from "@/Components/Auction/YouTubeLiveStream.vue";
 import { Head, usePage } from "@inertiajs/vue3";
 import { ref, defineProps, onMounted, onUnmounted } from "vue";
 import AuthenticatedLayout from "@/Layouts/AuctionLayout.vue";
@@ -67,60 +90,103 @@ import axios from "axios";
 import AgoraAuctionLive from "@/Components/Auction/AgoraAuctionLive.vue";
 import ItemControllerPanel from "@/Components/Auction/ItemControllerPanel.vue";
 
-const { props } = usePage();
+import { useToast } from "vue-toastification";
 
+const toast = useToast();
+
+const { props } = usePage();
 const authUser = usePage().props.auth.user;
 
-const updatedItem = ref(props.item);
-const updatedHighBid = ref(props.highBid);
-const updatedBids = ref(props.bids);
-const updatedUser = ref(props.user);
-const updatedWalletBalance = ref(props.walletBalance);
+const item = ref(props.item);
+const highBid = ref(props.highBid);
+const bids = ref(props.bids);
+const user = ref(props.user);
+const walletBalance = ref(props.walletBalance);
 const noActiveBidding = ref(props.noActiveBidding);
-const youtubeChannelId = ref(props.youtubeChannelId);
-let interval = null;
+const duration = ref(60);
+const increment = ref(0);
+
+const isLoading = ref(false);
+
+const formatPrice = (price) => {
+    return new Intl.NumberFormat("en-PH", {
+        style: "currency",
+        currency: "PHP",
+        minimumFractionDigits: 2,
+    }).format(price || 0);
+};
 
 const fetchShowWindowData = async () => {
     try {
         const response = await axios.get("/auction/stream/bidlist");
         const data = response.data;
 
-        updatedItem.value = data.item;
-        updatedHighBid.value = data.highBid;
-        updatedBids.value = data.bids;
-        updatedUser.value = data.user;
-        updatedWalletBalance.value = data.walletBalance;
+        increment.value = data.item.bid_increment;
+
+        // Always update the data when we receive new data
+        item.value = data.item;
+        highBid.value = data.highBid;
+        bids.value = data.bids;
+        user.value = data.user;
+        walletBalance.value = data.walletBalance;
         noActiveBidding.value = data.noActiveBidding;
     } catch (error) {
-        console.error("Error fetching auction data:", error);
+        // Clear data on error
+        item.value = null;
+        highBid.value = null;
+        bids.value = [];
+        user.value = null;
+        walletBalance.value = 0;
+        noActiveBidding.value = true;
     }
 };
 
-const duration = ref(60);
-
 const startAuction = () => {
-    if (!updatedItem.value?.id) {
+    if (!item.value?.id) {
         console.error("No item ID found to start auction");
         return;
     }
 
-    axios.post(route("auction.start", { item: updatedItem.value.id }), {
-        duration: duration.value,
-    });
+    isLoading.value = true;
+
+    axios
+        .post(route("auction.start", { item: item.value.id }), {
+            duration: duration.value,
+            increment: increment.value,
+        })
+        .then((response) => {
+            toast.success("Auction started successfully!");
+        })
+        .catch((error) => {
+            if (error.response && error.response.data.message) {
+                toast.error(error.response.data.message);
+            } else {
+                toast.error("Something went wrong! Please try again.");
+            }
+        })
+        .finally(() => {
+            isLoading.value = false;
+        });
 };
 
 onMounted(() => {
     fetchShowWindowData();
-    // interval = setInterval(fetchShowWindowData, 20000);
 
+    // Listen for auction item toggling
     window.Echo.channel("auction-items").listen(".AuctionItemToggled", (e) => {
+        // Force refresh when any item is toggled
+        fetchShowWindowData();
+    });
+
+    // Also listen for specific auction events
+    window.Echo.channel("auction").listen("AuctionStarted", (e) => {
+        console.log("Auction started event received");
+        // Refresh data when auction starts
         fetchShowWindowData();
     });
 });
 
 onUnmounted(() => {
-    clearInterval(interval);
+    // Clean up Echo listeners if needed
 });
 </script>
-
-<style scoped></style>
