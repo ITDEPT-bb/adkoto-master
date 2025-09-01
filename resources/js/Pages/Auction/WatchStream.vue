@@ -134,10 +134,14 @@ const item = ref(props.item);
 const highBid = ref(props.highBid);
 const bids = ref(props.bids);
 const user = ref(props.user);
-const walletBalance = ref(props.walletBalance);
+// const walletBalance = ref(props.walletBalance);
+const walletBalance = ref(Number(props.walletBalance) || 0);
+
 const noActiveBidding = ref(props.noActiveBidding);
 const duration = ref(60);
 const increment = ref(0);
+
+console.log(typeof walletBalance);
 
 const isLoading = ref(false);
 
@@ -172,7 +176,8 @@ const fetchShowWindowData = async () => {
         bids.value = data.bids;
         user.value = data.user;
         // walletBalance.value = data.walletBalance;
-        walletBalance.value = data.walletBalance ?? walletBalance.value;
+        // walletBalance.value = data.walletBalance ?? walletBalance.value;
+        walletBalance.value = Number(data.walletBalance) || 0;
         noActiveBidding.value = data.noActiveBidding;
     } catch (error) {
         // Clear data on error
