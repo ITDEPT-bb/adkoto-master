@@ -163,6 +163,21 @@
                             <button
                                 @click="placeBid(item.id)"
                                 :disabled="
+                                    isLoadingBid || bidIncrementResp === 0
+                                "
+                                :class="[
+                                    'group my-6 w-full sm:gap-4 sm:items-center justify-center sm:flex sm:my-4 rounded-md p-2',
+                                    {
+                                        'bg-blue-200 text-white cursor-not-allowed':
+                                            !isBidValid || isLoadingBid,
+                                        'bg-blue-300 hover:bg-blue-500 transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-105 duration-300 hover:text-white':
+                                            isBidValid && !isLoadingBid,
+                                    },
+                                ]"
+                            >
+                                <!-- <button
+                                @click="placeBid(item.id)"
+                                :disabled="
                                     !isBidValid ||
                                     isLoadingBid ||
                                     bidIncrementResp === 0
@@ -176,7 +191,7 @@
                                             isBidValid && !isLoadingBid,
                                     },
                                 ]"
-                            >
+                            > -->
                                 <div class="flex gap-3 items-center">
                                     <BankNoteIcon />
                                     <p class="font-bold">

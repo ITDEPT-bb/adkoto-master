@@ -76,6 +76,38 @@
     </AuthenticatedLayout>
 
     <UpdateProfileReminder />
+
+    <div
+        v-if="walletBalance < 1000 && !authUser.is_filament_admin"
+        class="fixed inset-0 z-20 flex items-center justify-center bg-black bg-opacity-70"
+    >
+        <div
+            class="bg-white dark:bg-slate-950 p-6 rounded-lg shadow-lg text-center max-w-md mx-auto"
+        >
+            <h2 class="text-xl font-bold text-red-600 mb-4">
+                Wallet Balance Too Low
+            </h2>
+            <p class="text-gray-700 dark:text-gray-300 mb-6">
+                You need at least {{ formatPrice(1000) }} in your wallet to join
+                the live auction.
+                <br />
+                Please recharge your wallet to continue.
+            </p>
+            <button
+                @click="openModalRecharge"
+                class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+            >
+                Recharge Wallet
+            </button>
+        </div>
+    </div>
+
+    <!-- Recharge Modal -->
+    <RechargeModal
+        :isOpen="isModalOpen"
+        @close="closeModalRecharge"
+        @recharge="handleRecharge"
+    />
 </template>
 
 <script setup>
@@ -91,6 +123,7 @@ import AgoraAuctionLive from "@/Components/Auction/AgoraAuctionLive.vue";
 import ItemControllerPanel from "@/Components/Auction/ItemControllerPanel.vue";
 
 import { useToast } from "vue-toastification";
+import RechargeModal from "@/Components/Auction/RechargeModal.vue";
 
 const toast = useToast();
 
@@ -107,6 +140,16 @@ const duration = ref(60);
 const increment = ref(0);
 
 const isLoading = ref(false);
+
+const isModalOpen = ref(false);
+
+function openModalRecharge() {
+    isModalOpen.value = true;
+}
+
+function closeModalRecharge() {
+    isModalOpen.value = false;
+}
 
 const formatPrice = (price) => {
     return new Intl.NumberFormat("en-PH", {
@@ -128,7 +171,8 @@ const fetchShowWindowData = async () => {
         highBid.value = data.highBid;
         bids.value = data.bids;
         user.value = data.user;
-        walletBalance.value = data.walletBalance;
+        // walletBalance.value = data.walletBalance;
+        walletBalance.value = data.walletBalance ?? walletBalance.value;
         noActiveBidding.value = data.noActiveBidding;
     } catch (error) {
         // Clear data on error
