@@ -66,10 +66,23 @@ class BidPlaced implements ShouldBroadcastNow
 
     public function broadcastWith()
     {
+        // return [
+        //     'itemId' => $this->itemId,
+        //     'bid' => $this->bid,
+        //     'endTime' => $this->endTime
+        // ];
         return [
             'itemId' => $this->itemId,
-            'bid' => $this->bid,
-            'endTime' => $this->endTime
+            'bid' => [
+                'id' => $this->bid->id,
+                'amount' => $this->bid->bid_amount,
+                'user' => [
+                    'id' => $this->bid->user->id,
+                    'name' => $this->bid->user->name,
+                ],
+                'created_at' => $this->bid->created_at->toDateTimeString(),
+            ],
+            'endTime' => $this->endTime,
         ];
     }
 }

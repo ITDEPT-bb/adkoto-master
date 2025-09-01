@@ -20,8 +20,15 @@ class BidController extends Controller
         $item = AuctionItem::findOrFail($request->item_id);
 
         $min = $item->current_price ?? $item->starting_price;
-        if ($request->amount <= $min) {
-            return response()->json(['message' => 'Bid must be higher than current bid.'], 422);
+        // if ($request->amount <= $min) {
+        //     return response()->json(['message' => 'Bid must be higher than current bid.'], 422);
+        // }
+        $requiredMin = $min + ($min * 0.1); // 10% increment
+
+        if ($request->bid_amount < $requiredMin) {
+            return response()->json([
+                'error' => "Bid must be at least 10% higher than ₱" . number_format($min, 2),
+            ], 422);
         }
 
         $bid = Bid::create([
@@ -40,7 +47,7 @@ class BidController extends Controller
             'time' => now()->format('H:i:s'),
         ];
 
-        event(new BidPlaced($payload));
+        event(new BidPlaced($item->id, $bid));
         event(new AuctionUpdated('bid', $payload));
 
         return response()->json(['ok' => true]);

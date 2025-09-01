@@ -142,6 +142,7 @@ const toast = useToast();
 const isOpen = ref(false);
 const items = ref([]);
 const loading = ref(false);
+const isLoadingBid = ref(false);
 
 function openModal() {
     isOpen.value = true;
@@ -165,6 +166,7 @@ async function fetchItems() {
 }
 
 async function toggleActive(item) {
+    isLoadingBid.value = true;
     try {
         await axios.patch(`/auction/host/items/${item.id}/toggle-active`);
         item.is_active = !item.is_active;
