@@ -13,46 +13,53 @@
             >
                 <!-- Host Controls -->
                 <div
-                    v-if="authUser.is_filament_admin"
-                    class="bg-white p-4 rounded mb-4"
+                    v-if="authUser.is_filament_admin || isActiveSeller"
+                    class="bg-white p-4 rounded mb-4 flex justify-between items-center"
                 >
-                    <h3 class="font-semibold mb-2">Host Controls</h3>
-                    <div class="flex gap-2">
-                        <input
-                            type="number"
-                            v-model="duration"
-                            placeholder="Duration (seconds)"
-                            class="border rounded px-2 py-1 w-28"
-                        />
-                        <!-- Increment Input -->
-                        <input
-                            type="number"
-                            v-model.number="increment"
-                            placeholder="Bid Increment (min is 10% of the item price)"
-                            class="border rounded px-2 py-1 w-28"
-                        />
+                    <div class="flex flex-col gap-2">
+                        <h3 class="font-semibold mb-2">Host Controls</h3>
+                        <div class="flex gap-2">
+                            <input
+                                type="number"
+                                v-model="duration"
+                                placeholder="Duration (seconds)"
+                                class="border rounded px-2 py-1 w-28"
+                            />
+                            <!-- Increment Input -->
+                            <input
+                                type="number"
+                                v-model.number="increment"
+                                placeholder="Bid Increment (min is 10% of the item price)"
+                                class="border rounded px-2 py-1 w-28"
+                            />
 
-                        <!-- Display formatted value -->
-                        <p class="text-sm text-gray-500 mt-1">
-                            Current Increment:
-                            {{ formatPrice(Math.round(increment)) }}
-                        </p>
-                        <button
-                            @click="startAuction"
-                            :disabled="isLoading"
-                            :class="[
-                                'px-4 py-2 text-white rounded transition-all duration-300',
-                                {
-                                    'bg-green-200 cursor-not-allowed':
-                                        isLoading,
-                                    'bg-green-600 hover:bg-green-700':
-                                        !isLoading,
-                                },
-                            ]"
-                        >
-                            Start Auction
-                        </button>
-                        <ItemControllerPanel />
+                            <!-- Display formatted value -->
+                            <p class="text-sm text-gray-500 mt-1">
+                                Current Increment:
+                                {{ formatPrice(Math.round(increment)) }}
+                            </p>
+                            <button
+                                @click="startAuction"
+                                :disabled="isLoading"
+                                :class="[
+                                    'px-4 py-2 text-white rounded transition-all duration-300',
+                                    {
+                                        'bg-green-200 cursor-not-allowed':
+                                            isLoading,
+                                        'bg-green-600 hover:bg-green-700':
+                                            !isLoading,
+                                    },
+                                ]"
+                            >
+                                Start Auction
+                            </button>
+                            <ItemControllerPanel />
+                        </div>
+                    </div>
+
+                    <div v-if="authUser.is_filament_admin" class="flex gap-2">
+                        <!-- <AuctionSellerControlPanel /> -->
+                        <ManageSellers />
                     </div>
                 </div>
 
@@ -77,7 +84,7 @@
 
     <UpdateProfileReminder />
 
-    <div
+    <!-- <div
         v-if="walletBalance < 1000 && !authUser.is_filament_admin"
         class="fixed inset-0 z-20 flex items-center justify-center bg-black bg-opacity-70"
     >
@@ -100,7 +107,7 @@
                 Recharge Wallet
             </button>
         </div>
-    </div>
+    </div> -->
 
     <!-- Recharge Modal -->
     <RechargeModal
@@ -124,11 +131,15 @@ import ItemControllerPanel from "@/Components/Auction/ItemControllerPanel.vue";
 
 import { useToast } from "vue-toastification";
 import RechargeModal from "@/Components/Auction/RechargeModal.vue";
+import AuctionSellerControlPanel from "@/Components/Auction/AuctionSellerControlPanel.vue";
+import ManageSellers from "@/Components/Auction/ManageSellers.vue";
 
 const toast = useToast();
 
 const { props } = usePage();
 const authUser = usePage().props.auth.user;
+
+const isActiveSeller = usePage().props.is_active_seller;
 
 const item = ref(props.item);
 const highBid = ref(props.highBid);
@@ -140,8 +151,6 @@ const walletBalance = ref(Number(props.walletBalance) || 0);
 const noActiveBidding = ref(props.noActiveBidding);
 const duration = ref(60);
 const increment = ref(0);
-
-console.log(typeof walletBalance);
 
 const isLoading = ref(false);
 

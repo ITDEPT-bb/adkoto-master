@@ -20,6 +20,7 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\KalakalkotoChatController;
 use App\Http\Controllers\LiveAuctionController;
 use App\Http\Controllers\LiveAuctionItemController;
+use App\Http\Controllers\LiveAuctionSellerController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PostController;
@@ -136,6 +137,20 @@ Route::middleware(['auth', 'verified'])->prefix('/auction')->group(function () {
     Route::get('/host/items', [LiveAuctionItemController::class, 'index']);
     Route::patch('/host/items/{item}/toggle-active', [LiveAuctionItemController::class, 'toggleActive']);
 
+    // Live Auction Seller Controller
+    // Route::get('/host/sellers', [LiveAuctionSellerController::class, 'index']);
+    // Route::post('/host/sellers', [LiveAuctionSellerController::class, 'store']);
+    // Route::get('/host/active-sellers', [LiveAuctionSellerController::class, 'list']);
+    // Route::patch('/host/sellers/{seller}/toggle-active', [LiveAuctionSellerController::class, 'toggleActive']);
+    // Route::delete('/host/sellers/{id}/delete', [LiveAuctionSellerController::class, 'destroy']);
+
+    Route::prefix('host')->group(function () {
+        Route::get('/sellers', [LiveAuctionSellerController::class, 'users']);
+        Route::get('/active-sellers', [LiveAuctionSellerController::class, 'sellers']);
+        Route::post('/sellers', [LiveAuctionSellerController::class, 'store']);
+        Route::patch('/sellers/{seller}/toggle-active', [LiveAuctionSellerController::class, 'toggle']);
+        Route::delete('/sellers/{seller}/delete', [LiveAuctionSellerController::class, 'destroy']);
+    });
 
     // Bids
     Route::post('/bids', [BidController::class, 'store'])->name('bids.store');
