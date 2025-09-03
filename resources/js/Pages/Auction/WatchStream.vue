@@ -139,7 +139,8 @@ const toast = useToast();
 const { props } = usePage();
 const authUser = usePage().props.auth.user;
 
-const isActiveSeller = usePage().props.is_active_seller;
+// const isActiveSeller = usePage().props.is_active_seller;
+const isActiveSeller = ref(props.is_active_seller);
 
 const item = ref(props.item);
 const highBid = ref(props.highBid);
@@ -241,6 +242,17 @@ onMounted(() => {
         console.log("Auction started event received");
         // Refresh data when auction starts
         fetchShowWindowData();
+    });
+
+    window.Echo.channel("sellers").listen(".SellerToggled", (event) => {
+        if (event.seller.user_id === authUser.id) {
+            isActiveSeller.value = event.seller.is_active;
+            if (event.seller.is_active) {
+                toast.success("You can now start your turn for the auction.");
+            } else {
+                toast.warning("Your turn for the auction ends now.");
+            }
+        }
     });
 });
 

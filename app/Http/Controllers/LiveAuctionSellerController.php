@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\SellerToggled;
 use App\Models\AuctionSeller;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -160,6 +161,9 @@ class LiveAuctionSellerController extends Controller
         }
 
         $seller->update(['is_active' => !$seller->is_active]);
+
+        // Broadcast to all clients
+        broadcast(new SellerToggled($seller))->toOthers();
 
         return response()->json([
             'message' => $seller->is_active
