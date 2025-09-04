@@ -57,7 +57,7 @@ class RechargeWalletController extends Controller
                 'data' => [
                     'attributes' => [
                         'line_items' => $lineItems,
-                        'payment_method_types' => ['card', 'gcash', 'paymaya', 'qrph', 'billease', 'grab_pay', 'dob'],
+                        'payment_method_types' => ['card', 'paymaya', 'qrph', 'billease', 'grab_pay', 'dob'],
                         'success_url' => route('recharge.success', ['userId' => $user->id]),
                         'cancel_url' => route('recharge.cancel'),
                     ],
