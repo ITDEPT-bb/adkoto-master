@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\AuctionStarted;
 use App\Models\AuctionItem;
+use App\Models\AuctionSeller;
 use App\Models\Bid;
 use App\Models\KalakalkotoCategory;
 use App\Models\User;
@@ -420,6 +421,11 @@ class AuctionController extends Controller
             'bids.user'
         ])->where('is_active', true)->first();
 
+        $activeSellerUser = auth()->user();
+        $isActiveSeller = AuctionSeller::active()
+            ->where('user_id', $activeSellerUser->id)
+            ->exists();
+
         if (!$auctionItem) {
             $user = Auth::user();
             $walletBalance = $user->wallet ? $user->wallet->balance : 0;
@@ -431,6 +437,7 @@ class AuctionController extends Controller
                 'appId' => $appID,
                 'message' => 'No active bidding yet.',
                 'user' => $user,
+                'is_active_seller' => $isActiveSeller,
                 'walletBalance' => $walletBalance,
                 'youtubeChannelId' => $youtubeChannelId ? $youtubeChannelId->channel_id : null,
             ]);
@@ -456,6 +463,7 @@ class AuctionController extends Controller
             'highBid' => $highBid,
             'bids' => $auctionItem->bids,
             'user' => $user,
+            'is_active_seller' => $isActiveSeller,
             'appId' => $appID,
             'walletBalance' => $walletBalance,
             'noActiveBidding' => false,

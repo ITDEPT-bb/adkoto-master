@@ -187,4 +187,9 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
     {
         return $this->hasMany(Block::class, 'user_id');
     }
+
+    public function auctionSeller()
+    {
+        return $this->hasOne(AuctionSeller::class, 'user_id');
+    }
 }

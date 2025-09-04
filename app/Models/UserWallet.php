@@ -16,10 +16,6 @@ class UserWallet extends Model
         'balance',
     ];
 
-    protected $casts = [
-        'balance' => 'float',
-    ];
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

@@ -16,6 +16,9 @@ const props = defineProps({
 
 const authUser = usePage().props.auth.user;
 
+const page = usePage();
+const isActiveSeller = ref(page.props.is_active_seller);
+
 // Agora refs
 const client = AgoraRTC.createClient({ mode: "live", codec: "vp8" });
 const localAudioTrack = ref(null);
@@ -83,6 +86,12 @@ const fetchToken = async (channelName) => {
 
 onMounted(() => {
     setupEventListeners();
+
+    window.Echo.channel("sellers").listen(".SellerToggled", (event) => {
+        if (event.seller.user_id === authUser.id) {
+            isActiveSeller.value = event.seller.is_active;
+        }
+    });
 });
 onBeforeUnmount(() => {
     leaveChannel();
@@ -92,7 +101,7 @@ onBeforeUnmount(() => {
 <template>
     <!-- Top Action Buttons -->
     <div class="flex flex-wrap gap-2 p-4 bg-gray-800">
-        <template v-if="authUser.is_filament_admin">
+        <template v-if="authUser.is_filament_admin || isActiveSeller">
             <button
                 @click="joinChannel(ROLE_HOST)"
                 class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg flex items-center"

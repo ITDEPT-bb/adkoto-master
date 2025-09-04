@@ -10,16 +10,30 @@ use Illuminate\Http\Request;
 
 class LiveAuctionItemController extends Controller
 {
+    // public function index()
+    // {
+    //     $items = AuctionItem::select('id', 'name', 'is_active')
+    //         ->with('attachments')
+    //         ->where('bidding_type', 'live')
+    //         ->where('auction_ends_at', '>', now())
+    //         ->get();
+
+    //     return AuctionItemResource::collection($items);
+    // }
     public function index()
     {
+        $userId = auth()->id();
+
         $items = AuctionItem::select('id', 'name', 'is_active')
             ->with('attachments')
+            ->where('user_id', $userId)
             ->where('bidding_type', 'live')
             ->where('auction_ends_at', '>', now())
             ->get();
 
         return AuctionItemResource::collection($items);
     }
+
 
     // public function toggleActive(AuctionItem $item)
     // {
