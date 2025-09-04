@@ -202,7 +202,7 @@ const fetchShowWindowData = async () => {
 
 const startAuction = () => {
     if (!item.value?.id) {
-        console.error("No item ID found to start auction");
+        toast.error("You cannot start the auction without an active item.");
         return;
     }
 
