@@ -150,6 +150,10 @@ Route::middleware(['auth', 'verified'])->prefix('/auction')->group(function () {
         Route::post('/sellers', [LiveAuctionSellerController::class, 'store']);
         Route::patch('/sellers/{seller}/toggle-active', [LiveAuctionSellerController::class, 'toggle']);
         Route::delete('/sellers/{seller}/delete', [LiveAuctionSellerController::class, 'destroy']);
+
+        Route::get('/categories', [LiveAuctionSellerController::class, 'fetchCategories']);
+
+        Route::post('/item/live', [LiveAuctionSellerController::class, 'storeLive']);
     });
 
     // Bids

@@ -108,7 +108,9 @@
                                     </tbody>
                                 </table>
 
-                                <div class="mt-4 flex justify-end">
+                                <div class="mt-4 flex justify-between gap-4">
+                                    <CreateItemModal @created="fetchItems" />
+
                                     <button
                                         type="button"
                                         class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
@@ -137,6 +139,7 @@ import {
     DialogTitle,
 } from "@headlessui/vue";
 import { useToast } from "vue-toastification";
+import CreateItemModal from "./CreateItemModal.vue";
 
 const toast = useToast();
 const isOpen = ref(false);

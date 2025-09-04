@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Events\SellerToggled;
+use App\Models\AuctionItem;
 use App\Models\AuctionSeller;
+use App\Models\KalakalkotoCategory;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class LiveAuctionSellerController extends Controller
 {
@@ -178,6 +182,58 @@ class LiveAuctionSellerController extends Controller
 
         return response()->json([
             'message' => 'Seller removed successfully.',
+        ]);
+    }
+
+    public function fetchCategories()
+    {
+        return response()->json([
+            'data' => KalakalkotoCategory::select('id', 'name')->orderBy('name')->get()
+        ]);
+    }
+
+    public function storeLive(Request $request)
+    {
+        Log::info('Incoming storeLive request', $request->except('attachments'));
+
+        $request->validate([
+            'category_id' => 'required|exists:kalakalkoto_categories,id',
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'price' => 'required|numeric|min:1',
+            'location' => 'required|string|max:255',
+            'attachments.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        // Insert item into auction_items
+        $auctionItem = AuctionItem::create([
+            'user_id' => auth()->id(),
+            'category_id' => $request->category_id,
+            'name' => $request->name,
+            'description' => $request->description,
+            'location' => $request->location,
+            'starting_price' => $request->price,
+            'auction_ends_at' => now()->addDays(7),
+            'bidding_type' => 'live',
+        ]);
+
+        // Handle attachments
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $file) {
+                $path = $file->store('auction_items', 'public');
+
+                DB::table('auction_item_attachments')->insert([
+                    'auction_id' => $auctionItem->id,
+                    'image_path' => $path,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+        }
+
+        return response()->json([
+            'message' => 'Live auction item created successfully!',
+            'item' => $auctionItem
         ]);
     }
 }
