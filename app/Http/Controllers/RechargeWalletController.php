@@ -18,6 +18,7 @@ class RechargeWalletController extends Controller
         // Ensure the amount is multiplied by 100 and cast to integer
         // $amount = (int) ($request->input('amount') * 100);
         $originalAmount = (float) $request->input('amount');
+        $originalAmountCents = (int) ($originalAmount * 100);
 
         $chargePercentage = 0.05;
         $chargeAmount = $originalAmount * $chargePercentage;
@@ -35,7 +36,7 @@ class RechargeWalletController extends Controller
         $transaction = WalletTransaction::create([
             'user_id' => $user->id,
             // 'amount' => $amount,
-            'amount' => $originalAmount,
+            'amount' => $originalAmountCents,
             'transaction_type' => 'recharge',
             'status' => 'pending',
         ]);
