@@ -3,6 +3,9 @@ import { usePage } from "@inertiajs/vue3";
 import AgoraRTC from "agora-rtc-sdk-ng";
 import axios from "axios";
 import { ref, onMounted, defineProps, onBeforeUnmount } from "vue";
+import PlayIcon from "../Icons/PlayIcon.vue";
+import UserPlusIcon from "../Icons/UserPlusIcon.vue";
+import UserMinusIcon from "../Icons/UserMinusIcon.vue";
 
 // Constants
 const ROLE_HOST = "host";
