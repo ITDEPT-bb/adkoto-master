@@ -35,7 +35,8 @@ class PaymentController extends Controller
                 'data' => [
                     'attributes' => [
                         'line_items' => $lineItems,
-                        'payment_method_types' => ['card', 'gcash', 'paymaya'],
+                        // 'payment_method_types' => ['card', 'paymaya'],
+                        'payment_method_types' => ['card', 'paymaya', 'qrph', 'billease', 'grab_pay', 'dob'],
                         'success_url' => route('payment.success', ['itemId' => $item->id, 'auction_type' => $auctionType]), // Pass auction_type in success_url
                         'cancel_url' => route('payment.cancel'),
                     ],
