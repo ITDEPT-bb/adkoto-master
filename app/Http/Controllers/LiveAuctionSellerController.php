@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Events\SellerToggled;
+use App\Http\Resources\AuctionSellerResource;
+use App\Http\Resources\UserResource;
 use App\Models\AuctionItem;
 use App\Models\AuctionSeller;
 use App\Models\KalakalkotoCategory;
@@ -123,6 +125,9 @@ class LiveAuctionSellerController extends Controller
             });
 
         return $query->paginate(10);
+        // return UserResource::collection(
+        //     $query->paginate(10)
+        // );
     }
 
     public function sellers(Request $request)
@@ -139,6 +144,9 @@ class LiveAuctionSellerController extends Controller
             });
 
         return $query->paginate(10);
+        // return AuctionSellerResource::collection(
+        //     $query->paginate(10)
+        // );
     }
 
     public function store(Request $request)

@@ -391,11 +391,9 @@ async function removeSeller(seller) {
                                                         >
                                                             <img
                                                                 v-if="
-                                                                    user.avatar_url
+                                                                    user.avatar_path
                                                                 "
-                                                                :src="
-                                                                    user.avatar_url
-                                                                "
+                                                                :src="`/storage/${user.avatar_path}`"
                                                                 class="w-10 h-10 object-cover rounded-full mx-auto"
                                                             />
                                                             <img
@@ -588,10 +586,7 @@ async function removeSeller(seller) {
                                                                     seller.user
                                                                         .avatar_path
                                                                 "
-                                                                :src="
-                                                                    seller.user
-                                                                        .avatar_path
-                                                                "
+                                                                :src="`/storage/${seller.user.avatar_path}`"
                                                                 class="w-10 h-10 object-cover rounded-full mx-auto"
                                                             />
                                                             <img
