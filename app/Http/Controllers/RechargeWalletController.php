@@ -34,7 +34,8 @@ class RechargeWalletController extends Controller
         // Create a new wallet transaction with 'pending' status
         $transaction = WalletTransaction::create([
             'user_id' => $user->id,
-            'amount' => $amount,
+            // 'amount' => $amount,
+            'amount' => $originalAmount,
             'transaction_type' => 'recharge',
             'status' => 'pending',
         ]);
