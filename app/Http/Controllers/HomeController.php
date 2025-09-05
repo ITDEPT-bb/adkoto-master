@@ -153,25 +153,26 @@ class HomeController extends Controller
 
     public function policy(Request $request)
     {
-        return Inertia::render('PrivacyPolicy', [
-        ]);
+        return Inertia::render('PrivacyPolicy', []);
     }
 
     public function terms(Request $request)
     {
-        return Inertia::render('TermsOfService', [
-        ]);
+        return Inertia::render('TermsOfService', []);
     }
 
     public function copyright(Request $request)
     {
-        return Inertia::render('Copyright', [
-        ]);
+        return Inertia::render('Copyright', []);
     }
 
     public function faqs(Request $request)
     {
-        return Inertia::render('Faqs', [
-        ]);
+        return Inertia::render('Faqs', []);
+    }
+
+    public function adkotoprofile(Request $request)
+    {
+        return Inertia::render('AdkotoProfile', []);
     }
 }

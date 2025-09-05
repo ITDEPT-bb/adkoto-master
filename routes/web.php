@@ -64,6 +64,9 @@ Route::get('/copyright', [HomeController::class, 'copyright'])
 Route::get('/faqs', [HomeController::class, 'faqs'])
     ->name('faqs.show');
 
+Route::get('/adkoto/profile', [HomeController::class, 'adkotoprofile'])
+    ->name('adkotoprofile.show');
+
 Route::post('/profanity-check', [TextController::class, 'checkProfanity']);
 
 // Kalakalkoto
