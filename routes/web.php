@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdkotoChatController;
 use App\Http\Controllers\AgoraVideoController;
+use App\Http\Controllers\AuctionAuthController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CallController;
 use App\Http\Controllers\GamesController;
@@ -50,6 +51,22 @@ Route::get('/', [HomeController::class, 'index'])
 
 Route::get('/download-mobile-app', function () {
     return view('download-mobile-app');
+});
+
+Route::get('/about', function () {
+    return view('about');
+});
+
+Route::middleware('guest.auction')->prefix('auction')->group(function () {
+    Route::get('/register', [AuctionAuthController::class, 'showRegisterForm'])
+        ->name('auction.register');
+
+    Route::post('/register', [AuctionAuthController::class, 'register']);
+
+    Route::get('/login', [AuctionAuthController::class, 'showLoginForm'])
+        ->name('auction.login');
+
+    Route::post('/login', [AuctionAuthController::class, 'login']);
 });
 
 Route::get('/terms', [HomeController::class, 'terms'])
