@@ -20,19 +20,36 @@ class LiveAuctionItemController extends Controller
 
     //     return AuctionItemResource::collection($items);
     // }
+    // public function index()
+    // {
+    //     $userId = auth()->id();
+
+    //     $items = AuctionItem::select('id', 'name', 'is_active')
+    //         ->with('attachments')
+    //         ->where('user_id', $userId)
+    //         ->where('bidding_type', 'live')
+    //         ->where('auction_ends_at', '>', now())
+    //         ->get();
+
+    //     return AuctionItemResource::collection($items);
+    // }
     public function index()
     {
-        $userId = auth()->id();
+        $user = auth()->user();
 
         $items = AuctionItem::select('id', 'name', 'is_active')
             ->with('attachments')
-            ->where('user_id', $userId)
             ->where('bidding_type', 'live')
-            ->where('auction_ends_at', '>', now())
-            ->get();
+            ->where('auction_ends_at', '>', now());
 
-        return AuctionItemResource::collection($items);
+        // If not admin, restrict to their own items
+        if (!$user->is_filament_admin) {
+            $items->where('user_id', $user->id);
+        }
+
+        return AuctionItemResource::collection($items->get());
     }
+
 
 
     // public function toggleActive(AuctionItem $item)
