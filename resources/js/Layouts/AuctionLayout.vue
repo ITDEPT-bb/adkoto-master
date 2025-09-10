@@ -125,6 +125,18 @@ else if (url.startsWith("/adkoto")) {
     logoTextClass =
         "absolute bottom-2 italic text-blue-500 font-black ml-10 left-1/2 transform -translate-x-1/2 translate-y-full text-center text-xs my-1 pt-1 group-hover:pt-2";
 }
+
+// Auction
+else if (url.startsWith("/auction")) {
+    logoSrc = "/img/kalakalkoto.png";
+    logoClass =
+        "block h-7 sm:h-8 xl:h-10 2xl:h-12 w-auto ml-2 sm:ml-4 md:ml-6 lg:ml-2 xl:ml-7 2xl:ml-[70px] hover:scale-110 transition duration-200 ease-in-out scale-75";
+    kalakalkotoClass = "border border-red-500";
+    logoText = "Where Opportunity Meets Marketplace!";
+    logoTextClass =
+        "absolute bottom-1.5 italic text-blue-500 font-black ml-10 left-1/2 transform -translate-x-1/2 translate-y-full text-center text-xs my-1 pt-1 group-hover:pt-2";
+}
+
 // Games
 else if (url.startsWith("/games")) {
     gamesClass = "border border-red-500";

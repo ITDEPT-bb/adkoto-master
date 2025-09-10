@@ -80,6 +80,11 @@
                                                 class="border px-4 py-2 flex items-center"
                                             >
                                                 <img
+                                                    :src="item.attachment_url"
+                                                    alt="Item Image"
+                                                    class="w-12 h-12 object-cover rounded"
+                                                />
+                                                <!-- <img
                                                     v-if="
                                                         item.attachments &&
                                                         item.attachments.length
@@ -93,7 +98,7 @@
                                                     src="https://placehold.co/400"
                                                     alt="No Image"
                                                     class="w-12 h-12 object-cover rounded"
-                                                />
+                                                /> -->
                                             </td>
                                             <td
                                                 class="border px-4 py-2 text-center"

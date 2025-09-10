@@ -14,7 +14,7 @@
                 >
                     Kalakalkoto
                 </option>
-                <option value="auction" :selected="route().current('auction')">
+                <option value="auction" :selected="isAuctionActive">
                     Auction
                 </option>
             </select>
@@ -24,40 +24,63 @@
         <ul
             class="hidden text-sm font-semibold text-center text-gray-500 rounded-lg shadow sm:flex dark:divide-gray-700 dark:text-gray-400"
         >
+            <!-- Auction -->
             <li
-                class="me-2 w-full focus-within:z-10 flex justify-center items-center align-middle"
-            >
-                <Link
-                    :href="route('kalakalkoto')"
-                    class="inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group"
-                    :class="{
-                        'text-blue-600 border-blue-600 underline':
-                            route().current() === 'kalakalkoto',
-                        'text-gray-500': !route().current() === 'kalakalkoto',
-                    }"
-                >
-                    <ShoppingBagIcon
-                        class="w-6 h-6 me-1 text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300"
-                    />
-                    <p>Kalakalkoto</p>
-                </Link>
-            </li>
-
-            <li
-                class="me-2 w-full focus-within:z-10 flex justify-center items-center align-middle"
+                :class="[
+                    isAuctionActive ? 'order-1' : 'order-2',
+                    'me-2 w-full flex justify-center items-center align-middle',
+                ]"
             >
                 <Link
                     :href="route('auction')"
-                    class="inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group"
+                    class="inline-flex items-center justify-center border-transparent rounded-t-lg group transition-all duration-200"
                     :class="{
-                        'text-blue-600 border-blue-600 underline':
-                            route().current('auction'),
-                        'text-gray-500': !route().current('auction'),
+                        // 👇 Bigger & highlighted when active
+                        'p-5 text-lg font-bold text-blue-600 border-b-4 border-blue-600':
+                            isAuctionActive,
+                        // 👇 Normal style when inactive
+                        'p-4 text-gray-500 border-b-2 hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300':
+                            !isAuctionActive,
                     }"
                 >
                     <UserGroupIcon
-                        class="w-6 h-6 me-1 text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300"
-                    />Auction
+                        :class="[
+                            isAuctionActive
+                                ? 'w-7 h-7 text-blue-600 dark:text-blue-400'
+                                : 'w-6 h-6 text-gray-400 dark:text-gray-500',
+                            'me-1 transition-all duration-200',
+                        ]"
+                    />
+                    <span class="text-xl">Auction</span>
+                </Link>
+            </li>
+
+            <!-- Kalakalkoto -->
+            <li
+                :class="[
+                    isAuctionActive ? 'order-2' : 'order-1',
+                    'me-2 w-full flex justify-center items-center align-middle',
+                ]"
+            >
+                <Link
+                    :href="route('kalakalkoto')"
+                    class="inline-flex items-center justify-center border-transparent rounded-t-lg group transition-all duration-200"
+                    :class="{
+                        'p-5 text-lg font-bold text-blue-600 border-b-4 border-blue-600':
+                            route().current('kalakalkoto'),
+                        'p-4 text-gray-500 border-b-2 hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300':
+                            !route().current('kalakalkoto'),
+                    }"
+                >
+                    <ShoppingBagIcon
+                        :class="[
+                            route().current('kalakalkoto')
+                                ? 'w-7 h-7 text-blue-600 dark:text-blue-400'
+                                : 'w-6 h-6 text-gray-400 dark:text-gray-500',
+                            'me-1 transition-all duration-200',
+                        ]"
+                    />
+                    <span>Kalakalkoto</span>
                 </Link>
             </li>
         </ul>
@@ -65,14 +88,19 @@
 </template>
 
 <script setup>
+import { computed } from "vue";
 import { router } from "@inertiajs/vue3";
 import { Link } from "@inertiajs/vue3";
 import ShoppingBagIcon from "./ShoppingBagIcon.vue";
 import UserGroupIcon from "./UserGroupIcon.vue";
 
-// Function to change route when the select option changes
 const changeRoute = (event) => {
     const selectedRoute = event.target.value;
     router.get(route(selectedRoute));
 };
+
+// ✅ Auction is active if either auction or auction.watchStream
+const isAuctionActive = computed(
+    () => route().current("auction") || route().current("auction.watchStream")
+);
 </script>
