@@ -243,10 +243,12 @@ import {
     DialogTitle,
 } from "@headlessui/vue";
 import { useToast } from "vue-toastification";
-import { useForm } from "@inertiajs/vue3";
+import { useForm, usePage } from "@inertiajs/vue3";
 
+const { props } = usePage();
 const toast = useToast();
 const isOpen = ref(false);
+const walletBalance = ref(Number(props.walletBalance) || 0);
 
 const imagePreviews = ref([]);
 
@@ -300,8 +302,30 @@ const removeImage = (index) => {
 const isLoading = ref(false);
 const emit = defineEmits(["created"]);
 
+const formatPrice = (price) => {
+    return new Intl.NumberFormat("en-PH", {
+        style: "currency",
+        currency: "PHP",
+        minimumFractionDigits: 2,
+    }).format(price || 0);
+};
+
 const submitForm = () => {
     isLoading.value = true;
+
+    const price = Number(form.price) || 0;
+    const requiredBalance = price * 0.02;
+
+    if (walletBalance.value < requiredBalance) {
+        toast.error(
+            `You need at least ${formatPrice(
+                requiredBalance
+            )} in your wallet (2% of the price).`
+        );
+        isLoading.value = false;
+        return;
+    }
+
     const formData = new FormData();
     formData.append("name", form.name);
     formData.append("description", form.description);

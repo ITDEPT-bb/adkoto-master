@@ -200,10 +200,64 @@ class LiveAuctionSellerController extends Controller
         ]);
     }
 
+    // public function storeLive(Request $request)
+    // {
+
+    //     $request->validate([
+    //         'category_id' => 'required|exists:kalakalkoto_categories,id',
+    //         'name' => 'required|string|max:255',
+    //         'description' => 'required|string',
+    //         'price' => 'required|numeric|min:1',
+    //         'location' => 'required|string|max:255',
+    //         'attachments.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+    //     ]);
+
+    //     $user = auth()->user();
+    //     $price = $request->price;
+    //     $requiredBalance = $price * 0.02;
+    //     $walletBalance = $user->wallet ? $user->wallet->balance : 0;
+
+    //     // Check wallet balance
+    //     if ($walletBalance < $requiredBalance) {
+    //         return response()->json([
+    //             'message' => "You need at least ₱" . number_format($requiredBalance, 2) . " in your wallet (2% of the price).",
+    //         ], 422);
+    //     }
+
+    //     // Insert item into auction_items
+    //     $auctionItem = AuctionItem::create([
+    //         'user_id' => auth()->id(),
+    //         'category_id' => $request->category_id,
+    //         'name' => $request->name,
+    //         'description' => $request->description,
+    //         'location' => $request->location,
+    //         'starting_price' => $request->price,
+    //         'auction_ends_at' => now()->addDays(7),
+    //         'bidding_type' => 'live',
+    //     ]);
+
+    //     // Handle attachments
+    //     if ($request->hasFile('attachments')) {
+    //         foreach ($request->file('attachments') as $file) {
+    //             $path = $file->store('auction_items', 'public');
+
+    //             DB::table('auction_item_attachments')->insert([
+    //                 'auction_id' => $auctionItem->id,
+    //                 'image_path' => $path,
+    //                 'created_at' => now(),
+    //                 'updated_at' => now(),
+    //             ]);
+    //         }
+    //     }
+
+    //     return response()->json([
+    //         'message' => 'Live auction item created successfully!',
+    //         'item' => $auctionItem
+    //     ]);
+    // }
+
     public function storeLive(Request $request)
     {
-        Log::info('Incoming storeLive request', $request->except('attachments'));
-
         $request->validate([
             'category_id' => 'required|exists:kalakalkoto_categories,id',
             'name' => 'required|string|max:255',
@@ -213,35 +267,65 @@ class LiveAuctionSellerController extends Controller
             'attachments.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // Insert item into auction_items
-        $auctionItem = AuctionItem::create([
-            'user_id' => auth()->id(),
-            'category_id' => $request->category_id,
-            'name' => $request->name,
-            'description' => $request->description,
-            'location' => $request->location,
-            'starting_price' => $request->price,
-            'auction_ends_at' => now()->addDays(7),
-            'bidding_type' => 'live',
-        ]);
+        $user = auth()->user();
+        $price = $request->price;
+        $requiredBalance = $price * 0.02;
+        $walletBalance = $user->wallet ? $user->wallet->balance : 0;
 
-        // Handle attachments
-        if ($request->hasFile('attachments')) {
-            foreach ($request->file('attachments') as $file) {
-                $path = $file->store('auction_items', 'public');
-
-                DB::table('auction_item_attachments')->insert([
-                    'auction_id' => $auctionItem->id,
-                    'image_path' => $path,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
-            }
+        // Check wallet balance
+        if ($walletBalance < $requiredBalance) {
+            return response()->json([
+                'message' => "You need at least ₱" . number_format($requiredBalance, 2) . " in your wallet (2% of the price).",
+            ], 422);
         }
 
-        return response()->json([
-            'message' => 'Live auction item created successfully!',
-            'item' => $auctionItem
-        ]);
+        DB::beginTransaction();
+
+        try {
+            // Insert item into auction_items
+            $auctionItem = AuctionItem::create([
+                'user_id' => $user->id,
+                'category_id' => $request->category_id,
+                'name' => $request->name,
+                'description' => $request->description,
+                'location' => $request->location,
+                'starting_price' => $price,
+                'auction_ends_at' => now()->addDays(7),
+                'bidding_type' => 'live',
+            ]);
+
+            // Handle attachments
+            if ($request->hasFile('attachments')) {
+                foreach ($request->file('attachments') as $file) {
+                    $path = $file->store('auction_items', 'public');
+
+                    DB::table('auction_item_attachments')->insert([
+                        'auction_id' => $auctionItem->id,
+                        'image_path' => $path,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
+            }
+
+            // Deduct 2% from user's wallet
+            if ($user->wallet) {
+                $user->wallet->decrement('balance', $requiredBalance);
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Live auction item created successfully!',
+                'item' => $auctionItem
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'message' => 'Failed to create auction item.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }

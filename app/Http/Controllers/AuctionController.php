@@ -236,9 +236,10 @@ class AuctionController extends Controller
         $walletBalance = $user->wallet ? $user->wallet->balance : 0;
 
         // Ensure wallet balance is enough
-        if ($walletBalance < $newBidAmount) {
+        // if ($walletBalance < $newBidAmount) {
+        if ($walletBalance < 1000) {
             return response()->json([
-                'error' => 'Insufficient wallet balance to place this bid'
+                'error' => 'Insufficient wallet balance to place this bid. You need to recharge atleast ₱1000 to place a bid'
             ], 403);
         }
 
