@@ -130,6 +130,80 @@
                                                     >₱ 1000</label
                                                 >
                                             </div>
+                                            <div class="flex items-center">
+                                                <input
+                                                    id="amount-5000"
+                                                    type="radio"
+                                                    v-model="rechargeAmount"
+                                                    value="5000"
+                                                    class="form-radio w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
+                                                />
+                                                <label
+                                                    for="amount-5000"
+                                                    class="ml-2 text-sm font-semibold text-gray-900 dark:text-white"
+                                                    >₱ 5000</label
+                                                >
+                                            </div>
+                                            <div class="flex items-center">
+                                                <input
+                                                    id="amount-10000"
+                                                    type="radio"
+                                                    v-model="rechargeAmount"
+                                                    value="10000"
+                                                    class="form-radio w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
+                                                />
+                                                <label
+                                                    for="amount-10000"
+                                                    class="ml-2 text-sm font-semibold text-gray-900 dark:text-white"
+                                                    >₱ 10,000</label
+                                                >
+                                            </div>
+                                            <div class="flex items-center">
+                                                <input
+                                                    id="amount-25000"
+                                                    type="radio"
+                                                    v-model="rechargeAmount"
+                                                    value="25000"
+                                                    class="form-radio w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
+                                                />
+                                                <label
+                                                    for="amount-25000"
+                                                    class="ml-2 text-sm font-semibold text-gray-900 dark:text-white"
+                                                    >₱ 25,000</label
+                                                >
+                                                <div class="flex items-center">
+                                                    <input
+                                                        id="amount-50000"
+                                                        type="radio"
+                                                        v-model="rechargeAmount"
+                                                        value="50000"
+                                                        class="form-radio w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
+                                                    />
+                                                    <label
+                                                        for="amount-50000"
+                                                        class="ml-2 text-sm font-semibold text-gray-900 dark:text-white"
+                                                        >₱ 50,000</label
+                                                    >
+                                                    <div
+                                                        class="flex items-center"
+                                                    >
+                                                        <input
+                                                            id="amount-100000"
+                                                            type="radio"
+                                                            v-model="
+                                                                rechargeAmount
+                                                            "
+                                                            value="100000"
+                                                            class="form-radio w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
+                                                        />
+                                                        <label
+                                                            for="amount-100000"
+                                                            class="ml-2 text-sm font-semibold text-gray-900 dark:text-white"
+                                                            >₱ 100,000</label
+                                                        >
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <p class="mt-4 text-xs text-red-500">
                                             * Note: A 5% charge will be applied
