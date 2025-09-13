@@ -10,7 +10,7 @@
             <p
                 class="text-gray-700 text-base md:text-lg mb-10 max-w-3xl mx-auto"
             >
-                Using Adkoto has been a smooth experience — the platform is easy
+                Using Adkoto has been a smooth experience the platform is easy
                 to navigate, reliable, and helps me connect with the right
                 opportunities.
             </p>
