@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AboutPageController;
 use App\Http\Controllers\AdkotoChatController;
 use App\Http\Controllers\AgoraVideoController;
 use App\Http\Controllers\AuctionAuthController;
@@ -53,9 +54,8 @@ Route::get('/download-mobile-app', function () {
     return view('download-mobile-app');
 });
 
-Route::get('/about', function () {
-    return view('about');
-});
+Route::get('/about', [AboutPageController::class, 'index'])
+    ->name('about.show');
 
 Route::middleware('guest.auction')->prefix('auction')->group(function () {
     Route::get('/register', [AuctionAuthController::class, 'showRegisterForm'])
