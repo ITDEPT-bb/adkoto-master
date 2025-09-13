@@ -5,17 +5,17 @@
         class="h-full mx-auto overflow-hidden flex flex-col bg-gray-100 dark:bg-gray-800"
     >
         <main class="flex-1 overflow-y-scroll">
-            <Hero />
+            <Hero id="home" />
             <AdsSection :featuredAds="featuredAds" />
-            <AboutUs />
-            <AdhikainKoto />
+            <AboutUs id="about-us" />
+            <AdhikainKoto id="features" />
             <Kalakalkoto />
             <Auction />
             <AdsSection :featuredAds="featuredAds" />
             <Tribekoto />
             <Cards />
-            <Testimonials />
-            <ContactUs />
+            <Testimonials id="testimonials" />
+            <ContactUs id="contact-us" />
             <Footer />
         </main>
     </div>

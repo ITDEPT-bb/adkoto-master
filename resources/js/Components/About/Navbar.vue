@@ -1,10 +1,18 @@
 <script setup>
+import { Link } from "@inertiajs/vue3";
 import { ref } from "vue";
 
 const mobileOpen = ref(false);
 
 function toggleMenu() {
     mobileOpen.value = !mobileOpen.value;
+}
+
+function scrollToSection(id) {
+    const section = document.getElementById(id);
+    if (section) {
+        section.scrollIntoView({ behavior: "smooth" });
+    }
 }
 </script>
 
@@ -27,34 +35,46 @@ function toggleMenu() {
                 <nav
                     class="hidden md:flex flex-1 justify-center items-center space-x-6 text-gray-700 font-medium"
                 >
-                    <a
-                        href="#"
+                    <button
+                        @click="scrollToSection('home')"
                         class="bg-brand-green text-white px-4 py-1 rounded-md font-semibold shadow-sm shadow-green-200/40"
                     >
                         Home
-                    </a>
-                    <a href="#" class="hover:text-blue-700 transition"
-                        >About us</a
+                    </button>
+                    <button
+                        @click="scrollToSection('about-us')"
+                        class="hover:text-blue-700 transition"
                     >
-                    <a href="#" class="hover:text-blue-700 transition"
-                        >Features</a
+                        About us
+                    </button>
+                    <button
+                        @click="scrollToSection('features')"
+                        class="hover:text-blue-700 transition"
                     >
-                    <a href="#" class="hover:text-blue-700 transition"
-                        >Testimonials</a
+                        Features
+                    </button>
+                    <button
+                        @click="scrollToSection('testimonials')"
+                        class="hover:text-blue-700 transition"
                     >
-                    <a href="#" class="hover:text-blue-700 transition"
-                        >Contact us</a
+                        Testimonials
+                    </button>
+                    <button
+                        @click="scrollToSection('contact-us')"
+                        class="hover:text-blue-700 transition"
                     >
+                        Contact us
+                    </button>
                 </nav>
 
                 <!-- Desktop button -->
                 <div class="hidden md:flex items-center">
-                    <a
-                        href="#"
+                    <Link
+                        :href="route('auction.login')"
                         class="inline-flex items-center px-6 py-1 rounded-full bg-brand-blue text-white font-semibold shadow-md hover:bg-blue-700 transition"
                     >
                         Log in
-                    </a>
+                    </Link>
                 </div>
 
                 <!-- Mobile menu button -->
@@ -99,39 +119,44 @@ function toggleMenu() {
                     v-if="mobileOpen"
                     class="md:hidden mt-3 bg-white border-2 border-brand-blue rounded-xl shadow-lg p-4 space-y-3"
                 >
-                    <a
-                        href="#"
+                    <button
+                        @click="scrollToSection('home')"
                         class="block px-4 py-2 rounded-md font-semibold bg-brand-green text-white"
-                        >Home</a
                     >
-                    <a
-                        href="#"
+                        Home
+                    </button>
+                    <button
+                        @click="scrollToSection('about-us')"
                         class="block px-4 py-2 hover:text-blue-700 transition"
-                        >About us</a
                     >
-                    <a
-                        href="#"
+                        About us
+                    </button>
+                    <button
+                        @click="scrollToSection('features')"
                         class="block px-4 py-2 hover:text-blue-700 transition"
-                        >Features</a
                     >
-                    <a
-                        href="#"
+                        Features
+                    </button>
+                    <button
+                        @click="scrollToSection('testimonials')"
                         class="block px-4 py-2 hover:text-blue-700 transition"
-                        >Testimonials</a
                     >
-                    <a
-                        href="#"
+                        Testimonials
+                    </button>
+                    <button
+                        @click="scrollToSection('contact-us')"
                         class="block px-4 py-2 hover:text-blue-700 transition"
-                        >Contact us</a
                     >
+                        Contact us
+                    </button>
 
                     <!-- Mobile login button -->
-                    <a
-                        href="#"
+                    <Link
+                        :href="route('auction.login')"
                         class="block text-center px-6 py-2 rounded-full bg-brand-blue text-white font-semibold shadow-md hover:bg-blue-700 transition"
                     >
                         Log in
-                    </a>
+                    </Link>
                 </div>
             </transition>
         </div>
