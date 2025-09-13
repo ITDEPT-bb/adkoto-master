@@ -1,6 +1,5 @@
 <template>
-    <div class="bg-cover bg-no-repeat bg-ads rounded-lg">
-        <!-- Display message if no featured ads are found -->
+    <div class="bg-cover bg-no-repeat bg-ads rounded-lg p-6">
         <div
             v-if="featuredAds.length === 0"
             class="text-center text-white font-boldmarker p-10"
@@ -8,10 +7,9 @@
             No Advertisements available at the moment.
         </div>
 
-        <!-- If there are featured ads, display them in carousels -->
         <div
             v-else
-            class="flex w-full px-2 flex-wrap md:flex-nowrap justify-center items-center gap-4"
+            class="flex w-full mx-auto flex-wrap md:flex-nowrap justify-center items-center"
         >
             <!-- First Carousel -->
             <swiper
@@ -21,13 +19,13 @@
                 :autoplay="{ delay: 5000, disableOnInteraction: false }"
                 :navigation="true"
                 :pagination="{ clickable: true }"
-                class="w-full sm:w-1/2 lg:w-1/2 h-auto"
+                class="w-full max-w-3xl h-48"
             >
                 <swiper-slide v-for="ad in firstCarouselAds" :key="ad.id">
                     <img
                         :src="ad.attachments[0]?.image_path"
                         alt="Featured Ad"
-                        class="w-full h-auto object-cover rounded"
+                        class="w-full h-full object-contain rounded-lg"
                     />
                 </swiper-slide>
             </swiper>
@@ -40,13 +38,13 @@
                 :autoplay="{ delay: 5000, disableOnInteraction: false }"
                 :navigation="true"
                 :pagination="{ clickable: true }"
-                class="w-full sm:w-1/2 lg:w-1/2 h-auto"
+                class="w-full max-w-3xl h-48"
             >
                 <swiper-slide v-for="ad in secondCarouselAds" :key="ad.id">
                     <img
                         :src="ad.attachments[0]?.image_path"
                         alt="Featured Ad"
-                        class="w-full h-auto object-cover rounded"
+                        class="w-full h-full object-contain rounded-lg"
                     />
                 </swiper-slide>
             </swiper>
