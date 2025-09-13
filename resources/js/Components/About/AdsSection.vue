@@ -17,7 +17,6 @@
                 effect="fade"
                 :loop="true"
                 :autoplay="{ delay: 5000, disableOnInteraction: false }"
-                :navigation="true"
                 :pagination="{ clickable: true }"
                 class="w-full max-w-3xl h-48"
             >
@@ -36,7 +35,6 @@
                 effect="fade"
                 :loop="true"
                 :autoplay="{ delay: 5000, disableOnInteraction: false }"
-                :navigation="true"
                 :pagination="{ clickable: true }"
                 class="w-full max-w-3xl h-48"
             >
