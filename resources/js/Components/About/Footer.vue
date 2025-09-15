@@ -19,29 +19,44 @@
                 <h3 class="font-semibold text-lg">Useful Links</h3>
                 <ul class="space-y-2">
                     <li>
-                        <a href="#" class="text-white hover:text-brand-green"
-                            >Home</a
+                        <button
+                            @click="scrollToSection('home')"
+                            class="text-white hover:text-brand-green"
                         >
+                            Home
+                        </button>
                     </li>
                     <li>
-                        <a href="#" class="text-white hover:text-brand-green"
-                            >About us</a
+                        <button
+                            @click="scrollToSection('about-us')"
+                            class="text-white hover:text-brand-green"
                         >
+                            About us
+                        </button>
                     </li>
                     <li>
-                        <a href="#" class="text-white hover:text-brand-green"
-                            >Features</a
+                        <button
+                            @click="scrollToSection('features')"
+                            class="text-white hover:text-brand-green"
                         >
+                            Features
+                        </button>
                     </li>
                     <li>
-                        <a href="#" class="text-white hover:text-brand-green"
-                            >Testimonials</a
+                        <button
+                            @click="scrollToSection('testimonials')"
+                            class="text-white hover:text-brand-green"
                         >
+                            Testimonials
+                        </button>
                     </li>
                     <li>
-                        <a href="#" class="text-white hover:text-brand-green"
-                            >Contact us</a
+                        <button
+                            @click="scrollToSection('contact-us')"
+                            class="text-white hover:text-brand-green"
                         >
+                            Contact us
+                        </button>
                     </li>
                 </ul>
             </section>
@@ -53,28 +68,38 @@
                 </h3>
                 <ul class="space-y-2">
                     <li>
-                        <a href="#" class="text-white hover:text-brand-green"
-                            >Adkoto Profile</a
+                        <Link
+                            :href="route('adkotoprofile.show')"
+                            class="text-white hover:text-brand-green"
+                            >Adkoto Profile</Link
                         >
                     </li>
                     <li>
-                        <a href="#" class="text-white hover:text-brand-green"
-                            >Privacy Policy</a
+                        <Link
+                            :href="route('policy.show')"
+                            class="text-white hover:text-brand-green"
+                            >Privacy Policy</Link
                         >
                     </li>
                     <li>
-                        <a href="#" class="text-white hover:text-brand-green"
-                            >Terms and Conditions</a
+                        <Link
+                            :href="route('terms.show')"
+                            class="text-white hover:text-brand-green"
+                            >Terms and Conditions</Link
                         >
                     </li>
                     <li>
-                        <a href="#" class="text-white hover:text-brand-green"
-                            >Copyrights</a
+                        <Link
+                            :href="route('copyright.show')"
+                            class="text-white hover:text-brand-green"
+                            >Copyrights</Link
                         >
                     </li>
                     <li>
-                        <a href="#" class="text-white hover:text-brand-green"
-                            >FAQs</a
+                        <Link
+                            :href="route('faqs.show')"
+                            class="text-white hover:text-brand-green"
+                            >FAQs</Link
                         >
                     </li>
                 </ul>
@@ -107,11 +132,24 @@
     <div
         class="bg-brand-green text-white flex flex-col sm:flex-row justify-between items-center py-2 px-6 text-sm"
     >
-        <p class="mb-1 sm:mb-0">©2025 Adhikain Koto, All Rights Reserved.</p>
+        <p class="mb-1 sm:mb-0">
+            ©{{ currentYear }} Adkoto, All Rights Reserved.
+        </p>
         <p class="text-center">
             Designed & Developed by BB 88 Advertising and Digital Solutions Inc.
         </p>
     </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { Link } from "@inertiajs/vue3";
+
+function scrollToSection(id) {
+    const section = document.getElementById(id);
+    if (section) {
+        section.scrollIntoView({ behavior: "smooth" });
+    }
+}
+
+const currentYear = new Date().getFullYear();
+</script>
