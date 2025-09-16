@@ -14,35 +14,64 @@
                 <!-- Host Controls -->
                 <div
                     v-if="authUser.is_filament_admin || isActiveSeller"
-                    class="bg-white p-4 rounded mb-4 flex justify-between items-center"
+                    class="bg-white p-4 rounded mb-4 flex flex-col gap-4 md:flex-row md:justify-between md:items-start"
                 >
-                    <div class="flex flex-col gap-2">
+                    <!-- Left Panel -->
+                    <div class="flex flex-col gap-2 w-full md:w-2/3">
                         <h3 class="font-semibold mb-2">Host Controls</h3>
-                        <div class="flex gap-2">
-                            <input
-                                type="number"
-                                v-model="duration"
-                                placeholder="Duration (seconds)"
-                                class="border rounded px-2 py-1 w-28"
-                            />
-                            <!-- Increment Input -->
-                            <input
-                                type="number"
-                                v-model.number="increment"
-                                placeholder="Bid Increment (min is 10% of the item price)"
-                                class="border rounded px-2 py-1 w-28"
-                            />
+
+                        <div
+                            class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center"
+                        >
+                            <!-- Duration -->
+                            <div class="flex flex-col w-full sm:w-28">
+                                <label
+                                    for="duration"
+                                    class="text-sm font-medium text-gray-700 mb-1"
+                                >
+                                    Duration (seconds)
+                                </label>
+                                <input
+                                    id="duration"
+                                    type="number"
+                                    v-model="duration"
+                                    placeholder="e.g. 60"
+                                    class="border rounded px-2 py-1 w-full"
+                                />
+                            </div>
+
+                            <!-- Increment -->
+                            <div class="flex flex-col w-full sm:w-48">
+                                <label
+                                    for="increment"
+                                    class="text-sm font-medium text-gray-700 mb-1"
+                                >
+                                    Bid Increment
+                                    <span class="text-gray-500"
+                                        >(min 10% of price)</span
+                                    >
+                                </label>
+                                <input
+                                    id="increment"
+                                    type="number"
+                                    v-model.number="increment"
+                                    placeholder="e.g. 100"
+                                    class="border rounded px-2 py-1 w-full"
+                                />
+                            </div>
 
                             <!-- Display formatted value -->
-                            <p class="text-sm text-gray-500 mt-1">
+                            <p class="text-sm text-gray-500">
                                 Current Increment:
                                 {{ formatPrice(Math.round(increment)) }}
                             </p>
+
+                            <!-- Start Auction Button -->
                             <button
                                 @click="startAuction"
                                 :disabled="isLoading"
                                 :class="[
-                                    'px-4 py-2 text-white rounded transition-all duration-300',
+                                    'px-4 py-2 text-white rounded transition-all duration-300 w-full sm:w-auto',
                                     {
                                         'bg-green-200 cursor-not-allowed':
                                             isLoading,
@@ -53,13 +82,17 @@
                             >
                                 Start Auction
                             </button>
-                            <ItemControllerPanel />
+
+                            <ItemControllerPanel class="w-full sm:w-auto" />
                         </div>
                     </div>
 
-                    <div v-if="authUser.is_filament_admin" class="flex gap-2">
-                        <!-- <AuctionSellerControlPanel /> -->
-                        <ManageSellers />
+                    <!-- Right Panel -->
+                    <div
+                        v-if="authUser.is_filament_admin"
+                        class="flex gap-2 w-full md:w-1/3 justify-start md:justify-end"
+                    >
+                        <ManageSellers class="w-full sm:w-auto" />
                     </div>
                 </div>
 
