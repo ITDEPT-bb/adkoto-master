@@ -10,7 +10,7 @@
             <AboutUs id="about-us" data-aos="fade-in" />
             <AdhikainKoto id="features" data-aos="fade-in" />
             <Kalakalkoto data-aos="fade-in" />
-            <Auction data-aos="fade-in" />
+            <Auction :auctions="activeAuctions" data-aos="fade-in" />
             <AdsSection :featuredAds="featuredAds" data-aos="fade-in" />
             <Tribekoto data-aos="fade-in" />
             <Cards data-aos="fade-in" />
@@ -38,6 +38,7 @@ import Testimonials from "@/Components/About/Testimonials.vue";
 
 const { props } = usePage();
 const featuredAds = ref(props.featuredAds);
+const activeAuctions = ref(props.activeAuctions);
 
 import AOS from "aos";
 import "aos/dist/aos.css";
