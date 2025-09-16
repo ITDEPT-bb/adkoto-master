@@ -42,7 +42,7 @@
                         <!-- iOS Button -->
                         <a
                             href="#"
-                            class="flex items-center px-4 py-3 bg-white rounded-lg hover:bg-gray-100 shadow-sm w-full sm:w-60"
+                            class="flex items-center px-4 py-3 bg-white opacity-80 rounded-lg hover:bg-gray-100 shadow-sm w-full sm:w-60 hover:cursor-not-allowed"
                         >
                             <img
                                 src="/assets/icon/download_icon.png"
@@ -57,7 +57,8 @@
 
                         <!-- Android Button -->
                         <a
-                            href="#"
+                            :href="route('download.app')"
+                            target="_blank"
                             class="flex items-center px-4 py-3 bg-white rounded-lg hover:bg-gray-100 shadow-sm w-full sm:w-60"
                         >
                             <img
@@ -67,7 +68,7 @@
                             />
                             <span class="text-left text-sm">
                                 Download<br />
-                                <strong>Google Play Store</strong>
+                                <strong>For Android</strong>
                             </span>
                         </a>
                     </div>

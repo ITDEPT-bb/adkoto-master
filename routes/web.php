@@ -52,7 +52,7 @@ Route::get('/', [HomeController::class, 'index'])
 
 Route::get('/download-mobile-app', function () {
     return view('download-mobile-app');
-});
+})->name('download.app');
 
 Route::get('/about', [AboutPageController::class, 'index'])
     ->name('about.show');

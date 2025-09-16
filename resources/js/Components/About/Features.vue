@@ -1,4 +1,6 @@
 <script setup>
+import { Link } from "@inertiajs/vue3";
+
 const features = [
     {
         icon: "/assets/icon/connect_with_real_people.png",
@@ -30,12 +32,12 @@ const features = [
         >
             <img :src="feature.icon" class="mx-auto h-16 mb-4" />
             <h4 class="font-bold text-lg">{{ feature.title }}</h4>
-            <a
-                href="#"
+            <Link
+                :href="route('dashboard')"
                 class="mt-4 inline-block px-4 py-2 border-2 border-brand-blue rounded-md font-semibold bg-gray-100 text-brand-blue hover:bg-blue-100"
             >
                 Learn more...
-            </a>
+            </Link>
         </div>
     </section>
 </template>

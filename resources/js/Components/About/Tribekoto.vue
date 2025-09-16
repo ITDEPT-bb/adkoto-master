@@ -27,12 +27,12 @@
                         tribes.
                     </p>
 
-                    <a
-                        href="#"
+                    <Link
+                        :href="route('login')"
                         class="inline-block bg-brand-blue text-white font-semibold px-8 py-3 rounded-lg shadow-md hover:bg-blue-700 transition"
                     >
                         Learn More...
-                    </a>
+                    </Link>
                 </div>
 
                 <div></div>
@@ -123,4 +123,6 @@
     </section>
 </template>
 
-<script setup></script>
+<script setup>
+import { Link } from "@inertiajs/vue3";
+</script>
