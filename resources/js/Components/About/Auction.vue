@@ -36,12 +36,12 @@
                                 auction.attachments[0]?.image_path ??
                                 '/assets/picture/auction_pic1.png'
                             "
-                            :alt="auction.title"
+                            :alt="auction.name"
                             class="h-48 w-auto object-contain mb-4"
                         />
 
                         <h3 class="text-lg font-semibold text-gray-800 mb-3">
-                            {{ auction.title }}
+                            {{ auction.name }}
                         </h3>
 
                         <Link
