@@ -27,18 +27,23 @@
                 }"
                 class="auction-swiper"
             >
-                <SwiperSlide v-for="(product, index) in products" :key="index">
+                <SwiperSlide v-for="auction in auctions.data" :key="auction.id">
                     <div
                         class="border-2 border-brand-blue rounded-xl overflow-hidden p-4 flex flex-col items-center shadow-md"
                     >
                         <img
-                            :src="product.image"
-                            :alt="product.title"
+                            :src="
+                                auction.attachments[0]?.image_path ??
+                                '/assets/picture/auction_pic1.png'
+                            "
+                            :alt="auction.title"
                             class="h-48 w-auto object-contain mb-4"
                         />
+
                         <h3 class="text-lg font-semibold text-gray-800 mb-3">
-                            {{ product.title }}
+                            {{ auction.title }}
                         </h3>
+
                         <Link
                             :href="route('auction')"
                             class="px-4 py-2 text-sm font-medium rounded-md text-white bg-brand-blue hover:bg-brand-blue/90 transition"
@@ -59,29 +64,12 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { Link } from "@inertiajs/vue3";
 
-// Example product data
-const products = [
-    {
-        title: "IPHONE 13",
-        image: "/assets/picture/auction_pic1.png",
+defineProps({
+    auctions: {
+        type: Object,
+        required: true,
     },
-    {
-        title: "IPHONE 13",
-        image: "/assets/picture/auction_pic1.png",
-    },
-    {
-        title: "IPHONE 13",
-        image: "/assets/picture/auction_pic1.png",
-    },
-    {
-        title: "IPHONE 13",
-        image: "/assets/picture/auction_pic1.png",
-    },
-    {
-        title: "IPHONE 13",
-        image: "/assets/picture/auction_pic1.png",
-    },
-];
+});
 </script>
 
 <style scoped>
