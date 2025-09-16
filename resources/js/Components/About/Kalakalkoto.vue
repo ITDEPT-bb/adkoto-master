@@ -24,12 +24,12 @@
                         how to register and start your journey.
                     </p>
 
-                    <a
-                        href="#"
+                    <Link
+                        :href="route('auction.login')"
                         class="inline-block bg-brand-green text-white border-2 border-brand-lightgreen font-semibold px-6 sm:px-8 md:px-10 py-2 sm:py-3 rounded-lg shadow-md hover:bg-green-700 transition"
                     >
                         Register now!
-                    </a>
+                    </Link>
                 </div>
 
                 <!-- Right: Video -->
@@ -75,4 +75,6 @@
     </section>
 </template>
 
-<script setup></script>
+<script setup>
+import { Link } from "@inertiajs/vue3";
+</script>
