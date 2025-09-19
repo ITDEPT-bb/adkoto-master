@@ -6,16 +6,16 @@
     >
         <main class="flex-1 overflow-y-scroll">
             <Hero id="home" data-aos="zoom-in" />
-            <AdsSection :featuredAds="featuredAds" data-aos="fade-in" />
-            <AboutUs id="about-us" data-aos="fade-in" />
-            <AdhikainKoto id="features" data-aos="fade-in" />
-            <Kalakalkoto data-aos="fade-in" />
-            <Auction :auctions="activeAuctions" data-aos="fade-in" />
-            <AdsSection :featuredAds="featuredAds" data-aos="fade-in" />
-            <Tribekoto data-aos="fade-in" />
-            <Cards data-aos="fade-in" />
-            <Testimonials id="testimonials" data-aos="fade-in" />
-            <ContactUs id="contact-us" data-aos="fade-in" />
+            <AdsSection :featuredAds="featuredAds" data-aos="fade-up" />
+            <AboutUs id="about-us" data-aos="fade-up" />
+            <AdhikainKoto id="features" data-aos="fade-up" />
+            <Kalakalkoto data-aos="fade-up" />
+            <Auction :auctions="activeAuctions" data-aos="fade-up" />
+            <AdsSection :featuredAds="featuredAds" data-aos="fade-up" />
+            <Tribekoto data-aos="fade-up" />
+            <Cards data-aos="fade-up" />
+            <Testimonials id="testimonials" data-aos="fade-up" />
+            <ContactUs id="contact-us" data-aos="fade-up" />
             <Footer />
         </main>
     </div>
