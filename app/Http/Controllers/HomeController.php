@@ -106,8 +106,7 @@ class HomeController extends Controller
                             where sp.shared_post_id = posts.id
                             and sp.deleted_at is null) + 1, 100)) * 3) +                           -- shares
                         (LOG(LEAST((select count(*) from comments
-                            where comments.post_id = posts.id
-                            and comments.deleted_at is null) + 1, 100)) * 4) +                     -- comments
+                            where comments.post_id = posts.id) + 1, 100)) * 4) +                     -- comments
                         (CASE WHEN posts.user_id = ? THEN 0.2 ELSE 0 END) +                          -- small boost for own posts
                         (CASE WHEN f.follower_id IS NOT NULL THEN 2 ELSE 0 END) +                    -- boost for followed users
                         (CASE WHEN gu.group_id IS NOT NULL THEN 2 ELSE 0 END)                        -- boost for same group
