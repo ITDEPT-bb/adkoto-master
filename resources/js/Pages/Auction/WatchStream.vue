@@ -261,6 +261,11 @@ const startAuction = () => {
         });
 };
 
+function preventRefresh(e) {
+    e.preventDefault();
+    e.returnValue = "";
+}
+
 onMounted(() => {
     fetchShowWindowData();
 
@@ -287,9 +292,21 @@ onMounted(() => {
             }
         }
     });
+
+    window.addEventListener("beforeunload", preventRefresh);
+
+    window.addEventListener("keydown", (e) => {
+        if (
+            e.key === "F5" ||
+            (e.ctrlKey && e.key === "r") ||
+            (e.metaKey && e.key === "r")
+        ) {
+            e.preventDefault();
+        }
+    });
 });
 
 onUnmounted(() => {
-    // Clean up Echo listeners if needed
+    window.removeEventListener("beforeunload", preventRefresh);
 });
 </script>
