@@ -192,4 +192,9 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
     {
         return $this->hasOne(AuctionSeller::class, 'user_id');
     }
+
+    public function getIsActiveSellerAttribute()
+    {
+        return $this->auctionSeller && $this->auctionSeller->is_active;
+    }
 }

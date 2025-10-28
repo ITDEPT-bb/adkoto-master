@@ -49,6 +49,7 @@ class UserResource extends JsonResource
             'unread_count' => $this->when(isset($this->unread_count), $this->unread_count),
             'is_deactivated' => $isDeactivated,
             'deactivation_message' => $isDeactivated ? 'This user has been deactivated.' : null,
+            'is_active_seller' => $this->auctionSeller?->is_active ?? false,
         ];
     }
 }
