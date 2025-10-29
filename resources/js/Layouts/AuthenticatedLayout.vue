@@ -27,17 +27,20 @@ import NotificationDropdown from "@/Components/Notification/NotificationDropdown
 import MessageIcon from "@/Components/Chat/MessageIconDropdown.vue";
 
 // Valentines Specific
-import Cupid from "/public/img/admoto/CUPID.jpg";
-import TeddyBear from "/public/img/admoto/TEDDYBEAR.png";
-import Ribbon from "/public/img/admoto/RIBBON.png";
-import HeartSearch from "/public/img/admoto/HEART HEART.png";
+// import Cupid from "/public/img/admoto/CUPID.jpg";
+// import TeddyBear from "/public/img/admoto/TEDDYBEAR.png";
+// import Ribbon from "/public/img/admoto/RIBBON.png";
+// import HeartSearch from "/public/img/admoto/HEART HEART.png";
 
 // Mother's Day Specific
-import MothersDayIcon from "/public/img/mothers_day/2.png";
-import IconBackground from "/public/img/mothers_day/icon_bg.png";
-import AwardIcon from "/public/img/mothers_day/best_mom.png";
-import SearchBarIcon from "/public/img/mothers_day/icon.png";
-import ProfileSmallIcon from "/public/img/mothers_day/p1.png";
+// import MothersDayIcon from "/public/img/mothers_day/2.png";
+// import IconBackground from "/public/img/mothers_day/icon_bg.png";
+// import AwardIcon from "/public/img/mothers_day/best_mom.png";
+// import SearchBarIcon from "/public/img/mothers_day/icon.png";
+// import ProfileSmallIcon from "/public/img/mothers_day/p1.png";
+
+// Halloween Specific
+import ProfileSmallIcon from "/public/img/Halloween/hat.png";
 
 import axiosClient from "@/axiosClient.js";
 import DarkModeToggle from "@/Components/DarkModeToggle.vue";
@@ -193,11 +196,11 @@ onMounted(() => {
             class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 fixed md:static top-0 z-10 pt-6 sm:pt-0 shadow"
         >
             <!-- Primary Navigation Menu -->
-            <!-- <div
+            <div
                 class="max-w-screen mx-auto px-4 py-0.5 sm:px-6 lg:px-20 bg-cover bg-center drop-shadow-lg relative sm:z-50 z-0"
-                style="background-image: url('/img/mothers_day/Bg.png')"
-            > -->
-            <div class="max-w-screen mx-auto px-4 sm:px-6 lg:px-16">
+                style="background-image: url('/img/Halloween/bg.jpg')"
+            >
+                <!-- <div class="max-w-screen mx-auto px-4 sm:px-6 lg:px-16"> -->
                 <!-- <div class="flex items-center justify-between gap-4 h-16">
                     <div class="flex"> -->
                 <!-- <div
@@ -652,15 +655,15 @@ onMounted(() => {
                                                 :src="authUser.avatar_url"
                                                 :alt="authUser.name"
                                             />
-                                            <!-- <div
+                                            <div
                                                 class="absolute -bottom-1 xl:right-2 2xl:right-2 lg:block hidden"
                                             >
                                                 <img
                                                     :src="ProfileSmallIcon"
-                                                    class="w-3 relative bottom-9 left-2 h-auto"
+                                                    class="w-6 relative bottom-9 left-2 h-auto"
                                                     alt="Logo"
                                                 />
-                                            </div> -->
+                                            </div>
                                         </button>
                                         <div
                                             id="profile-tooltip"
