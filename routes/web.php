@@ -153,6 +153,8 @@ Route::middleware(['auth', 'verified'])->prefix('/auction')->group(function () {
     Route::post('/next', [AuctionHostController::class, 'nextItem'])->name('auction.next');
     Route::post('/end', [AuctionHostController::class, 'endAuction'])->name('auction.end');
 
+    Route::get('/{id}/state', [AuctionController::class, 'state']);
+
     // web.php
     Route::get('/host/items', [LiveAuctionItemController::class, 'index']);
     Route::patch('/host/items/{item}/toggle-active', [LiveAuctionItemController::class, 'toggleActive']);

@@ -277,11 +277,15 @@ class AuctionController extends Controller
             ], 422);
         }
 
-        // Save increment
-        $item->bid_increment = $request['increment'];
-        $item->save();
+        $endTime = now()->addSeconds($request->duration);
 
-        broadcast(new AuctionStarted($item->id, $request->duration, $item->bid_increment));
+        // Save increment
+        $item->update([
+            'bid_increment' => $request->increment,
+            'end_time' => $endTime,
+        ]);
+
+        broadcast(new AuctionStarted($item->id, $endTime->timestamp, $item->bid_increment));
 
         return response()->json(['message' => 'Auction started']);
     }
@@ -514,6 +518,20 @@ class AuctionController extends Controller
             // 'user' => $user,
             // 'walletBalance' => $walletBalance,
             'noActiveBidding' => false,
+        ]);
+    }
+
+    public function state($id)
+    {
+        $item = AuctionItem::findOrFail($id);
+
+        if (!$item->end_time) {
+            return response()->json(['end_time' => null, 'is_active' => false]);
+        }
+
+        return response()->json([
+            'end_time' => $item->end_time,
+            'is_active' => now()->lt($item->end_time),
         ]);
     }
 }

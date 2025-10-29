@@ -1,118 +1,148 @@
 <template>
-    <div>
-        <!-- Auction Status Display -->
+    <transition name="fade" mode="out-in">
         <div
-            v-if="winner"
-            class="w-full bg-blue-50 border border-blue-200 p-4 mb-4 rounded-md"
+            v-if="isFetchingState"
+            key="loading"
+            class="flex justify-center py-10"
         >
-            <div class="flex items-center justify-center">
-                <div class="bg-blue-100 p-2 rounded-full mr-3">
-                    <span class="text-blue-600 text-xl">🏆</span>
-                </div>
-                <h2 class="text-blue-800 font-semibold text-lg">
-                    Winner:
-                    <span class="font-bold">{{ winner.name }}</span> with
-                    {{ formatPrice(winner.amount) }}
-                </h2>
-            </div>
+            <svg
+                class="animate-spin h-6 w-6 text-blue-500 mr-2"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+            >
+                <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                ></circle>
+                <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                ></path>
+            </svg>
+            <p class="text-gray-600 font-medium">Loading auction status...</p>
         </div>
-
-        <div
-            v-else
-            class="w-full bg-gray-50 border border-gray-200 p-4 mb-4 rounded-md"
-        >
-            <div class="flex items-center justify-center mb-3">
-                <div class="bg-gray-100 p-2 rounded-full mr-3">
-                    <span class="text-gray-600 text-xl">⏱️</span>
-                </div>
-                <h2 class="text-gray-800 font-semibold text-lg">
-                    Auction {{ auctionStatus }}
-                </h2>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Current Bid Section -->
-                <div
-                    class="bg-white p-3 rounded-lg border border-gray-100 shadow-sm"
-                >
-                    <div class="flex items-center mb-2">
-                        <span class="text-green-600 text-lg mr-2">💰</span>
-                        <h3 class="text-gray-700 font-medium">Current Bid</h3>
+        <div v-else key="content">
+            <!-- Auction Status Display -->
+            <div
+                v-if="winner"
+                class="w-full bg-blue-50 border border-blue-200 p-4 mb-4 rounded-md"
+            >
+                <div class="flex items-center justify-center">
+                    <div class="bg-blue-100 p-2 rounded-full mr-3">
+                        <span class="text-blue-600 text-xl">🏆</span>
                     </div>
-                    <p class="text-2xl font-bold text-green-600">
-                        {{ formatPrice(computedCurrentBid) }}
-                    </p>
-                </div>
-
-                <!-- Time Left Section -->
-                <div
-                    class="bg-white p-3 rounded-lg border border-gray-100 shadow-sm"
-                >
-                    <div class="flex items-center mb-2">
-                        <span class="text-red-600 text-lg mr-2">⏰</span>
-                        <h3 class="text-gray-700 font-medium">Time Left</h3>
-                    </div>
-                    <p class="text-2xl font-bold text-red-600">
-                        {{ timeLeft }}s
-                    </p>
+                    <h2 class="text-blue-800 font-semibold text-lg">
+                        Winner:
+                        <span class="font-bold">{{ winner.name }}</span> with
+                        {{ formatPrice(winner.amount) }}
+                    </h2>
                 </div>
             </div>
-        </div>
 
-        <!-- Item Display -->
-        <div
-            class="max-w-7xl mx-auto h-full overflow-y-auto p-4 scrollbar-thin"
-        >
-            <div class="px-4 mx-auto 2xl:px-0 my-4">
-                <div class="lg:grid lg:grid-cols-3 lg:gap-8 xl:gap-10">
-                    <!-- Image Carousel -->
-                    <div class="relative">
-                        <div class="overflow-hidden rounded-t-lg">
-                            <div
-                                class="flex"
-                                :style="{
-                                    transform: `translateX(-${
-                                        currentIndex * 100
-                                    }%)`,
-                                    transition: 'transform 0.5s ease',
-                                }"
-                            >
-                                <img
-                                    v-for="(
-                                        attachment, index
-                                    ) in item.attachments"
-                                    :key="index"
-                                    :src="attachment.image_path"
-                                    alt="Auction Image"
-                                    class="w-full h-full object-contain"
-                                />
-                            </div>
-                        </div>
-                        <button
-                            @click="prevImage"
-                            class="absolute top-1/2 lg:top-1/4 left-4 transform -translate-y-1/2 bg-white dark:bg-slate-950 dark:text-white text-blue-500 font-bold p-2 rounded-full"
-                        >
-                            &lt;
-                        </button>
-                        <button
-                            @click="nextImage"
-                            class="absolute top-1/2 lg:top-1/4 right-4 transform -translate-y-1/2 bg-white dark:bg-slate-950 dark:text-white text-blue-500 font-bold p-2 rounded-full"
-                        >
-                            &gt;
-                        </button>
+            <div
+                v-else
+                class="w-full bg-gray-50 border border-gray-200 p-4 mb-4 rounded-md"
+            >
+                <div class="flex items-center justify-center mb-3">
+                    <div class="bg-gray-100 p-2 rounded-full mr-3">
+                        <span class="text-gray-600 text-xl">⏱️</span>
                     </div>
+                    <h2 class="text-gray-800 font-semibold text-lg">
+                        Auction {{ auctionStatus }}
+                    </h2>
+                </div>
 
-                    <!-- Item Details -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Current Bid Section -->
                     <div
-                        class="mt-6 sm:mt-8 lg:mt-0 p-4 lg:h-full overflow-hidden bg-white dark:bg-slate-950 rounded"
+                        class="bg-white p-3 rounded-lg border border-gray-100 shadow-sm"
                     >
-                        <h1
-                            class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white"
-                        >
-                            {{ item.name }}
-                        </h1>
+                        <div class="flex items-center mb-2">
+                            <span class="text-green-600 text-lg mr-2">💰</span>
+                            <h3 class="text-gray-700 font-medium">
+                                Current Bid
+                            </h3>
+                        </div>
+                        <p class="text-2xl font-bold text-green-600">
+                            {{ formatPrice(computedCurrentBid) }}
+                        </p>
+                    </div>
 
-                        <!-- <div class="mt-4 sm:items-center sm:gap- sm:flex-col">
+                    <!-- Time Left Section -->
+                    <div
+                        class="bg-white p-3 rounded-lg border border-gray-100 shadow-sm"
+                    >
+                        <div class="flex items-center mb-2">
+                            <span class="text-red-600 text-lg mr-2">⏰</span>
+                            <h3 class="text-gray-700 font-medium">Time Left</h3>
+                        </div>
+                        <p class="text-2xl font-bold text-red-600">
+                            {{ timeLeft }}s
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item Display -->
+            <div
+                class="max-w-7xl mx-auto h-full overflow-y-auto p-4 scrollbar-thin"
+            >
+                <div class="px-4 mx-auto 2xl:px-0 my-4">
+                    <div class="lg:grid lg:grid-cols-3 lg:gap-8 xl:gap-10">
+                        <!-- Image Carousel -->
+                        <div class="relative">
+                            <div class="overflow-hidden rounded-t-lg">
+                                <div
+                                    class="flex"
+                                    :style="{
+                                        transform: `translateX(-${
+                                            currentIndex * 100
+                                        }%)`,
+                                        transition: 'transform 0.5s ease',
+                                    }"
+                                >
+                                    <img
+                                        v-for="(
+                                            attachment, index
+                                        ) in item.attachments"
+                                        :key="index"
+                                        :src="attachment.image_path"
+                                        alt="Auction Image"
+                                        class="w-full h-full object-contain"
+                                    />
+                                </div>
+                            </div>
+                            <button
+                                @click="prevImage"
+                                class="absolute top-1/2 lg:top-1/4 left-4 transform -translate-y-1/2 bg-white dark:bg-slate-950 dark:text-white text-blue-500 font-bold p-2 rounded-full"
+                            >
+                                &lt;
+                            </button>
+                            <button
+                                @click="nextImage"
+                                class="absolute top-1/2 lg:top-1/4 right-4 transform -translate-y-1/2 bg-white dark:bg-slate-950 dark:text-white text-blue-500 font-bold p-2 rounded-full"
+                            >
+                                &gt;
+                            </button>
+                        </div>
+
+                        <!-- Item Details -->
+                        <div
+                            class="mt-6 sm:mt-8 lg:mt-0 p-4 lg:h-full overflow-hidden bg-white dark:bg-slate-950 rounded"
+                        >
+                            <h1
+                                class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white"
+                            >
+                                {{ item.name }}
+                            </h1>
+
+                            <!-- <div class="mt-4 sm:items-center sm:gap- sm:flex-col">
                             <p
                                 class="text-lg font-extrabold text-gray-900 sm:text-lg dark:text-white"
                             >
@@ -120,62 +150,66 @@
                                 {{ formatPrice(item.starting_price) }}
                             </p>
                         </div> -->
-                        <div class="mt-4 sm:items-center sm:flex-col sm:gap-2">
-                            <p
-                                class="text-lg font-extrabold text-gray-900 sm:text-lg dark:text-white"
+                            <div
+                                class="mt-4 sm:items-center sm:flex-col sm:gap-2"
                             >
-                                Starting Price:
-                                {{ formatPrice(item.starting_price) }}
-                            </p>
-                            <p
-                                class="text-md font-semibold text-gray-700 sm:text-md dark:text-gray-300"
-                            >
-                                Minimum Bid Increment:
-                                {{
-                                    bidIncrementResp > 0
-                                        ? formatPrice(
-                                              Math.ceil(bidIncrementResp)
-                                          )
-                                        : "Waiting..."
-                                }}
-                            </p>
-                        </div>
+                                <p
+                                    class="text-lg font-extrabold text-gray-900 sm:text-lg dark:text-white"
+                                >
+                                    Starting Price:
+                                    {{ formatPrice(item.starting_price) }}
+                                </p>
+                                <p
+                                    class="text-md font-semibold text-gray-700 sm:text-md dark:text-gray-300"
+                                >
+                                    Minimum Bid Increment:
+                                    {{
+                                        bidIncrementResp > 0
+                                            ? formatPrice(
+                                                  Math.ceil(bidIncrementResp)
+                                              )
+                                            : "Waiting..."
+                                    }}
+                                </p>
+                            </div>
 
-                        <!-- Bid Input Section -->
-                        <div v-if="item.user.id !== authUser.id">
-                            <input
-                                v-model.number="bidAmount"
-                                type="number"
-                                :min="minAllowedBid"
-                                :disabled="
-                                    bidIncrementResp === 0 || isLoadingBid
-                                "
-                                placeholder="Enter your bid"
-                                class="border p-2 rounded w-full mb-3"
-                            />
-                            <p
-                                v-if="bidAmount && bidAmount <= minAllowedBid"
-                                class="text-red-500 text-sm mb-2"
-                            >
-                                Your bid must be higher than
-                                {{ formatPrice(minAllowedBid) }}.
-                            </p>
-                            <button
-                                @click="placeBid(item.id)"
-                                :disabled="
-                                    isLoadingBid || bidIncrementResp === 0
-                                "
-                                :class="[
-                                    'group my-6 w-full sm:gap-4 sm:items-center justify-center sm:flex sm:my-4 rounded-md p-2',
-                                    {
-                                        'bg-blue-200 text-white cursor-not-allowed':
-                                            !isBidValid || isLoadingBid,
-                                        'bg-blue-300 hover:bg-blue-500 transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-105 duration-300 hover:text-white':
-                                            isBidValid && !isLoadingBid,
-                                    },
-                                ]"
-                            >
-                                <!-- <button
+                            <!-- Bid Input Section -->
+                            <div v-if="item.user.id !== authUser.id">
+                                <input
+                                    v-model.number="bidAmount"
+                                    type="number"
+                                    :min="minAllowedBid"
+                                    :disabled="
+                                        bidIncrementResp === 0 || isLoadingBid
+                                    "
+                                    placeholder="Enter your bid"
+                                    class="border p-2 rounded w-full mb-3"
+                                />
+                                <p
+                                    v-if="
+                                        bidAmount && bidAmount <= minAllowedBid
+                                    "
+                                    class="text-red-500 text-sm mb-2"
+                                >
+                                    Your bid must be higher than
+                                    {{ formatPrice(minAllowedBid) }}.
+                                </p>
+                                <button
+                                    @click="placeBid(item.id)"
+                                    :disabled="
+                                        isLoadingBid || bidIncrementResp === 0
+                                    "
+                                    :class="[
+                                        'group my-6 w-full sm:gap-4 sm:items-center justify-center sm:flex sm:my-4 rounded-md p-2',
+                                        {
+                                            'bg-blue-200 text-white cursor-not-allowed':
+                                                !isBidValid || isLoadingBid,
+                                            'bg-blue-300 hover:bg-blue-500 transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-105 duration-300 hover:text-white':
+                                                isBidValid && !isLoadingBid,
+                                        },
+                                    ]"
+                                >
+                                    <!-- <button
                                 @click="placeBid(item.id)"
                                 :disabled="
                                     !isBidValid ||
@@ -192,67 +226,71 @@
                                     },
                                 ]"
                             > -->
-                                <div class="flex gap-3 items-center">
-                                    <BankNoteIcon />
-                                    <p class="font-bold">
-                                        <span v-if="isLoadingBid"
-                                            >Placing Bid...</span
-                                        >
-                                        <span v-else-if="bidIncrementResp === 0"
-                                            >Waiting to start...</span
-                                        >
-                                        <span v-else>Place Bid</span>
-                                    </p>
-                                </div>
-                            </button>
-                        </div>
+                                    <div class="flex gap-3 items-center">
+                                        <BankNoteIcon />
+                                        <p class="font-bold">
+                                            <span v-if="isLoadingBid"
+                                                >Placing Bid...</span
+                                            >
+                                            <span
+                                                v-else-if="
+                                                    bidIncrementResp === 0
+                                                "
+                                                >Waiting to start...</span
+                                            >
+                                            <span v-else>Place Bid</span>
+                                        </p>
+                                    </div>
+                                </button>
+                            </div>
 
-                        <hr
-                            class="my-6 md:my-8 border-gray-200 dark:border-gray-800"
-                        />
-
-                        <!-- Seller Information -->
-                        <div
-                            class="flex items-center text-gray-700 my-2 dark:text-gray-300"
-                        >
-                            <UserIcon
-                                class="w-5 h-5 mr-2 text-gray-500 dark:text-gray-400"
+                            <hr
+                                class="my-6 md:my-8 border-gray-200 dark:border-gray-800"
                             />
-                            <p
-                                class="text-sm font-semibold text-gray-600 dark:text-gray-400"
+
+                            <!-- Seller Information -->
+                            <div
+                                class="flex items-center text-gray-700 my-2 dark:text-gray-300"
                             >
-                                {{ item.user.name }} {{ item.user.surname }}
+                                <UserIcon
+                                    class="w-5 h-5 mr-2 text-gray-500 dark:text-gray-400"
+                                />
+                                <p
+                                    class="text-sm font-semibold text-gray-600 dark:text-gray-400"
+                                >
+                                    {{ item.user.name }} {{ item.user.surname }}
+                                </p>
+                            </div>
+
+                            <!-- Location Information -->
+                            <div
+                                class="flex items-center text-gray-700 my-2 dark:text-gray-300"
+                            >
+                                <MapPinIcon
+                                    class="w-5 h-5 mr-2 text-gray-500 dark:text-gray-400"
+                                />
+                                <p
+                                    class="text-sm font-semibold text-gray-600 dark:text-gray-400"
+                                >
+                                    {{ item.location }}
+                                </p>
+                            </div>
+
+                            <!-- Item Description -->
+                            <p class="mb-6 text-gray-500 dark:text-gray-400">
+                                {{ item.description }}
                             </p>
                         </div>
 
-                        <!-- Location Information -->
-                        <div
-                            class="flex items-center text-gray-700 my-2 dark:text-gray-300"
-                        >
-                            <MapPinIcon
-                                class="w-5 h-5 mr-2 text-gray-500 dark:text-gray-400"
-                            />
-                            <p
-                                class="text-sm font-semibold text-gray-600 dark:text-gray-400"
-                            >
-                                {{ item.location }}
-                            </p>
+                        <!-- Bidding History -->
+                        <div class="lg:h-screen overflow-hidden">
+                            <BiddingList :items="bids" :highBid="highBid" />
                         </div>
-
-                        <!-- Item Description -->
-                        <p class="mb-6 text-gray-500 dark:text-gray-400">
-                            {{ item.description }}
-                        </p>
-                    </div>
-
-                    <!-- Bidding History -->
-                    <div class="lg:h-screen overflow-hidden">
-                        <BiddingList :items="bids" :highBid="highBid" />
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </transition>
 </template>
 
 <script setup>
@@ -291,6 +329,8 @@ const item = ref(props.item);
 const increment = ref(props.item.bid_increment);
 const bids = ref(props.bids);
 const highBid = ref(props.highBid);
+
+const isFetchingState = ref(false);
 
 const computedCurrentBid = computed(() => {
     if (props.highBid) {
@@ -335,6 +375,20 @@ const isBidValid = computed(() => {
         bidAmount.value > minAllowedBid.value &&
         !isUserHighestBidder.value
     );
+});
+
+const formattedTimeLeft = computed(() => {
+    const total = timeLeft.value;
+    if (total <= 0) return "00:00";
+    const h = Math.floor(total / 3600);
+    const m = Math.floor((total % 3600) / 60);
+    const s = total % 60;
+    if (h > 0)
+        return `${String(h).padStart(2, "0")}:${String(m).padStart(
+            2,
+            "0"
+        )}:${String(s).padStart(2, "0")}`;
+    return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
 });
 
 // Formatting Functions
@@ -457,6 +511,39 @@ function showWinner() {
     }
 }
 
+// 🕓 Persistent Auction State
+const fetchAuctionState = async () => {
+    isFetchingState.value = true;
+    try {
+        const response = await axiosClient.get(
+            `/auction/${item.value.id}/state`
+        );
+        const data = response.data;
+
+        if (data.end_time) {
+            const endTimestamp = Math.floor(
+                new Date(data.end_time).getTime() / 1000
+            );
+            const now = Math.floor(Date.now() / 1000);
+
+            if (endTimestamp > now) {
+                startTimer(endTimestamp);
+                auctionStatus.value = "Ongoing";
+            } else {
+                auctionStatus.value = "Ended";
+                timeLeft.value = 0;
+            }
+        } else {
+            auctionStatus.value = "Waiting to start...";
+        }
+    } catch (err) {
+        console.error("Failed to fetch auction state:", err);
+        auctionStatus.value = "Unavailable";
+    } finally {
+        isFetchingState.value = false;
+    }
+};
+
 // Watchers
 watch(
     () => props.item,
@@ -473,6 +560,7 @@ watch(
 
 // Lifecycle Hooks
 onMounted(() => {
+    // Listen for new bids
     window.Echo.join(`auction.${item.value.id}`).listen("BidPlaced", (e) => {
         currentBid.value = e.bid.amount;
         startTimer(e.endTime);
@@ -486,15 +574,26 @@ onMounted(() => {
         }
     });
 
+    // Listen for auction start event
     window.Echo.join("auction").listen("AuctionStarted", (e) => {
         toast.success("Bidding is now Open!");
         startTimer(e.endTime);
-        console.log(e);
         bidIncrementResp.value = e.bidIncrement;
     });
 
+    // Load persisted state
     fetchLatestBids();
+    fetchAuctionState();
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.3s;
+}
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
+</style>

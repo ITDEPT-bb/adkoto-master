@@ -22,6 +22,11 @@ class AuctionItem extends Model
         'bidding_type',
         'is_active',
         'auction_ends_at',
+        'end_time',
+    ];
+
+    protected $casts = [
+        'end_time' => 'datetime',
     ];
 
     public function bids()
