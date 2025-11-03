@@ -170,11 +170,11 @@ else if (
             class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 fixed md:static top-0 z-10 pt-6 sm:pt-0 shadow"
         >
             <!-- Primary Navigation Menu -->
-            <div
+            <!-- <div
                 class="max-w-screen mx-auto px-4 py-0.5 sm:px-6 lg:px-20 bg-cover bg-center drop-shadow-lg relative sm:z-50 z-0"
                 style="background-image: url('/img/Halloween/bg.jpg')"
-            >
-                <!-- <div class="max-w-screen mx-auto px-4 sm:px-6 lg:px-16"> -->
+            > -->
+            <div class="max-w-screen mx-auto px-4 sm:px-6 lg:px-16">
                 <!-- <div class="flex items-center justify-between gap-4 h-16">
                     <div class="flex"> -->
                 <!-- <div
@@ -629,7 +629,7 @@ else if (
                                                 :src="authUser.avatar_url"
                                                 :alt="authUser.name"
                                             />
-                                            <div
+                                            <!-- <div
                                                 class="absolute -bottom-1 xl:right-2 2xl:right-2 lg:block hidden"
                                             >
                                                 <img
@@ -637,7 +637,7 @@ else if (
                                                     class="w-6 relative bottom-9 left-2 h-auto"
                                                     alt="Logo"
                                                 />
-                                            </div>
+                                            </div> -->
                                         </button>
                                         <div
                                             id="profile-tooltip"
