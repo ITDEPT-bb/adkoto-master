@@ -17,6 +17,11 @@ class KalakalkotoItemsSeeder extends Seeder
     {
         $faker = Faker::create();
 
+        $storagePath = public_path('storage/kalakalkoto_images');
+        if (!file_exists($storagePath)) {
+            mkdir($storagePath, 0755, true);
+        }
+
         // Sample data for 20 items
         $items = [
             ['user_id' => 1, 'category_id' => 1, 'name' => 'iPhone 13', 'description' => 'Brand new iPhone 13 for sale.', 'price' => 999.99, 'status' => 'available', 'location' => 'New York, NY'],
