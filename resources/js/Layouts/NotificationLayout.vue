@@ -27,6 +27,10 @@ import TeddyBear from "/public/img/admoto/TEDDYBEAR.png";
 import Ribbon from "/public/img/admoto/RIBBON.png";
 import HeartSearch from "/public/img/admoto/HEART HEART.png";
 
+// Day of Valor Specific
+import DayOfValorBg from "/public/img/Kagitingan/kagitingan_bg.jpg";
+import DayOfValorPeople from "/public/img/Kagitingan/kagitingan_people.png";
+
 // Mother's Day Specific
 import MothersDayIcon from "/public/img/mothers_day/2.png";
 import IconBackground from "/public/img/mothers_day/icon_bg.png";
@@ -97,7 +101,7 @@ onMounted(() => {
             if (parseInt(data.userToCall) === parseInt(authUser.id)) {
                 try {
                     const response = await axiosClient.get(
-                        `/fetch-call/${data.from}`
+                        `/fetch-call/${data.from}`,
                     );
                     incomingCaller.value = response.data.user;
                     userToCall.value = data.userToCall;
@@ -106,7 +110,7 @@ onMounted(() => {
                     console.error("Failed to fetch caller info", error);
                 }
             }
-        }
+        },
     );
 });
 </script>
@@ -125,11 +129,17 @@ onMounted(() => {
                 class="max-w-screen mx-auto px-4 py-0.5 sm:px-6 lg:px-20 bg-cover bg-center drop-shadow-lg relative sm:z-50 z-0"
                 style="background-image: url('/img/Halloween/bg.jpg')"
             > -->
-            <div class="max-w-screen mx-auto px-4 sm:px-6 lg:px-16">
+            <!-- <div class="max-w-screen mx-auto px-4 sm:px-6 lg:px-16"> -->
+            <div
+                class="max-w-screen mx-auto px-4 py-0.5 sm:px-6 lg:px-16 bg-cover bg-center drop-shadow-lg relative sm:z-50 z-0"
+                style="
+                    background-image: url(&quot;/img/Kagitingan/kagitingan_bg.jpg&quot;);
+                "
+            >
                 <!-- <div class="flex items-center justify-between gap-4 h-16">
                     <div class="flex"> -->
                 <div class="flex items-center justify-evenly gap-2 h-16">
-                    <!-- <div
+                    <div
                         class="absolute -bottom-0.5 left-1 xl:left-6 2xl:left-12 lg:block hidden"
                     >
                         <img
@@ -137,7 +147,7 @@ onMounted(() => {
                             class="w-16 relative -top-0.5 left-0 h-auto"
                             alt="Logo"
                         />
-                    </div> -->
+                    </div>
                     <div class="flex sm:mr-2">
                         <!-- Logo -->
                         <!-- <div class="shrink-0 flex items-center bg-white bg-opacity-75 px-4 py-2 rounded-full"> -->
@@ -698,7 +708,7 @@ onMounted(() => {
                                 <ResponsiveNavLink
                                     :href="
                                         route(
-                                            'notifications.fetchAllNotifications'
+                                            'notifications.fetchAllNotifications',
                                         )
                                     "
                                 >
