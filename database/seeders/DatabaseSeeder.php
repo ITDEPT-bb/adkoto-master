@@ -22,5 +22,9 @@ class DatabaseSeeder extends Seeder
         // $this->call(MarketplaceSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(WalletSeeder::class);
+        $this->call(KalakalkotoCategoriesSeeder::class);
+        $this->call(KalakalkotoItemsSeeder::class);
+        $this->call(AdvertisementCategorySeeder::class);
+        $this->call(AdvertisementSeeder::class);
     }
 }
