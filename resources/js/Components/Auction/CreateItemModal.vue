@@ -87,7 +87,7 @@
                                                 class="block text-sm font-medium text-gray-700 dark:text-white"
                                                 >Category</label
                                             >
-                                            <select
+                                            <!-- <select
                                                 v-model="form.category_id"
                                                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm dark:bg-slate-950 dark:text-white dark:border-gray-700"
                                                 placeholder="Enter the name of the product"
@@ -102,7 +102,14 @@
                                                 >
                                                     {{ category.name }}
                                                 </option>
-                                            </select>
+                                            </select> -->
+                                            <input type="hidden" v-model="form.category_id" />
+
+                                            <div
+                                                class="mt-1 block w-full rounded-md border border-gray-300 bg-gray-100 px-3 py-2 dark:border-gray-700 dark:bg-slate-900 dark:text-white"
+                                            >
+                                                Original Artworks
+                                            </div>
                                         </div>
 
                                         <!-- Description -->
@@ -262,7 +269,8 @@ function closeModal() {
 }
 
 const form = useForm({
-    category_id: "",
+    // category_id: "",
+    category_id: 21,
     name: "",
     description: "",
     price: "",

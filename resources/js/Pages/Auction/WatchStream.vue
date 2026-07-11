@@ -11,6 +11,14 @@
             <div
                 class="bg-white dark:bg-slate-950 flex flex-col gap-4 p-6 rounded-lg shadow-sm"
             >
+            <div class="mb-4">
+    <h2 class="text-xl font-semibold text-gray-900 dark:text-white">
+        Original Artworks
+    </h2>
+    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+        All new listings are categorized as Original Artworks.
+    </p>
+</div>
                 <!-- Host Controls -->
                 <div
                     v-if="authUser.is_filament_admin || isActiveSeller"

@@ -59,7 +59,7 @@
                     class="col-span-12 lg:col-span-9 bg-white dark:bg-slate-950 p-6 rounded-lg shadow-sm"
                 >
                     <h2 class="text-2xl font-bold mb-4 dark:text-white">
-                        Normal Bidding
+                        Original Artworks
                     </h2>
                     <NormalItemList :items="normalBiddingItems" />
                 </div>

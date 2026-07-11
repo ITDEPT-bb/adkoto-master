@@ -23,7 +23,8 @@ class AuctionController extends Controller
         $normalBiddingItems = AuctionItem::with(['attachments', 'user', 'category', 'bids'])
             ->select('*', DB::raw('(SELECT MAX(bid_amount) FROM bids WHERE bids.auction_item_id = auction_items.id) as highest_bid'))
             ->orderByDesc('created_at')
-            ->where('bidding_type', 'normal')
+            // ->where('bidding_type', 'normal')
+            ->where('category_id','=',21)
             ->where('auction_ends_at', '>', Carbon::now())
             ->paginate(9);
 
