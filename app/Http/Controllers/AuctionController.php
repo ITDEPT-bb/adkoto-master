@@ -477,47 +477,95 @@ class AuctionController extends Controller
         ]);
     }
 
+    // public function fetchShowWindowData(Request $request)
+    // {
+    //     $auctionItem = AuctionItem::with([
+    //         'attachments',
+    //         'user',
+    //         'category',
+    //         'bids' => function ($query) {
+    //             $query->orderBy('created_at', 'desc')->limit(1);
+    //         },
+    //         'bids.user'
+    //     ])
+    //         ->where('is_active', true)
+    //         ->latest('updated_at')
+    //         ->first();
+
+    //     if (!$auctionItem) {
+    //         return response()->json([
+    //             'noActiveBidding' => true,
+    //             'message' => 'No active bidding yet.',
+    //         ]);
+    //     }
+
+    //     // Process the attachments
+    //     $auctionItem->attachments->each(function ($attachment) {
+    //         $attachment->image_path = asset('storage/' . $attachment->image_path);
+    //     });
+
+    //     $highBid = Bid::with(['item', 'user'])
+    //         ->where('auction_item_id', $auctionItem->id)
+    //         ->orderBy('bid_amount', 'desc')
+    //         ->first();
+
+    //     // $user = Auth::user();
+    //     // $walletBalance = $user->wallet ? $user->wallet->balance : 0;
+
+    //     return response()->json([
+    //         'item' => $auctionItem,
+    //         'highBid' => $highBid,
+    //         'bids' => $auctionItem->bids,
+    //         // 'user' => $user,
+    //         // 'walletBalance' => $walletBalance,
+    //         'noActiveBidding' => false,
+    //     ]);
+    // }
     public function fetchShowWindowData(Request $request)
     {
+        $user = Auth::user();
+        $walletBalance = $user->wallet?->balance ?? 0;
+
         $auctionItem = AuctionItem::with([
             'attachments',
             'user',
             'category',
             'bids' => function ($query) {
-                $query->orderBy('created_at', 'desc')->limit(1);
+                $query->latest()->limit(1);
             },
-            'bids.user'
+            'bids.user',
         ])
-            ->where('is_active', true)
-            ->latest('updated_at')
-            ->first();
+        ->where('is_active', true)
+        ->latest('updated_at')
+        ->first();
 
-        if (!$auctionItem) {
+        if (! $auctionItem) {
             return response()->json([
+                'walletBalance' => $walletBalance,
+                'item' => null,
+                'highBid' => null,
+                'bids' => [],
+                'user' => $user,
                 'noActiveBidding' => true,
                 'message' => 'No active bidding yet.',
             ]);
         }
 
-        // Process the attachments
         $auctionItem->attachments->each(function ($attachment) {
-            $attachment->image_path = asset('storage/' . $attachment->image_path);
+            $attachment->image_path = asset('storage/'.$attachment->image_path);
         });
 
         $highBid = Bid::with(['item', 'user'])
             ->where('auction_item_id', $auctionItem->id)
-            ->orderBy('bid_amount', 'desc')
+            ->orderByDesc('bid_amount')
             ->first();
 
-        // $user = Auth::user();
-        // $walletBalance = $user->wallet ? $user->wallet->balance : 0;
-
         return response()->json([
+            'walletBalance' => $walletBalance,
             'item' => $auctionItem,
             'highBid' => $highBid,
             'bids' => $auctionItem->bids,
-            // 'user' => $user,
-            // 'walletBalance' => $walletBalance,
+            'user' => $user,
             'noActiveBidding' => false,
         ]);
     }

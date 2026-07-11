@@ -149,6 +149,14 @@
             </button>
         </div>
     </div> -->
+    <LowWalletOverlay
+        v-if="
+            walletBalance < 1000 &&
+            !authUser.is_filament_admin &&
+            !isModalOpen
+        "
+        @recharge="openModalRecharge"
+    />
 
     <!-- Recharge Modal -->
     <RechargeModal
@@ -174,6 +182,7 @@ import { useToast } from "vue-toastification";
 import RechargeModal from "@/Components/Auction/RechargeModal.vue";
 import AuctionSellerControlPanel from "@/Components/Auction/AuctionSellerControlPanel.vue";
 import ManageSellers from "@/Components/Auction/ManageSellers.vue";
+import LowWalletOverlay from "@/Components/Auction/LowWalletOverlay.vue";
 
 const toast = useToast();
 
@@ -214,29 +223,55 @@ const formatPrice = (price) => {
     }).format(price || 0);
 };
 
+// const fetchShowWindowData = async () => {
+//     try {
+//         const response = await axios.get("/auction/stream/bidlist");
+//         const data = response.data;
+
+//         increment.value = data.item.bid_increment;
+
+//         // Always update the data when we receive new data
+//         item.value = data.item;
+//         highBid.value = data.highBid;
+//         bids.value = data.bids;
+//         user.value = data.user;
+//         // walletBalance.value = data.walletBalance;
+//         // walletBalance.value = data.walletBalance ?? walletBalance.value;
+//         // walletBalance.value = Number(data.walletBalance) || 0;
+//         noActiveBidding.value = data.noActiveBidding;
+//     } catch (error) {
+//         // Clear data on error
+//         item.value = null;
+//         highBid.value = null;
+//         bids.value = [];
+//         user.value = null;
+//         walletBalance.value = 0;
+//         noActiveBidding.value = true;
+//     }
+// };
 const fetchShowWindowData = async () => {
     try {
-        const response = await axios.get("/auction/stream/bidlist");
-        const data = response.data;
+        const { data } = await axios.get("/auction/stream/bidlist");
 
-        increment.value = data.item.bid_increment;
-
-        // Always update the data when we receive new data
         item.value = data.item;
         highBid.value = data.highBid;
         bids.value = data.bids;
         user.value = data.user;
-        // walletBalance.value = data.walletBalance;
-        // walletBalance.value = data.walletBalance ?? walletBalance.value;
-        walletBalance.value = Number(data.walletBalance) || 0;
+        walletBalance.value = Number(data.walletBalance);
         noActiveBidding.value = data.noActiveBidding;
+
+        increment.value = data.item?.bid_increment ?? 0;
     } catch (error) {
-        // Clear data on error
+        console.error(error);
+
         item.value = null;
         highBid.value = null;
         bids.value = [];
         user.value = null;
-        walletBalance.value = 0;
+
+        // Keep the last known wallet balance.
+        // Don't overwrite it with 0.
+
         noActiveBidding.value = true;
     }
 };
